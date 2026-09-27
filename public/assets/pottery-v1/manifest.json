@@ -1,0 +1,2205 @@
+{
+  "version": "0.1.0",
+  "status": "first-pass library; not release approved",
+  "assets": [
+    {
+      "id": "ui_obols",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_obols.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_obols.svg",
+      "sha256": "ba579c8742b186a91a56afb961b975cc151367de4fa03e16ccd7739f19cf32eb",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_insight",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_insight.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_insight.svg",
+      "sha256": "b49e4b4085520388d722add8310cb70185bcc45065a85ae05629773a9b34b49b",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_push",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_push.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_push.svg",
+      "sha256": "260a4da1ec8a96932c48607cbdcb6eb71a4b223cff9ec07ee52c42e0b70c143c",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_strength",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_strength.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_strength.svg",
+      "sha256": "e6ef4ed501ce5c8e95a12672a66efbcae5fc3b267abde9b58eb2120cfada59f2",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_impact",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_impact.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_impact.svg",
+      "sha256": "46499041e2083a6f93963f79884aa3c8fdd1053f861628ae05a9d9f7f4783479",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_wheel",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_wheel.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_wheel.svg",
+      "sha256": "b69078182f4a6641f9c6251f996e696d2297e8a7b500698270ae68b2efa4a235",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_foreman",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_foreman.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_foreman.svg",
+      "sha256": "fa14bc0c1ec87cd8045b16fb29a5482c309358524aa6e8998d0c0ef5a068d332",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_milestone",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_milestone.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_milestone.svg",
+      "sha256": "67e9d259c299b01aca9058d01858e9a90400fcc5cdb206e7e4fd45d267d03ca1",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_decree",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_decree.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_decree.svg",
+      "sha256": "e3dbd20e45999c51d369db8e498aab590f397552aa65160ffb8b408ca5a8a0f0",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_archive",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_archive.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_archive.svg",
+      "sha256": "7e881ca168c64975cc7129734e894a663273799581e1d24bdbf024bc94968db3",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_settings",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_settings.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_settings.svg",
+      "sha256": "f715980b8f6e58cdb8eb0e7d9b9adddd1e4d62fda3f55476abfc7a73c187e00f",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_pause",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_pause.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_pause.svg",
+      "sha256": "da6b6c0cfa9548dabc9051e43e22983e458b2e74fdc4dabe4d8026313c6d100e",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_play",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_play.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_play.svg",
+      "sha256": "0f06e3c67552520a259b52733dda2d58e8c640e9091750f36813a8ad09225bc7",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_close",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_close.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_close.svg",
+      "sha256": "0121a5d137a08914017866851f9afd55a345c51d715be2b4201ac18606db5c51",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_back",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_back.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_back.svg",
+      "sha256": "4a9efd6b27e23682a680cef23ade390ad52c374a01f1c06a1548ffe43813cdae",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_next",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_next.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_next.svg",
+      "sha256": "2e10f757af0864cb57a2cb339b1f597f5b53811856fd1052cc63e9280ff7c421",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_sound",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_sound.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_sound.svg",
+      "sha256": "d9fabd5688e51232500098f785de0e69836f9491e21809dbe0cde7c3c78faae3",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_music",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_music.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_music.svg",
+      "sha256": "14826ce23024240f8fc8ff8d60f41b92b147423a47cee4c1d3f59e0be3ecc263",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_save",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_save.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_save.svg",
+      "sha256": "2a6050ef63f59ea2183f66c529d382499e516d3b37658082d9b6704ce9109fa9",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_offline",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_offline.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_offline.svg",
+      "sha256": "d2f2b5481e24c774636fe478f4820deb6967910f78ecf2de71e53bdad7b2d30e",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_prestige",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_prestige.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_prestige.svg",
+      "sha256": "02a82f2a8634b61399cfecb415a955c7937973ec7ff9a3c141f18f64b2c81044",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_lock",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_lock.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_lock.svg",
+      "sha256": "8340f4949aa4e00b1be4dd5aa4227f1423f26f7194b8af89c7fd1e121da32c2d",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_check",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_check.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_check.svg",
+      "sha256": "195dd19a6a5b23f06181fad87fe8f9dd5cd0adff9475b983027a4d96bdb3a362",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "ui_empire",
+      "category": "interface",
+      "url": "/assets/pottery-v1/icons/ui_empire.svg",
+      "exportFile": "public/assets/pottery-v1/icons/ui_empire.svg",
+      "sha256": "4f2657f931f81fae611fd0df60986a73c5603a039d6e917a06d1d60f11da7d75",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_hermes_seal",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_hermes_seal.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_hermes_seal.svg",
+      "sha256": "e23f0bbdd250918364d31794a3ec940d03756c19e1e9594e5afa1f625b97bf35",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_daedalus_pin",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_daedalus_pin.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_daedalus_pin.svg",
+      "sha256": "c2c3cb0cbacf255aa20cca3749857534602849689639a09e6c7856aa0e89920b",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_danaid_handle",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_danaid_handle.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_danaid_handle.svg",
+      "sha256": "1ae9a913ef0f118975158f673a939651e8f28e8f46d97d0d6eb2659a70691b46",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_ichor_ampoule",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_ichor_ampoule.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_ichor_ampoule.svg",
+      "sha256": "a933979f6fb05f4d7838b2bfc5565f6d69a57ce01fe87ecc4e46c178eff1707d",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_atlas_shard",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_atlas_shard.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_atlas_shard.svg",
+      "sha256": "ab4fe5faf505c71a38679d924e33e8e88a64ad8b2812faebdf30ac602b1c7a12",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "relic_zeus_seal",
+      "category": "relic",
+      "url": "/assets/pottery-v1/icons/relic_zeus_seal.svg",
+      "exportFile": "public/assets/pottery-v1/icons/relic_zeus_seal.svg",
+      "sha256": "367d141e08fee87fb92b01734fe071865d37cc18f22c02a93c01e5f24451f53c",
+      "dimensions": [
+        96,
+        96
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_remembered_hand",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_remembered_hand.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_remembered_hand.svg",
+      "sha256": "8942058cb627c9549fc83c8951ed4b7058ccaf88588503c9aed77cf5467e26a1",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_known_machinery",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_known_machinery.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_known_machinery.svg",
+      "sha256": "ebeb687b4faae7b4fc6249d95c7128bb91e5fd2905dba76207b6217891178dd8",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_standing_orders",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_standing_orders.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_standing_orders.svg",
+      "sha256": "83f27c5274d28631c4ba05d2abd8d96cb7c3c3d49e82aa735cd84f0abc319f05",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_familiar_ground",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_familiar_ground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_familiar_ground.svg",
+      "sha256": "3c196daacc23c7633cc38b76fd9532125dde489c37524bed7e34a9d1722222cf",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_signed_in_advance",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_signed_in_advance.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_signed_in_advance.svg",
+      "sha256": "61737a285bbabace80a8f30f1b08420c68f880ab1f8c7f0b984649f83ecdc102",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_eternal_shift",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_eternal_shift.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_eternal_shift.svg",
+      "sha256": "d8323d8e42484cec39dd3a3fa7c786e7037fcfb15bc23a2f85f0ccb746af1ba1",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_deep_reservoir",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_deep_reservoir.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_deep_reservoir.svg",
+      "sha256": "9a6486b7e7c08865cc0fc3d175b535b679eec7b59858d2cd2b6f1e88e439c3b0",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "upgrade_unbroken_memory",
+      "category": "insight-upgrade",
+      "url": "/assets/pottery-v1/icons/upgrade_unbroken_memory.svg",
+      "exportFile": "public/assets/pottery-v1/icons/upgrade_unbroken_memory.svg",
+      "sha256": "dba0628e1cdba1092450bc1efe4dc668bde3b79e76b196c46e52fdfb46559d3e",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_summit",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_summit.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_summit.svg",
+      "sha256": "2c1aa4994ef0a0b677fea638251e20aab3b50a3ff18fbfe444dfd35c99011859",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_return",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_return.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_return.svg",
+      "sha256": "046caf61fe0200987e2caef25296b0b9adfeabab68a06bddeb7b0ce1a7e7f72c",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_purchase",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_purchase.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_purchase.svg",
+      "sha256": "fb736d8fff2676a4ff3fb3014a727143572640c30727d99b1a670ebe5b99f02a",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_ten_levels",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_ten_levels.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_ten_levels.svg",
+      "sha256": "09945e5dc85c7f708350227285b81b804e224c6890cc5717ef17a23d25f270d6",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_wheel",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_wheel.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_wheel.svg",
+      "sha256": "ce2235d996ac618ca4e0755b740c24a9570545ba3e24bc9fa8e81eb11c738a23",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_auto",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_auto.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_auto.svg",
+      "sha256": "5aa3a5b8b270d7a87acb8f62e1727ea9f7aa52646b9dd7316086c11559881573",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_hermes",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_hermes.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_hermes.svg",
+      "sha256": "db2b22964814ee11028bbfdca1b736a1f17defef32739d5101b883d153428aa5",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_expansion",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_expansion.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_expansion.svg",
+      "sha256": "8660f1eaf681be42adf8ab833355ae7b947ebc72d25f9313c35d64faa5da4cad",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_daedalus",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_daedalus.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_daedalus.svg",
+      "sha256": "1f5bf5182405576ac23f64cbb91a6be18f8fcb68c0d3f394baf716b7ffea339c",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_ixion",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_ixion.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_ixion.svg",
+      "sha256": "b67aaadd00db989c90182dd4565a5f81f85b2df18f954f0151303206ca0238ad",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_danaids",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_danaids.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_danaids.svg",
+      "sha256": "123b3e0642a3fa5643218d86a3cfca25ed1f1162d970501ccfdce155b07721e3",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_talos",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_talos.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_talos.svg",
+      "sha256": "5ac5cff25981588351b12dc1ea0efe59c95697f3d06e4b615b4754037dbf4b0a",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_atlas",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_atlas.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_atlas.svg",
+      "sha256": "09a9922eb389abe72fc2a8068bcc9c93533253ea5223516743009b854d29714c",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_relic",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_relic.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_relic.svg",
+      "sha256": "e3927f0353ef76843308de5124075c44e1664361e3ab6493e194942a9cda5dec",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_full_relics",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_full_relics.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_full_relics.svg",
+      "sha256": "0996aa48b891890e8a0a12b5e9250054aa260638b5ee3dc13ccaea6d21e92628",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_first_prestige",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_first_prestige.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_first_prestige.svg",
+      "sha256": "5599de4257151d8e0a50098f36abf631d8cc4949a5128db40637f17e883f27cd",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_record_prestige",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_record_prestige.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_record_prestige.svg",
+      "sha256": "0cb04a84413ef43c1b9e3f777b15d7d85e6ac7f02bffa22eabe25cd5600e7cbe",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_old_site_50",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_old_site_50.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_old_site_50.svg",
+      "sha256": "578cec263bdbe521438827a6bd854a7d324d67f358ed2eb9d966d445b70d3f41",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_million",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_million.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_million.svg",
+      "sha256": "23a6d2d3810278b06d51b1cc99014a4d6ef360c5f7e33fa480a9e9c9dc598641",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_billion",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_billion.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_billion.svg",
+      "sha256": "fa8883c6a207f472d9fc7ba745973608046921e44273b93822a4b8739aa62f82",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_trillion",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_trillion.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_trillion.svg",
+      "sha256": "dd9296fee9dc3bc239011eb6a480c8b5b0b9fe42253e53b91deec3c5be8eb012",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_all_sites",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_all_sites.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_all_sites.svg",
+      "sha256": "0ecd1bc70ebc005976029c5dd5da5e30844807a06d41867ef947fbe5b30ad706",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_level_100",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_level_100.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_level_100.svg",
+      "sha256": "0427aaa1b8a7591e2fb7394ba0f2cffc7ee3b48af40e6aaac397852db7f3cf81",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "achievement_charter",
+      "category": "achievement",
+      "url": "/assets/pottery-v1/icons/achievement_charter.svg",
+      "exportFile": "public/assets/pottery-v1/icons/achievement_charter.svg",
+      "sha256": "54273ec3c314e56f1d5801e979c7ae54ef5c1a2a43c36d8fae3cc48838791585",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "target_debris",
+      "category": "target",
+      "url": "/assets/pottery-v1/icons/target_debris.svg",
+      "exportFile": "public/assets/pottery-v1/icons/target_debris.svg",
+      "sha256": "db62f58e072d0145d9c836ad492bea9d8f722120e329f773d9585e4811361b28",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.86
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "target_coin_amphora",
+      "category": "target",
+      "url": "/assets/pottery-v1/icons/target_coin_amphora.svg",
+      "exportFile": "public/assets/pottery-v1/icons/target_coin_amphora.svg",
+      "sha256": "e13ce9f6b2941e1d473b1e409a54bebb660e204bb761c0377bd73a70d8d5f651",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.86
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "target_gilded_offering",
+      "category": "target",
+      "url": "/assets/pottery-v1/icons/target_gilded_offering.svg",
+      "exportFile": "public/assets/pottery-v1/icons/target_gilded_offering.svg",
+      "sha256": "2f3249efdf392bff8d4dadadbeed149157bfd6aabbc2d971a88d2337e5f800b2",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.86
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "review-ready symbol",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_scaffold",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_scaffold.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_scaffold.svg",
+      "sha256": "83f5c2ed6fd7aa2d57e31e6859dc62e9cd87baa7f92e0af25e5eb10613c7bca9",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_bronze_support",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_bronze_support.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_bronze_support.svg",
+      "sha256": "20d96f009c3219c38fa5680efe33404824ab030730bb65ae8fb48be38ed013e3",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_flywheel_stand",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_flywheel_stand.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_flywheel_stand.svg",
+      "sha256": "7130c10fa2b004715664dba7efebbb55e42462b3cd91b89616ddb05aa499de1d",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_capture_paddle",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_capture_paddle.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_capture_paddle.svg",
+      "sha256": "e4e22e8ddb3d4baba280f945a803c62ff80d0d7f81db7b59b1de5d0a53b3fa60",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_belt_segment",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_belt_segment.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_belt_segment.svg",
+      "sha256": "473af08b51a48f77c57fbefde0c49d3fb618d99f5d4d7fa85fdf839898332388",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_rope_segment",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_rope_segment.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_rope_segment.svg",
+      "sha256": "8a1521a749a1cc36455209725405daa3900601e28f8d0a20a2f4873ad7b2c7be",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_pottery_chip",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_pottery_chip.svg",
+      "sha256": "8c6667a852f1b0579e5c96f71ef7cca59b2b00bba3da3c852dd7ef860dfd2954",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_water_drop",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_water_drop.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_water_drop.svg",
+      "sha256": "c17feb9bc9fc5d8f438d728d32ea1e34c42f344e6bf6a493c29e9525a0fac9cc",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "prop_reward_spark",
+      "category": "prop",
+      "url": "/assets/pottery-v1/icons/prop_reward_spark.svg",
+      "exportFile": "public/assets/pottery-v1/icons/prop_reward_spark.svg",
+      "sha256": "6a700679ba87037e022de21520e7d1f28819ae5caa66fcccfdf0e345f63327fa",
+      "dimensions": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "geometric component study",
+      "hasTransparency": true
+    },
+    {
+      "id": "terrain_clay",
+      "category": "terrain-kit",
+      "url": "/assets/pottery-v1/icons/terrain_clay.svg",
+      "exportFile": "public/assets/pottery-v1/icons/terrain_clay.svg",
+      "sha256": "c9077491e453fbfce770686f68286311d7359d768f79972c48a8d606498f6732",
+      "dimensions": [
+        1000,
+        480
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "deterministic route geometry study",
+      "hasTransparency": true
+    },
+    {
+      "id": "terrain_underworld",
+      "category": "terrain-kit",
+      "url": "/assets/pottery-v1/icons/terrain_underworld.svg",
+      "exportFile": "public/assets/pottery-v1/icons/terrain_underworld.svg",
+      "sha256": "ac6972de011bea5de59a6fc7dc8a72431d33bcc3c010e808cafb115e724fcc39",
+      "dimensions": [
+        1000,
+        480
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "deterministic route geometry study",
+      "hasTransparency": true
+    },
+    {
+      "id": "terrain_celestial",
+      "category": "terrain-kit",
+      "url": "/assets/pottery-v1/icons/terrain_celestial.svg",
+      "exportFile": "public/assets/pottery-v1/icons/terrain_celestial.svg",
+      "sha256": "ec15083af7c7ee5aa42d7c715d69c9af598433ae323b3156ffc91b580ed958be",
+      "dimensions": [
+        1000,
+        480
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "deterministic route geometry study",
+      "hasTransparency": true
+    },
+    {
+      "id": "sfx_ui_open",
+      "category": "interface-audio",
+      "url": "/assets/pottery-v1/audio/sfx_ui_open.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_ui_open.wav",
+      "sha256": "ed1a6e7dffaa8dfaa39ae8eaa7f689d835ad03339ee9eaf9e3ce82148b5fb203",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.72,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_ui_close",
+      "category": "interface-audio",
+      "url": "/assets/pottery-v1/audio/sfx_ui_close.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_ui_close.wav",
+      "sha256": "55c99682cc4895ae7e57682abf3e43b4c077cebaac2fe4140c772efdd45bfc78",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.72,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_ui_buy",
+      "category": "interface-audio",
+      "url": "/assets/pottery-v1/audio/sfx_ui_buy.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_ui_buy.wav",
+      "sha256": "513965d320cd98daf8696c7e83e589d0aea24a43dcb2534c6e3065ae9fb29a99",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.84,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_ui_unavailable",
+      "category": "interface-audio",
+      "url": "/assets/pottery-v1/audio/sfx_ui_unavailable.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_ui_unavailable.wav",
+      "sha256": "1e869fafe96094a61e7894bb30cfdcc1e8dfb0018baf1bdf844182ec90f93daa",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.72,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_summit",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_summit.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_summit.wav",
+      "sha256": "4e81e289f7d53cd8376fa1c1c2d0bf0c0a96d58250a1e2a73d23417f7d8c4111",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.84,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_coin",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_coin.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_coin.wav",
+      "sha256": "e2e40d1a2ea35cdedb16fe2d5612e24e4d90561c5069980bccde671b14c3a992",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.72,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_milestone",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_milestone.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_milestone.wav",
+      "sha256": "58a5f33294debe81e5ee79fd6d8df3d9e9571645199b75aafb4829b9194e729e",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.96,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_wheel_charge",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_wheel_charge.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_wheel_charge.wav",
+      "sha256": "1f58e57256889eaf958688bcb7f77726de7781778315ac5d54ea8025f38f0434",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.96,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_foreman",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_foreman.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_foreman.wav",
+      "sha256": "c2d16157e14993f4c81fe4e57e0deaa6f4078250f93aa8d038b36b0cb3c57cf7",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.96,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_decree",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_decree.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_decree.wav",
+      "sha256": "9d8ecb0aae5b3dc1330c75daf0c599fcef4edd828b322a5552cee384cf0b828a",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.84,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_relic",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_relic.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_relic.wav",
+      "sha256": "8f9290549faefa52822c68dc31f140789c2fb38d3d8df16f6f0689364c07bcaf",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.96,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_prestige",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_prestige.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_prestige.wav",
+      "sha256": "5988c5eefd118443a1e8eeb528b6ec4760e6649aaf8bdc61b881861de9bb5b0a",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 1.08,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_site_unlock",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_site_unlock.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_site_unlock.wav",
+      "sha256": "38fa9f87a6e818cde99fb856a3b7b291e9186a2340acadad83f2d0ddb06fd7e1",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.96,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_charter",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_charter.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_charter.wav",
+      "sha256": "443f1278f45bc1940748f935ca5b15907bf6c49c3bc3a4c38f51f9be1cdaa3ab",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 1.08,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_offline_return",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_offline_return.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_offline_return.wav",
+      "sha256": "d4f4f46d18b128919bf58214a9914e078cf4c3883667a1130948c1e02e0d7989",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.84,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_scrape",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_scrape.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_scrape.wav",
+      "sha256": "c70a91134baa1dacb195f4e290f23d5f0f3b6c4a77082178332883f04bf54b24",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 1.2,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_roll",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_roll.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_roll.wav",
+      "sha256": "cafeb51a9c5125d317833dc7e9c382206043618739e6c682c0e8d3cab81e3ebf",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 2.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_impact_pottery",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_impact_pottery.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_impact_pottery.wav",
+      "sha256": "9787dc7853535293d7c959945e3323695ddd5f7a2730495bcd47e577441ed2fc",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 0.5500226757369614,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_impact_bronze",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_impact_bronze.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_impact_bronze.wav",
+      "sha256": "0ce51235e4fbedfdf95947b3a459b1e5ba9e17bb4064c2e53e0a7dcb632cd9c1",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 1.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "sfx_machine_pulse",
+      "category": "effects-audio",
+      "url": "/assets/pottery-v1/audio/sfx_machine_pulse.wav",
+      "exportFile": "public/assets/pottery-v1/audio/sfx_machine_pulse.wav",
+      "sha256": "ce007aaf09946da631bc98bdcf9d8e39ef289e3746b9ce5b33eaae1bb4722fb7",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 1.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": false,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "music_early_labor",
+      "category": "music",
+      "url": "/assets/pottery-v1/audio/music_early_labor.wav",
+      "exportFile": "public/assets/pottery-v1/audio/music_early_labor.wav",
+      "sha256": "5e7e9c82e3ab72cf100e2b93c7753f70fffc5796a28cf764fe1c741768dd61ef",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 24.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": true,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "music_underworld_enterprise",
+      "category": "music",
+      "url": "/assets/pottery-v1/audio/music_underworld_enterprise.wav",
+      "exportFile": "public/assets/pottery-v1/audio/music_underworld_enterprise.wav",
+      "sha256": "aed48314dcef5bcdcfa4de1cdb59d62b0d858ad0578022197cd1cf3b1bef7fc5",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 24.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": true,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "music_approach_to_olympus",
+      "category": "music",
+      "url": "/assets/pottery-v1/audio/music_approach_to_olympus.wav",
+      "exportFile": "public/assets/pottery-v1/audio/music_approach_to_olympus.wav",
+      "sha256": "e02658264a07ae04e958c391cb613d0c3138be8c7e5f8a4a21bdc9810cb3a244",
+      "sourceFile": "tools/assets/build_library.py",
+      "provenance": "Original deterministic synthesis; no samples or external compositions.",
+      "status": "prototype audio; listening and mix approval pending",
+      "durationSeconds": 24.0,
+      "sampleRate": 22050,
+      "channels": 1,
+      "loop": true,
+      "peakDbFS": -6.38
+    },
+    {
+      "id": "scene_first_hill",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_first_hill.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_first_hill.png",
+      "sha256": "a135b02fb81a01da8ff227d62b34a4c88498cb9e3a1e7bfa2d0aa3fc6c42dc36",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_first_hill.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_tartarus_rim",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_tartarus_rim.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_tartarus_rim.png",
+      "sha256": "7c52062248add3de4a126a75d08f4c25d757fa05a572377c15c81494e1a6693a",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_tartarus_rim.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_leaking_heights",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_leaking_heights.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_leaking_heights.png",
+      "sha256": "867339b9d1e68dbef14ccf87bd194f2a64f696d21b3228c225aad568c5016684",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_leaking_heights.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_bronze_pass",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_bronze_pass.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_bronze_pass.png",
+      "sha256": "58cbe8be4312ad41218f0d0fe4a894afa077c82644bd0f17e090d604bb23896a",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_bronze_pass.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_skyward_escarpment",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_skyward_escarpment.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_skyward_escarpment.png",
+      "sha256": "e9f4a60558425774b793e5f644cb1018dcdff3f0f634560d8e5284e0cad97cdd",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_skyward_escarpment.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_olympian_approach",
+      "category": "environment",
+      "url": "/assets/pottery-v1/art/scene_olympian_approach.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_olympian_approach.png",
+      "sha256": "0ae00fda1d8ecd01a7d71be686cde13a15a84b29c0e83417c8ecf118d4322b4c",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "hasTransparency": false,
+      "sourceFile": "public/assets/pottery-v1/art/scene_olympian_approach.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_limestone",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_limestone.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_limestone.png",
+      "sha256": "7cdd552fdcfbfdb458b017b5d9d6605c65625c7fddde080a32926f50ee3ce6f4",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        103,
+        49,
+        1219,
+        1199
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_limestone.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_basalt",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_basalt.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_basalt.png",
+      "sha256": "e8ae779ef780de27a94a2765ef7312d8a8a48e11e5203b42e8cd3ae347b48f95",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        0,
+        1222,
+        1254
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_basalt.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_marble",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_marble.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_marble.png",
+      "sha256": "8f84ba1016d76cb5c208db16a7de1b7146153705286e4b9baf8a85d5476180d8",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        57,
+        21,
+        1129,
+        1182
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_marble.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_bronze",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_bronze.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_bronze.png",
+      "sha256": "e862391d9e31148a193aef0cdb905a88a323739fc528972a5a71b08086363ca7",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        111,
+        49,
+        1192,
+        1198
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_bronze.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_star",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_star.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_star.png",
+      "sha256": "043dd2f2fb1a1523a732ce65f73c06a0e234fa23a13084f5dead711db212b3fd",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        47,
+        1198,
+        1198
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_star.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "stone_decree",
+      "category": "stone",
+      "url": "/assets/pottery-v1/art/stone_decree.png",
+      "exportFile": "public/assets/pottery-v1/art/stone_decree.png",
+      "sha256": "dda5d11b1567d95c7e04978164efd805a177ea18e7c81ccccc5269d87a46b832",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        0,
+        21,
+        1228,
+        1254
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/stone_decree.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "sisyphus_push",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_push.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_push.png",
+      "sha256": "bc194f87dd52008df17dc8f805997b9fd75bc8cb2dcbf78fb947fa751e0bda32",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.9792663476874003
+      ],
+      "pivotStatus": "suggested; calibrate during scene integration",
+      "alphaBounds": [
+        25,
+        53,
+        1222,
+        1228
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_push.png",
+      "promptSource": "docs/art-direction/asset-generation-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    }
+  ],
+  "counts": {
+    "interface": 24,
+    "relic": 6,
+    "insight-upgrade": 8,
+    "achievement": 24,
+    "target": 3,
+    "prop": 9,
+    "terrain-kit": 3,
+    "interface-audio": 4,
+    "effects-audio": 16,
+    "music": 3,
+    "environment": 6,
+    "stone": 6,
+    "character": 1
+  },
+  "warnings": [
+    "Tight edge padding: stone_basalt",
+    "Tight edge padding: stone_marble",
+    "Tight edge padding: stone_star",
+    "Tight edge padding: stone_decree",
+    "Tight edge padding: sisyphus_push",
+    "Missing raster: shade_attendant",
+    "Missing raster: flywheel_rotor",
+    "Missing raster: capstan",
+    "Missing raster: work_hermes",
+    "Missing raster: work_daedalus",
+    "Missing raster: work_ixion",
+    "Missing raster: work_danaids",
+    "Missing raster: work_talos",
+    "Missing raster: work_atlas",
+    "Missing raster: work_charter",
+    "Missing raster: portrait_hermes",
+    "Missing raster: portrait_daedalus",
+    "Missing raster: portrait_ixion",
+    "Missing raster: portrait_danaids",
+    "Missing raster: portrait_talos",
+    "Missing raster: portrait_atlas",
+    "Missing raster: portrait_zeus",
+    "Missing raster: portrait_thanatos"
+  ]
+}

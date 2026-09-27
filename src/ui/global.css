@@ -1,0 +1,74 @@
+:root {
+  --ink: #211b17;
+  --clay: #b65d35;
+  --pale-clay: #d99c6c;
+  --parchment: #ebdcc0;
+  --bronze: #a57b3b;
+  --ivory: #f6ecdc;
+  --panel: rgba(246, 236, 220, 0.96);
+  --muted: #5e544b;
+  --good: #3d6b3a;
+  --radius: 10px;
+  --text-scale: 1;
+  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-size: calc(16px * var(--text-scale));
+  color: var(--ink);
+  background: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
+  background: var(--ivory);
+  padding: 0 0.8rem;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--clay);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.high-contrast {
+  --panel: #fffaf0;
+  --muted: #211b17;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

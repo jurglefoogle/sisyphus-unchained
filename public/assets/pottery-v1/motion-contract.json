@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "status": "Integration contract and animation plan; not an executable rig",
+  "coordinates": "Normalized pivots in manifest refer to the full image canvas, including alpha padding.",
+  "rendering": {
+    "simulationAuthority": "All phases, payouts and unlocks come from core state. Animation callbacks never grant resources.",
+    "texturePolicy": "Source PNGs remain unmodified; atlas packing and downsampling are pending renderer needs.",
+    "darkScenes": "Check ink silhouettes against Tartarus; use a pale route backing, not a baked black box."
+  },
+  "routes": {
+    "viewBox": [
+      1000,
+      480
+    ],
+    "ascent": [
+      [
+        30,
+        400
+      ],
+      [
+        170,
+        335
+      ],
+      [
+        350,
+        260
+      ],
+      [
+        530,
+        180
+      ],
+      [
+        680,
+        100
+      ]
+    ],
+    "summit": [
+      720,
+      100
+    ],
+    "descent": [
+      [
+        720,
+        100
+      ],
+      [
+        860,
+        390
+      ]
+    ],
+    "return": [
+      [
+        860,
+        390
+      ],
+      [
+        950,
+        420
+      ],
+      [
+        30,
+        420
+      ],
+      [
+        30,
+        400
+      ]
+    ],
+    "note": "Draft render-space geometry; use continuous interpolation and offset stones by collision radius. Tune to actual hill composition; no collision simulation required."
+  },
+  "rigs": [
+    {
+      "id": "sisyphus",
+      "source": "sisyphus_push",
+      "status": "parts and clips pending",
+      "parts": [
+        "head",
+        "torso",
+        "upper_arm_near",
+        "forearm_near",
+        "upper_arm_far",
+        "forearm_far",
+        "thigh_near",
+        "shin_near",
+        "foot_near",
+        "thigh_far",
+        "shin_far",
+        "foot_far",
+        "tunic"
+      ],
+      "clips": [
+        "rest",
+        "push_loop",
+        "strain_accent",
+        "summit_reaction",
+        "step_aside",
+        "manual_assist"
+      ]
+    },
+    {
+      "id": "shade",
+      "source": "shade_attendant",
+      "status": "parts and clips pending",
+      "clips": [
+        "pull_loop",
+        "idle",
+        "purchase_reaction"
+      ]
+    }
+  ],
+  "clips": [
+    {
+      "id": "stone_roll",
+      "targets": [
+        "stone_limestone",
+        "stone_basalt",
+        "stone_marble",
+        "stone_bronze",
+        "stone_star",
+        "stone_decree"
+      ],
+      "implementation": "rotation = distance travelled / displayed radius; select direction by path tangent",
+      "status": "transform-ready artwork; integration pending"
+    },
+    {
+      "id": "summit_hesitation",
+      "implementation": "brief easing within existing phase duration; never insert economic delay"
+    },
+    {
+      "id": "impact",
+      "implementation": "short scale compression and rebound around calibrated contact point; small prop_pottery_chip burst"
+    },
+    {
+      "id": "flywheel_charge",
+      "target": "flywheel_rotor",
+      "implementation": "turn rotor around center after charged descent; leave prop_flywheel_stand fixed; belt endpoints fixed"
+    },
+    {
+      "id": "work_idle",
+      "implementation": "split flattened installation into stationary base, actor and mechanism before animation",
+      "status": "layer separation pending"
+    },
+    {
+      "id": "decree_stamp",
+      "target": "ui_decree",
+      "implementation": "brief scale settle; static appearance with reduced motion"
+    },
+    {
+      "id": "relic_discovery",
+      "implementation": "single short flourish, queue or aggregate other rewards"
+    }
+  ],
+  "audio": {
+    "music": [
+      "music_early_labor",
+      "music_underworld_enterprise",
+      "music_approach_to_olympus"
+    ],
+    "concurrency": {
+      "scrape": 1,
+      "roll": 1,
+      "reward": 1
+    },
+    "backgroundSites": "silent repeated production",
+    "browser": "Start AudioContext or media playback after user gesture.",
+    "mix": "Separate music, effects and interface controls; exact levels need listening review.",
+    "warning": "Synthesized audio studies are not recorded Foley or final mastered music."
+  },
+  "reducedMotion": "Keep phase state readable; disable decorative camera sweeps, shake and particle bursts. Do not change simulation timing."
+}
