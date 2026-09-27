@@ -68,6 +68,10 @@
       toast = `Relic found: ${t(`relic.${n.relicId}`)} — ${t(`relic.${n.relicId}.joke`)} (income ×1.1)`;
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => (toast = null), 6000);
+    } else if (n.kind === 'toast' && n.text) {
+      toast = n.text;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => (toast = null), 6000);
     } else if (n.kind === 'error' && n.text) {
       error = n.text;
     } else if (n.kind === 'info' && n.text) {
@@ -141,6 +145,7 @@
     const offView = game.onView((v) => (view = v));
     const offNotice = game.onNotice(onNotice);
     world = new World(game);
+    if (import.meta.env.DEV) (window as unknown as { world: World }).world = world;
     world.onPush = (down) => (down ? pushDown() : pushUp());
     void world.mount(worldHost);
     const onVis = () => document.hidden && releaseInput();

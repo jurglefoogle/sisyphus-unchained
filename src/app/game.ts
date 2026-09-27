@@ -1,9 +1,11 @@
 import { catalog } from '../content/catalog';
-import { ambient } from '../content/strings';
+import { ambient, t } from '../content/strings';
+import { formatMoney } from '../core/format';
 import {
   buyFlywheel,
   buyInsightUpgrade,
   buyLevels,
+  buyPreludeUpgrade,
   buyWork,
   confirmPrestige,
   hireForeman,
@@ -30,7 +32,7 @@ const AMBIENT_INTERVAL_MS = 90_000;
 const AMBIENT_REPEAT_WINDOW_MS = 10 * 60_000;
 
 export interface Notice {
-  kind: 'recap' | 'story' | 'relic' | 'info' | 'error';
+  kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast';
   storyId?: string;
   firstTime?: boolean;
   relicId?: string;
@@ -146,6 +148,10 @@ export class Game {
     for (const e of events) {
       if (e.type === 'StoryTriggered') this.notify({ kind: 'story', storyId: e.storyId, firstTime: e.firstTime });
       if (e.type === 'RelicGranted') this.notify({ kind: 'relic', relicId: e.relicId });
+      if (e.type === 'PreludeCompleted') {
+        this.notify({ kind: 'toast', text: `${t('prelude.offering')}: +${formatMoney(e.offering)} Obols` });
+      }
+      if (e.type === 'FeatureUnlocked') this.notify({ kind: 'toast', text: t(`unlock.${e.feature}`) });
     }
     for (const fn of this.listeners) fn(events);
   }
@@ -227,6 +233,9 @@ export class Game {
 
   buyLevels(track: LevelTrack, count: number) {
     return this.run((e) => buyLevels(this.state, this.state.empire.selectedSiteId, track, count, e));
+  }
+  buyPreludeUpgrade(id: string) {
+    return this.run((e) => buyPreludeUpgrade(this.state, id, e));
   }
   buyFlywheel() {
     return this.run((e) => buyFlywheel(this.state, this.state.empire.selectedSiteId, e));

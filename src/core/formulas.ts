@@ -1,4 +1,4 @@
-import { catalog, siteDef, workDef, type InsightEffect, type SiteDef } from '../content/catalog';
+import { catalog, siteDef, workDef, type InsightEffect, type PreludeUpgradeDef, type SiteDef } from '../content/catalog';
 import { Money } from './money';
 import type { GameState, SiteState } from './state';
 
@@ -115,7 +115,7 @@ export function fixedPhaseSeconds(): number {
 }
 
 export function isAutomated(state: GameState): boolean {
-  return state.empire.foremanOwned;
+  return state.empire.foremanOwned && state.prelude.complete;
 }
 
 export interface MotionInput {
@@ -145,6 +145,61 @@ export function steadyIncomePerSecond(state: GameState, site: SiteState): Money 
 export function empireIncomePerSecond(state: GameState): Money {
   if (!isAutomated(state)) return Money.ZERO;
   return Money.sum(state.empire.sites.map((s) => steadyIncomePerSecond(state, s)));
+}
+
+// ----------------------------------------------------------------- prelude
+
+export function preludeActive(state: GameState): boolean {
+  return !state.prelude.complete;
+}
+
+/** Fraction of the hill the stone can be pushed before grip gives out. */
+export function preludeReach(state: GameState): number {
+  const p = catalog.prelude;
+  const owned = p.upgrades.filter((u) => state.prelude.upgradeIds.includes(u.id));
+  const reach = owned.reduce((a, u) => a + u.reach, p.baseReach);
+  return reach >= 1 - 1e-9 ? 1 : Math.round(reach * 1e6) / 1e6;
+}
+
+/** Highest normalised progress the current ascent can reach before a slip. */
+export function ascentLimit(state: GameState, site: Pick<SiteState, 'id'>): number {
+  if (state.prelude.complete || site.id !== catalog.sites[0].id) return 1;
+  return preludeReach(state);
+}
+
+/** How long the stone takes to roll back to the foot from `height`. */
+export function slipSeconds(height: number): number {
+  const p = catalog.prelude;
+  return p.slipSecondsBase + p.slipSecondsPerHeight * height;
+}
+
+/** Obols the watching shades toss when the stone falls from `height`. */
+export function fallPayout(height: number): Money {
+  return Money.of(Math.max(1, Math.ceil(catalog.prelude.fallYield * height - 1e-9)));
+}
+
+export function nextPreludeUpgrade(state: GameState): PreludeUpgradeDef | null {
+  if (state.prelude.complete) return null;
+  return catalog.prelude.upgrades.find((u) => !state.prelude.upgradeIds.includes(u.id)) ?? null;
+}
+
+// -------------------------------------------------------------- automation
+
+function firstHillLevel(state: GameState): number {
+  return state.empire.sites.find((s) => s.id === catalog.sites[0].id)?.productionLevel ?? 0;
+}
+
+/** The first flywheel is discovered at a First Hill level; afterwards it stays known. */
+export function flywheelUnlocked(state: GameState): boolean {
+  if (!state.prelude.complete) return false;
+  if (state.discoveries.tutorialIds.includes('first_wheel')) return true;
+  return firstHillLevel(state) >= catalog.automation.flywheelUnlockLevel;
+}
+
+export function foremanUnlocked(state: GameState): boolean {
+  if (!state.prelude.complete || !state.empire.sites.some((s) => s.wheelOwned)) return false;
+  if (state.discoveries.tutorialIds.includes('foreman')) return true;
+  return firstHillLevel(state) >= catalog.automation.foremanUnlockLevel;
 }
 
 // ------------------------------------------------------------------ prices

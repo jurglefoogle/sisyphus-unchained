@@ -24,6 +24,7 @@ function snapshotToJson(s: CycleSnapshot): Json {
     bonusTargetId: s.bonusTargetId,
     summitGranted: s.summitGranted,
     impactGranted: s.impactGranted,
+    slipHeight: s.slipHeight,
   };
 }
 
@@ -39,6 +40,12 @@ export function stateToJson(state: GameState): Json {
       obols: state.wallet.obols.serialize(),
       runGross: state.wallet.runGross.serialize(),
       bestRunGross: state.wallet.bestRunGross.serialize(),
+    },
+    prelude: {
+      complete: state.prelude.complete,
+      upgradeIds: [...state.prelude.upgradeIds],
+      bestHeight: state.prelude.bestHeight,
+      attempts: state.prelude.attempts,
     },
     prestige: {
       lifetimeInsightAwarded: state.prestige.lifetimeInsightAwarded,
@@ -145,13 +152,15 @@ const WORK_IDS = new Set(catalog.works.map((w) => w.id));
 const RELIC_IDS = new Set(catalog.relics.catalog.map((r) => r.id));
 const UPGRADE_IDS = new Set(catalog.insightUpgrades.map((u) => u.id));
 const TARGET_IDS = new Set([...catalog.bonusTargets.map((t) => t.id), 'expected']);
+const PRELUDE_IDS = new Set(catalog.prelude.upgrades.map((u) => u.id));
+const PHASES = new Set(['ascending', 'descending', 'returning', 'slipping']);
 
 function parseSite(v: unknown, path: string): SiteState {
   const o = obj(v, path);
   const id = str(o.id, `${path}.id`);
   req(SITE_IDS.has(id), `${path}.id unknown`);
   const phase = str(o.phase, `${path}.phase`);
-  req(phase === 'ascending' || phase === 'descending' || phase === 'returning', `${path}.phase invalid`);
+  req(PHASES.has(phase), `${path}.phase invalid`);
   const snap = obj(o.snapshot, `${path}.snapshot`);
   const bonusTargetId = str(snap.bonusTargetId, `${path}.snapshot.bonusTargetId`);
   req(TARGET_IDS.has(bonusTargetId), `${path}.snapshot.bonusTargetId unknown`);
@@ -163,7 +172,7 @@ function parseSite(v: unknown, path: string): SiteState {
     impactLevel: int(o.impactLevel, `${path}.impactLevel`, 0, L.impactCap),
     wheelOwned: bool(o.wheelOwned, `${path}.wheelOwned`),
     wheelCharged: bool(o.wheelCharged, `${path}.wheelCharged`),
-    phase,
+    phase: phase as SiteState['phase'],
     phaseProgress: num(o.phaseProgress, `${path}.phaseProgress`, 0, 60),
     cycleIndex: int(o.cycleIndex, `${path}.cycleIndex`, 0, Number.MAX_SAFE_INTEGER),
     snapshot: {
@@ -173,6 +182,7 @@ function parseSite(v: unknown, path: string): SiteState {
       bonusTargetId,
       summitGranted: bool(snap.summitGranted, `${path}.snapshot.summitGranted`),
       impactGranted: bool(snap.impactGranted, `${path}.snapshot.impactGranted`),
+      slipHeight: num(snap.slipHeight, `${path}.snapshot.slipHeight`, 0, 1),
     },
   };
 }
@@ -187,6 +197,10 @@ export function stateFromJson(data: unknown): GameState {
   const counters = obj(d.counters, 'counters');
   const random = obj(d.random, 'random');
   const options = obj(d.options ?? {}, 'options');
+  const prelude = obj(d.prelude, 'prelude');
+  const preludeIds = idList(prelude.upgradeIds, 'prelude.upgradeIds', PRELUDE_IDS);
+  const inOrder = catalog.prelude.upgrades.slice(0, preludeIds.length).map((u) => u.id);
+  req(inOrder.every((id, i) => preludeIds[i] === id), 'prelude upgrades out of sequence');
 
   const sites = (() => {
     req(Array.isArray(empire.sites), 'empire.sites must be an array');
@@ -220,6 +234,12 @@ export function stateFromJson(data: unknown): GameState {
       obols: money(wallet.obols, 'wallet.obols'),
       runGross: money(wallet.runGross, 'wallet.runGross'),
       bestRunGross: money(wallet.bestRunGross, 'wallet.bestRunGross'),
+    },
+    prelude: {
+      complete: bool(prelude.complete, 'prelude.complete'),
+      upgradeIds: preludeIds,
+      bestHeight: num(prelude.bestHeight, 'prelude.bestHeight', 0, 1),
+      attempts: int(prelude.attempts, 'prelude.attempts', 0, Number.MAX_SAFE_INTEGER),
     },
     prestige: { lifetimeInsightAwarded: lifetime, insightSpent: spent, permanentUpgradeIds: upgrades },
     empire: {
@@ -265,7 +285,33 @@ export function stateFromJson(data: unknown): GameState {
  * Sequential migrations keyed by the schema version they upgrade FROM.
  * Released schemas must keep their entry and a fixture forever.
  */
-const MIGRATIONS: Record<number, (data: Record<string, unknown>) => Record<string, unknown>> = {};
+const MIGRATIONS: Record<number, (data: Record<string, unknown>) => Record<string, unknown>> = {
+  /** v2 adds the prelude. Saves that already reached a summit skip it. */
+  1: (data) => {
+    const disc = obj(data.discoveries, 'discoveries');
+    const tutorials = Array.isArray(disc.tutorialIds) ? disc.tutorialIds : [];
+    const done = tutorials.includes('first_summit');
+    const empire = obj(data.empire, 'empire');
+    const sites = Array.isArray(empire.sites) ? empire.sites : [];
+    return {
+      ...data,
+      schemaVersion: 2,
+      empire: {
+        ...empire,
+        sites: sites.map((site) => {
+          const o = obj(site, 'site');
+          return { ...o, snapshot: { ...obj(o.snapshot, 'site.snapshot'), slipHeight: 0 } };
+        }),
+      },
+      prelude: {
+        complete: done,
+        upgradeIds: done ? catalog.prelude.upgrades.map((u) => u.id) : [],
+        bestHeight: done ? 1 : 0,
+        attempts: 0,
+      },
+    };
+  },
+};
 
 export function deserializeSave(text: string): LoadResult {
   try {

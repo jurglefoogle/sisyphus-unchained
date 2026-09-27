@@ -1,0 +1,68 @@
+{
+  "mode": "built-in image editing",
+  "tasks": [
+    {
+      "id": "sisyphus_rest",
+      "ref": "sisyphus_push",
+      "pose": "Standing upright relaxed, hands resting on hips, calm and slightly amused, both feet on one horizontal baseline.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding upright relaxed, hands resting on hips, calm and slightly amused, both feet on one horizontal baseline."
+    },
+    {
+      "id": "sisyphus_push_recoil",
+      "ref": "sisyphus_push",
+      "pose": "The recovery half of a pushing cycle: same forward-pushing direction, knees bent more, elbows bent slightly, torso a little more upright, palms still at the same forward height. The near leg bears weight and the far heel is lifted.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nThe recovery half of a pushing cycle: same forward-pushing direction, knees bent more, elbows bent slightly, torso a little more upright, palms still at the same forward height. The near leg bears weight and the far heel is lifted."
+    },
+    {
+      "id": "sisyphus_strain",
+      "ref": "sisyphus_push",
+      "pose": "Brief strong effort accent: deep forward lean, flexed elbows and compressed bent knees, chin slightly down, both palms forward. Clear strong silhouette; no pain symbols.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nBrief strong effort accent: deep forward lean, flexed elbows and compressed bent knees, chin slightly down, both palms forward. Clear strong silhouette; no pain symbols."
+    },
+    {
+      "id": "sisyphus_summit",
+      "ref": "sisyphus_push",
+      "pose": "Standing tall after releasing the stone, hands open lifted to chest height in a small relieved shrug, head looking right toward the descending stone. No stone.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding tall after releasing the stone, hands open lifted to chest height in a small relieved shrug, head looking right toward the descending stone. No stone."
+    },
+    {
+      "id": "shade_idle",
+      "ref": "shade_attendant",
+      "pose": "Standing upright with a modest stoop, arms relaxed at sides, feet shoulder-width apart on a common horizontal ground line. Calm worker waiting for next shift.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding upright with a modest stoop, arms relaxed at sides, feet shoulder-width apart on a common horizontal ground line. Calm worker waiting for next shift."
+    },
+    {
+      "id": "shade_pull_recoil",
+      "ref": "shade_attendant",
+      "pose": "The second pose of a capstan working loop: elbows bent and hands drawn closer to waist from the reference position, torso slightly leaned back and knees flexed. Hands grip an imaginary handle; do not draw handle.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nThe second pose of a capstan working loop: elbows bent and hands drawn closer to waist from the reference position, torso slightly leaned back and knees flexed. Hands grip an imaginary handle; do not draw handle."
+    },
+    {
+      "id": "shade_purchase_reaction",
+      "ref": "shade_attendant",
+      "pose": "Standing up and giving a small respectful nod, one hand over chest and the other relaxed at side, feet grounded on same horizontal baseline.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding up and giving a small respectful nod, one hand over chest and the other relaxed at side, feet grounded on same horizontal baseline."
+    },
+    {
+      "id": "sisyphus_walk_strip",
+      "ref": "sisyphus_push",
+      "pose": "WALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nWALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions."
+    },
+    {
+      "id": "shade_walk_strip",
+      "ref": "shade_attendant",
+      "pose": "WALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions.",
+      "category": "character-pose",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nWALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions."
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "technicalChecks": "PASS",
+  "assetCount": 131,
+  "errors": [],
+  "artWarnings": [
+    "Tight edge padding: stone_basalt",
+    "Tight edge padding: stone_marble",
+    "Tight edge padding: stone_star",
+    "Tight edge padding: stone_decree",
+    "Tight edge padding: sisyphus_push",
+    "Tight edge padding: shade_attendant",
+    "Tight edge padding: flywheel_rotor",
+    "Tight edge padding: capstan",
+    "Tight edge padding: work_hermes",
+    "Tight edge padding: work_daedalus",
+    "Tight edge padding: work_ixion",
+    "Tight edge padding: work_danaids",
+    "Tight edge padding: work_talos",
+    "Tight edge padding: work_atlas",
+    "Tight edge padding: work_charter",
+    "Tight edge padding: portrait_hermes",
+    "Tight edge padding: portrait_daedalus",
+    "Tight edge padding: portrait_danaids",
+    "Tight edge padding: portrait_talos",
+    "Tight edge padding: portrait_atlas",
+    "Tight edge padding: portrait_zeus",
+    "Tight edge padding: portrait_thanatos"
+  ],
+  "audio": [
+    {
+      "id": "sfx_ui_open",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_ui_close",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_ui_buy",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_ui_unavailable",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_summit",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_coin",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_milestone",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_wheel_charge",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_foreman",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_decree",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_relic",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_prestige",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_site_unlock",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_charter",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_offline_return",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_scrape",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_roll",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_impact_pottery",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_impact_bronze",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "sfx_machine_pulse",
+      "loop": false,
+      "boundaryJump": 0.0
+    },
+    {
+      "id": "music_early_labor",
+      "loop": true,
+      "boundaryJump": 0.00946
+    },
+    {
+      "id": "music_underworld_enterprise",
+      "loop": true,
+      "boundaryJump": 0.002136
+    },
+    {
+      "id": "music_approach_to_olympus",
+      "loop": true,
+      "boundaryJump": 0.015778
+    }
+  ],
+  "limits": [
+    "No claim of final art approval",
+    "Character rigging and work-layer animation remain pending",
+    "No in-game readability or lifecycle verification",
+    "Audio listening and final mix remain pending"
+  ]
+}

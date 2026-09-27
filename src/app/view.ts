@@ -10,14 +10,19 @@ import {
   empireIncomePerSecond,
   flywheelCost,
   flywheelFactor,
+  flywheelUnlocked,
+  foremanUnlocked,
   insightFactor,
   isAutomated,
   levelCap,
   levelsToMilestone,
   maxAffordable,
   nextMilestone,
+  nextPreludeUpgrade,
   nextRecordTarget,
   nextUnownedSite,
+  preludeActive,
+  preludeReach,
   prestigeRecord,
   spendableInsight,
   steadyIncomePerSecond,
@@ -44,6 +49,7 @@ export type RowAction =
   | { kind: 'work'; workId: string }
   | { kind: 'site'; siteId: string }
   | { kind: 'upgrade'; upgradeId: string }
+  | { kind: 'prelude'; upgradeId: string }
   | { kind: 'prestige' };
 
 export interface PurchaseRow {
@@ -58,7 +64,7 @@ export interface PurchaseRow {
   wait?: string;
   action: RowAction;
   options?: BuyOption[];
-  accent?: 'machine' | 'work' | 'decree' | 'insight';
+  accent?: 'machine' | 'work' | 'decree' | 'insight' | 'grip';
   progress?: number;
 }
 
@@ -82,6 +88,8 @@ export interface GameView {
     wheelCharged: boolean;
   };
   decree: { name: string; progress: number; ready: boolean; shown: boolean } | null;
+  /** The opening, while the stone still slips. */
+  prelude: { active: boolean; reach: number; best: number; attempts: number };
   objective: string;
   rows: PurchaseRow[];
   prestige: {
@@ -193,16 +201,36 @@ function workRow(state: GameState, def: WorkDef, site: SiteState): PurchaseRow |
   };
 }
 
+const pct = (x: number) => `${Math.round(x * 100)}%`;
+
+function preludeObjective(state: GameState): string {
+  const p = state.prelude;
+  if (!has(state, 'first_slip')) return t('hint.push');
+  const next = nextPreludeUpgrade(state);
+  if (!next) return t('hint.prelude_summit');
+  const name = t(`prelude.${next.id}`);
+  if (state.wallet.obols.gte(next.cost)) return `Open Improve: ${name} will get you higher.`;
+  return `Best height ${pct(p.bestHeight)}. ${t('hint.prelude_fall')} ${name}: ${formatMoney(next.cost)} Obols.`;
+}
+
 function objective(state: GameState, site: SiteState): string {
-  if (!has(state, 'first_summit')) return t('hint.push');
+  if (preludeActive(state)) return preludeObjective(state);
   if (!has(state, 'first_level')) return t('hint.improve');
+  const a = catalog.automation;
+  const hill = state.empire.sites[0];
   if (!state.empire.sites.some((s) => s.wheelOwned)) {
-    return has(state, 'first_descent')
-      ? `${t('hint.flywheel')} Flywheel: ${formatMoney(flywheelCost(site))} Obols.`
-      : t('hint.improve');
+    if (!flywheelUnlocked(state)) {
+      const nm = nextMilestone(hill.productionLevel);
+      const tease = nm !== null && nm >= a.flywheelUnlockLevel ? ` ${t('hint.flywheel_tease')}` : '';
+      return nm === null ? t('hint.flywheel_tease') : `Reach level ${nm} for ×2.${tease}`;
+    }
+    return `${t('hint.flywheel')} Flywheel: ${formatMoney(flywheelCost(site))} Obols.`;
   }
   if (!isAutomated(state)) {
     if (!state.empire.sites.some((s) => s.wheelCharged)) return t('hint.charge');
+    if (!foremanUnlocked(state)) {
+      return `Reach level ${a.foremanUnlockLevel} (now ${hill.productionLevel}). ${t('hint.foreman_tease')}`;
+    }
     return `${t('hint.foreman')} Foreman: ${formatMoney(catalog.levels.foremanCost)} Obols.`;
   }
   const hermes = catalog.works.find((w) => w.siteId === site.id && !state.empire.purchasedWorkIds.includes(w.id));
@@ -225,7 +253,22 @@ export function buildView(state: GameState): GameView {
   const automated = isAutomated(state);
   const rows: PurchaseRow[] = [];
 
-  if (has(state, 'first_summit')) {
+  const prelude = preludeActive(state);
+  const nextGrip = nextPreludeUpgrade(state);
+  if (prelude && nextGrip && has(state, 'first_slip')) {
+    const reach = preludeReach(state);
+    rows.push({
+      key: `prelude-${nextGrip.id}`,
+      title: t(`prelude.${nextGrip.id}`),
+      effect: `Reach ${pct(reach)} → ${pct(Math.min(1, reach + nextGrip.reach))} of the hill`,
+      note: t(`prelude.${nextGrip.id}.desc`),
+      cost: formatMoney(nextGrip.cost),
+      affordable: state.wallet.obols.gte(nextGrip.cost),
+      action: { kind: 'prelude', upgradeId: nextGrip.id },
+      accent: 'grip',
+    });
+  }
+  if (!prelude && has(state, 'first_summit')) {
     rows.push(levelRow(state, site, 'production')!);
   }
   if (has(state, 'first_level')) {
@@ -234,7 +277,7 @@ export function buildView(state: GameState): GameView {
     if (str) rows.push(str);
     if (imp) rows.push(imp);
   }
-  if (!site.wheelOwned && (has(state, 'first_descent') || owned.some((s) => s.wheelOwned))) {
+  if (!site.wheelOwned && flywheelUnlocked(state)) {
     const cost = flywheelCost(site);
     rows.push({
       key: 'flywheel',
@@ -248,7 +291,7 @@ export function buildView(state: GameState): GameView {
       accent: 'machine',
     });
   }
-  if (!automated && owned.some((s) => s.wheelOwned)) {
+  if (!automated && foremanUnlocked(state)) {
     const cost = catalog.levels.foremanCost;
     rows.push({
       key: 'foreman',
@@ -352,6 +395,12 @@ export function buildView(state: GameState): GameView {
       wheelCharged: site.wheelCharged,
     },
     decree,
+    prelude: {
+      active: prelude,
+      reach: preludeReach(state),
+      best: state.prelude.bestHeight,
+      attempts: state.prelude.attempts,
+    },
     objective: objective(state, site),
     rows,
     prestige: {

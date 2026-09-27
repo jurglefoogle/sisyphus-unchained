@@ -2,7 +2,7 @@ import { Application, Circle, Container, Graphics, Text } from 'pixi.js';
 import type { Game } from '../app/game';
 import { catalog } from '../content/catalog';
 import { formatMoney } from '../core/format';
-import { ascentRate } from '../core/formulas';
+import { ascentLimit, ascentRate, slipSeconds } from '../core/formulas';
 import { findSite } from '../core/sim';
 import type { GameEvent, SiteState } from '../core/state';
 import {
@@ -21,6 +21,7 @@ import {
   surfaceY,
   TARGET,
   UP_DIR,
+  UP_NORMAL,
   type Vec,
 } from './geometry';
 import { GREY } from './palette';
@@ -73,6 +74,9 @@ export class World {
   private stonePulse = 0;
   private shake = 0;
   private flash = 0;
+  private stoneKey = '';
+  private slipX: number | null = null;
+  private summitGlow = 0;
 
   constructor(private game: Game) {}
 
@@ -87,8 +91,6 @@ export class World {
     el.appendChild(this.app.canvas);
     this.app.canvas.setAttribute('aria-hidden', 'true');
 
-    this.stoneG.circle(0, 0, STONE_R).fill(GREY.stone);
-    this.stoneG.moveTo(0, 0).lineTo(STONE_R * 0.85, 0).stroke({ width: 4, color: GREY.sky });
     this.stone.addChild(this.stoneG);
     this.stage.addChild(this.staticLayer, this.dynamic, this.stone, this.fx, this.hotspot);
 
@@ -140,11 +142,43 @@ export class World {
     }
   }
 
+  private grip(id: string): boolean {
+    const p = this.game.state.prelude;
+    return p.complete || p.upgradeIds.includes(id);
+  }
+
+  /** The stone starts jagged; prelude upgrades chip and grind it round (stone states in assets.ts). */
+  private drawStone(site: SiteState): void {
+    const first = site.id === catalog.sites[0].id;
+    const shape = !first || this.grip('grind_round') ? 'round' : this.grip('chip_burrs') ? 'chipped' : 'rough';
+    if (shape === this.stoneKey) return;
+    this.stoneKey = shape;
+    const g = this.stoneG;
+    g.clear();
+    if (shape === 'round') {
+      g.circle(0, 0, STONE_R).fill(GREY.stone);
+    } else {
+      // Fixed irregular outlines so the stone reads the same every frame.
+      const radii =
+        shape === 'rough'
+          ? [1.08, 0.8, 1.02, 0.86, 1.1, 0.78, 0.98, 0.84, 1.06, 0.82, 1.0]
+          : [1.02, 0.93, 1.0, 0.95, 1.03, 0.92, 0.99];
+      const pts: number[] = [];
+      radii.forEach((r, i) => {
+        const a = (i / radii.length) * Math.PI * 2;
+        pts.push(Math.cos(a) * STONE_R * r, Math.sin(a) * STONE_R * r);
+      });
+      g.poly(pts).fill(GREY.stone).stroke({ width: 2, color: GREY.line });
+    }
+    g.moveTo(0, 0).lineTo(STONE_R * 0.7, 0).stroke({ width: 4, color: GREY.sky });
+  }
+
   private drawStatic(site: SiteState): void {
     const s = this.game.state;
     const works = s.empire.purchasedWorkIds.filter((id) => catalog.works.find((w) => w.id === id)?.siteId === site.id);
     const tier = catalog.levels.milestones.filter((m) => m <= site.productionLevel).length;
-    const key = `${site.id}|${tier}|${site.wheelOwned}|${works.join(',')}`;
+    const footholds = site.id === catalog.sites[0].id && this.grip('cut_footholds');
+    const key = `${site.id}|${tier}|${site.wheelOwned}|${works.join(',')}|${footholds}`;
     if (key === this.staticKey) return;
     this.staticKey = key;
 
@@ -158,6 +192,15 @@ export class World {
     // Hill.
     const { footLeft: a, summitLeft: b, summitRight: c, footRight: d } = HILL;
     g.poly([a.x, a.y, b.x, b.y, c.x, c.y, d.x, d.y]).fill(GREY.hill).stroke(line);
+
+    // Footholds cut into the steep upper route (placeholder for route_footholds).
+    if (footholds) {
+      for (let u = 0.5; u < 0.97; u += 0.065) {
+        const x = a.x + (b.x - a.x) * u;
+        const y = surfaceY(x);
+        g.poly([x - 16, y + 9, x + 8, y - 4, x + 8, y + 9]).fill(GREY.ground);
+      }
+    }
 
     // Installation tiers at milestone anchors (placeholders for install_level_*).
     if (tier >= 1) {
@@ -185,6 +228,12 @@ export class World {
   private stonePosition(site: SiteState): Vec {
     const c = catalog.cycle;
     if (site.phase === 'ascending') return routePoint(site.phaseProgress);
+    if (site.phase === 'slipping') {
+      // Rolls back from where grip gave out, gathering speed toward the foot.
+      const h = site.snapshot.slipHeight;
+      const t = Math.min(1, site.phaseProgress / slipSeconds(h));
+      return routePoint(h * (1 - t * t));
+    }
     if (site.phase === 'descending') return descentPoint(site.phaseProgress / c.descentSeconds);
     return returnPoint(site.phaseProgress / c.returnSeconds);
   }
@@ -196,9 +245,19 @@ export class World {
     this.time += dt;
     this.layout();
     this.drawStatic(site);
+    this.drawStone(site);
 
     const reduced = s.options.reducedMotion;
-    const pos = this.stonePosition(site);
+    const held = this.game.manualHeld;
+    const limit = ascentLimit(s, site);
+    // Near the grip limit the stone shudders and Sisyphus strains.
+    const strain =
+      site.phase === 'ascending' && limit < 1 && held ? Math.max(0, 1 - (limit - site.phaseProgress) / 0.06) : 0;
+    const pos = { ...this.stonePosition(site) };
+    if (strain > 0 && !reduced) {
+      pos.x += (Math.random() - 0.5) * 6 * strain;
+      pos.y += (Math.random() - 0.5) * 4 * strain;
+    }
     if (this.lastStone) this.stone.rotation += (pos.x - this.lastStone.x) / STONE_R;
     this.lastStone = pos;
     this.stonePulse = Math.max(0, this.stonePulse - dt * 3);
@@ -207,9 +266,9 @@ export class World {
     this.hotspot.hitArea = new Circle(pos.x - 40, pos.y, 130);
     this.shake = reduced ? 0 : Math.max(0, this.shake - dt * 40);
     this.flash = Math.max(0, this.flash - dt * 1.5);
+    this.summitGlow = Math.max(0, this.summitGlow - dt * 0.6);
 
     const automated = s.empire.foremanOwned;
-    const held = this.game.manualHeld;
     const rate = ascentRate(s, site, { manualHeld: held, offline: false });
     const g = this.dynamic;
     g.clear();
@@ -261,19 +320,38 @@ export class World {
       }
       return startX - offset + 40;
     };
-    const sisTarget = sisPushing ? pusherTarget(40) : REST_SPOT.x;
+    const slipping = site.phase === 'slipping';
+    const sisTarget = slipping && this.slipX !== null ? this.slipX : sisPushing ? pusherTarget(40) : REST_SPOT.x;
     const shadeTarget = automated ? pusherTarget(held ? 110 : 40) : REST_SPOT.x - 200;
     const follow = (cur: number, to: number) => {
       const max = 900 * dt;
       return Math.abs(to - cur) <= max ? to : cur + Math.sign(to - cur) * max;
     };
     const prevSis = this.sisX;
-    this.sisX = site.phase === 'ascending' && sisPushing ? sisTarget : follow(this.sisX, sisTarget);
+    // Glued to the stone while pushing, but after a slip he walks back down first.
+    const glued =
+      site.phase === 'ascending' && sisPushing && Math.abs(this.sisX - sisTarget) <= Math.max(30, 900 * dt);
+    this.sisX = glued ? sisTarget : follow(this.sisX, sisTarget);
+    if (!slipping) this.slipX = null;
     this.shadeX = site.phase === 'ascending' && automated ? shadeTarget : follow(this.shadeX, shadeTarget);
     this.stride += Math.abs(this.sisX - prevSis) * 0.08 + rate * dt * 30;
 
-    if (automated) this.drawPerson(g, this.shadeX, GREY.shade, 0.75, site.phase === 'ascending');
-    this.drawPerson(g, this.sisX, GREY.sisyphus, 1, sisPushing && site.phase === 'ascending');
+    if (automated) this.drawPerson(g, this.shadeX, GREY.shade, 0.75, site.phase === 'ascending' ? 0.5 : 0);
+    // Knocked flat by the slip, leaning into the strain, or upright.
+    const lean = slipping ? -1.35 : sisPushing && glued ? 0.5 + 0.25 * strain : 0;
+    this.drawPerson(g, this.sisX, GREY.sisyphus, 1, lean, this.grip('wrap_feet'));
+
+    // High-water mark: the best height so far, while the stone still slips.
+    if (!s.prelude.complete && s.prelude.bestHeight > 0 && site.id === catalog.sites[0].id) {
+      const p = routePoint(s.prelude.bestHeight);
+      const base = { x: p.x - UP_NORMAL.x * STONE_R, y: p.y - UP_NORMAL.y * STONE_R };
+      g.moveTo(base.x, base.y).lineTo(base.x, base.y - 70).stroke({ width: 3, color: GREY.line });
+      g.poly([base.x, base.y - 70, base.x + 34, base.y - 60, base.x, base.y - 50]).fill(GREY.gold);
+    }
+    if (this.summitGlow > 0) {
+      const p = routePoint(1);
+      g.circle(p.x, p.y, 60 + 260 * (1 - this.summitGlow)).stroke({ width: 8, color: GREY.gold, alpha: this.summitGlow });
+    }
 
     // First-push affordance.
     if (!s.discoveries.tutorialIds.includes('first_summit') && !held) {
@@ -284,14 +362,15 @@ export class World {
     this.updateFx(dt);
   }
 
-  /** Greybox person: a capsule body and head, leaning when pushing. */
-  private drawPerson(g: Graphics, x: number, color: number, alpha: number, pushing: boolean): void {
+  /** Greybox person: a capsule body and head; `lean` in radians (negative = fallen back). */
+  private drawPerson(g: Graphics, x: number, color: number, alpha: number, lean: number, wrapped = false): void {
     const y = surfaceY(x);
-    const lean = pushing ? 0.5 : 0;
-    const bob = Math.sin(this.stride) * 3;
+    const bob = lean < -1 ? 0 : Math.sin(this.stride) * 3;
     const top = { x: x + Math.sin(lean) * 110, y: y - Math.cos(lean) * 110 + bob };
     g.moveTo(x, y).lineTo(top.x, top.y).stroke({ width: 26, color, alpha, cap: 'round' });
     g.circle(top.x + Math.sin(lean) * 26, top.y - Math.cos(lean) * 26, 15).fill({ color, alpha });
+    // Rag foot wraps (placeholder for the sisyphus feet_wrapped variant).
+    if (wrapped) g.roundRect(x - 17, y - 14, 34, 14, 5).fill({ color: GREY.chute, alpha });
   }
 
   // ------------------------------------------------------------------ effects
@@ -319,6 +398,38 @@ export class World {
           }
           break;
         }
+        case 'StoneSlipped': {
+          const p = routePoint(e.height);
+          this.slipX = this.sisX;
+          if (e.record) this.floatText(`New height: ${Math.round(e.height * 100)}%`, p.x, p.y - 130, GREY.gold);
+          else this.floatText('Slipped', p.x, p.y - 110, GREY.text);
+          if (!reduced) {
+            this.burst(p.x - 30, p.y + 30, 8, GREY.ground);
+            this.shake = 5;
+          }
+          break;
+        }
+        case 'FallResolved': {
+          const p = routePoint(0);
+          this.floatText(`+${formatMoney(e.amount)}`, p.x, p.y - 100, GREY.text);
+          if (!reduced) {
+            this.burst(p.x, p.y + 20, 6, GREY.gold);
+            this.shake = 4;
+          }
+          break;
+        }
+        case 'PreludeCompleted': {
+          const p = routePoint(1);
+          // Beside the summit, clear of the story banner, and held longer than usual.
+          this.floatText('THE SUMMIT', p.x - 260, p.y + 40, GREY.gold, 3);
+          this.floatText(`+${formatMoney(e.offering)} offering`, p.x - 260, p.y + 90, GREY.text, 3);
+          this.summitGlow = 1;
+          if (!reduced) {
+            this.burst(p.x, p.y - 30, 40, GREY.gold);
+            this.shake = 12;
+          }
+          break;
+        }
         case 'FlywheelCharged':
           this.flash = 1;
           break;
@@ -336,12 +447,12 @@ export class World {
     }
   }
 
-  private floatText(text: string, x: number, y: number, color: number): void {
+  private floatText(text: string, x: number, y: number, color: number, life = 1.4): void {
     const t = new Text({ text, style: { fontFamily: 'Georgia, serif', fontSize: 34, fontWeight: '700', fill: color } });
     t.anchor.set(0.5);
     t.position.set(x, y);
     this.fx.addChild(t);
-    this.texts.push({ t, life: 1.4 });
+    this.texts.push({ t, life });
     if (this.texts.length > 8) {
       const old = this.texts.shift()!;
       old.t.destroy();

@@ -187,6 +187,10 @@ def inspect_art():
             alpha=image.getchannel('A') if has_alpha else None
             transparent=bool(alpha and alpha.getextrema()[0]<255)
             bounds=alpha.getbbox() if alpha else (0,0,w,h)
+            if alpha:
+                opaque_y,opaque_x=np.where(np.asarray(alpha)>=128)
+                visible_bounds=(int(opaque_x.min()),int(opaque_y.min()),int(opaque_x.max()+1),int(opaque_y.max()+1)) if len(opaque_x) else bounds
+            else:visible_bounds=bounds
             margins=[bounds[0]/w,bounds[1]/h,(w-bounds[2])/w,(h-bounds[3])/h] if bounds else [0]*4
         category=task['category']
         status='first-pass raster; visual approval pending'
@@ -194,8 +198,9 @@ def inspect_art():
         if category!='environment' and not transparent:
             warnings.append('No transparent pixels: '+task['id']);status='blocked: opaque sprite background'
         if category!='environment' and min(margins)<.025:warnings.append('Tight edge padding: '+task['id'])
-        pivot=[.5,.5] if category in ('stone','portrait') or task['id']=='flywheel_rotor' else ([0,0] if category=='environment' else [.5,bounds[3]/h if bounds else 1])
-        record(task['id'],category,path,dimensions=[w,h],pivot=pivot,pivotStatus='suggested; calibrate during scene integration',alphaBounds=list(bounds) if bounds else None,hasTransparency=transparent,sourceFile=path.relative_to(ROOT).as_posix(),promptSource=prompt_path.relative_to(ROOT).as_posix(),provenance='Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.',status=status)
+        center=[(visible_bounds[0]+visible_bounds[2])/(2*w),(visible_bounds[1]+visible_bounds[3])/(2*h)]
+        pivot=center if category in ('stone','portrait') or task['id']=='flywheel_rotor' else ([0,0] if category=='environment' else [center[0],visible_bounds[3]/h])
+        record(task['id'],category,path,dimensions=[w,h],pivot=pivot,pivotStatus='suggested from alpha >= 128 bounds; calibrate during scene integration',alphaBounds=list(bounds) if bounds else None,visibleAlphaBounds=list(visible_bounds),hasTransparency=transparent,sourceFile=path.relative_to(ROOT).as_posix(),promptSource=prompt_path.relative_to(ROOT).as_posix(),provenance='Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.',status=status)
     return warnings
 
 def catalog(warnings):

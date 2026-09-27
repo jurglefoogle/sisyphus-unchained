@@ -12,7 +12,7 @@ import { insightFactor } from '../src/core/formulas';
 import { Money } from '../src/core/money';
 import { checkDecrees, grantIncome, stepSites } from '../src/core/sim';
 import type { GameEvent } from '../src/core/state';
-import { ctx, expectClose, give, makeState, runFrames } from './helpers';
+import { ctx, expectClose, give, knowsAutomation, makeState, runFrames } from './helpers';
 
 const count = (events: GameEvent[], type: GameEvent['type']) => events.filter((e) => e.type === type).length;
 
@@ -65,7 +65,7 @@ describe('manual cycle', () => {
 
 describe('flywheel and foreman', () => {
   it('assists only after the descent following purchase', () => {
-    const s = makeState();
+    const s = knowsAutomation(makeState());
     give(s, 80);
     runFrames(s, 3, 60, true); // mid-ascent
     expect(buyFlywheel(s, 'first_hill', []).ok).toBe(true);
@@ -80,7 +80,7 @@ describe('flywheel and foreman', () => {
   });
 
   it('foreman requires a flywheel and then automates every site, now and later', () => {
-    const s = makeState();
+    const s = knowsAutomation(makeState());
     give(s, 10_000);
     expect(hireForeman(s, []).ok).toBe(false);
     buyFlywheel(s, 'first_hill', []);

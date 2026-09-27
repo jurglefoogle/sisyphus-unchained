@@ -28,6 +28,23 @@
     "flywheelCostMultiplier": 10,
     "foremanCost": "360"
   },
+  "prelude": {
+    "baseReach": 0.3,
+    "fallYield": 10,
+    "slipSecondsBase": 0.6,
+    "slipSecondsPerHeight": 1.6,
+    "summitOffering": "50",
+    "upgrades": [
+      { "id": "chip_burrs", "cost": "5", "reach": 0.2 },
+      { "id": "wrap_feet", "cost": "8", "reach": 0.2 },
+      { "id": "grind_round", "cost": "12", "reach": 0.15 },
+      { "id": "cut_footholds", "cost": "16", "reach": 0.15 }
+    ]
+  },
+  "automation": {
+    "flywheelUnlockLevel": 25,
+    "foremanUnlockLevel": 35
+  },
   "sites": [
     { "id": "first_hill", "displayNameKey": "site.first_hill", "unlockCost": "0", "defianceGate": "0", "baseYield": "10", "baseLevelCost": "8", "ascentSeconds": 12, "stoneAssetId": "stone_limestone", "sceneId": "scene_first_hill", "patronId": "hermes" },
     { "id": "tartarus_rim", "displayNameKey": "site.tartarus_rim", "unlockCost": "45000", "defianceGate": "60000", "baseYield": "250", "baseLevelCost": "960", "ascentSeconds": 15, "stoneAssetId": "stone_basalt", "sceneId": "scene_tartarus_rim", "patronId": "daedalus" },

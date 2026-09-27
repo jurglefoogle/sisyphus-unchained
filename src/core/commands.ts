@@ -4,10 +4,13 @@ import {
   bulkCost,
   currentLevel,
   flywheelCost,
+  flywheelUnlocked,
+  foremanUnlocked,
   hasUpgrade,
   insightFactor,
   levelCap,
   milestoneCount,
+  nextPreludeUpgrade,
   prestigeEntitlement,
   prestigeRecord,
   spendableInsight,
@@ -84,6 +87,7 @@ export function newGame(now: number, seeds?: { coin: number; relic: number; save
     lastSettledUtc: now,
     paused: false,
     wallet: { obols: Money.ZERO, runGross: Money.ZERO, bestRunGross: Money.ZERO },
+    prelude: { complete: false, upgradeIds: [], bestHeight: 0, attempts: 0 },
     prestige: { lifetimeInsightAwarded: 0, insightSpent: 0, permanentUpgradeIds: [] },
     empire: {
       foremanOwned: false,
@@ -146,6 +150,7 @@ export function buyLevels(
   events.push({ type: 'PurchaseCompleted', kind: track, siteId, count, cost });
   if (track === 'production') {
     markTutorial(state, 'first_level');
+    announceUnlocks(state, from, events);
     const reached = catalog.levels.milestones.filter((m) => m > from && m <= site.productionLevel);
     if (milestoneCount(site.productionLevel) > milestonesBefore) {
       for (const level of reached) events.push({ type: 'MilestoneReached', siteId, level });
@@ -155,10 +160,39 @@ export function buyLevels(
   return commit(state);
 }
 
+/** First-run discoveries unlocked by First Hill levels (see `automation` in economy data). */
+function announceUnlocks(state: GameState, fromLevel: number, events: GameEvent[]): void {
+  const hill = findSite(state, catalog.sites[0].id);
+  if (!hill || hill.productionLevel === fromLevel) return;
+  const a = catalog.automation;
+  const crossed = (level: number) => fromLevel < level && hill.productionLevel >= level;
+  if (crossed(a.flywheelUnlockLevel) && !state.discoveries.tutorialIds.includes('first_wheel')) {
+    events.push({ type: 'FeatureUnlocked', feature: 'flywheel' });
+  }
+  if (crossed(a.foremanUnlockLevel) && !state.discoveries.tutorialIds.includes('foreman')) {
+    events.push({ type: 'FeatureUnlocked', feature: 'foreman' });
+  }
+}
+
+/** Prelude grip upgrades are bought once each, in order. */
+export function buyPreludeUpgrade(state: GameState, upgradeId: string, events: GameEvent[]): CommandResult {
+  if (state.prelude.complete) return fail('prelude-complete');
+  const def = catalog.prelude.upgrades.find((u) => u.id === upgradeId);
+  if (!def) return fail('unknown-upgrade');
+  if (state.prelude.upgradeIds.includes(upgradeId)) return fail('already-owned');
+  if (nextPreludeUpgrade(state)?.id !== upgradeId) return fail('previous-not-owned');
+  if (def.cost.gt(state.wallet.obols)) return fail('insufficient-funds');
+  debit(state, def.cost);
+  state.prelude.upgradeIds.push(upgradeId);
+  events.push({ type: 'PurchaseCompleted', kind: 'prelude', siteId: catalog.sites[0].id, cost: def.cost });
+  return commit(state);
+}
+
 export function buyFlywheel(state: GameState, siteId: string, events: GameEvent[]): CommandResult {
   const site = findSite(state, siteId);
   if (!site) return fail('site-not-owned');
   if (site.wheelOwned) return fail('already-owned');
+  if (!flywheelUnlocked(state)) return fail('locked');
   const cost = flywheelCost(site);
   if (cost.gt(state.wallet.obols)) return fail('insufficient-funds');
   debit(state, cost);
@@ -173,6 +207,7 @@ export function buyFlywheel(state: GameState, siteId: string, events: GameEvent[
 export function hireForeman(state: GameState, events: GameEvent[]): CommandResult {
   if (state.empire.foremanOwned) return fail('already-owned');
   if (!state.empire.sites.some((s) => s.wheelOwned)) return fail('needs-flywheel');
+  if (!foremanUnlocked(state)) return fail('locked');
   const cost = catalog.levels.foremanCost;
   if (cost.gt(state.wallet.obols)) return fail('insufficient-funds');
   debit(state, cost);

@@ -1,8 +1,9 @@
 import { Money } from './money';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
-export type Phase = 'ascending' | 'descending' | 'returning';
+/** `slipping`: during the prelude the stone rolls back from where grip gave out. */
+export type Phase = 'ascending' | 'descending' | 'returning' | 'slipping';
 
 /** Payout fixed when a cycle begins (spec §01 "snapshotted"). */
 export interface CycleSnapshot {
@@ -12,6 +13,8 @@ export interface CycleSnapshot {
   bonusTargetId: string;
   summitGranted: boolean;
   impactGranted: boolean;
+  /** Height (0..1) the stone slipped from; meaningful only while slipping. */
+  slipHeight: number;
 }
 
 export interface SiteState {
@@ -22,7 +25,7 @@ export interface SiteState {
   wheelOwned: boolean;
   wheelCharged: boolean;
   phase: Phase;
-  /** Ascending: normalised work 0..1. Descending/returning: seconds elapsed. */
+  /** Ascending: normalised work 0..1. Other phases: seconds elapsed. */
   phaseProgress: number;
   cycleIndex: number;
   snapshot: CycleSnapshot;
@@ -49,6 +52,18 @@ export interface GameState {
     /** Defiance: gross Obols earned this run. */
     runGross: Money;
     bestRunGross: Money;
+  };
+
+  /**
+   * The opening: the stone slips until grip upgrades let it reach the summit.
+   * Played once per save; survives Begin Again.
+   */
+  prelude: {
+    complete: boolean;
+    upgradeIds: string[];
+    /** Highest point reached before a slip, 0..1. */
+    bestHeight: number;
+    attempts: number;
   };
 
   prestige: {
@@ -110,6 +125,7 @@ export function emptySnapshot(): CycleSnapshot {
     bonusTargetId: 'debris',
     summitGranted: false,
     impactGranted: false,
+    slipHeight: 0,
   };
 }
 
@@ -118,6 +134,10 @@ export type GameEvent =
   | { type: 'SummitReached'; siteId: string; amount: Money }
   | { type: 'ImpactResolved'; siteId: string; amount: Money; bonus: Money; targetId: string }
   | { type: 'FlywheelCharged'; siteId: string }
+  | { type: 'StoneSlipped'; siteId: string; height: number; record: boolean }
+  | { type: 'FallResolved'; siteId: string; amount: Money }
+  | { type: 'PreludeCompleted'; offering: Money }
+  | { type: 'FeatureUnlocked'; feature: 'flywheel' | 'foreman' }
   | { type: 'PurchaseCompleted'; kind: PurchaseKind; siteId?: string; count?: number; cost: Money }
   | { type: 'MilestoneReached'; siteId: string; level: number }
   | { type: 'WorkInstalled'; workId: string; free: boolean }
@@ -136,4 +156,5 @@ export type PurchaseKind =
   | 'foreman'
   | 'work'
   | 'site'
-  | 'insight';
+  | 'insight'
+  | 'prelude';

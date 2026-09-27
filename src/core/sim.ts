@@ -1,8 +1,11 @@
 import { catalog, siteDef } from '../content/catalog';
 import {
+  ascentLimit,
   ascentRate,
   cyclePayout,
+  fallPayout,
   isAutomated,
+  slipSeconds,
   type MotionInput,
 } from './formulas';
 import { Money } from './money';
@@ -147,6 +150,7 @@ export function startCycle(state: GameState, site: SiteState, ctx: StepContext):
     bonusTargetId,
     summitGranted: false,
     impactGranted: false,
+    slipHeight: 0,
   };
   ctx.events.push({ type: 'CycleStarted', siteId: site.id, cycleIndex: site.cycleIndex });
 }
@@ -160,9 +164,13 @@ export function timeToBoundary(state: GameState, site: SiteState, input: MotionI
   const c = catalog.cycle;
   switch (site.phase) {
     case 'ascending': {
+      const limit = ascentLimit(state, site);
+      if (site.phaseProgress >= limit) return 0;
       const rate = ascentRate(state, site, input);
-      return rate > 0 ? Math.max(0, (1 - site.phaseProgress) / rate) : Infinity;
+      return rate > 0 ? (limit - site.phaseProgress) / rate : Infinity;
     }
+    case 'slipping':
+      return phaseFrozen(state, input) ? Infinity : Math.max(0, slipSeconds(site.snapshot.slipHeight) - site.phaseProgress);
     case 'descending':
       return phaseFrozen(state, input) ? Infinity : Math.max(0, c.descentSeconds - site.phaseProgress);
     case 'returning':
@@ -173,16 +181,59 @@ export function timeToBoundary(state: GameState, site: SiteState, input: MotionI
 function advancePartial(state: GameState, site: SiteState, dt: number, input: MotionInput): void {
   if (dt <= 0) return;
   if (site.phase === 'ascending') {
-    site.phaseProgress = Math.min(1, site.phaseProgress + ascentRate(state, site, input) * dt);
+    const limit = ascentLimit(state, site);
+    site.phaseProgress = Math.min(limit, site.phaseProgress + ascentRate(state, site, input) * dt);
   } else if (!phaseFrozen(state, input)) {
-    const limit = site.phase === 'descending' ? catalog.cycle.descentSeconds : catalog.cycle.returnSeconds;
-    site.phaseProgress = Math.min(limit, site.phaseProgress + dt);
+    site.phaseProgress = Math.min(phaseSeconds(site), site.phaseProgress + dt);
   }
+}
+
+function phaseSeconds(site: SiteState): number {
+  switch (site.phase) {
+    case 'descending':
+      return catalog.cycle.descentSeconds;
+    case 'returning':
+      return catalog.cycle.returnSeconds;
+    case 'slipping':
+      return slipSeconds(site.snapshot.slipHeight);
+    case 'ascending':
+      return Infinity;
+  }
+}
+
+/** Grip gave out: the stone rolls back to the foot (prelude only). */
+function beginSlip(state: GameState, site: SiteState, events: GameEvent[]): void {
+  // The boundary is the grip limit; a migrated save may already sit above it.
+  const height = Math.max(site.phaseProgress, ascentLimit(state, site));
+  const record = height > state.prelude.bestHeight + 1e-9;
+  if (record) state.prelude.bestHeight = height;
+  state.prelude.attempts += 1;
+  site.snapshot.slipHeight = height;
+  site.phase = 'slipping';
+  site.phaseProgress = 0;
+  events.push({ type: 'StoneSlipped', siteId: site.id, height, record });
+  if (!state.discoveries.tutorialIds.includes('first_slip')) {
+    markTutorial(state, 'first_slip');
+    triggerStory(state, 'first_slip', events);
+  }
+}
+
+/** The first summit ends the prelude; the astonished shades pay up. */
+function completePrelude(state: GameState, events: GameEvent[]): void {
+  state.prelude.complete = true;
+  state.prelude.bestHeight = 1;
+  const offering = catalog.prelude.summitOffering;
+  grantIncome(state, offering, events);
+  events.push({ type: 'PreludeCompleted', offering });
 }
 
 function processBoundary(state: GameState, site: SiteState, ctx: StepContext): void {
   switch (site.phase) {
     case 'ascending': {
+      if (ascentLimit(state, site) < 1) {
+        beginSlip(state, site, ctx.events);
+        return;
+      }
       if (!site.snapshot.summitGranted) {
         site.snapshot.summitGranted = true;
         grantIncome(state, site.snapshot.summit, ctx.events);
@@ -193,6 +244,7 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
         markTutorial(state, 'first_summit');
         triggerStory(state, 'first_summit', ctx.events);
       }
+      if (!state.prelude.complete) completePrelude(state, ctx.events);
       site.phase = 'descending';
       site.phaseProgress = 0;
       return;
@@ -221,6 +273,14 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
       relicTick(state, site, ctx.events);
       site.phase = 'returning';
       site.phaseProgress = 0;
+      return;
+    }
+    case 'slipping': {
+      const amount = fallPayout(site.snapshot.slipHeight);
+      grantIncome(state, amount, ctx.events);
+      ctx.events.push({ type: 'FallResolved', siteId: site.id, amount });
+      site.cycleIndex += 1;
+      startCycle(state, site, ctx);
       return;
     }
     case 'returning':
@@ -269,7 +329,14 @@ export function timeUntilImpacts(state: GameState, site: SiteState, impacts: num
     if (!Number.isFinite(tb)) return Infinity;
     t += tb;
     if (clone.phase === 'ascending') {
-      clone.phase = 'descending';
+      if (ascentLimit(state, clone) < 1) {
+        clone.snapshot.slipHeight = clone.phaseProgress + tb * ascentRate(state, clone, input);
+        clone.phase = 'slipping';
+      } else {
+        clone.phase = 'descending';
+      }
+    } else if (clone.phase === 'slipping') {
+      clone.phase = 'ascending';
     } else if (clone.phase === 'descending') {
       if (clone.wheelOwned) clone.wheelCharged = true;
       left -= 1;

@@ -5,10 +5,10 @@ import { settleOffline } from '../src/core/offline';
 import { checksum, deserializeSave, serializeSave } from '../src/core/save';
 import { grantIncome, stepSites } from '../src/core/sim';
 import type { GameState } from '../src/core/state';
-import { ctx, expectClose, give, makeState } from './helpers';
+import { ctx, expectClose, give, knowsAutomation, makeState } from './helpers';
 
 function automated(): GameState {
-  const s = makeState();
+  const s = knowsAutomation(makeState());
   give(s, 80);
   buyFlywheel(s, 'first_hill', []);
   s.empire.foremanOwned = true;

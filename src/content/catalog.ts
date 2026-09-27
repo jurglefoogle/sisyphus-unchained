@@ -59,11 +59,24 @@ export interface InsightUpgradeDef {
   effect: InsightEffect;
 }
 
+/** A one-time grip improvement bought during the opening (the prelude). */
+export interface PreludeUpgradeDef {
+  id: string;
+  cost: Money;
+  /** Added fraction of the hill the stone can be pushed before it slips. */
+  reach: number;
+}
+
 export interface Catalog {
   contentVersion: string;
   cycle: typeof raw.cycle;
   speed: typeof raw.speed;
   levels: Omit<typeof raw.levels, 'foremanCost'> & { foremanCost: Money };
+  prelude: Omit<typeof raw.prelude, 'summitOffering' | 'upgrades'> & {
+    summitOffering: Money;
+    upgrades: PreludeUpgradeDef[];
+  };
+  automation: typeof raw.automation;
   sites: SiteDef[];
   works: WorkDef[];
   bonusTargets: BonusTargetDef[];
@@ -172,6 +185,18 @@ export function buildCatalog(data: RawEconomy): Catalog {
     check(INSIGHT_EFFECTS.includes(u.effect), `${u.id}: unknown effect ${u.effect}`);
   });
 
+  const prelude = {
+    ...data.prelude,
+    summitOffering: Money.of(data.prelude.summitOffering),
+    upgrades: data.prelude.upgrades.map((u) => ({ ...u, cost: Money.of(u.cost) })),
+  };
+  check(new Set(prelude.upgrades.map((u) => u.id)).size === prelude.upgrades.length, 'prelude upgrade ids must be unique');
+  check(prelude.baseReach > 0 && prelude.baseReach < 1, 'prelude base reach must be inside the hill');
+  for (const u of prelude.upgrades) check(u.reach > 0 && u.cost.gt(0), `${u.id}: reach and cost must be positive`);
+  const fullReach = prelude.upgrades.reduce((a, u) => a + u.reach, prelude.baseReach);
+  check(fullReach >= 1 - 1e-9, 'prelude upgrades must eventually reach the summit');
+  check(prelude.fallYield > 0 && prelude.slipSecondsBase > 0, 'prelude falls must pay and take time');
+
   check(data.cycle.descentSeconds > 0 && data.cycle.returnSeconds > 0, 'phase durations must be positive');
   check(Math.abs(data.cycle.summitShare + data.cycle.impactShare - 1) < 1e-9, 'summit + impact shares must be 1');
 
@@ -182,6 +207,8 @@ export function buildCatalog(data: RawEconomy): Catalog {
     cycle: data.cycle,
     speed: data.speed,
     levels: { ...data.levels, foremanCost: Money.of(data.levels.foremanCost) },
+    prelude,
+    automation: data.automation,
     sites,
     works,
     bonusTargets: data.bonusTargets,

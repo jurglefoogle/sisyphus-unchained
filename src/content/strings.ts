@@ -27,6 +27,8 @@ export const en: Record<string, string> = {
   'work.charter': 'Eternal Labor Charter',
   'work.charter.desc': 'Zeus contracts the enterprise for its own punishment. All income ×2.',
 
+  'story.first_slip.god': 'The stone shall never reach the summit.',
+  'story.first_slip.sis': 'Never is a long time. I have a long time.',
   'story.first_summit.god': 'The stone shall return to the foot of the hill.',
   'story.first_summit.sis': 'Convenient. I was going to need it again.',
   'story.flywheel_purchase.god': 'The return is part of your punishment.',
@@ -53,6 +55,19 @@ export const en: Record<string, string> = {
   'story.charter_purchase.sis': 'So is the contract.',
   'story.first_prestige.god': 'Thanatos returns you to the foot of the hill.',
   'story.first_prestige.sis': 'Same sentence. New understanding.',
+
+  'prelude.chip_burrs': 'Chip Off the Burrs',
+  'prelude.chip_burrs.desc': 'Knock the jagged edges off the stone so it stops snagging on every rut.',
+  'prelude.wrap_feet': 'Wrap Your Feet',
+  'prelude.wrap_feet.desc': 'Rags bound over bare soles. The scree stops sliding out from under you.',
+  'prelude.grind_round': 'Grind It Round',
+  'prelude.grind_round.desc': 'Hours of grinding against the rocks. A round stone rolls; a lump drags.',
+  'prelude.cut_footholds': 'Cut Footholds',
+  'prelude.cut_footholds.desc': 'Steps hacked into the steepest stretch. Somewhere to stand, at last.',
+  'prelude.offering': 'The astonished shades empty their purses',
+
+  'unlock.flywheel': 'Idea: the falling stone could turn a wheel. Flywheel available.',
+  'unlock.foreman': 'The shades who watched you fail now want the job. Foreman available.',
 
   'relic.hermes_seal': 'Hermes Seal',
   'relic.hermes_seal.joke': 'Delivered before the complaint.',
@@ -89,6 +104,10 @@ export const en: Record<string, string> = {
   'target.gilded_offering': 'Gilded offering',
 
   'hint.push': 'Hold the boulder, Space, or the Push button to climb.',
+  'hint.prelude_fall': 'Shades toss an obol at every fall.',
+  'hint.prelude_summit': 'Nothing holds you back now. Push to the top.',
+  'hint.flywheel_tease': 'Something about the falling stone nags at you.',
+  'hint.foreman_tease': 'The watching shades are asking about work.',
   'hint.improve': 'Spend Obols to Improve Operation. Bigger payouts every climb.',
   'hint.flywheel': 'The falling stone is wasted. A flywheel could catch it.',
   'hint.charge': 'The next descent will charge the flywheel.',

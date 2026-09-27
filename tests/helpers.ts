@@ -1,10 +1,25 @@
+import { catalog } from '../src/content/catalog';
 import { newGame } from '../src/core/commands';
 import { Money } from '../src/core/money';
 import { stepSites, type StepContext } from '../src/core/sim';
 import type { GameEvent, GameState } from '../src/core/state';
 
-export function makeState(): GameState {
+/** A brand-new save: the prelude (slipping stone) is still ahead. */
+export function freshState(): GameState {
   return newGame(0, { coin: 12345, relic: 67890, saveId: 'test' });
+}
+
+/** A save past the prelude: the ordinary summit economy. */
+export function makeState(): GameState {
+  const s = freshState();
+  s.prelude = { complete: true, upgradeIds: catalog.prelude.upgrades.map((u) => u.id), bestHeight: 1, attempts: 0 };
+  return s;
+}
+
+/** Flywheel and foreman were discovered in an earlier run, so no level gates apply. */
+export function knowsAutomation(s: GameState): GameState {
+  s.discoveries.tutorialIds.push('first_wheel', 'foreman');
+  return s;
 }
 
 export function ctx(opts: Partial<StepContext> = {}): StepContext {

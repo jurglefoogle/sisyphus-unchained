@@ -19,6 +19,8 @@
         return game.openSite(a.siteId);
       case 'upgrade':
         return game.buyUpgrade(a.upgradeId);
+      case 'prelude':
+        return game.buyPreludeUpgrade(a.upgradeId);
       case 'prestige':
         return onprestige();
     }
@@ -28,16 +30,23 @@
 <div class="drawer-body">
   <div class="site-head">
     <h2>{view.site.name}</h2>
-    <p class="muted">
-      Level {view.site.level}{#if view.site.nextMilestone}&nbsp;· next ×2 at {view.site.nextMilestone}{/if}
-    </p>
-    <div class="bar" role="progressbar" aria-label="Progress to next milestone" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.site.milestoneProgress * 100)}>
-      <span style:width="{view.site.milestoneProgress * 100}%"></span>
-    </div>
+    {#if view.prelude.active}
+      <p class="muted">Grip gives out at {Math.round(view.prelude.reach * 100)}% · best {Math.round(view.prelude.best * 100)}%</p>
+      <div class="bar" role="progressbar" aria-label="Highest point reached" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.prelude.best * 100)}>
+        <span style:width="{view.prelude.best * 100}%"></span>
+      </div>
+    {:else}
+      <p class="muted">
+        Level {view.site.level}{#if view.site.nextMilestone}&nbsp;· next ×2 at {view.site.nextMilestone}{/if}
+      </p>
+      <div class="bar" role="progressbar" aria-label="Progress to next milestone" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.site.milestoneProgress * 100)}>
+        <span style:width="{view.site.milestoneProgress * 100}%"></span>
+      </div>
+    {/if}
   </div>
 
   {#if view.rows.length === 0}
-    <p class="muted empty">Reach the summit to earn your first Obols.</p>
+    <p class="muted empty">{view.prelude.active ? 'Push. See how far you get.' : 'Reach the summit to earn your first Obols.'}</p>
   {/if}
 
   <ul>
@@ -128,6 +137,9 @@
   }
   .row[data-accent='decree'] {
     border-left: 6px solid var(--ink);
+  }
+  .row[data-accent='grip'] {
+    border-left: 6px solid var(--muted);
   }
   .row[data-accent='insight'] {
     border-left: 6px solid #6b4f8a;
