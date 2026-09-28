@@ -1,19 +1,26 @@
 :root {
   --ink: #211b17;
-  --clay: #b65d35;
+  --clay: #954421;
   --pale-clay: #d99c6c;
   --parchment: #ebdcc0;
   --bronze: #a57b3b;
   --ivory: #f6ecdc;
-  --panel: rgba(246, 236, 220, 0.96);
+  --panel: rgba(246, 236, 220, 0.94);
+  --paper: #f3e8d4;
+  --rule: rgba(33, 27, 23, 0.28);
   --muted: #5e544b;
   --good: #3d6b3a;
-  --radius: 10px;
+  --radius: 12px;
+  --shadow: 0 6px 20px rgba(33, 27, 23, 0.14), 0 1px 2px rgba(33, 27, 23, 0.12);
   --text-scale: 1;
-  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --body: 'Palatino Linotype', Palatino, 'Book Antiqua', 'EB Garamond', Georgia, serif;
+  --display: 'Cormorant Garamond', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-family: var(--body);
   font-size: calc(16px * var(--text-scale));
   color: var(--ink);
   background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -35,11 +42,23 @@ button {
   cursor: pointer;
   min-height: 44px;
   min-width: 44px;
-  border-radius: 8px;
-  border: 2px solid var(--ink);
+  border-radius: 10px;
+  border: 1.5px solid var(--ink);
   background: var(--ivory);
   padding: 0 0.8rem;
+  transition: background 150ms ease, filter 150ms ease, transform 150ms ease;
 }
+
+@media (hover: hover) {
+  button:not(:disabled):hover { filter: brightness(1.07) saturate(1.05); }
+}
+button:not(:disabled):active { transform: translateY(1px); }
+input, textarea, select { font: inherit; color: var(--ink); accent-color: var(--clay); }
+input[type='range'] { min-width: 60px; width: 100%; cursor: pointer; }
+textarea, input:not([type]), input[type='text'] { background: var(--ivory); border: 1px solid var(--muted); border-radius: 6px; padding: 0.5rem; }
+textarea { resize: vertical; }
+::selection { background: var(--pale-clay); color: var(--ink); }
+* { scrollbar-width: thin; scrollbar-color: var(--bronze) transparent; }
 
 button:disabled {
   cursor: not-allowed;
@@ -47,7 +66,10 @@ button:disabled {
 }
 
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   outline: 3px solid var(--clay);
   outline-offset: 2px;
 }
@@ -61,10 +83,27 @@ a:focus-visible {
   white-space: nowrap;
 }
 
+.visually-hidden-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 .high-contrast {
   --panel: #fffaf0;
+  --paper: #fffaf0;
+  --rule: #211b17;
   --muted: #211b17;
 }
+
+.reduced-motion * { transition: none !important; animation: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   * {

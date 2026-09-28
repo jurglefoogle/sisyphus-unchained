@@ -1,0 +1,474 @@
+{
+  "requiredAssets": 37,
+  "registeredAssets": 170,
+  "requiredStates": 79,
+  "availableStates": 67,
+  "blockedStates": [
+    {
+      "id": "sisyphus",
+      "state": "rest",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "strain_accent",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "summit_reaction",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "step_aside",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "walk",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "slip_knockdown",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "get_up",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "idle",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "purchase_reaction",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "walk",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "stone_limestone_prelude",
+      "state": "rough",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "stone_limestone_prelude",
+      "state": "chipped",
+      "status": "blocked-image-limit"
+    }
+  ],
+  "variants": [
+    {
+      "id": "sisyphus",
+      "variant": "feet_wrapped",
+      "status": "blocked-image-limit"
+    }
+  ],
+  "complete": false,
+  "rows": [
+    {
+      "id": "stone_limestone",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "stone_basalt",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "stone_marble",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "stone_bronze",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "stone_star",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "stone_decree",
+      "state": "texture",
+      "status": "available"
+    },
+    {
+      "id": "sisyphus",
+      "state": "push_loop",
+      "status": "available"
+    },
+    {
+      "id": "sisyphus",
+      "state": "manual_assist",
+      "status": "available"
+    },
+    {
+      "id": "sisyphus",
+      "state": "rest",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "strain_accent",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "summit_reaction",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "step_aside",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "walk",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "slip_knockdown",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "sisyphus",
+      "state": "get_up",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "pull_loop",
+      "status": "available"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "idle",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "purchase_reaction",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "shade_attendant",
+      "state": "walk",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "stone_limestone_prelude",
+      "state": "rough",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "stone_limestone_prelude",
+      "state": "chipped",
+      "status": "blocked-image-limit"
+    },
+    {
+      "id": "flywheel",
+      "state": "uninstalled",
+      "status": "available"
+    },
+    {
+      "id": "flywheel",
+      "state": "charging",
+      "status": "available"
+    },
+    {
+      "id": "flywheel",
+      "state": "turning",
+      "status": "available"
+    },
+    {
+      "id": "flywheel",
+      "state": "upgraded",
+      "status": "available"
+    },
+    {
+      "id": "rope_drum",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "rope_drum",
+      "state": "turning",
+      "status": "available"
+    },
+    {
+      "id": "target_debris",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "target_debris",
+      "state": "shatter",
+      "status": "available"
+    },
+    {
+      "id": "target_coin_amphora",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "target_coin_amphora",
+      "state": "shatter",
+      "status": "available"
+    },
+    {
+      "id": "target_gilded_offering",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "target_gilded_offering",
+      "state": "shatter",
+      "status": "available"
+    },
+    {
+      "id": "work_hermes",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_hermes",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_daedalus",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_daedalus",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_ixion",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_ixion",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_danaids",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_danaids",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_talos",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_talos",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_atlas",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_atlas",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "work_charter",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "work_charter",
+      "state": "entrance",
+      "status": "available"
+    },
+    {
+      "id": "install_level_10",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "install_level_25",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "install_level_50",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "install_level_50",
+      "state": "running",
+      "status": "available"
+    },
+    {
+      "id": "fx_coin",
+      "state": "small_grant",
+      "status": "available"
+    },
+    {
+      "id": "fx_coin",
+      "state": "milestone_grant",
+      "status": "available"
+    },
+    {
+      "id": "fx_relic",
+      "state": "rare_discovery",
+      "status": "available"
+    },
+    {
+      "id": "decree_stamp",
+      "state": "stamp",
+      "status": "available"
+    },
+    {
+      "id": "route_footholds",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "best_height_marker",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "best_height_marker",
+      "state": "moved",
+      "status": "available"
+    },
+    {
+      "id": "fx_fall",
+      "state": "dust",
+      "status": "available"
+    },
+    {
+      "id": "fx_fall",
+      "state": "obol_toss",
+      "status": "available"
+    },
+    {
+      "id": "fx_first_summit",
+      "state": "burst",
+      "status": "available"
+    },
+    {
+      "id": "scene_first_hill",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_first_hill",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_first_hill",
+      "state": "foreground",
+      "status": "available"
+    },
+    {
+      "id": "scene_tartarus_rim",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_tartarus_rim",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_tartarus_rim",
+      "state": "foreground",
+      "status": "available"
+    },
+    {
+      "id": "scene_leaking_heights",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_leaking_heights",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_leaking_heights",
+      "state": "foreground",
+      "status": "available"
+    },
+    {
+      "id": "scene_bronze_pass",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_bronze_pass",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_bronze_pass",
+      "state": "foreground",
+      "status": "available"
+    },
+    {
+      "id": "scene_skyward_escarpment",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_skyward_escarpment",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_skyward_escarpment",
+      "state": "foreground",
+      "status": "available"
+    },
+    {
+      "id": "scene_olympian_approach",
+      "state": "background",
+      "status": "available"
+    },
+    {
+      "id": "scene_olympian_approach",
+      "state": "hill",
+      "status": "available"
+    },
+    {
+      "id": "scene_olympian_approach",
+      "state": "foreground",
+      "status": "available"
+    }
+  ],
+  "note": "Derived from deliveries; tests/asset-contract.test.ts verifies coverage against REQUIRED_ASSETS in assets.ts."
+}

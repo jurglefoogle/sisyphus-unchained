@@ -6,6 +6,9 @@ export const SAVE_FORMAT = 'sisyphus-unchained-save';
 
 type Json = null | boolean | number | string | Json[] | { [k: string]: Json };
 
+const volume = (v: unknown, fallback: number): number =>
+  typeof v === 'number' && Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : fallback;
+
 /** FNV-1a. Detects accidental corruption; it is not anticheat. */
 export function checksum(text: string): string {
   let h = 0x811c9dc5;
@@ -36,6 +39,7 @@ export function stateToJson(state: GameState): Json {
     saveId: state.saveId,
     lastSettledUtc: state.lastSettledUtc,
     paused: state.paused,
+    pinnedGoal: state.pinnedGoal,
     wallet: {
       obols: state.wallet.obols.serialize(),
       runGross: state.wallet.runGross.serialize(),
@@ -230,6 +234,7 @@ export function stateFromJson(data: unknown): GameState {
     saveId: str(d.saveId, 'saveId'),
     lastSettledUtc: num(d.lastSettledUtc, 'lastSettledUtc', 0),
     paused: bool(d.paused, 'paused'),
+    pinnedGoal: typeof d.pinnedGoal === 'string' && d.pinnedGoal.length <= 64 ? d.pinnedGoal : null,
     wallet: {
       obols: money(wallet.obols, 'wallet.obols'),
       runGross: money(wallet.runGross, 'wallet.runGross'),
@@ -277,6 +282,14 @@ export function stateFromJson(data: unknown): GameState {
         typeof options.ambientCaptions === 'boolean' ? options.ambientCaptions : DEFAULT_OPTIONS.ambientCaptions,
       textScale: typeof options.textScale === 'number' ? Math.min(1.5, Math.max(0.85, options.textScale)) : 1,
       highContrast: typeof options.highContrast === 'boolean' ? options.highContrast : DEFAULT_OPTIONS.highContrast,
+      screenShake: typeof options.screenShake === 'boolean' ? options.screenShake : DEFAULT_OPTIONS.screenShake,
+      flashFree: typeof options.flashFree === 'boolean' ? options.flashFree : DEFAULT_OPTIONS.flashFree,
+      pushKey:
+        typeof options.pushKey === 'string' && /^[A-Za-z0-9]{1,24}$/.test(options.pushKey) ? options.pushKey : DEFAULT_OPTIONS.pushKey,
+      telemetry: typeof options.telemetry === 'boolean' ? options.telemetry : DEFAULT_OPTIONS.telemetry,
+      effectsVolume: volume(options.effectsVolume, DEFAULT_OPTIONS.effectsVolume),
+      musicVolume: volume(options.musicVolume, DEFAULT_OPTIONS.musicVolume),
+      interfaceVolume: volume(options.interfaceVolume, DEFAULT_OPTIONS.interfaceVolume),
     },
   };
 }

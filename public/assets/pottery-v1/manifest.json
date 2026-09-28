@@ -2832,6 +2832,481 @@
       "promptSource": "docs/art-direction/asset-generation-v1.json",
       "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
       "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_first_hill_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_first_hill_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_first_hill_hill.svg",
+      "sha256": "b7d0105721451fceb15ddf6400ea796976fd877f903870e863cfe2959d385a77",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_first_hill_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_first_hill_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_first_hill_foreground.svg",
+      "sha256": "f5b99cf2aa383a9fcc1717f737638a8324308959c5dbb1adebd4993d8d3c3210",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_tartarus_rim_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_tartarus_rim_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_tartarus_rim_hill.svg",
+      "sha256": "2b8ec36641e85404a192b8e3f04e60707d90b2ada8452fefa3c12268d42872c8",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_tartarus_rim_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_tartarus_rim_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_tartarus_rim_foreground.svg",
+      "sha256": "038c9c2ae42bbf8894a6230afd91fb290d94ec9622b4042ec8d10f9845baf8c2",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_leaking_heights_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_leaking_heights_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_leaking_heights_hill.svg",
+      "sha256": "c1a78ce152538c542864fa4defd351fb83ee2c1a0260660ed6b11ec08e19ce11",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_leaking_heights_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_leaking_heights_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_leaking_heights_foreground.svg",
+      "sha256": "be1ab9307ce3a647bef18a5aed0ff386e5bc641b121811a8512813aa0b56dc69",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_bronze_pass_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_bronze_pass_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_bronze_pass_hill.svg",
+      "sha256": "e085acd2a838ddb43918fae91156ea9457d9265a2b29e766dc118f80cdd46743",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_bronze_pass_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_bronze_pass_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_bronze_pass_foreground.svg",
+      "sha256": "79d3449f7f0d83a26b29c9a40feb503135d20b70e194dd10d8c06f8d4e523c34",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_skyward_escarpment_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_skyward_escarpment_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_skyward_escarpment_hill.svg",
+      "sha256": "9fda10b65ffb8c3e0f91bb2d4c11e2699cd872c9fe072071b9907ba2f73c856f",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_skyward_escarpment_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_skyward_escarpment_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_skyward_escarpment_foreground.svg",
+      "sha256": "cbf4289ebda596d778b5fe0ad9ed45552d09f326484f40ef67f12869a84373d7",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_olympian_approach_hill",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_olympian_approach_hill.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_olympian_approach_hill.svg",
+      "sha256": "5f190e6c8b20926fface0d223d098eb4708419ff8cee4d373c96240a64af0081",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "scene_olympian_approach_foreground",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/scene_olympian_approach_foreground.svg",
+      "exportFile": "public/assets/pottery-v1/icons/scene_olympian_approach_foreground.svg",
+      "sha256": "4479fef9efb66cef1a94579a01c084f7e95be28a57984254a22afeb379b28fef",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "machine_drum_frame",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/machine_drum_frame.svg",
+      "exportFile": "public/assets/pottery-v1/icons/machine_drum_frame.svg",
+      "sha256": "e9ac5ae1ff098d80e179a452c2597387f88d2b2b3ca2008cdcbe0918496b1476",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "machine_drum_rotor",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/machine_drum_rotor.svg",
+      "exportFile": "public/assets/pottery-v1/icons/machine_drum_rotor.svg",
+      "sha256": "9c0a905c809adf54668cc4826c0d75da34dbba9d234d15e95fbe57a7b2fe0401",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "machine_wheel_stand",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/machine_wheel_stand.svg",
+      "exportFile": "public/assets/pottery-v1/icons/machine_wheel_stand.svg",
+      "sha256": "5ba783754ce5c5bb77605fd2e76a5b1398207ed973b53f7c137d9b3f5d21178d",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "machine_wheel_upgrade",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/machine_wheel_upgrade.svg",
+      "exportFile": "public/assets/pottery-v1/icons/machine_wheel_upgrade.svg",
+      "sha256": "3979d1c32d7ee229b33cecbcb54ac75ae35e2de79da9c7152293680e06c3b825",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "install_scaffold_frame",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/install_scaffold_frame.svg",
+      "exportFile": "public/assets/pottery-v1/icons/install_scaffold_frame.svg",
+      "sha256": "64d39eed04a491d4a701798eb77ac87db123fe66784958b064705d87ba9dd7fd",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.12,
+        0.9
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "install_bronze_frame",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/install_bronze_frame.svg",
+      "exportFile": "public/assets/pottery-v1/icons/install_bronze_frame.svg",
+      "sha256": "98474ddbba46089a941eb15ede43a778fa8921a1f1694df28bfe3b215018662e",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.12,
+        0.9
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "machine_belt",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/machine_belt.svg",
+      "exportFile": "public/assets/pottery-v1/icons/machine_belt.svg",
+      "sha256": "8f3120847b15f92c29d4559d31822304fb5ee82229ac468ca770581771c1ec6b",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "height_marker_pole",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/height_marker_pole.svg",
+      "exportFile": "public/assets/pottery-v1/icons/height_marker_pole.svg",
+      "sha256": "8f9173253f6c37996359dd08c0bee2bbd0bc0186b275e209eb2096f9dcbc5934",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.90625
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "route_footholds_overlay",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/icons/route_footholds_overlay.svg",
+      "exportFile": "public/assets/pottery-v1/icons/route_footholds_overlay.svg",
+      "sha256": "a9ef14bd7b2b3719f212e4f3659206a859bc9c1fd20ea289a1cbdb9d52acdf69",
+      "dimensions": [
+        1600.0,
+        900.0
+      ],
+      "pivot": [
+        0.125,
+        0.8444444444444444
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "fx_dust_puff",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/fx_dust_puff.svg",
+      "exportFile": "public/assets/pottery-v1/icons/fx_dust_puff.svg",
+      "sha256": "7d2fc933d51cbb947316908f15fd2dec371ab2ba821aec6abc16bf1bb816ac3f",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "fx_coin_disc",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+      "exportFile": "public/assets/pottery-v1/icons/fx_coin_disc.svg",
+      "sha256": "66ef7d20e8a7be1158736d97391d5f491faf3b589926621538660e210d725c27",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "fx_relic_rays",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/fx_relic_rays.svg",
+      "exportFile": "public/assets/pottery-v1/icons/fx_relic_rays.svg",
+      "sha256": "92d2583326ca9464ec50f7b5d884da46b7a193684ec448e8222a3389f93d8028",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
+    },
+    {
+      "id": "decree_seal",
+      "category": "world-component",
+      "url": "/assets/pottery-v1/icons/decree_seal.svg",
+      "exportFile": "public/assets/pottery-v1/icons/decree_seal.svg",
+      "sha256": "cd79f2c9dc257e2d4fbc5af7e4374447bf7de1781d5c0153c18d0b959ac3678a",
+      "dimensions": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sourceFile": "tools/assets/build_contract.py",
+      "provenance": "Original code-authored vector for this project; no external assets.",
+      "status": "authored vector; in-game review pending",
+      "hasTransparency": true
     }
   ],
   "counts": {
@@ -2850,7 +3325,9 @@
     "character": 2,
     "machine": 2,
     "installation": 7,
-    "portrait": 8
+    "portrait": 8,
+    "scene-layer": 13,
+    "world-component": 12
   },
   "warnings": [
     "Tight edge padding: stone_basalt",

@@ -1,0 +1,5475 @@
+{
+  "version": 1,
+  "geometry": {
+    "stage": [
+      1600.0,
+      900.0
+    ],
+    "ground": 760.0,
+    "hill": {
+      "footLeft": [
+        200.0,
+        760.0
+      ],
+      "summitLeft": [
+        1000.0,
+        312.0
+      ],
+      "summitRight": [
+        1090.0,
+        312.0
+      ],
+      "footRight": [
+        1420.0,
+        760.0
+      ]
+    },
+    "ascent": [
+      [
+        200.0,
+        760.0
+      ],
+      [
+        1000.0,
+        312.0
+      ]
+    ],
+    "outline": [
+      [
+        200.0,
+        760.0
+      ],
+      [
+        1000.0,
+        312.0
+      ],
+      [
+        1090.0,
+        312.0
+      ],
+      [
+        1420.0,
+        760.0
+      ]
+    ],
+    "sha256": "4cb532bb46a66a4be2d04e26bfc7b028c68d33174bdfe8dcb0d1fbe496bd1fc9"
+  },
+  "assets": {
+    "stone_limestone": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_limestone",
+              "frame": {
+                "assetId": "stone_limestone",
+                "url": "/assets/pottery-v1/art/stone_limestone.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5039872408293461,
+                  0.5007974481658692
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_basalt": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_basalt",
+              "frame": {
+                "assetId": "stone_basalt",
+                "url": "/assets/pottery-v1/art/stone_basalt.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5003987240829346,
+                  0.511164274322169
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_marble": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_marble",
+              "frame": {
+                "assetId": "stone_marble",
+                "url": "/assets/pottery-v1/art/stone_marble.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5003987240829346,
+                  0.5047846889952153
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_bronze": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_bronze",
+              "frame": {
+                "assetId": "stone_bronze",
+                "url": "/assets/pottery-v1/art/stone_bronze.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_star": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_star",
+              "frame": {
+                "assetId": "stone_star",
+                "url": "/assets/pottery-v1/art/stone_star.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.501993620414673,
+                  0.4972089314194577
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_decree": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stone_decree",
+              "frame": {
+                "assetId": "stone_decree",
+                "url": "/assets/pottery-v1/art/stone_decree.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5,
+                  0.501993620414673
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "sisyphus": {
+      "states": {
+        "push_loop": {
+          "status": "available",
+          "duration": 1.2,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "sisyphus_push",
+              "frame": {
+                "assetId": "sisyphus_push",
+                "url": "/assets/pottery-v1/art/sisyphus_push.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5283094098883573,
+                  0.8899521531100478
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.6,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1.01,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.2,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Single illustrated pose with a subtle effort transform; articulated push frames remain pending."
+        },
+        "manual_assist": {
+          "status": "available",
+          "duration": 1.2,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "sisyphus_push",
+              "frame": {
+                "assetId": "sisyphus_push",
+                "url": "/assets/pottery-v1/art/sisyphus_push.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5283094098883573,
+                  0.8899521531100478
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.6,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1.01,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.2,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Single illustrated pose with a subtle effort transform; articulated push frames remain pending."
+        },
+        "rest": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_rest"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "strain_accent": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_strain"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "summit_reaction": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_summit"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "step_aside": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_step_aside"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "walk": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_walk_strip"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "slip_knockdown": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_slip_strip"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "get_up": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "sisyphus_get_up_strip"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        }
+      },
+      "notes": "In-game acceptance pending.",
+      "variants": {
+        "feet_wrapped": {
+          "status": "blocked-image-limit",
+          "states": {},
+          "notes": "Rag-wrapped feet artwork required for every character state after Wrap Your Feet. Existing barefoot images must not be relabeled."
+        }
+      }
+    },
+    "shade_attendant": {
+      "states": {
+        "pull_loop": {
+          "status": "available",
+          "duration": 1.3,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "shade_attendant",
+              "frame": {
+                "assetId": "shade_attendant",
+                "url": "/assets/pottery-v1/art/shade_attendant.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5259170653907496,
+                  0.9298245614035088
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.65,
+                  "x": -2,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": -0.012,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.3,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Single-pose working motion; articulated arms pending."
+        },
+        "idle": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "shade_idle"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "purchase_reaction": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "shade_purchase_reaction"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "walk": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "shade_walk_strip"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "stone_limestone_prelude": {
+      "states": {
+        "rough": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "stone_limestone_rough"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        },
+        "chipped": {
+          "status": "blocked-image-limit",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "stone_limestone_chipped"
+          ],
+          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "flywheel": {
+      "states": {
+        "uninstalled": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "notes": "Intentionally empty: no installed wheel. This is a delivered visibility state."
+        },
+        "charging": {
+          "status": "available",
+          "duration": 1.8,
+          "loop": false,
+          "reducedMotionTime": 1.8,
+          "layers": [
+            {
+              "id": "stand",
+              "frame": {
+                "assetId": "machine_wheel_stand",
+                "url": "/assets/pottery-v1/icons/machine_wheel_stand.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "flywheel_rotor",
+                "url": "/assets/pottery-v1/art/flywheel_rotor.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5003987240829346,
+                  0.5015948963317385
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0.4,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.8,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 6.283185307179586,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Fixed stand; wheel gains speed after the authoritative charge event."
+        },
+        "turning": {
+          "status": "available",
+          "duration": 3,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stand",
+              "frame": {
+                "assetId": "machine_wheel_stand",
+                "url": "/assets/pottery-v1/icons/machine_wheel_stand.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "flywheel_rotor",
+                "url": "/assets/pottery-v1/art/flywheel_rotor.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5003987240829346,
+                  0.5015948963317385
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 3,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 6.283185307179586,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "upgraded": {
+          "status": "available",
+          "duration": 2,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "stand",
+              "frame": {
+                "assetId": "machine_wheel_stand",
+                "url": "/assets/pottery-v1/icons/machine_wheel_stand.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "flywheel_rotor",
+                "url": "/assets/pottery-v1/art/flywheel_rotor.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5003987240829346,
+                  0.5015948963317385
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 2,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 6.283185307179586,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rim",
+              "frame": {
+                "assetId": "machine_wheel_upgrade",
+                "url": "/assets/pottery-v1/icons/machine_wheel_upgrade.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "rope_drum": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "frame",
+              "frame": {
+                "assetId": "machine_drum_frame",
+                "url": "/assets/pottery-v1/icons/machine_drum_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "machine_drum_rotor",
+                "url": "/assets/pottery-v1/icons/machine_drum_rotor.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "turning": {
+          "status": "available",
+          "duration": 2.4,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "frame",
+              "frame": {
+                "assetId": "machine_drum_frame",
+                "url": "/assets/pottery-v1/icons/machine_drum_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "machine_drum_rotor",
+                "url": "/assets/pottery-v1/icons/machine_drum_rotor.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 2.4,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 6.283185307179586,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Separate end-on drum rotor and fixed support frame."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "target_debris": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "target_debris",
+              "frame": {
+                "assetId": "target_debris",
+                "url": "/assets/pottery-v1/icons/target_debris.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.86
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "shatter": {
+          "status": "available",
+          "duration": 0.8,
+          "loop": false,
+          "reducedMotionTime": 0.8,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 40.0,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 32.3606797749979,
+                  "y": -59.022820183397855,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 64.7213595499958,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 12.360679774997898,
+                  "y": -88.08452130361228,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 24.721359549995796,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_3",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -12.360679774997894,
+                  "y": -88.08452130361229,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.35,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -24.72135954999579,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 2.7,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_4",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -32.36067977499789,
+                  "y": -59.02282018339786,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.8,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -64.72135954999578,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 3.6,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_5",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -40.0,
+                  "y": -12.00000000000001,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.25,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 4.5,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "target_coin_amphora": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "target_coin_amphora",
+              "frame": {
+                "assetId": "target_coin_amphora",
+                "url": "/assets/pottery-v1/icons/target_coin_amphora.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.86
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "shatter": {
+          "status": "available",
+          "duration": 0.8,
+          "loop": false,
+          "reducedMotionTime": 0.8,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 40.0,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 32.3606797749979,
+                  "y": -59.022820183397855,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 64.7213595499958,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 12.360679774997898,
+                  "y": -88.08452130361228,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 24.721359549995796,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_3",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -12.360679774997894,
+                  "y": -88.08452130361229,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.35,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -24.72135954999579,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 2.7,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_4",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -32.36067977499789,
+                  "y": -59.02282018339786,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.8,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -64.72135954999578,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 3.6,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_5",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -40.0,
+                  "y": -12.00000000000001,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.25,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 4.5,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "target_gilded_offering": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "target_gilded_offering",
+              "frame": {
+                "assetId": "target_gilded_offering",
+                "url": "/assets/pottery-v1/icons/target_gilded_offering.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.86
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "shatter": {
+          "status": "available",
+          "duration": 0.8,
+          "loop": false,
+          "reducedMotionTime": 0.8,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 40.0,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 32.3606797749979,
+                  "y": -59.022820183397855,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 64.7213595499958,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 12.360679774997898,
+                  "y": -88.08452130361228,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 24.721359549995796,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_3",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -12.360679774997894,
+                  "y": -88.08452130361229,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.35,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -24.72135954999579,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 2.7,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_4",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -32.36067977499789,
+                  "y": -59.02282018339786,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.8,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -64.72135954999578,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 3.6,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_5",
+              "frame": {
+                "assetId": "prop_pottery_chip",
+                "url": "/assets/pottery-v1/icons/prop_pottery_chip.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -40.0,
+                  "y": -12.00000000000001,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.25,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -80.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 4.5,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_hermes": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_hermes",
+              "frame": {
+                "assetId": "work_hermes",
+                "url": "/assets/pottery-v1/art/work_hermes.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5207336523125997,
+                  0.9354066985645934
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_hermes",
+              "frame": {
+                "assetId": "work_hermes",
+                "url": "/assets/pottery-v1/art/work_hermes.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5207336523125997,
+                  0.9354066985645934
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_daedalus": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_daedalus",
+              "frame": {
+                "assetId": "work_daedalus",
+                "url": "/assets/pottery-v1/art/work_daedalus.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5191387559808612,
+                  0.8819776714513556
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_daedalus",
+              "frame": {
+                "assetId": "work_daedalus",
+                "url": "/assets/pottery-v1/art/work_daedalus.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5191387559808612,
+                  0.8819776714513556
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_ixion": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_ixion",
+              "frame": {
+                "assetId": "work_ixion",
+                "url": "/assets/pottery-v1/art/work_ixion.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5382775119617225,
+                  0.835725677830941
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_ixion",
+              "frame": {
+                "assetId": "work_ixion",
+                "url": "/assets/pottery-v1/art/work_ixion.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5382775119617225,
+                  0.835725677830941
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_danaids": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_danaids",
+              "frame": {
+                "assetId": "work_danaids",
+                "url": "/assets/pottery-v1/art/work_danaids.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5063795853269537,
+                  0.9226475279106858
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_danaids",
+              "frame": {
+                "assetId": "work_danaids",
+                "url": "/assets/pottery-v1/art/work_danaids.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5063795853269537,
+                  0.9226475279106858
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_talos": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_talos",
+              "frame": {
+                "assetId": "work_talos",
+                "url": "/assets/pottery-v1/art/work_talos.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5115629984051037,
+                  0.8628389154704944
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_talos",
+              "frame": {
+                "assetId": "work_talos",
+                "url": "/assets/pottery-v1/art/work_talos.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5115629984051037,
+                  0.8628389154704944
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_atlas": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_atlas",
+              "frame": {
+                "assetId": "work_atlas",
+                "url": "/assets/pottery-v1/art/work_atlas.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5342902711323764,
+                  0.8963317384370016
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_atlas",
+              "frame": {
+                "assetId": "work_atlas",
+                "url": "/assets/pottery-v1/art/work_atlas.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5342902711323764,
+                  0.8963317384370016
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "work_charter": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "work_charter",
+              "frame": {
+                "assetId": "work_charter",
+                "url": "/assets/pottery-v1/art/work_charter.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5,
+                  0.8787878787878788
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Held illustrated installation. Internal machine-layer animation remains a later art pass."
+        },
+        "entrance": {
+          "status": "available",
+          "duration": 0.7,
+          "loop": false,
+          "reducedMotionTime": 0.7,
+          "layers": [
+            {
+              "id": "work_charter",
+              "frame": {
+                "assetId": "work_charter",
+                "url": "/assets/pottery-v1/art/work_charter.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5,
+                  0.8787878787878788
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 12,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.45,
+                  "x": 0,
+                  "y": -2,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "install_level_10": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "install_scaffold_frame",
+              "frame": {
+                "assetId": "install_scaffold_frame",
+                "url": "/assets/pottery-v1/icons/install_scaffold_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.12,
+                  0.9
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "install_level_25": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "install_bronze_frame",
+              "frame": {
+                "assetId": "install_bronze_frame",
+                "url": "/assets/pottery-v1/icons/install_bronze_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.12,
+                  0.9
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "install_level_50": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "frame",
+              "frame": {
+                "assetId": "install_bronze_frame",
+                "url": "/assets/pottery-v1/icons/install_bronze_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.12,
+                  0.9
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "belt",
+              "frame": {
+                "assetId": "machine_belt",
+                "url": "/assets/pottery-v1/icons/machine_belt.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "machine_drum_rotor",
+                "url": "/assets/pottery-v1/icons/machine_drum_rotor.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                128,
+                128
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "running": {
+          "status": "available",
+          "duration": 2.4,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "frame",
+              "frame": {
+                "assetId": "install_bronze_frame",
+                "url": "/assets/pottery-v1/icons/install_bronze_frame.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.12,
+                  0.9
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "belt",
+              "frame": {
+                "assetId": "machine_belt",
+                "url": "/assets/pottery-v1/icons/machine_belt.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "rotor",
+              "frame": {
+                "assetId": "machine_drum_rotor",
+                "url": "/assets/pottery-v1/icons/machine_drum_rotor.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                128,
+                128
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 2.4,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 6.283185307179586,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "fx_coin": {
+      "states": {
+        "small_grant": {
+          "status": "available",
+          "duration": 0.9,
+          "loop": false,
+          "reducedMotionTime": 0.9,
+          "layers": [
+            {
+              "id": "fx_coin_disc",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.4,
+                  "scaleY": 0.4,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.12,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.5,
+                  "scaleY": 0.5,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.9,
+                  "x": 0,
+                  "y": -48,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "milestone_grant": {
+          "status": "available",
+          "duration": 1.1,
+          "loop": false,
+          "reducedMotionTime": 1.1,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": 50.0,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": 100.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": 46.19397662556434,
+                  "y": -50.268343236508976,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": 92.38795325112868,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": 35.35533905932738,
+                  "y": -82.71067811865476,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": 70.71067811865476,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_3",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": 19.13417161825449,
+                  "y": -104.38795325112868,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.35,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": 38.26834323650898,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 2.7,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_4",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": 3.061616997868383e-15,
+                  "y": -112.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.8,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": 6.123233995736766e-15,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 3.6,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_5",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": -19.134171618254488,
+                  "y": -104.38795325112868,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.25,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": -38.268343236508976,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 4.5,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_6",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": -35.35533905932737,
+                  "y": -82.71067811865476,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.7,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": -70.71067811865474,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 5.4,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_7",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": -46.19397662556434,
+                  "y": -50.26834323650899,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 3.15,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": -92.38795325112868,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 6.3,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_8",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.49500000000000005,
+                  "x": -50.0,
+                  "y": -12.000000000000012,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 3.6,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.1,
+                  "x": -100.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 7.2,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "fx_relic": {
+      "states": {
+        "rare_discovery": {
+          "status": "available",
+          "duration": 1.4,
+          "loop": false,
+          "reducedMotionTime": 1.4,
+          "layers": [
+            {
+              "id": "fx_relic_rays",
+              "frame": {
+                "assetId": "fx_relic_rays",
+                "url": "/assets/pottery-v1/icons/fx_relic_rays.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.5,
+                  "scaleY": 0.5,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.4,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1.1,
+                  "scaleY": 1.1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "ui_insight",
+              "frame": {
+                "assetId": "ui_insight",
+                "url": "/assets/pottery-v1/icons/ui_insight.svg",
+                "dimensions": [
+                  64,
+                  64
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.6,
+                  "scaleY": 0.6,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.4,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.6,
+                  "scaleY": 0.6,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "decree_stamp": {
+      "states": {
+        "stamp": {
+          "status": "available",
+          "duration": 0.3,
+          "loop": false,
+          "reducedMotionTime": 0.3,
+          "layers": [
+            {
+              "id": "decree_seal",
+              "frame": {
+                "assetId": "decree_seal",
+                "url": "/assets/pottery-v1/icons/decree_seal.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1.2,
+                  "scaleY": 1.2,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.14,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.92,
+                  "scaleY": 0.92,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.3,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "route_footholds": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "route_footholds_overlay",
+              "frame": {
+                "assetId": "route_footholds_overlay",
+                "url": "/assets/pottery-v1/icons/route_footholds_overlay.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0.125,
+                  0.8444444444444444
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "best_height_marker": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "height_marker_pole",
+              "frame": {
+                "assetId": "height_marker_pole",
+                "url": "/assets/pottery-v1/icons/height_marker_pole.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.90625
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "moved": {
+          "status": "available",
+          "duration": 0.35,
+          "loop": false,
+          "reducedMotionTime": 0.35,
+          "layers": [
+            {
+              "id": "height_marker_pole",
+              "frame": {
+                "assetId": "height_marker_pole",
+                "url": "/assets/pottery-v1/icons/height_marker_pole.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.90625
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 0.9,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.15,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1.04,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.35,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "fx_fall": {
+      "states": {
+        "dust": {
+          "status": "available",
+          "duration": 0.65,
+          "loop": false,
+          "reducedMotionTime": 0.65,
+          "layers": [
+            {
+              "id": "fx_dust_puff",
+              "frame": {
+                "assetId": "fx_dust_puff",
+                "url": "/assets/pottery-v1/icons/fx_dust_puff.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.6,
+                  "scaleY": 0.4,
+                  "rotation": 0,
+                  "alpha": 0.65
+                },
+                {
+                  "time": 0.65,
+                  "x": 12,
+                  "y": -8,
+                  "scaleX": 1.2,
+                  "scaleY": 0.7,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        "obol_toss": {
+          "status": "available",
+          "duration": 0.8,
+          "loop": false,
+          "reducedMotionTime": 0.8,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 30.0,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 60.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": 1.83697019872103e-15,
+                  "y": -72.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": 3.67394039744206e-15,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.36000000000000004,
+                  "x": -30.0,
+                  "y": -12.000000000000007,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8,
+                  "x": -60.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "fx_first_summit": {
+      "states": {
+        "burst": {
+          "status": "available",
+          "duration": 1.25,
+          "loop": false,
+          "reducedMotionTime": 1.25,
+          "layers": [
+            {
+              "id": "particle_0",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 62.5,
+                  "y": -12.0,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 125.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_1",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 59.968310850906086,
+                  "y": -47.21656960517871,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.45,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 119.93662170181217,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 0.9,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_2",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 52.57834580194883,
+                  "y": -79.5801021819497,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 0.9,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 105.15669160389766,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 1.8,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_3",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 40.92879587158032,
+                  "y": -106.46869679428228,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.35,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 81.85759174316064,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 2.7,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_4",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 25.963438312617903,
+                  "y": -125.7039994193148,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 1.8,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 51.926876625235806,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 3.6,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_5",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": 8.894677392080334,
+                  "y": -135.72768023511657,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.25,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": 17.78935478416067,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 4.5,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_6",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -8.894677392080313,
+                  "y": -135.7276802351166,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 2.7,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -17.789354784160626,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 5.4,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_7",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -25.963438312617896,
+                  "y": -125.70399941931481,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 3.15,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -51.92687662523579,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 6.3,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_8",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -40.92879587158031,
+                  "y": -106.46869679428228,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 3.6,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -81.85759174316063,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 7.2,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_9",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -52.578345801948835,
+                  "y": -79.58010218194968,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 4.05,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -105.15669160389767,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 8.1,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_10",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -59.96831085090608,
+                  "y": -47.216569605178755,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 4.5,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -119.93662170181216,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 9.0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "particle_11",
+              "frame": {
+                "assetId": "fx_coin_disc",
+                "url": "/assets/pottery-v1/icons/fx_coin_disc.svg",
+                "dimensions": [
+                  256,
+                  256
+                ],
+                "pivot": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "size": [
+                64,
+                64
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 0.35,
+                  "scaleY": 0.35,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5625,
+                  "x": -62.5,
+                  "y": -12.000000000000016,
+                  "scaleX": 0.45,
+                  "scaleY": 0.45,
+                  "rotation": 4.95,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.25,
+                  "x": -125.0,
+                  "y": 28,
+                  "scaleX": 0.2,
+                  "scaleY": 0.2,
+                  "rotation": 9.9,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Cosmetic particles only; grants remain authoritative."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_first_hill": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_first_hill",
+              "frame": {
+                "assetId": "scene_first_hill",
+                "url": "/assets/pottery-v1/art/scene_first_hill.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_first_hill_hill",
+              "frame": {
+                "assetId": "scene_first_hill_hill",
+                "url": "/assets/pottery-v1/icons/scene_first_hill_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_first_hill_foreground",
+              "frame": {
+                "assetId": "scene_first_hill_foreground",
+                "url": "/assets/pottery-v1/icons/scene_first_hill_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_tartarus_rim": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_tartarus_rim",
+              "frame": {
+                "assetId": "scene_tartarus_rim",
+                "url": "/assets/pottery-v1/art/scene_tartarus_rim.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_tartarus_rim_hill",
+              "frame": {
+                "assetId": "scene_tartarus_rim_hill",
+                "url": "/assets/pottery-v1/icons/scene_tartarus_rim_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_tartarus_rim_foreground",
+              "frame": {
+                "assetId": "scene_tartarus_rim_foreground",
+                "url": "/assets/pottery-v1/icons/scene_tartarus_rim_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_leaking_heights": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_leaking_heights",
+              "frame": {
+                "assetId": "scene_leaking_heights",
+                "url": "/assets/pottery-v1/art/scene_leaking_heights.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_leaking_heights_hill",
+              "frame": {
+                "assetId": "scene_leaking_heights_hill",
+                "url": "/assets/pottery-v1/icons/scene_leaking_heights_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_leaking_heights_foreground",
+              "frame": {
+                "assetId": "scene_leaking_heights_foreground",
+                "url": "/assets/pottery-v1/icons/scene_leaking_heights_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_bronze_pass": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_bronze_pass",
+              "frame": {
+                "assetId": "scene_bronze_pass",
+                "url": "/assets/pottery-v1/art/scene_bronze_pass.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_bronze_pass_hill",
+              "frame": {
+                "assetId": "scene_bronze_pass_hill",
+                "url": "/assets/pottery-v1/icons/scene_bronze_pass_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_bronze_pass_foreground",
+              "frame": {
+                "assetId": "scene_bronze_pass_foreground",
+                "url": "/assets/pottery-v1/icons/scene_bronze_pass_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_skyward_escarpment": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_skyward_escarpment",
+              "frame": {
+                "assetId": "scene_skyward_escarpment",
+                "url": "/assets/pottery-v1/art/scene_skyward_escarpment.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_skyward_escarpment_hill",
+              "frame": {
+                "assetId": "scene_skyward_escarpment_hill",
+                "url": "/assets/pottery-v1/icons/scene_skyward_escarpment_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_skyward_escarpment_foreground",
+              "frame": {
+                "assetId": "scene_skyward_escarpment_foreground",
+                "url": "/assets/pottery-v1/icons/scene_skyward_escarpment_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_olympian_approach": {
+      "states": {
+        "background": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_olympian_approach",
+              "frame": {
+                "assetId": "scene_olympian_approach",
+                "url": "/assets/pottery-v1/art/scene_olympian_approach.png",
+                "dimensions": [
+                  1672,
+                  941
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "hill": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_olympian_approach_hill",
+              "frame": {
+                "assetId": "scene_olympian_approach_hill",
+                "url": "/assets/pottery-v1/icons/scene_olympian_approach_hill.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        },
+        "foreground": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_olympian_approach_foreground",
+              "frame": {
+                "assetId": "scene_olympian_approach_foreground",
+                "url": "/assets/pottery-v1/icons/scene_olympian_approach_foreground.svg",
+                "dimensions": [
+                  1600.0,
+                  900.0
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    }
+  },
+  "coordinateSystem": "Layer x/y offsets are stage pixels relative to the requested asset pivot. size is the full source canvas rendered size; pivots are normalized. rotation is radians. Keyframes are linearly interpolated; frame is held. Empty uninstalled layers are intentional.",
+  "status": "All non-character contract states delivered except two prelude stone illustrations. Character pose generation blocked by image quota."
+}

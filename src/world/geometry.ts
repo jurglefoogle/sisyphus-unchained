@@ -28,7 +28,13 @@ export const SLOPE_ANGLE = Math.atan2(up.y, up.x);
 export const ROUTE_LENGTH = upLen;
 
 export const PULLEY = { x: 1045, y: 236 };
-export const FLYWHEEL = { x: 1470, y: GROUND_Y - 6, r: 64 };
+/** Hub of the flywheel; its stand (machine_wheel_stand) reaches the ground. */
+export const FLYWHEEL = { x: 1470, y: GROUND_Y - 60, r: 64 };
+/** Rope drum axle, left of the route foot; the shade hauls beside it. */
+export const DRUM = { x: 150, y: GROUND_Y - 36 };
+export const SHADE_POST = { x: 88, y: GROUND_Y };
+/** Where Sisyphus stands aside once the shade works: in front of the hill. */
+export const ASIDE_SPOT = { x: 330, y: GROUND_Y + 30 };
 export const TARGET = { x: 1565, y: GROUND_Y };
 export const IMPACT = { x: 1515, y: GROUND_Y - STONE_R };
 export const REST_SPOT = { x: 96, y: GROUND_Y };

@@ -5,6 +5,7 @@ import {
   ascentSeconds,
   availableInsight,
   bulkCost,
+  currentLevel,
   cyclePayout,
   decreeProgress,
   empireIncomePerSecond,
@@ -66,6 +67,35 @@ export interface PurchaseRow {
   options?: BuyOption[];
   accent?: 'machine' | 'work' | 'decree' | 'insight' | 'grip';
   progress?: number;
+  /** Library asset id for the row's symbol (see world/library.ts). */
+  icon?: string;
+  /** Goal key when this purchase can be pinned; `pinned` when it is the goal. */
+  pinKey?: string;
+  pinned?: boolean;
+}
+
+const TRACK_ICONS: Record<LevelTrack, string> = { production: 'ui_milestone', strength: 'ui_strength', impact: 'ui_impact' };
+
+function rowIcon(row: PurchaseRow): string {
+  const a = row.action;
+  switch (a.kind) {
+    case 'levels':
+      return TRACK_ICONS[a.track];
+    case 'flywheel':
+      return 'ui_wheel';
+    case 'foreman':
+      return 'ui_foreman';
+    case 'work':
+      return `work_${a.workId}`;
+    case 'site':
+      return row.key.startsWith('decree-') ? 'ui_decree' : 'ui_empire';
+    case 'upgrade':
+      return `upgrade_${a.upgradeId}`;
+    case 'prelude':
+      return 'ui_push';
+    case 'prestige':
+      return 'ui_prestige';
+  }
 }
 
 export interface GameView {
@@ -91,6 +121,14 @@ export interface GameView {
   /** The opening, while the stone still slips. */
   prelude: { active: boolean; reach: number; best: number; attempts: number };
   objective: string;
+  /** Progress marker for the objective line (the pinned goal's affordability). */
+  objectiveProgress: number | null;
+  goal: GoalView | null;
+  /** The first worthwhile Begin Again, offered once and dismissible (spec §01). */
+  suggestPrestige: boolean;
+  empire: EmpireSite[];
+  /** The Eternal Labor Charter is signed this run: every label is stamped. */
+  charterSigned: boolean;
   rows: PurchaseRow[];
   prestige: {
     available: boolean;
@@ -104,7 +142,178 @@ export interface GameView {
   relics: { id: string; name: string; joke: string }[];
 }
 
+export interface GoalView {
+  key: string;
+  title: string;
+  cost: string;
+  affordable: boolean;
+  /** Bought, capped or otherwise no longer a purchase: kept until unpinned. */
+  stale: boolean;
+  progress: number;
+}
+
+export interface EmpireSite {
+  id: string;
+  chapter: number;
+  name: string;
+  owned: boolean;
+  selected: boolean;
+  /** Decree issued, waiting to be opened. */
+  offered: boolean;
+  /** The next site to be offered: shown as a silhouette with its gate. */
+  teased: boolean;
+  gate: string;
+  level: number;
+  rate: string;
+  automated: boolean;
+  wheel: boolean;
+  works: string[];
+  phase: string;
+  /** Position around the loop, 0..1 (ascent, descent, return). */
+  loop: number;
+}
+
 const has = (state: GameState, id: string) => state.discoveries.tutorialIds.includes(id);
+
+/** First Begin Again prompt threshold (spec §01). */
+export const PRESTIGE_PROMPT_INSIGHT = 10;
+
+// -------------------------------------------------------------------- goals
+
+/** A pinnable purchase. Keys: levels:site:track, flywheel:site, foreman, work:id, site:id, upgrade:id, prelude:id. */
+export function goalKey(action: RowAction, siteId: string): string | undefined {
+  switch (action.kind) {
+    case 'levels':
+      return `levels:${siteId}:${action.track}`;
+    case 'flywheel':
+      return `flywheel:${siteId}`;
+    case 'foreman':
+      return 'foreman';
+    case 'work':
+      return `work:${action.workId}`;
+    case 'site':
+      return `site:${action.siteId}`;
+    case 'upgrade':
+      return `upgrade:${action.upgradeId}`;
+    case 'prelude':
+      return `prelude:${action.upgradeId}`;
+    case 'prestige':
+      return undefined;
+  }
+}
+
+const TRACK_TITLES: Record<LevelTrack, string> = { production: 'Improve Operation', strength: 'Strength', impact: 'Impact' };
+
+export function resolveGoal(state: GameState, key: string): GoalView {
+  const [kind, a, b] = key.split(':');
+  const obols = state.wallet.obols;
+  const money = (title: string, cost: Money | null, stale: boolean, available = true): GoalView => ({
+    key,
+    title,
+    cost: cost ? `${formatMoney(cost)} Obols` : '',
+    affordable: !stale && !!cost && available && obols.gte(cost),
+    stale: stale || !cost,
+    progress: stale || !cost || cost.isZero() ? 1 : Math.min(1, obols.div(cost).toNumber()),
+  });
+  const siteName = (id: string) => (catalog.sites.some((d) => d.id === id) ? t(siteDef(id).displayNameKey) : id);
+  switch (kind) {
+    case 'levels': {
+      const site = findSite(state, a);
+      const track = b as LevelTrack;
+      if (!site || !(track in TRACK_TITLES)) return money(`${TRACK_TITLES[track] ?? 'Level'} · ${siteName(a)}`, null, true);
+      const level = currentLevel(site, track);
+      const capped = level >= levelCap(track) || (track === 'strength' && !strengthLevelEffective(state, site, level));
+      const where = state.empire.sites.length > 1 ? ` · ${siteName(a)}` : '';
+      return money(`${TRACK_TITLES[track]} ${level + 1}${where}`, capped ? null : bulkCost(site, track, 1), capped);
+    }
+    case 'flywheel': {
+      const site = findSite(state, a);
+      return money(`Flywheel · ${siteName(a)}`, site ? flywheelCost(site) : null, !site || site.wheelOwned);
+    }
+    case 'foreman':
+      return money('Foreman Contract', catalog.levels.foremanCost, state.empire.foremanOwned);
+    case 'work': {
+      const def = catalog.works.find((w) => w.id === a);
+      if (!def) return money(a, null, true);
+      const site = findSite(state, def.siteId);
+      const met = !!site && site.productionLevel >= def.requiredLevel;
+      return money(t(def.displayNameKey), def.cost, state.empire.purchasedWorkIds.includes(a), met);
+    }
+    case 'site': {
+      const def = catalog.sites.find((d) => d.id === a);
+      if (!def) return money(a, null, true);
+      return money(`Open ${siteName(a)}`, def.unlockCost, !!findSite(state, a), state.empire.offeredSiteIds.includes(a));
+    }
+    case 'prelude': {
+      const def = catalog.prelude.upgrades.find((u) => u.id === a);
+      const stale = !def || state.prelude.complete || state.prelude.upgradeIds.includes(a);
+      return money(t(`prelude.${a}`), def ? def.cost : null, stale, nextPreludeUpgrade(state)?.id === a);
+    }
+    case 'upgrade': {
+      const def = catalog.insightUpgrades.find((u) => u.id === a);
+      const stale = !def || state.prestige.permanentUpgradeIds.includes(a);
+      const have = spendableInsight(state);
+      return {
+        key,
+        title: t(`upgrade.${a}`),
+        cost: def ? `${def.cost} Insight` : '',
+        affordable: !stale && !!def && have >= def.cost,
+        stale,
+        progress: stale || !def ? 1 : Math.min(1, have / def.cost),
+      };
+    }
+  }
+  return money(key, null, true);
+}
+
+function goalObjective(state: GameState, goal: GoalView, fallback: string): string {
+  if (goal.stale) return `Pinned goal done or unavailable (${goal.title}). Next: ${fallback}`;
+  if (goal.affordable) return `Goal ready: ${goal.title} (${goal.cost}).`;
+  let wait = '';
+  const rate = empireIncomePerSecond(state);
+  if (goal.cost.endsWith('Obols') && !rate.isZero() && goal.progress > 0 && goal.progress < 1) {
+    // cost = obols / progress, so the shortfall follows without re-resolving the price.
+    const secs = state.wallet.obols.div(goal.progress).sub(state.wallet.obols).div(rate).toNumber();
+    if (Number.isFinite(secs) && secs > 0) wait = ` (≈ ${formatDuration(secs)}, estimate)`;
+  }
+  return `Goal: ${goal.title} — ${goal.cost}${wait}.`;
+}
+
+// ------------------------------------------------------------------- empire
+
+function loopFraction(site: SiteState): number {
+  const { descentSeconds, returnSeconds } = catalog.cycle;
+  // Ascent takes half the loop on the frieze; descent and return share the rest.
+  if (site.phase === 'ascending') return 0.5 * Math.min(1, site.phaseProgress);
+  if (site.phase === 'descending') return 0.5 + 0.4 * Math.min(1, site.phaseProgress / descentSeconds);
+  if (site.phase === 'returning') return 0.9 + 0.1 * Math.min(1, site.phaseProgress / returnSeconds);
+  return 0;
+}
+
+function empireView(state: GameState): EmpireSite[] {
+  const next = nextUnownedSite(state);
+  const automated = isAutomated(state);
+  return catalog.sites.map((def, i) => {
+    const site = findSite(state, def.id);
+    return {
+      id: def.id,
+      chapter: i + 1,
+      name: t(def.displayNameKey),
+      owned: !!site,
+      selected: state.empire.selectedSiteId === def.id,
+      offered: state.empire.offeredSiteIds.includes(def.id),
+      teased: !site && next?.id === def.id,
+      gate: formatMoney(def.defianceGate),
+      level: site?.productionLevel ?? 0,
+      rate: site ? (automated ? formatRate(steadyIncomePerSecond(state, site)) : 'manual') : '',
+      automated: !!site && automated,
+      wheel: !!site?.wheelOwned,
+      works: catalog.works.filter((w) => w.siteId === def.id && state.empire.purchasedWorkIds.includes(w.id)).map((w) => w.id),
+      phase: site?.phase ?? 'locked',
+      loop: site ? loopFraction(site) : 0,
+    };
+  });
+}
 
 function incomeDelta(state: GameState, site: SiteState, mutate: (s: SiteState) => void): string {
   const after = cloneSite(site);
@@ -121,10 +330,11 @@ function incomeDelta(state: GameState, site: SiteState, mutate: (s: SiteState) =
 
 function waitFor(state: GameState, cost: Money): string | undefined {
   if (state.wallet.obols.gte(cost)) return undefined;
+  const short = cost.sub(state.wallet.obols);
+  const need = `Need ${formatMoney(short)} more`;
   const rate = empireIncomePerSecond(state);
-  if (rate.isZero()) return undefined;
-  const secs = cost.sub(state.wallet.obols).div(rate).toNumber();
-  return `≈ ${formatDuration(secs)} (estimate)`;
+  if (rate.isZero()) return need;
+  return `${need} · ≈ ${formatDuration(short.div(rate).toNumber())} at current income (estimate)`;
 }
 
 function levelRow(state: GameState, site: SiteState, track: LevelTrack): PurchaseRow | null {
@@ -176,6 +386,8 @@ function levelRow(state: GameState, site: SiteState, track: LevelTrack): Purchas
     title,
     level: levelText,
     effect,
+    // Payouts are fixed when a climb begins; speed changes apply at once (spec §01).
+    note: track === 'strength' ? 'Faster ascent starts immediately.' : 'Raises the payout from the next climb.',
     cost: formatMoney(cost1),
     affordable: state.wallet.obols.gte(cost1),
     wait: waitFor(state, cost1),
@@ -325,6 +537,7 @@ export function buildView(state: GameState): GameView {
         key: `site-${next.id}`,
         title: `Open ${t(next.displayNameKey)}`,
         effect: 'A new, heavier operation. Existing sites keep working.',
+        note: automated ? undefined : 'Without the Foreman only the selected site moves. Completing automation first is recommended.',
         cost: formatMoney(next.unlockCost),
         affordable: state.wallet.obols.gte(next.unlockCost),
         wait: waitFor(state, next.unlockCost),
@@ -373,6 +586,13 @@ export function buildView(state: GameState): GameView {
     });
   }
 
+  for (const r of rows) {
+    r.pinKey = r.key.startsWith('decree-') ? undefined : goalKey(r.action, site.id);
+    r.pinned = !!r.pinKey && r.pinKey === state.pinnedGoal;
+  }
+  const goal = state.pinnedGoal ? resolveGoal(state, state.pinnedGoal) : null;
+  const plainObjective = objective(state, site);
+
   const nm = nextMilestone(site.productionLevel);
   const prevM = [...catalog.levels.milestones].reverse().find((m) => m <= site.productionLevel) ?? 1;
   return {
@@ -401,8 +621,13 @@ export function buildView(state: GameState): GameView {
       best: state.prelude.bestHeight,
       attempts: state.prelude.attempts,
     },
-    objective: objective(state, site),
-    rows,
+    objective: goal ? goalObjective(state, goal, plainObjective) : plainObjective,
+    objectiveProgress: goal && !goal.stale ? goal.progress : null,
+    goal,
+    suggestPrestige: award >= PRESTIGE_PROMPT_INSIGHT && (automated || has(state, 'foreman')) && !has(state, 'prestige_prompt'),
+    empire: empireView(state),
+    charterSigned: state.empire.purchasedWorkIds.includes('charter'),
+    rows: rows.map((r) => ({ ...r, icon: rowIcon(r) })),
     prestige: {
       available: award > 0,
       award,

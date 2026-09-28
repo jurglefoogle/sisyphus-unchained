@@ -12,7 +12,7 @@ import {
   steadyIncomePerSecond,
   strengthLevelEffective,
 } from '../src/core/formulas';
-import { formatMoney } from '../src/core/format';
+import { formatMoney, formatMultiplier, setNumberLocale } from '../src/core/format';
 import { Money } from '../src/core/money';
 import { expectClose, give, makeState } from './helpers';
 
@@ -152,5 +152,16 @@ describe('formatting', () => {
     expect(formatMoney(Money.of('1.2e10'))).toBe('12B');
     expect(formatMoney(Money.of('4.8e12'))).toBe('4.8T');
     expect(formatMoney(Money.of('2e15'))).toBe('2.00e15');
+  });
+
+  it('follows the locale decimal mark for display only', () => {
+    setNumberLocale('de-DE');
+    try {
+      expect(formatMoney(Money.of(1234))).toBe('1,23K');
+      expect(formatMultiplier(1.75)).toBe('×1,75');
+    } finally {
+      setNumberLocale('en-US');
+    }
+    expect(formatMoney(Money.of(1234))).toBe('1.23K');
   });
 });

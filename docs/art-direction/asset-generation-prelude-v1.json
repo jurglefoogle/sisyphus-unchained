@@ -1,0 +1,43 @@
+{
+  "status": "blocked-image-limit",
+  "reason": "Built-in image generation returned usage_limit_reached. These are planned assets, not delivered images.",
+  "mode": "built-in image editing",
+  "tasks": [
+    {
+      "id": "sisyphus_slip_strip",
+      "reference": "sisyphus_push",
+      "prompt": "Edit the reference Sisyphus into one transparent four-frame horizontal sprite strip showing a non-graphic comic loss of grip: hands slip, torso falls backward, seated landing, then resting on his back with knees bent. Same short tunic, face, pottery silhouette and incised lines. Four equal cells, fixed figure scale, no clipping or overlap, no boulder or background, no labels. Keep all limbs fully visible, no injury."
+    },
+    {
+      "id": "sisyphus_get_up_strip",
+      "reference": "sisyphus_push",
+      "prompt": "Edit the reference Sisyphus into one transparent four-frame horizontal sprite strip showing him getting up after a harmless fall: seated, one knee under body, rising crouch, standing. Preserve identity, short tunic, adult proportions and pottery art. Four equal cells, common floor baseline, fixed scale, generous transparent gutters; no extra figures or objects, no labels."
+    },
+    {
+      "id": "stone_limestone_rough",
+      "reference": "stone_limestone",
+      "prompt": "Edit only the outline and fractures of this limestone game boulder into a jagged prelude stone. Preserve ink and clay palette, incised spiral, material, and approximate diameter. Add prominent angular corners so it visibly resists rolling. One isolated transparent sprite, centered, at least 12 percent edge padding. No floor, shadow, text or other object."
+    },
+    {
+      "id": "stone_limestone_chipped",
+      "reference": "stone_limestone",
+      "prompt": "Edit the limestone game boulder into the intermediate chipped prelude stone: mostly round but several angular corners remain, small flat chisel facets on the rim. Preserve material, palette and spiral incision. One isolated transparent sprite, same scale and center as reference, at least 12 percent edge padding; no floor, labels, debris or shadows."
+    }
+  ],
+  "variant": {
+    "id": "sisyphus_feet_wrapped",
+    "appliesTo": [
+      "rest",
+      "push_loop",
+      "strain_accent",
+      "summit_reaction",
+      "step_aside",
+      "manual_assist",
+      "walk",
+      "slip_knockdown",
+      "get_up"
+    ],
+    "referencePolicy": "Use each completed matching Sisyphus pose or strip as edit target, inspect first.",
+    "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+  }
+}

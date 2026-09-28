@@ -2,9 +2,27 @@ import { Money } from './money';
 
 const SUFFIXES = ['', 'K', 'M', 'B', 'T'];
 
+/** Display decimal mark from the player's locale; saves always stay canonical. */
+let decimalMark = '.';
+
+export function setNumberLocale(locale: string | undefined): void {
+  try {
+    const part = new Intl.NumberFormat(locale).formatToParts(1.5).find((p) => p.type === 'decimal');
+    decimalMark = part?.value ?? '.';
+  } catch {
+    decimalMark = '.';
+  }
+}
+
+const localize = (text: string): string => (decimalMark === '.' ? text : text.replace('.', decimalMark));
+
 /** Display-only formatting: K, M, B, T, then scientific notation. */
 export function formatMoney(value: Money): string {
-  if (value.isNegative()) return '-' + formatMoney(Money.ZERO.sub(value));
+  return localize(formatCanonical(value));
+}
+
+function formatCanonical(value: Money): string {
+  if (value.isNegative()) return '-' + formatCanonical(Money.ZERO.sub(value));
   if (value.lt(1000)) {
     const n = value.toNumber();
     return Number.isInteger(n) ? String(n) : n < 10 ? n.toFixed(1) : String(Math.floor(n));
@@ -51,5 +69,5 @@ export function formatDuration(seconds: number): string {
 }
 
 export function formatMultiplier(x: number): string {
-  return `×${x.toFixed(x < 10 ? 2 : 1).replace(/\.?0+$/, '')}`;
+  return `×${localize(x.toFixed(x < 10 ? 2 : 1).replace(/\.?0+$/, ''))}`;
 }

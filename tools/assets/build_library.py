@@ -222,6 +222,7 @@ def catalog(warnings):
     </style><header><h1>Sisyphus / asset library</h1><p>Pottery, machinery, and divine administration.</p><p>First-pass art and original prototype audio. Characters and installations still need rigging; generated backgrounds are full plates. Inspect on both grounds before integrating.</p><a href="manifest.json">Asset manifest</a> · <a href="motion-contract.json">Motion handoff</a></header><nav><input id="search" type="search" aria-label="Find an asset" placeholder="Find an asset…"><select id="category" aria-label="Asset category"><option value="">All categories</option>OPTIONS</select><button id="ground">Switch preview ground</button></nav><p id="count" aria-live="polite"></p><main>CARDS</main><footer>Original sources: tools/assets/build_library.py and docs/art-direction/asset-generation-v1.json. No font files or third-party samples included.</footer><script>
     const search=document.querySelector('#search'),category=document.querySelector('#category'),cards=[...document.querySelectorAll('article')];function filter(){let n=0;for(const card of cards){card.hidden=!(card.dataset.id.includes(search.value.trim().toLowerCase())&&(!category.value||card.dataset.category===category.value));if(!card.hidden)n++}document.querySelector('#count').textContent=n+' assets shown'}search.addEventListener('input',filter);category.addEventListener('change',filter);document.querySelector('#ground').addEventListener('click',()=>document.body.classList.toggle('dark'));filter();
     </script></html>'''.replace('OPTIONS',options).replace('CARDS',''.join(cards))
+    page=page.replace('<a href="manifest.json">Asset manifest</a>', '<a href="states.html">Animated states</a> · <a href="coverage.json">Coverage</a> · <a href="manifest.json">Asset manifest</a>')
     (OUT/'index.html').write_text(page,encoding='utf-8')
     print(json.dumps({'assets':len(ASSETS),'counts':dict(counts),'warnings':warnings},indent=2))
 
@@ -231,6 +232,8 @@ def main():
     build_vectors(economy)
     build_audio()
     warnings=inspect_art()
+    from build_contract import build_contract
+    build_contract(ASSETS, svg)
     catalog(warnings)
 
 if __name__=='__main__':main()

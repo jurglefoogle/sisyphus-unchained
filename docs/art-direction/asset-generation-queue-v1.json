@@ -1,0 +1,176 @@
+{
+  "mode": "built-in image generation",
+  "reportedResetUTC": "2026-09-28T00:25:14Z",
+  "reportedResetLocal": "2026-09-27 19:25:14 America/Chicago",
+  "status": "pending-image-limit",
+  "instructions": [
+    "Process in listed order: inspect the reference image before each edit.",
+    "Keep generated images in their specified project output paths; preserve alpha.",
+    "Inspect identity, orientation, margins, pose and frame registration before marking an image delivered.",
+    "Availability requires reviewed files and delivery recipes; a prompt does not constitute delivery.",
+    "Wrapped variants depend on acceptance of the matching barefoot source."
+  ],
+  "tasks": [
+    {
+      "id": "sisyphus_rest",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_rest.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding upright relaxed, hands resting on hips, calm and slightly amused, both feet on one horizontal baseline."
+    },
+    {
+      "id": "sisyphus_push_recoil",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_push_recoil.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nThe recovery half of a pushing cycle: same forward-pushing direction, knees bent more, elbows bent slightly, torso a little more upright, palms still at the same forward height. The near leg bears weight and the far heel is lifted."
+    },
+    {
+      "id": "sisyphus_strain",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_strain.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nBrief strong effort accent: deep forward lean, flexed elbows and compressed bent knees, chin slightly down, both palms forward. Clear strong silhouette; no pain symbols."
+    },
+    {
+      "id": "sisyphus_summit",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_summit.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding tall after releasing the stone, hands open lifted to chest height in a small relieved shrug, head looking right toward the descending stone. No stone."
+    },
+    {
+      "id": "shade_idle",
+      "reference": "shade_attendant",
+      "output": "public/assets/pottery-v1/art/shade_idle.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding upright with a modest stoop, arms relaxed at sides, feet shoulder-width apart on a common horizontal ground line. Calm worker waiting for next shift."
+    },
+    {
+      "id": "shade_pull_recoil",
+      "reference": "shade_attendant",
+      "output": "public/assets/pottery-v1/art/shade_pull_recoil.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nThe second pose of a capstan working loop: elbows bent and hands drawn closer to waist from the reference position, torso slightly leaned back and knees flexed. Hands grip an imaginary handle; do not draw handle."
+    },
+    {
+      "id": "shade_purchase_reaction",
+      "reference": "shade_attendant",
+      "output": "public/assets/pottery-v1/art/shade_purchase_reaction.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding up and giving a small respectful nod, one hand over chest and the other relaxed at side, feet grounded on same horizontal baseline."
+    },
+    {
+      "id": "sisyphus_walk_strip",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nWALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions."
+    },
+    {
+      "id": "shade_walk_strip",
+      "reference": "shade_attendant",
+      "output": "public/assets/pottery-v1/art/shade_walk_strip.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nWALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions."
+    },
+    {
+      "id": "sisyphus_step_aside",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_step_aside.png",
+      "status": "pending",
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nTaking one short backward step clear of the released boulder: torso upright leaning slightly back, both open hands withdrawn near the chest, near foot planted and far foot stepping backward. Face remains in right-facing profile, looking toward the boulder. No boulder in the image."
+    },
+    {
+      "id": "sisyphus_slip_strip",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_slip_strip.png",
+      "status": "pending",
+      "prompt": "Edit the reference Sisyphus into one transparent four-frame horizontal sprite strip showing a non-graphic comic loss of grip: hands slip, torso falls backward, seated landing, then resting on his back with knees bent. Same short tunic, face, pottery silhouette and incised lines. Four equal cells, fixed figure scale, no clipping or overlap, no boulder or background, no labels. Keep all limbs fully visible, no injury."
+    },
+    {
+      "id": "sisyphus_get_up_strip",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_get_up_strip.png",
+      "status": "pending",
+      "prompt": "Edit the reference Sisyphus into one transparent four-frame horizontal sprite strip showing him getting up after a harmless fall: seated, one knee under body, rising crouch, standing. Preserve identity, short tunic, adult proportions and pottery art. Four equal cells, common floor baseline, fixed scale, generous transparent gutters; no extra figures or objects, no labels."
+    },
+    {
+      "id": "stone_limestone_rough",
+      "reference": "stone_limestone",
+      "output": "public/assets/pottery-v1/art/stone_limestone_rough.png",
+      "status": "pending",
+      "prompt": "Edit only the outline and fractures of this limestone game boulder into a jagged prelude stone. Preserve ink and clay palette, incised spiral, material, and approximate diameter. Add prominent angular corners so it visibly resists rolling. One isolated transparent sprite, centered, at least 12 percent edge padding. No floor, shadow, text or other object."
+    },
+    {
+      "id": "stone_limestone_chipped",
+      "reference": "stone_limestone",
+      "output": "public/assets/pottery-v1/art/stone_limestone_chipped.png",
+      "status": "pending",
+      "prompt": "Edit the limestone game boulder into the intermediate chipped prelude stone: mostly round but several angular corners remain, small flat chisel facets on the rim. Preserve material, palette and spiral incision. One isolated transparent sprite, same scale and center as reference, at least 12 percent edge padding; no floor, labels, debris or shadows."
+    },
+    {
+      "id": "sisyphus_push_feet_wrapped",
+      "reference": "sisyphus_push",
+      "output": "public/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_rest_feet_wrapped",
+      "reference": "sisyphus_rest",
+      "output": "public/assets/pottery-v1/art/sisyphus_rest_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_push_recoil_feet_wrapped",
+      "reference": "sisyphus_push_recoil",
+      "output": "public/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_strain_feet_wrapped",
+      "reference": "sisyphus_strain",
+      "output": "public/assets/pottery-v1/art/sisyphus_strain_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_summit_feet_wrapped",
+      "reference": "sisyphus_summit",
+      "output": "public/assets/pottery-v1/art/sisyphus_summit_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_walk_strip_feet_wrapped",
+      "reference": "sisyphus_walk_strip",
+      "output": "public/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_step_aside_feet_wrapped",
+      "reference": "sisyphus_step_aside",
+      "output": "public/assets/pottery-v1/art/sisyphus_step_aside_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_slip_strip_feet_wrapped",
+      "reference": "sisyphus_slip_strip",
+      "output": "public/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    },
+    {
+      "id": "sisyphus_get_up_strip_feet_wrapped",
+      "reference": "sisyphus_get_up_strip",
+      "output": "public/assets/pottery-v1/art/sisyphus_get_up_strip_feet_wrapped.png",
+      "status": "pending",
+      "prompt": "Change only the bare feet and lower ankles to simple rag wraps bound with narrow cloth strips. Preserve the exact pose, silhouette above the ankle, identity, tunic, canvas dimensions, frame positions, alpha background, palette and line style. No sandals or armor. All animation frames receive consistent cloth wraps."
+    }
+  ]
+}

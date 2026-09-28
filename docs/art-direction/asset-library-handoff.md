@@ -1,5 +1,7 @@
 # Pottery library v1 — first-pass handoff
 
+Updated renderer coverage, additional layers, animation recipes, and blocked artwork are documented in [renderer-asset-coverage.md](renderer-asset-coverage.md). The original delivery below was 131 assets; the expanded library now has 156 files and 170 registry entries. Use `delivery.json` for current scene geometry and clips.
+
 The library is in `public/assets/pottery-v1/`. Open its `index.html` directly or serve `public/` and visit `/assets/pottery-v1/`. The catalog includes category filtering, name search, light/dark preview grounds, downloads, and audio playback.
 
 ## Delivered scope

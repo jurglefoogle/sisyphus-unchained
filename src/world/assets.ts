@@ -1,3 +1,7 @@
+import library from '../../public/assets/pottery-v1/manifest.json';
+import deliveries from '../../public/assets/pottery-v1/delivery.json';
+import type { AssetDelivery, AssetState, LibraryAsset } from './asset-types';
+
 /**
  * Asset contract between the art pipeline and the world renderer. IDs match
  * economy.json (stoneAssetId, sceneId) and the animation inventory in spec §04.
@@ -13,9 +17,14 @@ export interface AssetSpec {
   /** Where the pivot must sit, in words, so placement code stays stable. */
   pivot: string;
   notes?: string;
+  category?: string;
+  /** Availability is state-specific; never substitute an unrelated pose. */
+  delivery?: AssetDelivery;
+  source?: LibraryAsset;
 }
 
-export const ASSET_MANIFEST: AssetSpec[] = [
+/** The renderer's required contract. Keep additions here, not in generated JSON. */
+export const REQUIRED_ASSETS: AssetSpec[] = [
   {
     id: 'sisyphus',
     states: [
@@ -85,3 +94,52 @@ export const ASSET_MANIFEST: AssetSpec[] = [
     notes: 'Layers must keep the route geometry in src/world/geometry.ts clear.',
   })),
 ];
+
+const delivered = deliveries.assets as Record<string, AssetDelivery>;
+const sources = library.assets as LibraryAsset[];
+const sourceById = new Map(sources.map((asset) => [asset.id, asset]));
+const requiredIds = new Set(REQUIRED_ASSETS.map((asset) => asset.id));
+
+function sourceState(source: LibraryAsset): AssetState {
+  const audio = source.url.endsWith('.wav');
+  return {
+    status: 'available',
+    duration: source.durationSeconds ?? 1,
+    loop: source.loop ?? false,
+    reducedMotionTime: 0,
+    layers: audio ? [] : [{
+      id: source.id,
+      frame: { assetId: source.id, url: source.url, dimensions: source.dimensions!, pivot: source.pivot! },
+      size: source.dimensions!,
+      keyframes: [{ time: 0, x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, alpha: 1 }],
+    }],
+    ...(audio ? { audioUrl: source.url } : {}),
+    notes: source.status,
+  };
+}
+
+/** Complete list: renderer requirements first, then every delivered library asset. */
+export const ASSET_MANIFEST: AssetSpec[] = [
+  ...REQUIRED_ASSETS.map((spec) => ({
+    ...spec,
+    category: sourceById.get(spec.id)?.category ?? 'world-contract',
+    source: sourceById.get(spec.id),
+    delivery: delivered[spec.id],
+  })),
+  ...sources.filter((source) => !requiredIds.has(source.id)).map((source) => {
+    const stateName = source.url.endsWith('.wav') ? 'audio' : 'texture';
+    return {
+      id: source.id,
+      states: [stateName],
+      pivot: source.pivot ? `normalized source pivot (${source.pivot.join(', ')})` : 'not applicable to audio',
+      category: source.category,
+      source,
+      notes: source.status,
+      delivery: { states: { [stateName]: sourceState(source) } },
+    };
+  }),
+];
+
+export function getAssetState(id: string, state: string): AssetState | undefined {
+  return ASSET_MANIFEST.find((asset) => asset.id === id)?.delivery?.states[state];
+}

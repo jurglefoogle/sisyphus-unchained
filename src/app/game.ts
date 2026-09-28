@@ -17,11 +17,13 @@ import {
   type PrestigePreview,
 } from '../core/commands';
 import type { LevelTrack } from '../core/formulas';
+import { reconcileAchievements } from '../core/achievements';
 import { settleOffline, type OfflineSummary } from '../core/offline';
 import { deserializeSave, serializeSave } from '../core/save';
-import { stepSites } from '../core/sim';
+import { markTutorial, stepSites } from '../core/sim';
 import type { GameEvent, GameState, Options } from '../core/state';
 import { CURRENT, PRE_RESET, backupKey, openSaveStore, type SaveStore } from '../platform/storage';
+import { Telemetry } from './telemetry';
 import { buildView, type GameView } from './view';
 
 /** Foreground gaps longer than this (hidden tab, sleep) settle as an absence. */
@@ -32,8 +34,9 @@ const AMBIENT_INTERVAL_MS = 90_000;
 const AMBIENT_REPEAT_WINDOW_MS = 10 * 60_000;
 
 export interface Notice {
-  kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast';
+  kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast' | 'achievement';
   storyId?: string;
+  achievementIds?: string[];
   firstTime?: boolean;
   relicId?: string;
   text?: string;
@@ -41,6 +44,38 @@ export interface Notice {
 }
 
 type EventListener = (events: GameEvent[]) => void;
+
+/** Player commands (spec §05). Each carries a request id; duplicates are ignored. */
+export type Command =
+  | { type: 'BuyLevels'; track: LevelTrack; count: number }
+  | { type: 'BuyPreludeUpgrade'; upgradeId: string }
+  | { type: 'BuyFlywheel' }
+  | { type: 'HireForeman' }
+  | { type: 'BuyWork'; workId: string }
+  | { type: 'OpenSite'; siteId: string }
+  | { type: 'BuyInsightUpgrade'; upgradeId: string };
+
+export interface CommandRequest {
+  requestId: string;
+  /** Client timestamp (ms). The purchase applies at the authoritative settlement time. */
+  at: number;
+  command: Command;
+}
+
+const REQUEST_MEMORY = 256;
+let requestCounter = 0;
+export const newRequestId = (): string => `r${Date.now().toString(36)}-${(requestCounter++).toString(36)}`;
+
+/** A save that can be restored from the recovery screen. */
+export interface RecoveryOption {
+  key: string;
+  label: string;
+  savedAt: number;
+  runGross: string;
+  record: string;
+  insight: number;
+  sites: number;
+}
 
 export class Game {
   state!: GameState;
@@ -58,8 +93,10 @@ export class Game {
   private viewListeners = new Set<(v: GameView) => void>();
   private viewTimer: ReturnType<typeof setInterval> | null = null;
   private lastAmbient = 0;
+  private seenRequests: string[] = [];
   private ambientShown = new Map<string, number>();
   loadProblem: { error: string; raw: string; restored: boolean } | null = null;
+  readonly telemetry = new Telemetry(() => !!this.state?.options.telemetry);
 
   async init(): Promise<void> {
     this.store = await openSaveStore();
@@ -68,30 +105,30 @@ export class Game {
       const loaded = deserializeSave(raw);
       if (loaded.ok) {
         this.state = loaded.state;
+        if (loaded.migratedFrom !== undefined) {
+          await this.store.put({ [`pre-migration-v${loaded.migratedFrom}`]: raw }).catch(() => {});
+        }
       } else {
         // Never silently replace a corrupt save: preserve it and try backups.
         await this.store.put({ [`corrupt-${Date.now()}`]: raw }).catch(() => {});
         const recovered = await this.recoverFromBackups();
         this.loadProblem = { error: loaded.error, raw, restored: !!recovered };
+        // Don't rotate backups until the player has chosen how to recover.
+        this.lastBackup = Date.now();
         this.state = recovered ?? newGame(Date.now());
       }
     } else {
       this.state = newGame(Date.now());
     }
     this.settleAbsence(Date.now(), true);
+    this.reconcile();
     this.lastFrame = performance.now();
     this.lastAmbient = Date.now();
     this.dirty = true;
     await this.save();
     this.viewTimer = setInterval(() => this.publishView(), 100);
-    if (this.loadProblem) {
-      this.notify({
-        kind: 'error',
-        text: `Your latest save could not be loaded (${this.loadProblem.error}). ${
-          this.loadProblem.restored ? 'A backup was restored.' : 'No valid backup was found, so a new game was started.'
-        } The damaged file was kept and can be exported from Settings.`,
-      });
-    }
+    this.telemetry.record(this.state, 'session_start');
+    // A load problem opens the recovery screen (App reads `loadProblem`).
   }
 
   private async recoverFromBackups(): Promise<GameState | null> {
@@ -142,9 +179,21 @@ export class Game {
     for (const fn of this.noticeListeners) fn(n);
   }
 
+  /** Pick up achievements earned by loading, importing or anything missed. */
+  private reconcile(): void {
+    const events: GameEvent[] = [];
+    reconcileAchievements(this.state, events);
+    this.emit(events);
+  }
+
   private emit(events: GameEvent[]): void {
     if (!events.length) return;
+    // Achievements follow from the state these events produced.
+    reconcileAchievements(this.state, events);
     this.dirty = true;
+    this.telemetry.onEvents(this.state, events);
+    const achieved = events.flatMap((e) => (e.type === 'AchievementUnlocked' ? [e.achievementId] : []));
+    if (achieved.length) this.notify({ kind: 'achievement', achievementIds: achieved });
     for (const e of events) {
       if (e.type === 'StoryTriggered') this.notify({ kind: 'story', storyId: e.storyId, firstTime: e.firstTime });
       if (e.type === 'RelicGranted') this.notify({ kind: 'relic', relicId: e.relicId });
@@ -229,30 +278,71 @@ export class Game {
     if (this.manualHeld === held) return;
     this.settleNow();
     this.manualHeld = held && !this.state.paused;
+    if (this.manualHeld) this.telemetry.push(this.state);
   }
 
-  buyLevels(track: LevelTrack, count: number) {
-    return this.run((e) => buyLevels(this.state, this.state.empire.selectedSiteId, track, count, e));
+  /**
+   * Apply a command at the settled present. A repeated request id (a double
+   * click on the same offer, a retried message) is ignored.
+   */
+  dispatch(req: CommandRequest): CommandResult {
+    if (this.seenRequests.includes(req.requestId)) return { ok: false, reason: 'duplicate-request' };
+    const result = this.apply(req.command);
+    // Only applied requests are remembered, so a refused one can be retried later.
+    if (result.ok) {
+      this.seenRequests.push(req.requestId);
+      if (this.seenRequests.length > REQUEST_MEMORY) this.seenRequests.shift();
+    }
+    return result;
   }
-  buyPreludeUpgrade(id: string) {
-    return this.run((e) => buyPreludeUpgrade(this.state, id, e));
+
+  private apply(c: Command): CommandResult {
+    const s = () => this.state;
+    switch (c.type) {
+      case 'BuyLevels':
+        return this.run((e) => buyLevels(s(), s().empire.selectedSiteId, c.track, c.count, e));
+      case 'BuyPreludeUpgrade':
+        return this.run((e) => buyPreludeUpgrade(s(), c.upgradeId, e));
+      case 'BuyFlywheel':
+        return this.run((e) => buyFlywheel(s(), s().empire.selectedSiteId, e));
+      case 'HireForeman':
+        return this.run((e) => hireForeman(s(), e));
+      case 'BuyWork':
+        return this.run((e) => buyWork(s(), c.workId, e));
+      case 'OpenSite': {
+        const r = this.run((e) => openSite(s(), c.siteId, e));
+        if (r.ok) this.selectSite(c.siteId);
+        return r;
+      }
+      case 'BuyInsightUpgrade':
+        return this.run((e) => buyInsightUpgrade(s(), c.upgradeId, e));
+    }
   }
-  buyFlywheel() {
-    return this.run((e) => buyFlywheel(this.state, this.state.empire.selectedSiteId, e));
+
+  private send(command: Command, requestId = newRequestId()): CommandResult {
+    return this.dispatch({ requestId, at: Date.now(), command });
   }
-  hireForeman() {
-    return this.run((e) => hireForeman(this.state, e));
+
+  buyLevels(track: LevelTrack, count: number, requestId?: string) {
+    return this.send({ type: 'BuyLevels', track, count }, requestId);
   }
-  buyWork(id: string) {
-    return this.run((e) => buyWork(this.state, id, e));
+  buyPreludeUpgrade(id: string, requestId?: string) {
+    return this.send({ type: 'BuyPreludeUpgrade', upgradeId: id }, requestId);
   }
-  openSite(id: string) {
-    const r = this.run((e) => openSite(this.state, id, e));
-    if (r.ok) this.selectSite(id);
-    return r;
+  buyFlywheel(requestId?: string) {
+    return this.send({ type: 'BuyFlywheel' }, requestId);
   }
-  buyUpgrade(id: string) {
-    return this.run((e) => buyInsightUpgrade(this.state, id, e));
+  hireForeman(requestId?: string) {
+    return this.send({ type: 'HireForeman' }, requestId);
+  }
+  buyWork(id: string, requestId?: string) {
+    return this.send({ type: 'BuyWork', workId: id }, requestId);
+  }
+  openSite(id: string, requestId?: string) {
+    return this.send({ type: 'OpenSite', siteId: id }, requestId);
+  }
+  buyUpgrade(id: string, requestId?: string) {
+    return this.send({ type: 'BuyInsightUpgrade', upgradeId: id }, requestId);
   }
   selectSite(id: string) {
     this.manualHeld = false;
@@ -261,7 +351,9 @@ export class Game {
 
   previewPrestige(): PrestigePreview {
     this.settleNow();
-    return previewPrestige(this.state);
+    const preview = previewPrestige(this.state);
+    this.telemetry.record(this.state, 'prestige_preview', { detail: preview.award });
+    return preview;
   }
 
   async confirmPrestige(): Promise<CommandResult> {
@@ -271,6 +363,27 @@ export class Game {
     const r = this.run((e) => confirmPrestige(this.state, e));
     await this.save();
     return r;
+  }
+
+  /** Pin one purchase as the goal (null unpins). Changes only the objective line. */
+  pinGoal(key: string | null): void {
+    this.state.pinnedGoal = key;
+    this.dirty = true;
+    this.publishView();
+    void this.save();
+  }
+
+  /** Record a one-time interface flag (dismissed prompt, seen credits). */
+  markSeen(id: string): void {
+    markTutorial(this.state, id);
+    this.dirty = true;
+    this.publishView();
+    void this.save();
+  }
+
+  endSession(): void {
+    this.telemetry.record(this.state, 'session_end', { detail: Math.round(this.state.counters.totalActiveSeconds) });
+    void this.save();
   }
 
   setPaused(paused: boolean): void {
@@ -329,10 +442,55 @@ export class Game {
     this.state = state;
     this.manualHeld = false;
     this.settleAbsence(Date.now(), true);
+    this.reconcile();
     this.dirty = true;
     await this.save();
     this.publishView();
     this.emit([{ type: 'SiteOpened', siteId: state.empire.selectedSiteId }]);
+  }
+
+  /** Backups and recovery copies that still load, newest first. */
+  async recoveryOptions(): Promise<RecoveryOption[]> {
+    const keys: [string, string][] = [];
+    for (let i = 0; i < catalog.save.backupCount; i++) keys.push([backupKey(i), `Backup ${i + 1}`]);
+    keys.push([PRE_RESET, 'Copy kept before the last reset or import']);
+    const out: RecoveryOption[] = [];
+    for (const [key, label] of keys) {
+      const raw = await this.store.get(key).catch(() => null);
+      if (!raw) continue;
+      const r = deserializeSave(raw);
+      if (!r.ok) continue;
+      const st = r.state;
+      out.push({
+        key,
+        label,
+        savedAt: st.lastSettledUtc,
+        runGross: formatMoney(st.wallet.runGross),
+        record: formatMoney(st.wallet.bestRunGross),
+        insight: st.prestige.lifetimeInsightAwarded,
+        sites: st.empire.sites.length,
+      });
+    }
+    return out.sort((a, b) => b.savedAt - a.savedAt);
+  }
+
+  async restoreFrom(key: string): Promise<boolean> {
+    const raw = await this.store.get(key).catch(() => null);
+    const r = raw ? deserializeSave(raw) : null;
+    if (!r?.ok) return false;
+    await this.applyImport(r.state);
+    return true;
+  }
+
+  async startFresh(): Promise<void> {
+    const options = this.state.options;
+    this.state = newGame(Date.now());
+    this.state.options = options;
+    this.manualHeld = false;
+    this.dirty = true;
+    await this.save();
+    this.publishView();
+    this.emit([{ type: 'SiteOpened', siteId: this.state.empire.selectedSiteId }]);
   }
 
   async resetSave(): Promise<void> {

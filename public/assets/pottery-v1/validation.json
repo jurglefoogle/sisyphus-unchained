@@ -1,6 +1,6 @@
 {
   "technicalChecks": "PASS",
-  "assetCount": 131,
+  "assetCount": 156,
   "errors": [],
   "artWarnings": [
     "Tight edge padding: stone_basalt",
@@ -145,7 +145,7 @@
   ],
   "limits": [
     "No claim of final art approval",
-    "Character rigging and work-layer animation remain pending",
+    "See coverage.json for blocked image-generation states and wrapped-feet variant",
     "No in-game readability or lifecycle verification",
     "Audio listening and final mix remain pending"
   ]

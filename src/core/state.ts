@@ -37,6 +37,18 @@ export interface Options {
   ambientCaptions: boolean;
   textScale: number;
   highContrast: boolean;
+  /** Camera shake on impacts and falls (off keeps every other effect). */
+  screenShake: boolean;
+  /** Decree and discovery flourishes without bright flashes. */
+  flashFree: boolean;
+  /** KeyboardEvent.code that works the Push control on desktop. */
+  pushKey: string;
+  /** Record a local, exportable playtest event log (consented; never sent). */
+  telemetry: boolean;
+  /** Volumes 0..1, kept separate per the audio handoff. */
+  effectsVolume: number;
+  musicVolume: number;
+  interfaceVolume: number;
 }
 
 export interface GameState {
@@ -46,6 +58,8 @@ export interface GameState {
   saveId: string;
   lastSettledUtc: number;
   paused: boolean;
+  /** One pinned next purchase (a goal key, see app/view.ts); never reserves money. */
+  pinnedGoal: string | null;
 
   wallet: {
     obols: Money;
@@ -115,6 +129,13 @@ export const DEFAULT_OPTIONS: Options = {
   ambientCaptions: true,
   textScale: 1,
   highContrast: false,
+  screenShake: true,
+  flashFree: false,
+  pushKey: 'Space',
+  telemetry: false,
+  effectsVolume: 0.7,
+  musicVolume: 0.4,
+  interfaceVolume: 0.5,
 };
 
 export function emptySnapshot(): CycleSnapshot {
@@ -146,7 +167,8 @@ export type GameEvent =
   | { type: 'RelicGranted'; relicId: string }
   | { type: 'StoryTriggered'; storyId: string; firstTime: boolean }
   | { type: 'PrestigeCompleted'; award: number }
-  | { type: 'CharterSigned' };
+  | { type: 'CharterSigned' }
+  | { type: 'AchievementUnlocked'; achievementId: string };
 
 export type PurchaseKind =
   | 'production'

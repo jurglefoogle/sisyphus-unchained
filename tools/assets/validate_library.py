@@ -48,7 +48,26 @@ for asset in assets:
         seam=abs(float(samples[0]-samples[-1]))
         if asset['loop']:require(seam<.02,'Loop boundary jump '+asset['id'])
         audio_stats.append(dict(id=asset['id'],loop=asset['loop'],boundaryJump=round(seam,6)))
-report=dict(technicalChecks='PASS' if not errors else 'FAIL',assetCount=len(assets),errors=errors,artWarnings=manifest['warnings'],audio=audio_stats,limits=['No claim of final art approval','Character rigging and work-layer animation remain pending','No in-game readability or lifecycle verification','Audio listening and final mix remain pending'])
+delivery_path=OUT/'delivery.json'
+queue=json.loads((ROOT/'docs/art-direction/asset-generation-queue-v1.json').read_text(encoding='utf-8'))
+queued_ids=set()
+for task in queue['tasks']:
+    require(task['id'] not in queued_ids,'Duplicate generation task '+task['id'])
+    require(task['reference'] in ids|queued_ids,'Unavailable generation reference '+task['reference'])
+    require(bool(task['prompt'].strip()),'Missing generation prompt '+task['id'])
+    require(task['output']=='public/assets/pottery-v1/art/'+task['id']+'.png','Unexpected generation destination '+task['id'])
+    queued_ids.add(task['id'])
+if delivery_path.exists():
+    delivery=json.loads(delivery_path.read_text(encoding='utf-8'))
+    for asset,spec in delivery['assets'].items():
+        for name,state in spec['states'].items():
+            if state['status']!='available':
+                for planned in state.get('plannedAssets',[]):
+                    require(planned in queued_ids,'Missing generation task '+planned)
+            for layer in state['layers']:
+                require((ROOT/'public'/layer['frame']['url'].lstrip('/')).is_file(),'Missing state layer '+asset+'/'+name)
+                require(layer['frame']['assetId'] in ids,'Unregistered state layer '+layer['frame']['assetId'])
+report=dict(technicalChecks='PASS' if not errors else 'FAIL',assetCount=len(assets),errors=errors,artWarnings=manifest['warnings'],audio=audio_stats,limits=['No claim of final art approval','See coverage.json for blocked image-generation states and wrapped-feet variant','No in-game readability or lifecycle verification','Audio listening and final mix remain pending'])
 (OUT/'validation.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print(json.dumps({k:v for k,v in report.items() if k!='audio'},indent=2))
 raise SystemExit(bool(errors))

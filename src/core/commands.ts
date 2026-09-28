@@ -86,6 +86,7 @@ export function newGame(now: number, seeds?: { coin: number; relic: number; save
     saveId: seeds?.saveId ?? `save-${now.toString(36)}-${randomSeed().toString(36)}`,
     lastSettledUtc: now,
     paused: false,
+    pinnedGoal: null,
     wallet: { obols: Money.ZERO, runGross: Money.ZERO, bestRunGross: Money.ZERO },
     prelude: { complete: false, upgradeIds: [], bestHeight: 0, attempts: 0 },
     prestige: { lifetimeInsightAwarded: 0, insightSpent: 0, permanentUpgradeIds: [] },
@@ -362,6 +363,7 @@ export function confirmPrestige(state: GameState, events: GameEvent[]): CommandR
   createSite(state, catalog.sites[0], events);
   refreshRelicEligibility(state);
   if (!state.discoveries.archiveIds.includes('thanatos')) state.discoveries.archiveIds.push('thanatos');
+  markTutorial(state, 'prestige_prompt');
   events.push({ type: 'PrestigeCompleted', award });
   triggerStory(state, 'first_prestige', events);
   return commit(state);

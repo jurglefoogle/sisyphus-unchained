@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sisyphus — renderer asset states</title>
+<style>
+:root{font:16px/1.5 system-ui;color:#211b17;background:#ebdcc0}body{max-width:1280px;margin:24px auto;padding:0 20px}h1{font:clamp(2rem,5vw,3.5rem) Georgia,serif;margin:0}a{color:#633214}nav{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}label{display:flex;align-items:center;gap:8px}select,button{font:inherit;padding:10px;min-height:44px;background:#f6ecdc;border:1px solid #6e513c;border-radius:4px;color:inherit}#view{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;background:#d99c6c;border:1px solid #6e513c;background-image:linear-gradient(#ebdcc026 1px,transparent 1px),linear-gradient(90deg,#ebdcc026 1px,transparent 1px);background-size:24px 24px}#view.dark{background-color:#211b17}#stage{width:1600px;height:900px;position:absolute;transform-origin:top left}.layer{position:absolute;width:0;height:0}.layer img{position:absolute;max-width:none}#notice{padding:14px;background:#f6ecdc;border-left:5px solid #a57b3b;min-height:48px}#notice.blocked{border-color:#b65d35}input{width:20px;height:20px}button:focus-visible,select:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #b65d35;outline-offset:3px}.legend{font-size:.9rem}#elapsed{font-variant-numeric:tabular-nums}
+</style>
+<h1>Renderer asset states</h1>
+<p>Illustrated sources, layered machinery, and authored effects. Blocked states stay visible in the list.</p>
+<p><a href="index.html">Full asset library</a> · <a href="delivery.json">Animation recipes</a> · <a href="coverage.json">Coverage report</a></p>
+<nav>
+<label>Asset <select id="asset"></select></label>
+<label>State <select id="state"></select></label>
+<button id="replay">Replay</button>
+<button id="ground">Switch ground</button>
+<label><input id="reduced" type="checkbox">Reduced motion</label>
+</nav>
+<p id="notice" role="status">Loading asset definitions…</p>
+<div id="view"><div id="stage"></div></div>
+<p class="legend">Preview time: <span id="elapsed">0.00</span>s. Animation is cosmetic and does not run the game economy.</p>
+<script type="module">
+const assetSelect=document.querySelector('#asset'),stateSelect=document.querySelector('#state'),stage=document.querySelector('#stage'),view=document.querySelector('#view'),notice=document.querySelector('#notice'),reduced=document.querySelector('#reduced');
+let definitions,clip,start=performance.now(),nodes=[];
+const media=matchMedia('(prefers-reduced-motion: reduce)');reduced.checked=media.matches;
+view.style.maxHeight='52vh';
+function resize(){const scale=Math.min(view.clientWidth/1600,view.clientHeight/900);stage.style.transform=`scale(${scale})`;stage.style.left=(view.clientWidth-1600*scale)/2+'px'};new ResizeObserver(resize).observe(view);
+function populate(){stateSelect.replaceChildren();for(const [name,state] of Object.entries(definitions.assets[assetSelect.value].states)){const option=new Option(name+(state.status==='available'?'':' — pending'),name);stateSelect.add(option)}show()}
+function show(){clip=definitions.assets[assetSelect.value].states[stateSelect.value];stage.replaceChildren();nodes=[];start=performance.now();const scene=assetSelect.value.startsWith('scene_');notice.classList.toggle('blocked',clip.status!=='available');notice.textContent=clip.status==='available'?(clip.notes||'Available for renderer integration; visual acceptance pending.'):`Blocked by image-generation usage limit. Needed: ${(clip.plannedAssets||[]).join(', ')}.`;if(clip.status!=='available')return;for(const layer of clip.layers){const node=document.createElement('div'),img=document.createElement('img');node.className='layer';node.style.left=(scene?0:800)+'px';node.style.top=(scene?0:590)+'px';img.src=layer.frame.url;img.alt=layer.frame.assetId;img.style.width=layer.size[0]+'px';img.style.height=layer.size[1]+'px';img.style.left=-layer.frame.pivot[0]*layer.size[0]+'px';img.style.top=-layer.frame.pivot[1]*layer.size[1]+'px';node.append(img);stage.append(node);nodes.push({node,layer})}}
+function tick(now){if(clip?.status==='available'){const elapsed=(now-start)/1000;const time=reduced.checked?clip.reducedMotionTime:clip.loop?elapsed%clip.duration:Math.min(elapsed,clip.duration);document.querySelector('#elapsed').textContent=time.toFixed(2);for(const {node,layer} of nodes){let a=layer.keyframes[0],b=a;for(const key of layer.keyframes){if(key.time<=time)a=key;b=key;if(key.time>=time)break}const f=b.time>a.time?Math.max(0,Math.min(1,(time-a.time)/(b.time-a.time))):0;const at=k=>a[k]+(b[k]-a[k])*f;node.style.transform=`translate(${at('x')}px,${at('y')}px) rotate(${at('rotation')}rad) scale(${at('scaleX')},${at('scaleY')})`;node.style.opacity=at('alpha')}}requestAnimationFrame(tick)}
+assetSelect.addEventListener('change',populate);stateSelect.addEventListener('change',show);document.querySelector('#replay').addEventListener('click',()=>start=performance.now());document.querySelector('#ground').addEventListener('click',()=>view.classList.toggle('dark'));
+try{const response=await fetch('delivery.json');if(!response.ok)throw Error('Asset definitions could not be loaded');definitions=await response.json();for(const id of Object.keys(definitions.assets))assetSelect.add(new Option(id,id));assetSelect.value='flywheel';populate();stateSelect.value='turning';show();resize();requestAnimationFrame(tick)}catch(error){notice.textContent=error.message;notice.classList.add('blocked')}
+</script>
+</html>
