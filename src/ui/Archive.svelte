@@ -60,6 +60,7 @@
               <div class="entry-body">
                 <p>{s.body}</p>
                 <p><em>In this game:</em> {s.adaptation}</p>
+                {#if s.margin}<p class="margin" aria-label="Sisyphus’s note">{s.margin}</p>{/if}
                 {#if s.variants}<p class="muted">Variants: {s.variants}</p>{/if}
                 <p class="source"><a href={s.source.url} target="_blank" rel="noopener noreferrer">{s.source.label}</a></p>
               </div>
@@ -154,6 +155,17 @@
   }
   .muted {
     color: var(--muted);
+  }
+  /* Scrawled beside the entry by its least reliable reader. */
+  .margin {
+    font-style: italic;
+    color: var(--clay);
+    transform: rotate(-0.6deg);
+  }
+  .margin::before {
+    content: '— S. ';
+    font-style: normal;
+    font-weight: 600;
   }
   ul {
     list-style: none;

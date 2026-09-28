@@ -107,9 +107,11 @@
   function showStory() {
     if (story || !storyQueue.length) return;
     story = storyQueue.shift()!;
-    sound.duck(story.firstTime ? 7 : 2.5);
+    // A repeat is shorter, but leaves time to read Sisyphus's comeback.
+    const hold = story.firstTime ? 7 : story.sis ? 5 : 2.5;
+    sound.duck(hold);
     clearTimeout(storyTimer);
-    storyTimer = setTimeout(dismissStory, story.firstTime ? 7000 : 2500);
+    storyTimer = setTimeout(dismissStory, hold * 1000);
   }
   function dismissStory() {
     story = null;
@@ -322,7 +324,7 @@
   }
 
   $effect(() => {
-    const bottom = controlsHeight + (narrow && drawerOpen ? height * 0.45 : 0);
+    const bottom = controlsHeight + 18 + (narrow && drawerOpen ? height * 0.45 : 0);
     world?.setInsets({ top: hudHeight + 12, right: drawerWidth, bottom, left: 0 });
   });
 
@@ -376,7 +378,11 @@
       error = 'The scene could not start. Please reload the page to try again. Your saved progress is safe.';
     });
     const onVis = () => {
-      if (document.hidden) releaseInput();
+      if (document.hidden) {
+        releaseInput();
+        // Mobile browsers may discard a hidden tab without a pagehide.
+        void game.save();
+      }
       sound.setHidden(document.hidden);
     };
     const onHide = () => game.endSession();
@@ -533,7 +539,7 @@
         {#if !drawerOpen && availableUpgrades > 0}<span class="purchase-count" aria-label="{availableUpgrades} affordable improvements">{availableUpgrades}</span>{/if}
       </button>
     </div>
-    <p id="push-hint" class="control-hint" class:quiet={view.prelude.attempts > 0 || !view.prelude.active}>{options.toggleMode ? `Tap Push or press ${keyLabel} to start and stop` : `Hold Push or ${keyLabel} to climb · release to rest`}</p>
+    <p id="push-hint" class="control-hint" class:quiet={view.prelude.attempts > 0 || !view.prelude.active}>{options.toggleMode ? `Tap or press ${keyLabel} again to stop` : 'Release to rest'}</p>
   </footer>
 
   <aside id="drawer" class="drawer" class:open={drawerOpen} aria-label="Purchases" inert={!drawerOpen}>
@@ -546,12 +552,8 @@
     <div class="story" class:compact={!story.firstTime} role="status" aria-live="polite">
       <img class="portrait" src={storyPortrait(id!)} alt={storyPortraitName(id!)} />
       <div>
-      {#if story.firstTime}
-        <p class="god">{t(`story.${id}.god`)}</p>
-        <p class="sis">— {t(`story.${id}.sis`)}</p>
-      {:else}
-        <p class="god small">{t(`story.${id}.god`)}</p>
-      {/if}
+      <p class="god" class:small={!story.firstTime}>{story.god ?? t(`story.${id}.god`)}</p>
+      {#if story.sis}<p class="sis">— {story.sis}</p>{/if}
       </div>
       <button onclick={dismissStory} aria-label="Dismiss">✕</button>
     </div>
@@ -586,6 +588,7 @@
       <p>Earned: <strong>{formatMoney(r.earned)} Obols</strong> — already in your purse.</p>
       {#each r.relicIds as id (id)}<p>Relic found: <strong>{t(`relic.${id}`)}</strong></p>{/each}
       {#each r.decreeSiteIds as id (id)}<p>Decree ready: <strong>{t(`site.${id}`)}</strong></p>{/each}
+      {#if recap.sis}<p class="recap-quip">“{recap.sis}”</p>{/if}
       <button onclick={() => (recap = null)}>Back to work</button>
     </Modal>
   {/if}
@@ -621,7 +624,7 @@
   {/if}
 
   {#if recoveryOpen}
-    <Recovery {game} onclose={() => ((recoveryOpen = false), (options = { ...game.state.options }))} />
+    <Recovery {game} onclose={() => ((recoveryOpen = false), game.acknowledgeRecovery(), (options = { ...game.state.options }))} />
   {/if}
 
   <p class="visually-hidden" aria-live="polite">{announcement}</p>
@@ -647,25 +650,30 @@
     right: var(--drawer-width);
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    align-items: start;
+    align-items: center;
     gap: 1rem;
-    padding: max(0.75rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.5rem max(1rem, env(safe-area-inset-left));
+    min-height: 68px;
+    padding: max(0.55rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.5rem max(1rem, env(safe-area-inset-left));
+    background: linear-gradient(180deg, rgba(246,236,220,.98), rgba(235,220,192,.93));
+    border-bottom: 2px solid var(--ink);
+    box-shadow: 0 4px 0 rgba(165,123,59,.42);
     pointer-events: none;
     transition: right 0.2s ease;
   }
   .hud-left > *, .menu > *, .chapter { pointer-events: auto; }
   .hud-left { display: flex; gap: 0.6rem; align-items: stretch; min-width: 0; flex-wrap: wrap; }
   .wallet, .decree {
-    background: var(--panel);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
   .wallet {
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+    padding: 0.15rem 1rem 0.15rem 0;
+    border-right: 1px solid var(--rule);
   }
   .coin { width: 2.3rem; height: 2.3rem; flex: none; }
   .wallet-text { display: flex; flex-direction: column; line-height: 1.1; }
@@ -682,7 +690,7 @@
     display: grid;
     align-content: center;
     gap: 0.1rem;
-    padding: 0.35rem 0.8rem;
+    padding: 0.1rem 0.8rem;
     min-width: 11rem;
     max-width: 16rem;
     font-size: 0.85rem;
@@ -695,15 +703,16 @@
   .chapter {
     grid-column: 2;
     text-align: center;
-    padding: 0.1rem 0.5rem 0;
+    padding: 0 1.4rem;
     color: var(--ink);
-    text-shadow: 0 0 12px rgba(246, 236, 220, 0.9), 0 0 2px rgba(246, 236, 220, 0.9);
+    text-shadow: none;
   }
   .chapter h1 {
     font-family: var(--display);
     font-weight: 600;
-    font-size: clamp(1.35rem, 2.4vw, 2.1rem);
-    letter-spacing: 0.06em;
+    font-size: clamp(1.3rem, 2.1vw, 1.9rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     margin: 0;
     line-height: 1.05;
   }
@@ -737,10 +746,10 @@
     padding: 0;
     display: grid;
     place-items: center;
-    border-radius: 50%;
-    background: var(--panel);
+    border-radius: 3px;
+    background: rgba(246,236,220,.3);
     border: 1px solid var(--rule);
-    box-shadow: var(--shadow);
+    box-shadow: none;
   }
   .round .icon { margin: 0; width: 22px; height: 22px; }
   .insight {
@@ -749,9 +758,9 @@
     gap: 0.3rem;
     height: 44px;
     padding: 0 0.8rem;
-    background: var(--panel);
+    background: transparent;
     border: 1px solid var(--rule);
-    border-radius: 22px;
+    border-radius: 3px;
     font-family: var(--display);
     font-weight: 600;
     font-size: 1.1rem;
@@ -845,8 +854,8 @@
   .suggest p { margin: 0; flex: 1 1 12rem; line-height: 1.35; }
   .suggest-actions { display: flex; gap: 0.4rem; margin-left: auto; }
   .suggest .primary { background: var(--clay); color: var(--ivory); }
-  .objective.pinned { border-color: var(--clay); }
-  .objective.goal-ready { background: #fff4dc; box-shadow: 0 0 0 2px var(--bronze), var(--shadow); }
+  .objective.pinned { color: var(--ivory); }
+  .objective.goal-ready { background: #fff4dc; color: var(--ink); box-shadow: inset 0 0 0 1px var(--bronze); }
   .pin-mark { color: var(--clay); margin-right: 0.45em; font-size: 0.8em; }
   .objective-bar {
     display: block;
@@ -863,35 +872,40 @@
   /* ----------------------------------------------------------- controls */
   .controls {
     position: absolute;
-    left: 0;
-    right: var(--drawer-width);
-    bottom: 0;
-    padding: 0.6rem 0.75rem max(0.8rem, env(safe-area-inset-bottom));
+    left: calc((100% - var(--drawer-width)) / 2);
+    width: min(46rem, calc(100% - var(--drawer-width) - 1.5rem));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
+    background: transparent;
+    border: 0;
     pointer-events: none;
-    transition: right 0.2s ease;
+    transition: left 0.2s ease, width 0.2s ease, bottom 0.2s ease;
   }
   .controls > * { pointer-events: auto; }
   .objective {
     margin: 0;
-    background: var(--panel);
-    border: 1px solid var(--rule);
+    background: rgba(33, 27, 23, 0.88);
+    color: var(--parchment);
+    border: 1px solid rgba(217, 156, 108, 0.72);
     border-radius: 999px;
-    padding: 0.45rem 1.2rem;
+    padding: 0.32rem 1.15rem;
     max-width: min(94vw, 44rem);
     text-align: center;
     font-size: 0.92rem;
     line-height: 1.35;
-    box-shadow: var(--shadow);
+    box-shadow: 0 3px 12px rgba(33, 27, 23, 0.22);
+    backdrop-filter: blur(4px);
   }
   .control-hint {
     margin: -0.1rem 0 0;
-    padding: 0.15rem 0.7rem;
+    padding: 0.18rem 0.75rem;
     border-radius: 999px;
-    background: rgba(33, 27, 23, 0.6);
+    background: rgba(33, 27, 23, 0.82);
     color: var(--parchment);
     font-size: 0.72rem;
     letter-spacing: 0.04em;
@@ -919,11 +933,21 @@
     font-weight: 700;
     margin-left: 0.15rem;
   }
-  .control-row { display: flex; gap: 0.6rem; align-items: center; }
+  .control-row {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+    padding: 0.38rem;
+    border: 1px solid rgba(217, 156, 108, 0.72);
+    border-radius: 7px;
+    background: rgba(33, 27, 23, 0.9);
+    box-shadow: 0 5px 16px rgba(33, 27, 23, 0.3);
+    backdrop-filter: blur(5px);
+  }
   .push,
   .drawer-toggle {
-    min-height: 56px;
-    border-radius: 999px;
+    min-height: 52px;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -931,14 +955,14 @@
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: 0.03em;
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.72);
   }
   .push {
     min-width: 12rem;
     padding: 0 1.2rem 0 1rem;
-    background: linear-gradient(#b0552e, var(--clay));
+    background: var(--clay);
     color: var(--ivory);
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--pale-clay);
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
@@ -967,8 +991,8 @@
   .drawer-toggle {
     min-width: 8rem;
     padding: 0 1.1rem 0 0.9rem;
-    background: var(--panel);
-    border: 1.5px solid var(--ink);
+    background: var(--parchment);
+    border: 1.5px solid var(--bronze);
   }
   .drawer-toggle .icon { margin: 0; }
 
@@ -981,12 +1005,12 @@
     width: min(420px, 30vw);
     min-width: 300px;
     background: var(--paper);
-    border-left: 1px solid var(--rule);
+    border-left: 3px solid var(--ink);
     overflow-y: auto;
     transform: translateX(100%);
     transition: transform 0.2s ease;
     z-index: 10;
-    box-shadow: -12px 0 40px rgba(33, 27, 23, 0.22);
+    box-shadow: -8px 0 0 rgba(165,123,59,.35);
   }
   .drawer-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.3rem 0.4rem 0.3rem 1rem; position: sticky; top: 0; z-index: 1; background: var(--ink); color: var(--parchment); }
   .eyebrow { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
@@ -1019,7 +1043,7 @@
   .narrow .coin { width: 1.8rem; height: 1.8rem; }
   .narrow .obols { font-size: 1.25rem; }
   .narrow .decree { min-width: 0; flex: 1; }
-  .narrow .controls { gap: 0.35rem; }
+  .narrow .controls { width: calc(100% - 0.8rem); gap: 0.3rem; bottom: max(0.4rem, env(safe-area-inset-bottom)); }
   .narrow .objective { font-size: 0.82rem; padding: 0.35rem 0.9rem; border-radius: 14px; }
   .narrow .push { min-width: 9.5rem; }
   .narrow .push kbd { display: none; }
@@ -1080,6 +1104,13 @@
   .story .sis {
     font-style: italic;
     color: var(--pale-clay);
+  }
+  .story.compact .sis {
+    font-size: 0.9rem;
+  }
+  .recap-quip {
+    font-style: italic;
+    color: var(--muted);
   }
   .story button {
     position: absolute;

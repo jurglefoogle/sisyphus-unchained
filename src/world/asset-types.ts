@@ -36,8 +36,16 @@ export interface AssetState {
   audioUrl?: string;
 }
 
+export interface AssetSkeleton {
+  id: string;
+  renderer: 'procedural-vector';
+  bones: { id: string; parent: string | null }[];
+  animations: string[];
+}
+
 export interface AssetDelivery {
   states: Record<string, AssetState>;
+  skeleton?: AssetSkeleton;
   notes?: string;
   variants?: Record<string, { status: string; states: Record<string, AssetState>; notes?: string }>;
 }

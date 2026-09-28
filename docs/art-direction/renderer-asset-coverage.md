@@ -4,24 +4,26 @@
 
 ## Current delivery
 
-The library has 156 physical assets, including the original 131 and 25 new vector components/layers. The registry has 170 entries because logical world assets such as `flywheel` compose several source files.
+The library has 159 physical assets, including the original 131, 25 new vector components/layers, two new Sisyphus poses, and the authored First Hill mountain layer. The registry has 173 entries because logical world assets such as `flywheel` compose several source files.
 
-There are 37 required world assets and 79 required states. 67 have available definitions. Twelve states and the wrapped-feet variant are blocked by the image-generation usage limit. `public/assets/pottery-v1/coverage.json` is the machine-readable report; rerun the builder and contract tests after changes.
+There are 37 required world assets and 79 required states. 68 have available definitions. Eleven states and the wrapped-feet variant still require artwork. `public/assets/pottery-v1/coverage.json` is the machine-readable report; rerun the builder and contract tests after changes.
 
 New delivered material includes twelve hill/foreground scene layers, route footholds, an independent wheel stand and upgrade rim, separate drum frame and rotor, milestone scaffold and bronze frame, belt, height-marker pole, dust puff, coin disc, relic rays, and a decree seal. Their geometry follows the current `src/world/geometry.ts`, with a test to catch route changes.
 
-State recipes include flywheel visibility/charge/turn/upgrade, drum rotation, target shatters, work entrances and held idle poses, milestone running machinery, coin/relic/decree effects, marker movement, slip dust, tossed obols, and the first-summit burst. Work idle states hold their illustration; they do not yet animate the internal machinery. Push and pull loops use subtle whole-pose movement, not an articulated rig.
+State recipes include flywheel visibility/charge/turn/upgrade, drum rotation, target shatters, work entrances and held idle poses, milestone running machinery, coin/relic/decree effects, marker movement, slip dust, tossed obols, and the first-summit burst. Work idle states hold their illustration; they do not yet animate the internal machinery.
+
+Sisyphus and the shade attendant now share an eleven-bone procedural vector skeleton. Runtime clips articulate the head, torso, paired arms, and paired legs for push, pull, walking, idle, step-aside, and fall motion. Reduced-motion mode samples stable authored poses. The generated PNGs remain reference/source art and delivery fallbacks rather than being warped at runtime.
 
 ## Blocked artwork
 
-- Sisyphus: rest, strain accent, summit reaction, step aside, walk, slip/knockdown, and get up.
+- Sisyphus: strain accent, summit reaction, step aside, walk, slip/knockdown, and get up.
 - Shade: idle, purchase reaction, and walk.
 - Prelude limestone: rough and chipped illustrations.
 - Sisyphus wrapped-feet variant across all states.
 
-The image tool returned `usage_limit_reached`; no new character images were produced during this pass. Planned prompts are retained in `asset-generation-states-v1.json` and `asset-generation-prelude-v1.json`. Blocked states contain no layers and identify the needed assets. They must continue to use the renderer's explicit fallback, not an unrelated illustration relabeled as complete.
+The image tool is available again. The resting pose and push-recovery pose have been delivered; the remaining planned prompts stay in `asset-generation-states-v1.json` and `asset-generation-prelude-v1.json`. Blocked states contain no layers and identify the needed assets. They must continue to use the renderer's explicit fallback, not an unrelated illustration relabeled as complete.
 
-`asset-generation-queue-v1.json` consolidates 23 explicit image tasks in dependency order: 14 base poses, strips, and stones plus nine matching wrapped-feet exports. Step aside has its own pose. The validator checks prompt coverage, unique IDs, output paths, and reference availability. The tool's last reported reset was September 27, 2026 at 7:25:14 p.m. America/Chicago (September 28 at 00:25:14 UTC); this is a reported limit reset, not a scheduled generation run.
+`asset-generation-queue-v1.json` consolidates 24 explicit image tasks in dependency order: the First Hill mountain, 14 base poses, strips, and stones, plus nine matching wrapped-feet exports. Three are now delivered. Step aside has its own pose. The validator checks prompt coverage, unique IDs, output paths, and reference availability.
 
 ## Consumption
 

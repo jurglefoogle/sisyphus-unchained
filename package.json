@@ -1,27 +1,83 @@
 {
   "name": "sisyphus-unchained",
+  "productName": "Sisyphus Unchained",
   "private": true,
   "version": "0.1.0",
+  "description": "An idle game about the labor that does not end, and what it becomes.",
+  "author": "Sisyphus: Unchained team",
   "type": "module",
+  "main": "desktop/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "desktop": "vite build && electron .",
+    "desktop:dev": "node desktop/dev.mjs",
+    "dist:desktop": "vite build && electron-builder",
+    "dist:desktop:dir": "vite build && electron-builder --dir",
+    "notices": "node tools/build-notices.mjs",
+    "desktop:smoke": "vite build && electron . --smoke"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/eb-garamond": "^5.3.0",
     "break_infinity.js": "^2.2.0",
     "pixi.js": "^8.21.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tsconfig/svelte": "^5.0.8",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
     "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
     "typescript": "^6.0.3",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
+  },
+  "build": {
+    "appId": "com.sisyphus-unchained.game",
+    "productName": "Sisyphus Unchained",
+    "copyright": "© 2026 Sisyphus: Unchained team",
+    "directories": {
+      "output": "release",
+      "buildResources": "desktop/resources"
+    },
+    "files": [
+      "dist/**",
+      "desktop/main.cjs",
+      "desktop/preload.cjs",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.cjs"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.simulation-games",
+      "hardenedRuntime": true
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Game"
+    }
   }
 }

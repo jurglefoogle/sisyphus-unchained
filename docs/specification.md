@@ -477,45 +477,67 @@ Hermes stamps a delivery docket and small wing motifs appear on payout effects. 
 These are intentionally straightforward global multipliers. Distinct mechanics belong in a later expansion only if tests show that the fixed loop needs them. The first release's variety comes from discovery, animation and purchase pacing rather than seven separate rule systems.
 ## Decrees and story beats
 Each opening decree is triggered once per first discovery. Returning runs use a short title stamp. The full dialogue is available in the archive. All lines below are original game writing and can be revised without changing mechanics.
+The voice is geeky and sarcastic. The speaker is usually Zeus, but a beat that introduces a figure lets that figure speak for themselves; Talos speaks in capitals. Sisyphus answers as the craftiest of men and a relentless smart aleck: myth-literate and loophole-hunting. The written reply appears on first viewing; repeats get a comeback (see Repeated decrees). Anachronism stays in one register: Olympus as a bureaucracy and Sisyphus as its contractor, so contracts, invoices and management are fair game, as is science he is too early for, which he may notice. His wit comes from cunning and myth rather than modern jargon: at most one programming or gamer joke per pool of lines, and none in story beats. The jokes never break the accuracy rules below.
 Trigger
-Divine text
+Speaker
+Line
 Sisyphus response
+First fall in the prelude
+Zeus
+The stone shall never reach the summit. I have decreed it. Thunderously.
+Never is a long time. Luckily I once chained up Death, so my calendar’s wide open.
 First summit
-The stone shall return to the foot of the hill
-Convenient. I was going to need it again
+Zeus
+The stone shall roll back to the foot of the hill. Every time. Forever.
+Every time? Then it’s reliable. You’ve handed me the one dependable thing in Hades.
 Flywheel purchase
-The return is part of your punishment
-Then I shall make full use of it
+Zeus
+That falling stone is part of your punishment, mortal. Not a power source.
+You took your father’s throne while he wasn’t looking. I’m taking some torque.
 Foreman contract
-Your labor must continue without end
-I have arranged shifts
+Zeus
+Your labor must continue without end.
+It says the labor continues. It doesn’t say whose. Meet my shift supervisors: the dead.
 Tartarus offer
-Your assigned stone is insufficiently burdensome
-Is the larger one included
+Zeus
+Your stone is insufficiently burdensome. Tartarus has a larger one.
+You’re punishing competence with a promotion. Olympus has invented middle management.
 Daedalus purchase
-No mortal may alter the terms
-We altered the pulley
+Daedalus
+I built the Labyrinth. Your pulley is simpler. Mostly. Don’t go into the gearbox.
+The guy who designed a maze nobody escapes is optimising my endless job. Thematically flawless.
 Ixion purchase
-The wheel must turn eternally
-At last, a reliable supplier
+Ixion
+Strapped to a burning wheel for all eternity. Want me to plug it into something?
+Spinning forever on one of Zeus’s grudges. Finally, a power source that never runs down.
 Leaking Heights offer
-This vessel shall never be filled
-That is the specification
+The Danaids
+We are the Danaids. This jar will never be full. We have checked. For millennia.
+Never full, always flowing? Ladies, that’s not a curse, that’s a hydroelectric startup.
 Bronze Pass offer
-Mortal strength shall no longer suffice
-I was hoping you would say that
+Talos
+TALOS WALKS CRETE THREE TIMES A DAY. MORTAL STRENGTH IS BELOW SPEC FOR THIS PASS.
+A towering bronze robot with one vein and a single point of failure. Buddy, you’re hired.
 Talos purchase
-No unauthorized handling of divine substances
-The ankle fitting is sealed
+Talos
+TALOS ACCEPTS CONTRACT. CLAUSE ONE: NOBODY TOUCHES THE ANKLE. NOBODY.
+Relax, big guy. Our entire safety policy is “don’t pull the nail.” It’s laminated.
 Skyward offer
-The burden shall approach the weight of heaven
-Atlas has submitted a quote
+Atlas
+I have held up the sky since the Titans lost. Your little rock is adorable.
+Respect. Also, every statue shows you holding a globe. Want me to sue somebody?
 Olympus offer
-The punishment shall now be administered personally
-Will you be paying by the climb
+Zeus
+Enough. Your punishment will now be administered by Olympus. By me. Personally.
+The CEO is doing QA himself. That’s how you know the product’s in trouble.
 Charter purchase
-The sentence is eternal
-So is the contract
+Zeus
+Olympus will now pay you to punish yourself. I hate that this is the best option.
+One must imagine Sisyphus invoicing.
+First Begin Again
+Thanatos
+Remember me? You chained me up. Nobody died until Ares got bored. Back to the bottom.
+Thanatos! Same hill, fresh start. And for the record, the chains looked great on you.
 The gods create opportunities; they do not attack the player's controls or interrupt production. Lightning is a brief decree flourish with reduced-motion support. It never knocks a boulder backward or destroys a purchase.
 ## Relic catalog
 Each relic supplies the same small permanent income multiplier, x1.10, and a distinct archive illustration. It arrives early through the bounded discovery system or no later than its listed guarantee. The art depicts collectible symbols, not equipment that must be worn.
@@ -528,32 +550,32 @@ hermes_seal
 Hermes Seal
 First Hill
 Open Tartarus Rim
-Delivered before the complaint
+Delivered before the complaint. Signed by the god of thieves.
 daedalus_pin
 Daedalus Pin
 Tartarus Rim
 Open Leaking Heights
-The spare part was intentional
+The spare part was intentional. He insists.
 danaid_handle
 Danaid Handle
 Leaking Heights
 Open Bronze Pass
-Handle with care. Contents optional
+Handle with care. Contents optional. Contents gone.
 ichor_ampoule
 Sealed Ichor Ampoule
 Bronze Pass
 Open Skyward Escarpment
-Do not remove the stopper
+Do not remove the stopper. Divine warranty void if shaken.
 atlas_shard
 Atlas Sky Shard
 Skyward Escarpment
 Open Olympian Approach
-Not a piece of the Earth
+Not a piece of the Earth. Atlas wants that on the record.
 zeus_seal
 Zeus Seal
 Olympian Approach
 Buy Charter
-Approved under protest
+Approved under protest. Loudly. With lightning.
 The ampoule is an invented game collectible inspired by Talos's vital fluid. Its appearance does not imply the player injures Talos. Machinery uses a consensual fictional servicing arrangement; there is no drain-or-repair minigame.
 ## Launch achievements
 Achievements are milestones and jokes. They grant an illustrated stamp and archive entry, not additional multipliers, so they do not create hidden economy dependencies. All are available in ordinary play with no date restrictions or missable opportunities.
@@ -561,10 +583,10 @@ ID
 Display name
 Exact trigger
 first_summit
-A Good Start
+Temporarily Successful
 Complete the first ascent
 first_return
-Back to Work
+Respawn
 Complete the first descent
 first_purchase
 Reinvested Futility
@@ -591,13 +613,13 @@ first_ixion
 Round the Clock
 Purchase Ixion Drive
 first_danaids
-Leak as a Service
+The Jar Half Empty
 Purchase Danaid Waterworks
 first_talos
 Read the Ankle Label
 Purchase Talos Heavy Labor
 first_atlas
-Supporting the Heavens
+Not a Globe
 Purchase Atlas Support Contract
 first_relic
 Found in the Debris
@@ -606,13 +628,13 @@ full_relics
 Curator of Consequences
 Acquire all six relics
 first_prestige
-Same Sentence New Understanding
+New Game Plus
 Complete Begin Again with a positive award
 record_prestige
 Remembered This Time
 Claim a second positive Insight award
 old_site_50
-Still Relevant
+Old Money
 First Hill reaches level 50 after opening another site
 million
 Unreasonable Already
@@ -642,52 +664,280 @@ Talos is the bronze guardian associated with Crete. Sources describe a vulnerabl
 Atlas bears the heavens, not a terrestrial globe [S5]. The sky route and its support machinery should make this visible. The Danaids' unfinishable water task and Ixion's wheel remain recognizable; a filled cistern or freed Ixion would accidentally remove the joke. Ancient versions and artistic depictions differ [S6, S7].
 Prometheus, Tantalus, the Hydra, Ariadne, the Trojan horse and Zeno are reserved for later content. Their inclusion was brainstormed, but the launch does not need every myth at once. Zeno and the modern absurdist reading belong in optional philosophical references rather than being presented as characters from the same mythic episode.
 ## Reactions and content budget
-The launch target is 36 short ambient reactions: six per chapter. Three concern the local machine, two concern the gods' rules, and one comments on a returning milestone. Display at most one ambient line per 90 seconds, never over a purchase or story interaction. Choose from unseen lines first, then enforce a no-repeat window of ten minutes. Store only the identifiers required for this behavior.
+The launch target is 72 short ambient reactions: 12 per chapter, mixing the local machine, the gods' rules and Sisyphus's opinion of both. Display at most one ambient line per 90 seconds, never over a purchase or story interaction. Choose from unseen lines first, then enforce a no-repeat window of ten minutes. Store only the identifiers required for this behavior.
 Ambient lines have no reward and do not pause play. They live in a small caption area, not in a speech balloon covering the path. They can be disabled independently. Text should fit in 80 English characters when practical, with expansion space for translation.
 The asset budget covers six chapter environments assembled from three shared landscape kits, six stone textures, one Sisyphus rig, one shade rig, seven work installations, eight mythological portraits including Thanatos, six relic icons, three target types and roughly twenty interface icons.
-The following copy supplies the first complete set. The six lines within each chapter follow the three-machine, two-decree, one-milestone order above. Final copy can change after voice and localization review.
+Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one, and summits and flywheel charges on the hill in view get one rarely, with at least 45 seconds between those. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
+Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one; summits, flywheel charges and bonus-target hits on the hill in view get one rarely, with at least 45 seconds between those; level purchases get one about one time in eight, at most once a minute. Pausing always gets one. Before the foreman, a minute without input earns one remark until the player acts again. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
+Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one; summits, flywheel charges and bonus-target hits on the hill in view get one rarely, with at least 45 seconds between those; level purchases get one about one time in eight, at most once a minute. Pausing always gets one. Before the foreman, a minute without input earns one remark until the player acts again. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
+The following copy supplies the first complete set. Final copy can change after voice and localization review.
 ### Ambient copy for the First Hill
-- I have identified a recurring task.
-- The stone has excellent attendance.
-- Downhill seems to require fewer qualifications.
-- Eternal is an ambitious deadline.
-- The gods have declined my request for a chair.
+- Net work over a full loop: zero. Emotionally, it’s a lot.
+- Potential energy: high. Kinetic energy: pending. Me: over it.
+- I cheated Death twice and my reward is cardio.
+- Day four thousand of while(true). Still looking for the break.
+- Zeus calls this eternal punishment. I call it a stable job.
+- Downhill requires no qualifications. I’ve checked. Repeatedly.
+- The rock and I aren’t friends. We’re coworkers. It’s worse.
+- Homer called me the craftiest of men. Look at me crafting. Uphill.
+- Coefficient of friction, limestone on scree: personally offensive.
+- Gravity has a perfect win record. I’m playing the long game.
+- Autolycus stole my cattle, so I engraved their hooves. Gravity is harder.
 - Same hill. Better margins.
 ### Ambient copy for the Tartarus Rim
-- Daedalus says the spare gear is decorative. I remain concerned.
-- Ixion has never missed a revolution.
-- The pulley has taken a great weight off my shoulders.
-- Olympus requests that we stop calling this an opportunity.
+- Daedalus swears the spare gear is decorative. Engineers lie about spares.
+- Ixion hasn’t missed a revolution in millennia. Punctual, if flammable.
+- The pulley gives a mechanical advantage of four. I bring spite.
+- Tartarus: great acoustics, no natural light, rent is your soul.
+- Cerberus sniffed the flywheel. Three heads, unanimous approval.
+- Hades wanted a quarterly report. I sent him a rock. He loved it.
 - The decree says forever. It says nothing about overtime.
-- We are now suffering at twice the rate.
+- Olympus asks us to stop calling damnation a growth opportunity.
+- Daedalus built a Labyrinth. The gearbox is somehow harder to navigate.
+- Persephone is up top half the year. We schedule maintenance around her.
+- Charon asked for an outboard motor. I told him to take a number.
+- We are now suffering at twice the rate. Productivity!
 ### Ambient copy for the Leaking Heights
-- Please do not repair the leak.
-- The vessel remains empty. The accounts do not.
-- We have classified the missing bottom as an outlet.
-- The inspector asked when it would be full.
-- Apparently, there is no approved form for useful futility.
-- Another milestone. Still not a drop retained.
+- Please do not fix the leak. The leak is the business model.
+- The jar is empty. The accounts are not. Checkmate, Hades.
+- We’ve reclassified bottomless as high throughput.
+- Forty-nine sisters, one leaky jar. Classic group project: never finished.
+- An inspector asked when it will be full. We said Q-never.
+- Olympus has no form for useful futility. We filed one anyway.
+- Entropy always wins. We’ve just arranged for it to pay rent.
+- Hydraulically, it’s a sieve. Economically, it’s a spring.
+- The water rolls downhill for once. Someone else doing my commute.
+- Zeus asked why the jar isn’t full. We sent him his own terms.
+- The Danaids and I have a lot in common. Mostly spite. Some cardio.
+- Another milestone. Still not a single drop retained. Beautiful.
 ### Ambient copy for the Bronze Pass
-- Talos has requested a larger doorway.
-- Do not touch the ankle fitting.
-- The new stone is an excellent conductor of complaints.
-- Zeus specified mortal labor. We read that carefully.
-- The gods have increased the burden. Talos seems pleased.
-- Heavy industry has become quite literal.
+- Talos requested a bigger door. Then a bigger chair. Then a bigger door.
+- Do NOT touch the ankle fitting. We have a sign. We have many signs.
+- The bronze stone conducts heat, electricity and complaints.
+- Zeus specified mortal labor. Talos is not mortal. I read contracts.
+- Hephaestus built Talos. Talos built a union. Hephaestus is concerned.
+- Talos used to throw rocks at ships. Now he throws them uphill. Growth.
+- Medea once stared Talos down. Sorceresses are banned from the site.
+- Talos laps Crete three times a day. His step count is shaming me.
+- Ichor is not a lubricant. We learned that from the paperwork. Luckily.
+- Welcome to the Bronze Age. Management is a very large robot.
+- The gods increased the burden. Talos said: finally, a warm-up.
+- Heavy industry has become extremely literal.
 ### Ambient copy for the Skyward Escarpment
-- Atlas assures me this is the sky, not the Earth.
-- The scaffolding now has a weather forecast.
-- Our overhead has become difficult to estimate.
-- Olympus objects to the view from below.
-- The next decree will need a longer scroll.
+- Atlas insists it’s the sky, not a globe. He is tired of the statues.
+- The scaffolding now has its own weather.
+- Our overhead is literally the heavens. Accounting is not coping.
+- The Hesperides live next door. Do not touch the apples. Ask Heracles.
+- Atlas took one afternoon off. Heracles covered. We don’t discuss it.
+- Load-bearing Titan. Do not remove. The sky will fall. Literally.
+- Olympus objects to us looking up. Something about the view.
+- Atlas has lifted the sky since the Titan war. His back has opinions.
+- Altitude sickness, Titan attitude, divine audits. Normal Tuesday.
+- The next decree will need a longer scroll and a stepladder.
+- The sky is no longer the limit. It is the ceiling. We checked.
 - We have raised expectations and several tons of stone.
 ### Ambient copy for the Olympian Approach
-- The stone now carries its own terms and conditions.
-- Divine marble produces a remarkably ordinary noise.
-- We have installed a complaint chute. It leads downhill.
-- Zeus would like to speak to the manager.
-- I am available for all of eternity. Please make an appointment.
-- The number no longer fits on the original tablet.
+- The stone now arrives with its own terms and conditions.
+- Divine marble makes a remarkably ordinary thud.
+- We installed a complaint chute. It leads downhill. Obviously.
+- Zeus would like to speak to the manager. I am the manager.
+- Zeus threw a thunderbolt at the pulley. It’s electroplated now. Thanks.
+- Olympus runs on ambrosia and grudges. We run on torque.
+- I cheated Death, snitched on Zeus, and now he’s my client. Character arc.
+- Hera sent a gift. We’ve quarantined it. We know this family.
+- The Fates spin, measure and cut. We push, profit and repeat.
+- I’m available for all of eternity. Please book through Hermes.
+- The punishment scaled so well it needs a board of directors.
+- The number no longer fits on the original tablet. Or the second one.
+### Barks: Any prelude fall
+- Gravity: one. Me: zero. Best of infinity.
+- I once talked my way out of the underworld. The hill is less persuadable.
+- Physics is undefeated. Physics is also petty.
+- In my defence, the rock looked heavy. It was heavier.
+- Somewhere on Olympus, a slow clap.
+- I meant to do that. For science.
+- The shades call it a rockslide. I call it a strategic withdrawal.
+- Ow. In several dialects.
+- The shades are laughing. The shades are also paying. I’ll allow it.
+- The inquest finds gravity at fault. Gravity has retained counsel.
+- Down again. I’ve seen the bottom more often than Charon has.
+- Hades just made a note. Hades makes a lot of notes.
+- That hill has a very aggressive return policy.
+- Newton won’t be born for two thousand years and he’s already smug.
+### Barks: A prelude fall from a new height record
+- New height record! Then the old depth record. Balance.
+- Higher than ever before. Then lower. Classic.
+- Personal best. The rock was not impressed.
+- Progress, measured in regret per metre.
+- That was the highest I’ve ever fallen from. Growth!
+### Barks: A summit on the hill in view
+- Summit! Enjoy the view. Five, four, three…
+- Top of the world. Briefly.
+- The stone is at the top. Everyone act natural.
+- Temporary success achieved. Return trip scheduled.
+- And there it goes. See you downstairs.
+- Peak performance. Literally. For about a second.
+### Barks: A flywheel charge on the hill in view
+- Gravity works for me now. Zeus hates that.
+- Kinetic energy: captured. Divine irony: maximised.
+- The stone rolls down, the wheel spins up. Conservation of spite.
+- Every fall charges the wheel. I’ve monetised failure.
+- What goes down must come around. Newton, take notes.
+- Somewhere, Zeus just felt a disturbance in his punishment.
+### Barks: A bonus target hit on the hill in view
+- Right in the amphora. Hermes would be proud. Then invoice me.
+- Gilded offering, pulverised. Sorry, whoever that was for.
+- Direct hit. Some minor deity is filing an insurance claim.
+- Bullseye. Artemis, eat your heart out.
+- The stone has excellent aim for something with no eyes.
+### Barks: Buying levels
+- Upgraded. The futility now runs slightly faster.
+- Line goes up. Rock goes down. Economics.
+- Reinvesting in suffering. Very forward-thinking.
+- Every obol reinvested. The Fates hate a planner.
+- Same rock, bigger numbers. Pythagoras would weep, once he’s born.
+- Stronger stone, stronger shoulders. Heracles, watch your back.
+### Barks: Pausing
+- Time stops. Chronos would be so jealous.
+- Pausing eternity. Zeus is filing a complaint in triplicate.
+- Break time. My first in several thousand years.
+- Frozen mid-shove. Very dramatic. Very vase.
+- Hypnos just sent a thumbs up.
+### Barks: A minute idle before the foreman
+- Taking five. The rock doesn’t mind. The rock is a rock.
+- Hello? Eternal punishment here. It won’t punish itself.
+- Loitering in the underworld. Charon charges for that.
+- Standing still is technically not rolling backwards.
+- If nobody pushes, is it still a punishment? Asking for Zeus.
+- I could leave. I won’t. But I could. Probably not.
+### Arrivals
+Half the time, switching to a hill earns a line about it.
+#### The First Hill
+- Home sweet hill.
+- The original. Accept no imitations.
+- Back where it all started. And restarted. And restarted.
+#### The Tartarus Rim
+- Tartarus. Mind the Titans, they bite.
+- Smells like brimstone and venture capital.
+- The Titans downstairs keep banging on the ceiling.
+#### The Leaking Heights
+- Hello, ladies. Still not full? Excellent.
+- Bring a towel. And a spreadsheet.
+- The only place where a leak counts as infrastructure.
+#### The Bronze Pass
+- HELLO, TALOS. (You have to shout. Bronze ears.)
+- Mind the ankle. Everyone mind the ankle.
+- Smells like hot metal and someone else’s island.
+#### The Skyward Escarpment
+- Air’s thin up here. So is Atlas’s patience.
+- Look up. That’s Atlas’s whole job. Don’t make it weird.
+- Close enough to the sky to file a noise complaint.
+#### The Olympian Approach
+- Olympus. Wipe your feet. Zeus is always watching.
+- Nice marble. Shame about the management.
+- The gods’ front lawn. I’m rolling a boulder across it.
+### Machinery commentary
+These lines join the ambient pool once the foreman is hired or the work is installed, on whichever hill is in view.
+#### Foreman
+- The shades took over. I’m management now. Horrifying.
+- The dead work harder than the living. Morale is, well, dead.
+- Shades don’t take breaks. Shades don’t take anything. It’s eerie.
+- My foreman is a ghost. Literally. He haunts the break room.
+#### Hermes Dispatch
+- Hermes delivers the invoices before I write them. Unsettling.
+- Winged sandals, zero tips. Classic courier.
+- Hermes once walked me down to Hades. Now he does my filing.
+#### Daedalus Workshop
+- Daedalus added a failsafe. It’s a smaller labyrinth.
+- Daedalus insists wax is load-bearing. I have concerns.
+- Every gear is patented. Even the one I whittled.
+#### Ixion Drive
+- Ixion hums while he spins. It’s the same note. Forever.
+- Ixion asked for a break. The wheel creaked no.
+- Renewable energy, Tartarus style: one guy, very sorry, spinning.
+#### Danaid Waterworks
+- The Danaids asked for a bigger jar. Same result, more volume.
+- The Danaids have poured longer than Olympus has had a calendar.
+- Water in, water out. The jar is a pass-through entity.
+#### Talos Heavy Labor
+- TALOS HAS COMPLETED HIS LAP OF CRETE. TALOS WOULD LIKE A MEDAL.
+- Talos asked what a holiday is. We are still drafting an answer.
+- Hephaestus came to check on Talos. He brought a very large wrench.
+#### Atlas Support Contract
+- Atlas likes the frame. He still won’t put the sky down.
+- Atlas asked if the frame could take the sky too. Zeus said no. Loudly.
+- Ovid says Perseus turned Atlas into a mountain. Atlas disputes this.
+#### Eternal Labor Charter
+- I am now legally my own punishment. HR is very confused.
+- Zeus signs every page with a thunderbolt. Paper costs are up.
+- We’re an official contractor of Olympus. Our logo is a sigh.
+### Repeated decrees
+Sisyphus remembers what Begin Again was meant to erase. A repeated decree keeps the speaker’s line and adds one comeback from this list, chosen like an ambient line. The compact panel stays up for five seconds when it carries one.
+#### First fall in the prelude
+- Yes, yes. Never. Thunderously. I could lip-sync this.
+- You’ve used this decree before. Olympus needs new writers.
+#### First summit
+- Every time, yes. I had the schedule framed.
+- Déjà vu. Olympus is doing reruns now.
+- Rolls back, I know. Got anything new?
+#### Flywheel purchase
+- Same torque, second helping. Kronos sends his regards.
+- You said that last time. The wheel still spins.
+#### Foreman contract
+- The dead remember their shifts. Unlike you, they read the contract.
+- Rehiring the underworld. Their references are posthumous but glowing.
+#### Tartarus offer
+- Another promotion. I’ll need bigger business cards. And stone.
+- Tartarus again. They kept my parking spot.
+#### Daedalus purchase
+- Still no gearbox access? Still going into the gearbox.
+- Last time I found a Minotaur-sized gap in the manual.
+#### Ixion purchase
+- Ixion, buddy. Same wheel. Same five-star review.
+- He didn’t notice I was gone. Occupational hazard of spinning.
+#### Leaking Heights offer
+- Still not full? Good. The whole business model depends on it.
+- Same jar, same leak. You’re the most reliable vendors I have.
+#### Bronze Pass offer
+- BIG BRONZE FRIEND. I missed you. Please don’t hug me.
+- He remembers me. Or the bronze does. Hard to tell.
+#### Talos purchase
+- Ankle clause, initialled. Twice. In bronze.
+- The laminated safety policy survived Begin Again. Priorities.
+#### Skyward offer
+- Still the sky, still not a globe. Admirable consistency.
+- Want a break? Last guy who offered was Heracles. Ask how that went.
+#### Olympus offer
+- Management visits again. I’ll put the ambrosia on.
+- Personally again? Don’t you have a swan disguise to maintain?
+#### Charter purchase
+- Sign here, here and here. The ink’s still warm from last time.
+- Same contract. I’ve added a clause about thunderbolts.
+#### First Begin Again
+- Skipped the Lethe again. I remember everything, including the chains.
+- Same hill, more Insight. You’re the one who keeps losing, pal.
+- I remember everything this time. That’s your punishment, not mine.
+- See you next run. Bring snacks. It’s a long way down.
+### Thanatos on later runs
+The second, third and fourth Begin Again use the first three lines in order; later runs draw from the rest.
+- Again? I have other clients. Well. Everyone is my client, eventually.
+- Third time. I’m starting a loyalty card. Tenth death is free.
+- My twin brother Sleep says you look tired. He would know.
+- I’ve stopped bringing the chains. You always ask to see them.
+- Hypnos gets poetry. I get you. Every. Single. Run.
+- Hades wants to know why you keep coming back. So do I.
+- Down you go. Try not to shackle any personifications on the way.
+### While you were away
+The offline recap card closes with one line from Sisyphus.
+- You left. The rock didn’t notice. I did.
+- The dead did all the work. There is talk of a union.
+- Welcome back. Nothing happened. Forever. Profitably.
+- Hermes kept the books. He swears nothing is missing. He would.
+- It went up. It came down. Repeat until you came back.
+- Time flies when you’re eternally punished.
+- I kept your seat warm. It’s a rock. It doesn’t get warm.
+### Archive margin notes
+Each mythology subject carries a one-line note from Sisyphus, set apart from the paraphrase and adaptation so that the jokes never read as sources. The notes live with the archive content.
 # 04  Art Direction Interface and Audio
 ## The world on screen
 The game looks like Greek pottery art that has started moving. Its world fills most of the display. Sisyphus leans into the stone; a capstan slowly turns; a fall throws a few angular chips; water pours in a repeatable line. The art uses flat figures with adult proportions, terracotta and ink silhouettes, and fine incised details. It should read as a stylized playable world at a glance.

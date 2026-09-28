@@ -328,7 +328,7 @@
           "reducedMotionTime": 0,
           "layers": [
             {
-              "id": "sisyphus_push",
+              "id": "push",
               "frame": {
                 "assetId": "sisyphus_push",
                 "url": "/assets/pottery-v1/art/sisyphus_push.png",
@@ -356,13 +356,31 @@
                   "alpha": 1
                 },
                 {
-                  "time": 0.6,
+                  "time": 0.54,
                   "x": 2,
                   "y": 0,
                   "scaleX": 1.01,
                   "scaleY": 1,
                   "rotation": 0,
                   "alpha": 1
+                },
+                {
+                  "time": 0.6,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.14,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
                 },
                 {
                   "time": 1.2,
@@ -374,9 +392,75 @@
                   "alpha": 1
                 }
               ]
+            },
+            {
+              "id": "recoil",
+              "frame": {
+                "assetId": "sisyphus_push_recoil",
+                "url": "/assets/pottery-v1/art/sisyphus_push_recoil.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5629984051036683,
+                  0.8811802232854864
+                ]
+              },
+              "size": [
+                270,
+                270
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.54,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.14,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.2,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
             }
           ],
-          "notes": "Single illustrated pose with a subtle effort transform; articulated push frames remain pending."
+          "notes": "Two-pose push and recovery loop; in-game registration review pending."
         },
         "manual_assist": {
           "status": "available",
@@ -385,7 +469,7 @@
           "reducedMotionTime": 0,
           "layers": [
             {
-              "id": "sisyphus_push",
+              "id": "push",
               "frame": {
                 "assetId": "sisyphus_push",
                 "url": "/assets/pottery-v1/art/sisyphus_push.png",
@@ -413,13 +497,31 @@
                   "alpha": 1
                 },
                 {
-                  "time": 0.6,
+                  "time": 0.54,
                   "x": 2,
                   "y": 0,
                   "scaleX": 1.01,
                   "scaleY": 1,
                   "rotation": 0,
                   "alpha": 1
+                },
+                {
+                  "time": 0.6,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.14,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
                 },
                 {
                   "time": 1.2,
@@ -431,20 +533,114 @@
                   "alpha": 1
                 }
               ]
+            },
+            {
+              "id": "recoil",
+              "frame": {
+                "assetId": "sisyphus_push_recoil",
+                "url": "/assets/pottery-v1/art/sisyphus_push_recoil.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.5629984051036683,
+                  0.8811802232854864
+                ]
+              },
+              "size": [
+                270,
+                270
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.54,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.14,
+                  "x": 2,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.2,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
             }
           ],
-          "notes": "Single illustrated pose with a subtle effort transform; articulated push frames remain pending."
+          "notes": "Two-pose push and recovery loop; in-game registration review pending."
         },
         "rest": {
-          "status": "blocked-image-limit",
+          "status": "available",
           "duration": 1,
           "loop": false,
           "reducedMotionTime": 0,
-          "layers": [],
-          "plannedAssets": [
-            "sisyphus_rest"
+          "layers": [
+            {
+              "id": "sisyphus_rest",
+              "frame": {
+                "assetId": "sisyphus_rest",
+                "url": "/assets/pottery-v1/art/sisyphus_rest.png",
+                "dimensions": [
+                  1254,
+                  1254
+                ],
+                "pivot": [
+                  0.4996012759170654,
+                  0.8995215311004785
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
           ],
-          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
+          "notes": "Reviewed resting pose with transparent cutout; in-game scale acceptance pending."
         },
         "strain_accent": {
           "status": "blocked-image-limit",
@@ -520,6 +716,64 @@
           "states": {},
           "notes": "Rag-wrapped feet artwork required for every character state after Wrap Your Feet. Existing barefoot images must not be relabeled."
         }
+      },
+      "skeleton": {
+        "id": "human_pottery_v1",
+        "renderer": "procedural-vector",
+        "bones": [
+          {
+            "id": "pelvis",
+            "parent": null
+          },
+          {
+            "id": "torso",
+            "parent": "pelvis"
+          },
+          {
+            "id": "head",
+            "parent": "torso"
+          },
+          {
+            "id": "far_upper_arm",
+            "parent": "torso"
+          },
+          {
+            "id": "far_forearm",
+            "parent": "far_upper_arm"
+          },
+          {
+            "id": "near_upper_arm",
+            "parent": "torso"
+          },
+          {
+            "id": "near_forearm",
+            "parent": "near_upper_arm"
+          },
+          {
+            "id": "far_thigh",
+            "parent": "pelvis"
+          },
+          {
+            "id": "far_shin",
+            "parent": "far_thigh"
+          },
+          {
+            "id": "near_thigh",
+            "parent": "pelvis"
+          },
+          {
+            "id": "near_shin",
+            "parent": "near_thigh"
+          }
+        ],
+        "animations": [
+          "rest",
+          "push_loop",
+          "manual_assist",
+          "walk",
+          "slip_knockdown",
+          "step_aside"
+        ]
       }
     },
     "shade_attendant": {
@@ -615,7 +869,63 @@
           "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
         }
       },
-      "notes": "In-game acceptance pending."
+      "notes": "In-game acceptance pending.",
+      "skeleton": {
+        "id": "human_pottery_v1",
+        "renderer": "procedural-vector",
+        "bones": [
+          {
+            "id": "pelvis",
+            "parent": null
+          },
+          {
+            "id": "torso",
+            "parent": "pelvis"
+          },
+          {
+            "id": "head",
+            "parent": "torso"
+          },
+          {
+            "id": "far_upper_arm",
+            "parent": "torso"
+          },
+          {
+            "id": "far_forearm",
+            "parent": "far_upper_arm"
+          },
+          {
+            "id": "near_upper_arm",
+            "parent": "torso"
+          },
+          {
+            "id": "near_forearm",
+            "parent": "near_upper_arm"
+          },
+          {
+            "id": "far_thigh",
+            "parent": "pelvis"
+          },
+          {
+            "id": "far_shin",
+            "parent": "far_thigh"
+          },
+          {
+            "id": "near_thigh",
+            "parent": "pelvis"
+          },
+          {
+            "id": "near_shin",
+            "parent": "near_thigh"
+          }
+        ],
+        "animations": [
+          "idle",
+          "pull_loop",
+          "walk",
+          "purchase_reaction"
+        ]
+      }
     },
     "stone_limestone_prelude": {
       "states": {

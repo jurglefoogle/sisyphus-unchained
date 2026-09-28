@@ -14,6 +14,7 @@
     ['The Danaids · Talos · Atlas', 'for water that never fills, a sealed ankle and the weight of heaven.'],
     ['Thanatos', 'for every new beginning.'],
     ['Sisyphus – Unchained', 'An incremental comedy after the Greek myth. Machines, contracts and income are our invention.'],
+    ['Built with', 'PixiJS, Svelte and break_infinity.js (MIT). Type set in Cormorant Garamond and EB Garamond (SIL Open Font License). Full notices ship with the game.'],
     ['The work continues', 'Production never stopped. The stone is still rolling.'],
   ];
 

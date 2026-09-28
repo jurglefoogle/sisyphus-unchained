@@ -104,6 +104,7 @@
     <label><input type="checkbox" checked={options.flashFree} onchange={(e) => set('flashFree', e.currentTarget.checked)} /> Flash-free decree effects</label>
     <label><input type="checkbox" checked={options.ambientCaptions} onchange={(e) => set('ambientCaptions', e.currentTarget.checked)} /> Ambient captions</label>
     <label><input type="checkbox" checked={options.highContrast} onchange={(e) => set('highContrast', e.currentTarget.checked)} /> High-contrast panels</label>
+    <button onclick={() => game.platform.toggleFullscreen()}>Toggle fullscreen{game.platform.kind === 'desktop' ? ' (F11)' : ''}</button>
     <label>
       Text size
       <input type="range" min="0.85" max="1.5" step="0.05" value={options.textScale} oninput={(e) => set('textScale', Number(e.currentTarget.value))} />
@@ -136,8 +137,13 @@
 
   <fieldset>
     <legend>Save</legend>
-    <p class="hint">Progress saves automatically in this browser. Export a copy to keep it safe or continue on another device.</p>
+    <p class="hint">
+      {game.platform.kind === 'desktop'
+        ? 'Progress saves automatically to your user folder, with rotating backups. Export a copy to keep it safe or continue on another device.'
+        : 'Progress saves automatically in this browser. Export a copy to keep it safe or continue on another device.'}
+    </p>
     <button onclick={doExport}>Export save</button>
+    {#if game.platform.revealSaves}<button onclick={game.platform.revealSaves}>Open save folder</button>{/if}
     {#if exportText}
       <textarea readonly rows="3" aria-label="Exported save">{exportText}</textarea>
     {/if}
@@ -185,6 +191,7 @@
     <label>Type RESET to confirm <input bind:value={resetConfirm} /></label>
     <button class="danger" disabled={resetConfirm !== 'RESET' || busy} onclick={reset}>Erase progress</button>
   </fieldset>
+  <p class="hint version">Sisyphus: Unchained {__APP_VERSION__} · {game.platform.kind === 'desktop' ? 'desktop' : 'browser'} · save stored in {game.store.kind}</p>
 </Modal>
 
 <style>
@@ -228,6 +235,10 @@
   .preview {
     border-left: 4px solid var(--bronze);
     padding-left: 0.6rem;
+  }
+  .version {
+    margin-top: 1rem;
+    font-size: 0.85rem;
   }
   .keyrow {
     display: flex;

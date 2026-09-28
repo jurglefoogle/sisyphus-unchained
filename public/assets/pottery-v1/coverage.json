@@ -1,14 +1,9 @@
 {
   "requiredAssets": 37,
-  "registeredAssets": 170,
+  "registeredAssets": 173,
   "requiredStates": 79,
-  "availableStates": 67,
+  "availableStates": 68,
   "blockedStates": [
-    {
-      "id": "sisyphus",
-      "state": "rest",
-      "status": "blocked-image-limit"
-    },
     {
       "id": "sisyphus",
       "state": "strain_accent",
@@ -117,7 +112,7 @@
     {
       "id": "sisyphus",
       "state": "rest",
-      "status": "blocked-image-limit"
+      "status": "available"
     },
     {
       "id": "sisyphus",

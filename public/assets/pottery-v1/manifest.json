@@ -1840,7 +1840,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_first_hill.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -1873,7 +1873,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_tartarus_rim.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -1906,7 +1906,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_leaking_heights.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -1939,7 +1939,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_bronze_pass.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -1972,7 +1972,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_skyward_escarpment.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2005,7 +2005,7 @@
       "hasTransparency": false,
       "sourceFile": "public/assets/pottery-v1/art/scene_olympian_approach.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2038,7 +2038,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_limestone.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2071,7 +2071,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_basalt.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2104,7 +2104,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_marble.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2137,7 +2137,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_bronze.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2170,7 +2170,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_star.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2203,7 +2203,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/stone_decree.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2236,7 +2236,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/sisyphus_push.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2269,7 +2269,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/shade_attendant.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2302,7 +2302,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/flywheel_rotor.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2335,7 +2335,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/capstan.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2368,7 +2368,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_hermes.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2401,7 +2401,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_daedalus.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2434,7 +2434,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_ixion.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2467,7 +2467,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_danaids.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2500,7 +2500,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_talos.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2533,7 +2533,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_atlas.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2566,7 +2566,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/work_charter.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
     },
     {
@@ -2599,7 +2599,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_hermes.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2632,7 +2632,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_daedalus.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2665,7 +2665,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_ixion.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2698,7 +2698,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_danaids.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2731,7 +2731,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_talos.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2764,7 +2764,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_atlas.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2797,7 +2797,7 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_zeus.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
     },
     {
@@ -2830,8 +2830,107 @@
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/portrait_thanatos.png",
       "promptSource": "docs/art-direction/asset-generation-v1.json",
-      "provenance": "Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "scene_first_hill_mountain",
+      "category": "scene-layer",
+      "url": "/assets/pottery-v1/art/scene_first_hill_mountain.png",
+      "exportFile": "public/assets/pottery-v1/art/scene_first_hill_mountain.png",
+      "sha256": "ad4c616dab375182e88b5c6cda20a6ff3c88d021d36d25a69460dcbbb03c167d",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "pivot": [
+        0.5,
+        0.8444444444444444
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        130,
+        226,
+        1470,
+        760
+      ],
+      "visibleAlphaBounds": [
+        130,
+        226,
+        1470,
+        760
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/scene_first_hill_mountain.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "sisyphus_rest",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_rest.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_rest.png",
+      "sha256": "9e2f4e8b28d45e9a16164d489d25f27b0b54047948b06c6d0bfa9d1033a35437",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.4996012759170654,
+        0.8995215311004785
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        414,
+        125,
+        839,
+        1128
+      ],
+      "visibleAlphaBounds": [
+        414,
+        125,
+        839,
+        1128
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_rest.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_push_recoil",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_push_recoil.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_push_recoil.png",
+      "sha256": "0e0746a980525607c2a8e73d4ccb1f6ce9eaa0d2364c9165c33ef08696ed7fb6",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5629984051036683,
+        0.8811802232854864
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        125,
+        131,
+        1128,
+        1122
+      ],
+      "visibleAlphaBounds": [
+        289,
+        178,
+        1123,
+        1105
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_push_recoil.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
     },
     {
       "id": "scene_first_hill_hill",
@@ -3322,11 +3421,11 @@
     "music": 3,
     "environment": 6,
     "stone": 6,
-    "character": 2,
+    "character": 4,
     "machine": 2,
     "installation": 7,
     "portrait": 8,
-    "scene-layer": 13,
+    "scene-layer": 14,
     "world-component": 12
   },
   "warnings": [

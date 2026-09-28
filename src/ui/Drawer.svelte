@@ -124,7 +124,7 @@
 
 <style>
   .drawer-body {
-    padding: 0.9rem 0.9rem 1.5rem;
+    padding: 1rem 1rem 1.5rem;
   }
   h2 {
     margin: 0;
@@ -157,15 +157,16 @@
     gap: 0.6rem;
   }
   .row {
-    border: 1px solid var(--rule);
+    border: 0;
     border-left: 4px solid var(--rule);
-    border-radius: var(--radius);
-    padding: 0.7rem 0.8rem 0.75rem;
-    background: rgba(255, 252, 245, 0.7);
+    border-radius: 0;
+    padding: 0.8rem 0.85rem;
+    background: rgba(255, 252, 245, 0.48);
+    box-shadow: inset 0 -1px var(--rule);
   }
   .row.affordable {
-    background: #fffaf0;
-    box-shadow: 0 0 0 1px var(--bronze), var(--shadow);
+    background: #fff7e8;
+    box-shadow: inset 0 0 0 1px var(--bronze);
   }
   .row[data-accent='machine'] {
     border-left-color: var(--bronze);
@@ -183,7 +184,7 @@
     border-left-color: #6b4f8a;
   }
   .row.pinned {
-    box-shadow: 0 0 0 2px var(--clay), var(--shadow);
+    box-shadow: inset 0 0 0 2px var(--clay);
   }
   .row.pinned.affordable {
     background: #fff6e2;
@@ -292,7 +293,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border-radius: 999px;
+    border-radius: 3px;
     padding: 0 0.9rem;
     font-weight: 700;
     background: transparent;

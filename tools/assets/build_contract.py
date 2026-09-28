@@ -123,12 +123,29 @@ def build_contract(assets,emit_svg):
         put(asset,state_id,dict(status='blocked-image-limit',duration=1,loop=False,reducedMotionTime=0,layers=[],plannedAssets=planned,notes='New character/stone raster artwork requires image generation. No unrelated pose substituted.'))
     def hold(asset):return state([layer(asset)])
     for asset in ('stone_limestone','stone_basalt','stone_marble','stone_bronze','stone_star','stone_decree'):put(asset,'texture',hold(asset))
-    put('sisyphus','push_loop',state([layer('sisyphus_push',keys=[key(0),key(.6,x=2,sx=1.01),key(1.2)])],1.2,True,'Single illustrated pose with a subtle effort transform; articulated push frames remain pending.'))
+    if 'sisyphus_push_recoil' in lookup:
+        push_keys=[key(0),key(.54,x=2,sx=1.01),key(.6,alpha=0),key(1.14,alpha=0),key(1.2)]
+        recoil_keys=[key(0,alpha=0),key(.54,alpha=0),key(.6,x=2,alpha=1),key(1.14,x=2,alpha=1),key(1.2,alpha=0)]
+        put('sisyphus','push_loop',state([layer('sisyphus_push','push',push_keys),layer('sisyphus_push_recoil','recoil',recoil_keys,270)],1.2,True,'Two-pose push and recovery loop; in-game registration review pending.'))
+    else:
+        put('sisyphus','push_loop',state([layer('sisyphus_push',keys=[key(0),key(.6,x=2,sx=1.01),key(1.2)])],1.2,True,'Single illustrated pose with a subtle effort transform; articulated push frames remain pending.'))
     put('sisyphus','manual_assist',delivery['sisyphus']['states']['push_loop'])
-    for name,planned in [('rest',['sisyphus_rest']),('strain_accent',['sisyphus_strain']),('summit_reaction',['sisyphus_summit']),('step_aside',['sisyphus_step_aside']),('walk',['sisyphus_walk_strip']),('slip_knockdown',['sisyphus_slip_strip']),('get_up',['sisyphus_get_up_strip'])]:blocked('sisyphus',name,planned)
+    if 'sisyphus_rest' in lookup:
+        put('sisyphus','rest',state([layer('sisyphus_rest')],note='Reviewed resting pose with transparent cutout; in-game scale acceptance pending.'))
+    else:blocked('sisyphus','rest',['sisyphus_rest'])
+    for name,planned in [('strain_accent',['sisyphus_strain']),('summit_reaction',['sisyphus_summit']),('step_aside',['sisyphus_step_aside']),('walk',['sisyphus_walk_strip']),('slip_knockdown',['sisyphus_slip_strip']),('get_up',['sisyphus_get_up_strip'])]:blocked('sisyphus',name,planned)
     delivery['sisyphus']['variants']={'feet_wrapped':dict(status='blocked-image-limit',states={},notes='Rag-wrapped feet artwork required for every character state after Wrap Your Feet. Existing barefoot images must not be relabeled.')}
     put('shade_attendant','pull_loop',state([layer('shade_attendant',keys=[key(0),key(.65,x=-2,rotation=-.012),key(1.3)])],1.3,True,'Single-pose working motion; articulated arms pending.'))
     for name,planned in [('idle',['shade_idle']),('purchase_reaction',['shade_purchase_reaction']),('walk',['shade_walk_strip'])]:blocked('shade_attendant',name,planned)
+    figure_bones=[
+      dict(id='pelvis',parent=None),dict(id='torso',parent='pelvis'),dict(id='head',parent='torso'),
+      dict(id='far_upper_arm',parent='torso'),dict(id='far_forearm',parent='far_upper_arm'),
+      dict(id='near_upper_arm',parent='torso'),dict(id='near_forearm',parent='near_upper_arm'),
+      dict(id='far_thigh',parent='pelvis'),dict(id='far_shin',parent='far_thigh'),
+      dict(id='near_thigh',parent='pelvis'),dict(id='near_shin',parent='near_thigh'),
+    ]
+    delivery['sisyphus']['skeleton']=dict(id='human_pottery_v1',renderer='procedural-vector',bones=figure_bones,animations=['rest','push_loop','manual_assist','walk','slip_knockdown','step_aside'])
+    delivery['shade_attendant']['skeleton']=dict(id='human_pottery_v1',renderer='procedural-vector',bones=figure_bones,animations=['idle','pull_loop','walk','purchase_reaction'])
     for name in ('rough','chipped'):blocked('stone_limestone_prelude',name,['stone_limestone_'+name])
 
     stand=layer('machine_wheel_stand','stand')

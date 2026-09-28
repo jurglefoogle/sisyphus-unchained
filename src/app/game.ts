@@ -1,5 +1,5 @@
 import { catalog } from '../content/catalog';
-import { ambient, t } from '../content/strings';
+import { again, ambient, ambientWorks, arrivals, barks, recapLines, t, thanatos } from '../content/strings';
 import { formatMoney } from '../core/format';
 import {
   buyFlywheel,
@@ -22,7 +22,8 @@ import { settleOffline, type OfflineSummary } from '../core/offline';
 import { deserializeSave, serializeSave } from '../core/save';
 import { markTutorial, stepSites } from '../core/sim';
 import type { GameEvent, GameState, Options } from '../core/state';
-import { CURRENT, PRE_RESET, backupKey, openSaveStore, type SaveStore } from '../platform/storage';
+import { detectPlatform, type Platform } from '../platform/platform';
+import { CURRENT, PRE_RESET, backupKey, type SaveStore } from '../platform/storage';
 import { Telemetry } from './telemetry';
 import { buildView, type GameView } from './view';
 
@@ -32,6 +33,8 @@ const RECAP_MIN_SECONDS = 60;
 const BACKUP_INTERVAL_MS = 5 * 60_000;
 const AMBIENT_INTERVAL_MS = 90_000;
 const AMBIENT_REPEAT_WINDOW_MS = 10 * 60_000;
+/** Standing idle this long by hand (before the foreman) earns a remark. */
+const IDLE_BARK_MS = 60_000;
 
 export interface Notice {
   kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast' | 'achievement';
@@ -41,6 +44,9 @@ export interface Notice {
   relicId?: string;
   text?: string;
   recap?: OfflineSummary;
+  /** Story and recap text, chosen when the notice is raised. */
+  god?: string;
+  sis?: string;
 }
 
 type EventListener = (events: GameEvent[]) => void;
@@ -86,6 +92,10 @@ export class Game {
   private dirty = false;
   private lastSave = 0;
   private lastBackup = 0;
+  /** While a load problem is unresolved, keep the good backups from rotating out. */
+  private holdBackups = false;
+  /** A failed save is reported once, then again only after it recovers and fails anew. */
+  private saveFailing = false;
   private listeners = new Set<EventListener>();
   private noticeListeners = new Set<(n: Notice) => void>();
   /** Notices raised before the UI subscribes (load problems, the offline recap). */
@@ -93,13 +103,24 @@ export class Game {
   private viewListeners = new Set<(v: GameView) => void>();
   private viewTimer: ReturnType<typeof setInterval> | null = null;
   private lastAmbient = 0;
+  private lastBark = 0;
+  private lastInput = 0;
+  private idleRemarked = false;
   private seenRequests: string[] = [];
   private ambientShown = new Map<string, number>();
   loadProblem: { error: string; raw: string; restored: boolean } | null = null;
   readonly telemetry = new Telemetry(() => !!this.state?.options.telemetry);
 
+  constructor(readonly platform: Platform = detectPlatform()) {}
+
   async init(): Promise<void> {
-    this.store = await openSaveStore();
+    this.store = await this.platform.openSaveStore();
+    if (this.store.kind.startsWith('memory')) {
+      this.notify({
+        kind: 'error',
+        text: 'This browser is not keeping saves (private browsing or blocked storage). Progress lasts only this session; export it from Settings to keep it.',
+      });
+    }
     const raw = await this.store.get(CURRENT).catch(() => null);
     if (raw) {
       const loaded = deserializeSave(raw);
@@ -114,7 +135,7 @@ export class Game {
         const recovered = await this.recoverFromBackups();
         this.loadProblem = { error: loaded.error, raw, restored: !!recovered };
         // Don't rotate backups until the player has chosen how to recover.
-        this.lastBackup = Date.now();
+        this.holdBackups = true;
         this.state = recovered ?? newGame(Date.now());
       }
     } else {
@@ -124,10 +145,18 @@ export class Game {
     this.reconcile();
     this.lastFrame = performance.now();
     this.lastAmbient = Date.now();
+    this.lastInput = Date.now();
     this.dirty = true;
     await this.save();
     this.viewTimer = setInterval(() => this.publishView(), 100);
     this.telemetry.record(this.state, 'session_start');
+    // Store fronts may have missed unlocks earned offline or on another device.
+    for (const id of this.state.discoveries.achievementIds) this.platform.unlockAchievement(id);
+    this.platform.onQuit(() => {
+      this.telemetry.record(this.state, 'session_end', { detail: Math.round(this.state.counters.totalActiveSeconds) });
+      this.settleNow();
+      return this.save();
+    });
     // A load problem opens the recovery screen (App reads `loadProblem`).
   }
 
@@ -193,9 +222,12 @@ export class Game {
     this.dirty = true;
     this.telemetry.onEvents(this.state, events);
     const achieved = events.flatMap((e) => (e.type === 'AchievementUnlocked' ? [e.achievementId] : []));
-    if (achieved.length) this.notify({ kind: 'achievement', achievementIds: achieved });
+    if (achieved.length) {
+      this.notify({ kind: 'achievement', achievementIds: achieved });
+      for (const id of achieved) this.platform.unlockAchievement(id);
+    }
     for (const e of events) {
-      if (e.type === 'StoryTriggered') this.notify({ kind: 'story', storyId: e.storyId, firstTime: e.firstTime });
+      if (e.type === 'StoryTriggered') this.notify({ kind: 'story', storyId: e.storyId, firstTime: e.firstTime, ...this.storyLines(e.storyId, e.firstTime) });
       if (e.type === 'RelicGranted') this.notify({ kind: 'relic', relicId: e.relicId });
       if (e.type === 'PreludeCompleted') {
         this.notify({ kind: 'toast', text: `${t('prelude.offering')}: +${formatMoney(e.offering)} Obols` });
@@ -225,7 +257,7 @@ export class Game {
     s.lastSettledUtc = nowUtc;
     this.emit(events);
     if (showRecap && elapsed >= RECAP_MIN_SECONDS && !summary.earned.isZero()) {
-      this.notify({ kind: 'recap', recap: summary });
+      this.notify({ kind: 'recap', recap: summary, sis: this.pickLine(recapLines, nowUtc) ?? undefined });
     }
   }
 
@@ -249,6 +281,8 @@ export class Game {
       s.counters.totalActiveSeconds += dt;
       s.lastSettledUtc = Math.max(s.lastSettledUtc, utc);
       this.emit(events);
+      this.react(events, utc);
+      this.checkIdle(utc);
     }
 
     this.tickAmbient(utc);
@@ -268,6 +302,7 @@ export class Game {
     if (result.ok) {
       this.dirty = true;
       this.emit(events);
+      this.react(events, Date.now());
       this.publishView();
       if (saveAfter) void this.save();
     }
@@ -277,6 +312,7 @@ export class Game {
   setManual(held: boolean): void {
     if (this.manualHeld === held) return;
     this.settleNow();
+    this.noteInput();
     this.manualHeld = held && !this.state.paused;
     if (this.manualHeld) this.telemetry.push(this.state);
   }
@@ -287,6 +323,7 @@ export class Game {
    */
   dispatch(req: CommandRequest): CommandResult {
     if (this.seenRequests.includes(req.requestId)) return { ok: false, reason: 'duplicate-request' };
+    this.noteInput();
     const result = this.apply(req.command);
     // Only applied requests are remembered, so a refused one can be retried later.
     if (result.ok) {
@@ -346,7 +383,10 @@ export class Game {
   }
   selectSite(id: string) {
     this.manualHeld = false;
-    return this.run(() => selectSite(this.state, id), false);
+    const moved = id !== this.state.empire.selectedSiteId;
+    const r = this.run(() => selectSite(this.state, id), false);
+    if (r.ok && moved) this.bark(arrivals[id] ?? [], Date.now(), 0.5, 20_000);
+    return r;
   }
 
   previewPrestige(): PrestigePreview {
@@ -381,6 +421,11 @@ export class Game {
     void this.save();
   }
 
+  /** The player has seen the recovery screen and chosen; backups rotate again. */
+  acknowledgeRecovery(): void {
+    this.holdBackups = false;
+  }
+
   endSession(): void {
     this.telemetry.record(this.state, 'session_end', { detail: Math.round(this.state.counters.totalActiveSeconds) });
     void this.save();
@@ -395,6 +440,7 @@ export class Game {
     this.dirty = true;
     this.publishView();
     void this.save();
+    if (paused) this.bark(barks.pause, Date.now(), 1, 20_000);
   }
 
   setOption<K extends keyof Options>(key: K, value: Options[K]): void {
@@ -410,7 +456,7 @@ export class Game {
     const text = serializeSave(this.state);
     const now = Date.now();
     const entries: Record<string, string> = { [CURRENT]: text };
-    if (now - this.lastBackup > BACKUP_INTERVAL_MS) {
+    if (!this.holdBackups && now - this.lastBackup > BACKUP_INTERVAL_MS) {
       for (let i = catalog.save.backupCount - 1; i > 0; i--) {
         const older = await this.store.get(backupKey(i - 1)).catch(() => null);
         if (older) entries[backupKey(i)] = older;
@@ -422,8 +468,23 @@ export class Game {
       await this.store.put(entries);
       this.dirty = false;
       this.lastSave = now;
+      if (this.saveFailing) {
+        this.saveFailing = false;
+        this.notify({ kind: 'info', text: 'Saving works again.' });
+      }
     } catch (err) {
-      this.notify({ kind: 'error', text: `Saving failed: ${(err as Error).message}. Export your save from Settings.` });
+      // Keep the last good file; retry on the next autosave rather than every frame.
+      this.lastSave = now;
+      if (this.saveFailing) return;
+      this.saveFailing = true;
+      const reason = err instanceof Error ? err.message : String(err);
+      const full = /quota|space|full|ENOSPC/i.test(reason);
+      this.notify({
+        kind: 'error',
+        text: full
+          ? 'Saving failed: the disk or browser storage is full. Free some space; your last save is intact. Export from Settings to be safe.'
+          : `Saving failed: ${reason}. Your last save is intact. Export from Settings to be safe.`,
+      });
     }
   }
 
@@ -512,14 +573,85 @@ export class Game {
     if (!this.state.discoveries.tutorialIds.includes('first_level')) return;
     if (now - this.lastAmbient < AMBIENT_INTERVAL_MS) return;
     this.lastAmbient = now;
-    const lines = ambient[this.state.empire.selectedSiteId] ?? [];
+    const e = this.state.empire;
+    const pool = [
+      ...(ambient[e.selectedSiteId] ?? []),
+      ...(e.foremanOwned ? ambientWorks.foreman : []),
+      ...e.purchasedWorkIds.flatMap((id) => ambientWorks[id] ?? []),
+    ];
+    const line = this.pickLine(pool, now);
+    if (line) this.notify({ kind: 'info', text: line, storyId: 'ambient' });
+  }
+
+  /**
+   * The words for a story beat. A first viewing uses the written exchange; a
+   * repeat keeps the god's line and gives Sisyphus a comeback, since he
+   * remembers. Thanatos varies his line as the runs pile up.
+   */
+  private storyLines(id: string, firstTime: boolean): { god: string; sis?: string } {
+    if (firstTime) return { god: t(`story.${id}.god`), sis: t(`story.${id}.sis`) };
+    let god = t(`story.${id}.god`);
+    if (id === 'first_prestige') {
+      const k = this.state.counters.totalRuns - 2;
+      god = k < 3 ? (thanatos[k] ?? god) : (this.pickLine(thanatos.slice(3), Date.now()) ?? god);
+    }
+    return { god, sis: this.pickLine(again[id] ?? [], Date.now()) ?? undefined };
+  }
+
+  /** Unseen lines first, then any outside the no-repeat window. */
+  private pickLine(lines: string[], now: number): string | null {
     const fresh = lines.filter((l) => !this.ambientShown.has(l));
     const pool = fresh.length
       ? fresh
       : lines.filter((l) => now - (this.ambientShown.get(l) ?? 0) > AMBIENT_REPEAT_WINDOW_MS);
-    if (!pool.length) return;
+    if (!pool.length) return null;
     const line = pool[Math.floor(Math.random() * pool.length)];
     this.ambientShown.set(line, now);
+    return line;
+  }
+
+  /**
+   * Sisyphus's reactions to live play (never to offline settlement): the
+   * prelude's falls, and now and then a summit or a flywheel charge on the
+   * hill in view. They share the ambient caption and its off switch.
+   */
+  private react(events: GameEvent[], now: number): void {
+    const selected = this.state.empire.selectedSiteId;
+    for (const e of events) {
+      if (e.type === 'StoneSlipped') this.bark(e.record ? barks.slip_record : barks.slip, now, e.record ? 1 : 0.6, 10_000);
+      else if (e.type === 'SummitReached' && e.siteId === selected) this.bark(barks.summit, now, 0.2, 45_000);
+      else if (e.type === 'FlywheelCharged' && e.siteId === selected) this.bark(barks.flywheel, now, 0.25, 45_000);
+      else if (e.type === 'ImpactResolved' && e.siteId === selected && e.targetId !== 'debris') {
+        this.bark(barks.impact, now, 0.25, 45_000);
+      } else if (e.type === 'PurchaseCompleted' && (e.kind === 'production' || e.kind === 'strength' || e.kind === 'impact')) {
+        this.bark(barks.levels, now, 0.12, 60_000);
+      }
+    }
+  }
+
+  private noteInput(): void {
+    this.lastInput = Date.now();
+    this.idleRemarked = false;
+  }
+
+  /** Before the foreman, standing around for a minute gets noticed. Once. */
+  private checkIdle(now: number): void {
+    const s = this.state;
+    if (this.idleRemarked || this.manualHeld || s.empire.foremanOwned) return;
+    if (!s.prelude.attempts && !s.prelude.complete) return;
+    if (now - this.lastInput < IDLE_BARK_MS) return;
+    this.idleRemarked = true;
+    this.bark(barks.idle, now, 1, 10_000);
+  }
+
+  private bark(lines: string[], now: number, chance: number, gap: number): void {
+    if (!this.state.options.ambientCaptions) return;
+    if (now - this.lastBark < gap || Math.random() >= chance) return;
+    const line = this.pickLine(lines, now);
+    if (!line) return;
+    this.lastBark = now;
+    // Hold the next ambient line back a little so the two don't trample each other.
+    this.lastAmbient = Math.max(this.lastAmbient, now - AMBIENT_INTERVAL_MS + 30_000);
     this.notify({ kind: 'info', text: line, storyId: 'ambient' });
   }
 

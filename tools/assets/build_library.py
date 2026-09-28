@@ -174,10 +174,18 @@ def build_audio():
         write_audio('music_'+name,out,'music',True)
 
 def inspect_art():
-    prompt_path=ROOT/'docs/art-direction/asset-generation-v1.json'
-    tasks=json.loads(prompt_path.read_text(encoding='utf-8'))['tasks']
+    base_prompt_path=ROOT/'docs/art-direction/asset-generation-v1.json'
+    queue_prompt_path=ROOT/'docs/art-direction/asset-generation-queue-v1.json'
+    tasks=[(task,base_prompt_path) for task in json.loads(base_prompt_path.read_text(encoding='utf-8'))['tasks']]
+    # Queue entries become real library assets only after their reviewed output
+    # exists. Pending prompts therefore never masquerade as delivered artwork.
+    tasks += [(task,queue_prompt_path) for task in json.loads(queue_prompt_path.read_text(encoding='utf-8'))['tasks']
+              if (OUT/'art'/(task['id']+'.png')).exists()]
     warnings=[]
-    for task in tasks:
+    seen=set()
+    for task,prompt_path in tasks:
+        if task['id'] in seen:continue
+        seen.add(task['id'])
         path=OUT/'art'/(task['id']+'.png')
         if not path.exists():
             warnings.append('Missing raster: '+task['id']);continue
@@ -192,7 +200,7 @@ def inspect_art():
                 visible_bounds=(int(opaque_x.min()),int(opaque_y.min()),int(opaque_x.max()+1),int(opaque_y.max()+1)) if len(opaque_x) else bounds
             else:visible_bounds=bounds
             margins=[bounds[0]/w,bounds[1]/h,(w-bounds[2])/w,(h-bounds[3])/h] if bounds else [0]*4
-        category=task['category']
+        category={'character-pose':'character','sprite-strip':'character','stone-variant':'stone'}.get(task.get('category'),task.get('category','character'))
         status='first-pass raster; visual approval pending'
         if category in ('character','installation'):status='single pose / flattened source; rigging required'
         if category!='environment' and not transparent:
@@ -200,7 +208,7 @@ def inspect_art():
         if category!='environment' and min(margins)<.025:warnings.append('Tight edge padding: '+task['id'])
         center=[(visible_bounds[0]+visible_bounds[2])/(2*w),(visible_bounds[1]+visible_bounds[3])/(2*h)]
         pivot=center if category in ('stone','portrait') or task['id']=='flywheel_rotor' else ([0,0] if category=='environment' else [center[0],visible_bounds[3]/h])
-        record(task['id'],category,path,dimensions=[w,h],pivot=pivot,pivotStatus='suggested from alpha >= 128 bounds; calibrate during scene integration',alphaBounds=list(bounds) if bounds else None,visibleAlphaBounds=list(visible_bounds),hasTransparency=transparent,sourceFile=path.relative_to(ROOT).as_posix(),promptSource=prompt_path.relative_to(ROOT).as_posix(),provenance='Generated with OpenAI built-in image generation for this project, 2026-09-27; no external reference images.',status=status)
+        record(task['id'],category,path,dimensions=[w,h],pivot=pivot,pivotStatus='suggested from alpha >= 128 bounds; calibrate during scene integration',alphaBounds=list(bounds) if bounds else None,visibleAlphaBounds=list(visible_bounds),hasTransparency=transparent,sourceFile=path.relative_to(ROOT).as_posix(),promptSource=prompt_path.relative_to(ROOT).as_posix(),provenance='Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.',status=status)
     return warnings
 
 def catalog(warnings):
