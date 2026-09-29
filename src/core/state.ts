@@ -41,6 +41,10 @@ export interface Options {
   screenShake: boolean;
   /** Decree and discovery flourishes without bright flashes. */
   flashFree: boolean;
+  /** Particles, per-hill light and the glaze finish (cosmetic; off for slow machines). */
+  richEffects: boolean;
+  /** With rich effects on: everything, or a lighter set for modest machines. */
+  effectsQuality: 'full' | 'balanced';
   /** KeyboardEvent.code that works the Push control on desktop. */
   pushKey: string;
   /** Record a local, exportable playtest event log (consented; never sent). */
@@ -131,6 +135,8 @@ export const DEFAULT_OPTIONS: Options = {
   highContrast: false,
   screenShake: true,
   flashFree: false,
+  richEffects: true,
+  effectsQuality: 'full',
   pushKey: 'Space',
   telemetry: false,
   effectsVolume: 0.7,

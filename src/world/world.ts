@@ -5,7 +5,7 @@ import { formatMoney } from '../core/format';
 import { ascentLimit, ascentRate, slipSeconds } from '../core/formulas';
 import { findSite } from '../core/sim';
 import type { GameEvent, SiteState } from '../core/state';
-import { getAssetState } from './assets';
+import { getAssetState, getAssetVariantState } from './assets';
 import type { AssetFrame, AssetState } from './asset-types';
 import { Clip } from './clip';
 import {
@@ -48,9 +48,17 @@ import {
   type Pose,
 } from './figure';
 import { FigureRig } from './rig';
-import { drawBird, drawCloud, drawCoin, drawInstalls, drawPuff, drawPulley, drawRope, ropeGuides, type Cloud } from './machinery';
+import { coinSprite, drawBird, drawCloud, drawPuff, drawRope, Installs, ropeGuides, SummitPulley, type Cloud } from './machinery';
+import { SpriteLayer } from './glow';
 import { GREY, POTTERY } from './palette';
 import { drawTarget } from './props';
+import { Atmosphere } from './atmosphere';
+import { Kiln } from './kiln';
+import { STONE_LIGHT_BOX, stoneLightTexture, warmPaintings } from './painted-fx';
+import { pebbleTextures, sherdTextures } from './painted';
+import { rng } from './paint';
+import { PotteryFx, SITE_MATERIAL, TARGET_MATERIAL } from './vfx';
+import { ChiselStamp } from './chisel';
 import {
   DEFAULT_GROUND,
   DEFAULT_SKY,
@@ -69,6 +77,7 @@ interface FloatText {
   t: Container;
   life: number;
   max: number;
+  x0: number;
   y0: number;
 }
 
@@ -140,7 +149,8 @@ export class World {
   private app = new Application();
   private stage = new Container();
   private textures = new Map<string, Texture>();
-  private pending = new Set<string>();
+  private pending = new Map<string, Promise<Texture | null>>();
+  private failed = new Set<string>();
 
   private tex = (frame: AssetFrame): Texture | null => this.load(frame);
   private clip = (): Clip => new Clip(this.tex);
@@ -152,7 +162,7 @@ export class World {
   private clouds: Cloud[] = [];
   private birds = { x: -400, y: 160, t: 0, next: 6 };
   private skyTint = 0xf6ecdc;
-  private installs = new Graphics();
+  private installs = new Installs();
   private installTier = -1;
   private installClock = 0;
   private works = new Container();
@@ -161,13 +171,23 @@ export class World {
   private frieze = new TilingSprite();
   private marker = this.clip();
   private ropes = new Graphics();
+  private pulley = new SummitPulley();
   private ropeCrawl = 0;
+  /** How far the rope hangs: taut while it hauls, slack otherwise. */
+  private ropeSag = 0.03;
   private wheel = this.clip();
   private drum = this.clip();
-  private target = new Graphics();
+  private target = new Container();
   private targetKind = '';
+  /** When the waiting target was last set down, for its drop-in. */
+  private targetShownAt = -Infinity;
+  private targetWasShown = true;
+  private targetSettling = false;
+  /** Broken pieces of earlier targets lying about the impact ground. */
+  private litter = new Container();
+  private litterKey = '';
   private shadows = new Graphics();
-  private dust = new Graphics();
+  private dust = new SpriteLayer(120);
   private motes: Mote[] = [];
   private moteClock = 0;
   private vignette = new Sprite();
@@ -184,6 +204,10 @@ export class World {
   private fallenAt = -Infinity;
   private stone = new Container();
   private stoneSpin = new Container();
+  /** The hill's light on the stone: it stays put while the stone rolls under it. */
+  private stoneLight = new Sprite();
+  /** Which effects set is applied to the stage: off, balanced or full. */
+  private richKey = '';
   private stoneClip = this.clip();
   private stoneStandIn = new Graphics();
   private knobs = new Graphics();
@@ -192,6 +216,12 @@ export class World {
   private overlay = new Graphics();
   private fx = new Container();
   private hotspot = new Container();
+  /** Rich effects: pottery-style particles, each hill's air, and the kiln's post pipeline. */
+  private vfx = new PotteryFx();
+  /** The level stamp: a giant chisel cuts the Roman numeral, then it joins the hillside cartouche. */
+  private chisel = new ChiselStamp();
+  private atmosphere = new Atmosphere();
+  private kiln: Kiln | null = null;
 
   private effects: Effect[] = [];
   private texts: FloatText[] = [];
@@ -230,6 +260,11 @@ export class World {
   private camX = -1;
   /** The first frame snaps to its final camera; later inset changes ease. */
   private cameraReady = false;
+  /** The eased framing, before shake and punch are laid over it. */
+  private cam = { x: 0, y: 0, s: 1 };
+  /** A brief push of the camera toward a heavy moment, 0 to 1. */
+  private punch = 0;
+  private punchAt: Vec = { x: 0, y: 0 };
 
   constructor(private game: Game) {}
 
@@ -247,7 +282,8 @@ export class World {
     this.shade.addChild(this.shadeRig);
     this.sis.addChild(this.sisRig, this.sisArt);
     this.stoneSpin.addChild(this.knobs, this.stoneStandIn, this.stoneClip);
-    this.stone.addChild(this.stoneSpin);
+    this.stoneLight.anchor.set(0.5);
+    this.stone.addChild(this.stoneSpin, this.stoneLight);
     this.stoneClip.scale.set(STONE_K);
     this.stage.addChild(
       this.below,
@@ -256,10 +292,14 @@ export class World {
       this.ambient,
       this.works,
       this.terrain,
+      this.litter,
+      this.chisel.plaque,
       this.installs,
       this.frieze,
+      this.atmosphere.back,
       this.marker,
       this.ropes,
+      this.pulley,
       this.wheel,
       this.drum,
       this.shadows,
@@ -269,6 +309,8 @@ export class World {
       this.stone,
       this.sis,
       this.dust,
+      this.vfx,
+      this.atmosphere.front,
       this.overlay,
       this.fx,
       this.hotspot,
@@ -298,7 +340,35 @@ export class World {
     this.hotspot.on('pointerup', () => this.onPush?.(false));
     this.hotspot.on('pointerupoutside', () => this.onPush?.(false));
     this.vignette.texture = Texture.from(paintVignette());
-    this.app.stage.addChild(this.stage, this.vignette);
+    this.app.stage.addChild(this.stage, this.chisel, this.vignette);
+    this.chisel.onStrike = (weight, at) => {
+      this.onChisel?.(weight);
+      if (weight >= 1) this.shake = Math.max(this.shake, weight >= 2 ? 7 : 2.5);
+      if (!at || this.reduced) return;
+      // The slam rings through the kiln; the numeral's arrival sparks like a purchase.
+      const p = this.stage.toLocal(at);
+      if (weight >= 2) {
+        this.kiln?.shockwave(p.x, p.y, 8, 1000, 0.7);
+        this.kiln?.flash(0.12);
+      } else if (weight < 1) this.vfx.purchase(p.x, p.y);
+    };
+    // The kiln is a set of GLSL passes; a renderer without WebGL simply goes without.
+    try {
+      if (Kiln.supported(this.app.renderer)) this.kiln = new Kiln();
+    } catch (err) {
+      console.warn('Kiln unavailable', err);
+    }
+
+    // Keep App's loading cover up until the first playable frame is complete.
+    // Later chapter assets continue to stream when the player approaches them.
+    await this.preloadInitialAssets();
+    this.update(0);
+    // Paint the effect pieces while idle, before the first blow needs them.
+    const looks = [...Object.values(SITE_MATERIAL), ...Object.values(TARGET_MATERIAL), { fill: POTTERY.clay, accent: POTTERY.ink, kind: 'figure' as const }];
+    warmPaintings(
+      catalog.sites.map((site) => site.id),
+      looks.map((m) => ({ kind: m.kind ?? 'stone', fill: m.fill, accent: m.accent })),
+    );
 
     this.game.onEvents((events) => this.onEvents(events));
     this.app.ticker.add((ticker) => {
@@ -308,6 +378,10 @@ export class World {
   }
 
   onPush: ((held: boolean) => void) | null = null;
+  /** Obols were earned on screen: where (in page pixels) and how grand. */
+  onPayout: ((x: number, y: number, grand: boolean) => void) | null = null;
+  /** A chisel blow (1), the slab landing (2) or the stamp setting into the wall (0.5), for sound. */
+  onChisel: ((weight: number) => void) | null = null;
 
   setInsets(insets: Insets): void {
     this.insets = insets;
@@ -315,23 +389,63 @@ export class World {
 
   // ------------------------------------------------------------------ assets
 
-  /** Texture for a delivered frame, or null while it loads. */
-  private load(frame: AssetFrame): Texture | null {
+  private frameUrl(frame: AssetFrame): string {
     // Absolute, because Pixi resolves root-relative paths only against http(s)
     // origins; the desktop shell serves the game from app://game/.
-    const url = new URL(`${import.meta.env.BASE_URL}${frame.url.replace(/^\//, '')}`, location.href).href;
+    return new URL(`${import.meta.env.BASE_URL}${frame.url.replace(/^\//, '')}`, location.href).href;
+  }
+
+  private requestTexture(frame: AssetFrame): Promise<Texture | null> {
+    const url = this.frameUrl(frame);
+    const ready = this.textures.get(url);
+    if (ready) return Promise.resolve(ready);
+    if (this.failed.has(url)) return Promise.resolve(null);
+    const inFlight = this.pending.get(url);
+    if (inFlight) return inFlight;
+
+    const svg = url.endsWith('.svg');
+    // Vectors rasterise sharp without huge full-stage textures; source PNGs
+    // are large masters, so mipmaps keep them clean at game scale.
+    const resolution = Math.min(4, 3200 / Math.max(...frame.dimensions));
+    const request = Assets.load<Texture>({ src: url, data: svg ? { resolution } : { autoGenerateMipmaps: true } })
+      .then((loaded) => {
+        this.textures.set(url, loaded);
+        return loaded;
+      })
+      .catch(() => {
+        this.failed.add(url);
+        console.warn(`Asset unavailable, keeping stand-in: ${url}`);
+        return null;
+      })
+      .finally(() => this.pending.delete(url));
+    this.pending.set(url, request);
+    return request;
+  }
+
+  private async preloadInitialAssets(): Promise<void> {
+    const site = this.game.state.empire.sites.find((s) => s.id === this.game.state.empire.selectedSiteId) ?? this.game.state.empire.sites[0];
+    const def = this.siteDef(site);
+    const states = [
+      getAssetState(def.sceneId, 'background'),
+      getAssetState(`${def.sceneId}_mountain`, 'texture'),
+      getAssetState(def.stoneAssetId, 'texture'),
+      getAssetState('sisyphus', 'rest'),
+      getAssetState('sisyphus', 'push_loop'),
+      getAssetState('sisyphus', 'walk'),
+      getAssetState('sisyphus', 'slip_knockdown'),
+      getAssetVariantState('sisyphus', 'feet_wrapped', 'walk'),
+      getAssetVariantState('sisyphus', 'feet_wrapped', 'slip_knockdown'),
+    ];
+    const frames = states.flatMap((state) => state?.layers.map((layer) => layer.frame) ?? []);
+    await Promise.all(frames.map((frame) => this.requestTexture(frame)));
+  }
+
+  /** Texture for a delivered frame, or null while it loads. */
+  private load(frame: AssetFrame): Texture | null {
+    const url = this.frameUrl(frame);
     const t = this.textures.get(url);
     if (t) return t;
-    if (!this.pending.has(url)) {
-      this.pending.add(url);
-      const svg = url.endsWith('.svg');
-      // Vectors rasterise sharp without huge full-stage textures; source PNGs
-      // are large masters, so mipmaps keep them clean at game scale.
-      const resolution = Math.min(4, 3200 / Math.max(...frame.dimensions));
-      Assets.load<Texture>({ src: url, data: svg ? { resolution } : { autoGenerateMipmaps: true } })
-        .then((loaded) => this.textures.set(url, loaded))
-        .catch(() => console.warn(`Asset unavailable, keeping stand-in: ${url}`));
-    }
+    void this.requestTexture(frame);
     return null;
   }
 
@@ -376,14 +490,27 @@ export class World {
     };
     // Ease toward the framing so drawer changes are gentle, not jumpy.
     const k = !this.cameraReady || this.game.state.options.reducedMotion ? 1 : 0.15;
-    this.stage.scale.set(this.stage.scale.x + (scale - this.stage.scale.x) * k || scale);
-    this.stage.x += (target.x - this.stage.x) * k;
-    this.stage.y += (target.y - this.stage.y) * k;
+    const cam = this.cam;
+    cam.s = cam.s + (scale - cam.s) * k || scale;
+    cam.x += (target.x - cam.x) * k;
+    cam.y += (target.y - cam.y) * k;
     this.cameraReady = true;
-    if (this.shake > 0) {
-      this.stage.x += (Math.random() - 0.5) * this.shake;
-      this.stage.y += (Math.random() - 0.5) * this.shake;
+    let { x, y, s: zoom } = cam;
+    if (this.punch > 0) {
+      // Lean in toward the blow, keeping its point still on screen.
+      const z = 1 + 0.035 * this.punch * this.punch;
+      x += this.punchAt.x * zoom * (1 - z);
+      y += this.punchAt.y * zoom * (1 - z);
+      zoom *= z;
     }
+    if (this.shake > 0) {
+      // A smooth tremor rather than per-frame noise: two detuned waves an axis.
+      const t = this.time;
+      x += this.shake * 0.5 * (0.6 * Math.sin(t * 53) + 0.4 * Math.sin(t * 97 + 1.3));
+      y += this.shake * 0.5 * (0.6 * Math.sin(t * 61 + 2.1) + 0.4 * Math.sin(t * 89));
+    }
+    this.stage.scale.set(zoom);
+    this.stage.position.set(x, y);
 
     // The background plate grows about its horizon to cover a view wider than
     // the stage, so the distance keeps its place; above the plate the sky
@@ -513,6 +640,9 @@ export class World {
     const key = `${id}|${shape}|${shown}|${art === prelude}`;
     if (key === this.stoneKey) return;
     this.stoneKey = key;
+    this.stoneLight.texture = stoneLightTexture(site.id, STONE_VR);
+    this.stoneLight.width = this.stoneLight.height = STONE_LIGHT_BOX;
+    this.stoneLight.visible = shown;
     this.stoneStandIn.clear();
     if (!shown) this.stoneStandIn.circle(0, 0, STONE_VR).fill(GREY.stone).stroke({ width: 3, color: GREY.line });
     const g = this.knobs;
@@ -542,6 +672,63 @@ export class World {
     }
   }
 
+  /** A fresh target is set down after each return: it drops in, squashes and settles. */
+  private settleTarget(): void {
+    const t = this.time - this.targetShownAt;
+    const base = surfaceY(TARGET.x);
+    if (t >= 0.6 || this.reduced) {
+      if (this.targetSettling) {
+        this.targetSettling = false;
+        this.target.position.set(TARGET.x, base);
+        this.target.scale.set(1);
+        this.target.alpha = 1;
+      }
+      return;
+    }
+    const fall = Math.min(1, t / 0.22);
+    const land = t - 0.22;
+    if (land > 0 && !this.targetSettling) {
+      // It lands: a puff of dust at its foot.
+      if (this.game.state.options.richEffects) this.vfx.dust(TARGET.x, base, 4, 45, 0.7);
+    }
+    this.targetSettling = land > 0 || this.targetSettling;
+    const q = land > 0 ? Math.exp(-land * 12) * Math.cos(land * 30) * 0.12 : 0;
+    this.target.position.set(TARGET.x, base - 34 * (1 - fall * fall));
+    this.target.scale.set(1 + q, 1 - q);
+    this.target.alpha = Math.min(1, t / 0.12);
+  }
+
+  /** Sherds and chips from earlier blows, lying where they fell. Painted once per hill. */
+  private drawLitter(siteId: string): void {
+    if (siteId === this.litterKey) return;
+    this.litterKey = siteId;
+    for (const c of this.litter.removeChildren()) c.destroy();
+    const r = rng(siteId.length * 31 + siteId.charCodeAt(0));
+    const mat = SITE_MATERIAL[siteId] ?? SITE_MATERIAL.first_hill;
+    const stone = { kind: 'stone' as const, fill: mat.fill, accent: mat.accent };
+    const figure = { kind: 'figure' as const, fill: POTTERY.clay, accent: POTTERY.ink };
+    const put = (tex: Texture, x: number, w: number) => {
+      const s = new Sprite(tex);
+      s.anchor.set(0.5);
+      s.width = w;
+      // Lying flat: seen at a low angle, so foreshortened.
+      s.height = w * (0.45 + r() * 0.2);
+      s.rotation = (r() - 0.5) * 0.5;
+      s.position.set(x, surfaceY(x) + 1 - s.height * 0.2);
+      s.tint = 0xe6ddd2;
+      this.litter.addChild(s);
+    };
+    // Most of it round the impact ground, thinning out up the plain.
+    for (let i = 0; i < 18; i++) {
+      const x = 1600 - 260 * r() ** 1.6;
+      const roll = r();
+      if (roll < 0.35) put(sherdTextures(figure)[Math.floor(r() * 8)], x, 12 + r() * 8);
+      else if (roll < 0.6) put(sherdTextures(stone)[Math.floor(r() * 8)], x, 10 + r() * 8);
+      else put(pebbleTextures(stone)[Math.floor(r() * 5)], x, 6 + r() * 5);
+    }
+    for (let i = 0; i < 6; i++) put(pebbleTextures(stone)[Math.floor(r() * 5)], 60 + r() * 300, 5 + r() * 4);
+  }
+
   /** Where the stone is drawn: lifted along the surface normal to its drawn radius. */
   private stoneDrawn(pos: Vec): Vec {
     const lift = STONE_VR - STONE_R;
@@ -565,7 +752,7 @@ export class World {
     }
     if (tier !== this.installTier || (tier > 0 && running)) {
       this.installTier = tier;
-      drawInstalls(this.installs, tier, this.installClock);
+      this.installs.draw(tier, this.installClock);
     }
     const key = `${site.id}|${works.join(',')}`;
     if (key !== this.staticKey) {
@@ -618,6 +805,16 @@ export class World {
     if (!site) return;
     this.time += dt;
     this.layout();
+    const area = this.insets;
+    this.chisel.update(dt, {
+      siteId: site.id,
+      level: site.productionLevel,
+      area: { x: area.left, y: area.top, w: this.app.screen.width - area.left - area.right, h: this.app.screen.height - area.top - area.bottom },
+      toScreen: (p) => this.stage.toGlobal(p),
+      worldScale: this.stage.scale.x,
+      rich: s.options.richEffects && !this.reduced,
+      reduced: this.reduced,
+    });
     this.drawScene(site);
     this.drawStatic(site, dt);
     this.drawStone(site);
@@ -646,6 +843,7 @@ export class World {
     this.stone.position.set(drawn.x, drawn.y + q * STONE_VR);
     this.hotspot.hitArea = new Circle(drawn.x - 50, drawn.y, 170);
     this.shake = reduced || !s.options.screenShake ? 0 : Math.max(0, this.shake - dt * 40);
+    this.punch = reduced || !s.options.screenShake ? 0 : Math.max(0, this.punch - dt * 3);
     this.summitGlow = Math.max(0, this.summitGlow - dt * 0.6);
     this.decreeBolt = Math.max(0, this.decreeBolt - dt * 1.4);
 
@@ -671,6 +869,8 @@ export class World {
     const r = this.ropes;
     r.clear();
     if (hauled && !reduced) this.ropeCrawl += dt * Math.max(8, rate * 400);
+    // A fresh haul takes up the slack: the rope snaps from hanging to taut.
+    this.ropeSag += ((hauled ? 0.004 : 0.05) - this.ropeSag) * Math.min(1, dt * (hauled ? 5 : 1));
     if (hauled) {
       // From the drum the rope runs up over the guide rollers (once built);
       // from the wheel it climbs straight to the pulley. It is tied to the
@@ -678,18 +878,26 @@ export class World {
       const anchor = automated ? { x: DRUM.x, y: DRUM.y - 23 } : { x: FLYWHEEL.x, y: FLYWHEEL.y };
       const guides = automated ? ropeGuides(this.installTier) : [];
       const tie = { x: drawn.x + UP_DIR.x * STONE_VR * 0.9, y: drawn.y + UP_DIR.y * STONE_VR * 0.9 - 6 };
-      drawRope(r, [anchor, ...guides, { x: PULLEY.x, y: PULLEY.y - 14 }], -this.ropeCrawl);
-      drawRope(r, [{ x: PULLEY.x - 13, y: PULLEY.y + 2 }, tie], this.ropeCrawl);
+      const sag = reduced ? 0.01 : this.ropeSag;
+      const hum = hauled && !reduced ? 0.7 : 0;
+      drawRope(r, [anchor, ...guides, { x: PULLEY.x, y: PULLEY.y - 14 }], -this.ropeCrawl, sag, hum, this.time);
+      drawRope(r, [{ x: PULLEY.x - 13, y: PULLEY.y + 2 }, tie], this.ropeCrawl, sag, hum, this.time);
     }
-    if (site.wheelOwned || automated) drawPulley(r, reduced ? 0 : this.ropeCrawl / 14);
+    this.pulley.visible = site.wheelOwned || automated;
+    if (!reduced) this.pulley.spin = this.ropeCrawl / 14;
 
     // Target waiting at the impact area.
     const kind = site.snapshot.bonusTargetId === 'expected' ? 'debris' : site.snapshot.bonusTargetId;
-    this.target.visible = site.phase !== 'returning';
+    const showTarget = site.phase !== 'returning';
+    if (showTarget && !this.targetWasShown) this.targetShownAt = this.time;
+    this.targetWasShown = showTarget;
+    this.target.visible = showTarget;
     if (kind !== this.targetKind) {
       this.targetKind = kind;
       drawTarget(this.target, kind);
     }
+    this.settleTarget();
+    this.drawLitter(site.id);
 
     this.updateAmbient(dt);
     this.updateSisyphus(site, pos, dt, held, automated, strain);
@@ -734,6 +942,45 @@ export class World {
     }
 
     this.updateFx(dt);
+    this.updateRich(dt, site, drawn);
+  }
+
+  /** Rich effects: speed lines, particles, the hill's air and the glaze finish. */
+  private updateRich(dt: number, site: SiteState, stone: Vec): void {
+    const rich = this.game.state.options.richEffects;
+    const moving = rich && !this.reduced;
+    if (moving) {
+      this.vfx.trail(stone.x, stone.y, dt, STONE_VR);
+      this.vfx.update(dt);
+    } else if (this.vfx.visible) this.vfx.clear();
+    this.vfx.visible = moving;
+    this.atmosphere.update(dt, site.id, rich, this.reduced);
+    const full = this.game.state.options.effectsQuality !== 'balanced';
+    this.vfx.budget = full ? 360 : 180;
+    if (this.kiln) {
+      const key = rich ? (full ? 'full' : 'balanced') : 'off';
+      if (key !== this.richKey) {
+        this.richKey = key;
+        this.kiln.lite = !full;
+        this.app.stage.filters = rich ? this.kiln.filters : [];
+        // Pin the passes to the screen so their pixels are CSS pixels.
+        this.app.stage.filterArea = rich ? this.app.screen : undefined;
+        // The kiln darkens its own rim.
+        this.vignette.visible = !rich;
+        // Figures and machines catch the hill's light on their edges.
+        const rim = rich && full ? [this.kiln.rim] : [];
+        this.sis.filters = rim;
+        this.stone.filters = rim;
+        this.shade.filters = rim;
+        this.wheel.filters = rim;
+        this.kiln.resolution = this.app.renderer.resolution;
+      }
+      if (rich) {
+        const screen = this.app.screen;
+        this.kiln.flashFree = this.game.state.options.flashFree;
+        this.kiln.update(dt, screen.width, screen.height, this.stage, this.bg, site.id, this.reduced);
+      }
+    }
   }
 
   /** Soft contact shadows keep the stone and Sisyphus on the ground. */
@@ -800,7 +1047,7 @@ export class World {
       if (Math.random() < 0.4) this.kick(stone.x - 10, surfaceY(stone.x - 10), 1, 1.6, 30);
     }
     const g = this.dust;
-    g.clear();
+    g.begin();
     this.motes = this.motes.filter((m) => {
       m.life += dt;
       if (m.life >= m.max) return false;
@@ -814,6 +1061,7 @@ export class World {
       drawPuff(g, m.x, m.y, m.r * (0.5 + grow * 0.9), 0.85 * (1 - t) ** 1.4, m.seed);
       return true;
     });
+    g.end();
   }
 
   /** Flywheel: charging when first installed and each time it charges, then turning. */
@@ -980,14 +1228,17 @@ export class World {
     else this.turnScale = shown * Math.min(1, width + turnRate);
     this.sis.scale.set(this.turnScale, 1);
     this.sisRig.update(this.pose, wrapped, this.time, this.turnScale < 0);
-    const authoredState = !slipping
-      ? glued
-        ? getAssetState('sisyphus', 'push_loop')
-        : !moving
-          ? getAssetState('sisyphus', 'rest')
-          : undefined
-      : undefined;
-    const authored = this.sisArt.show(authoredState, glued ? this.pushClock : 0, reduced);
+    const poseName = slipping ? 'slip_knockdown' : glued ? 'push_loop' : moving ? 'walk' : 'rest';
+    const authoredState = (wrapped && getAssetVariantState('sisyphus', 'feet_wrapped', poseName)) || getAssetState('sisyphus', poseName);
+    const slipTime = slipping ? Math.min(1, Math.max(0, (this.time - this.fallenAt) / slipSeconds(site.snapshot.slipHeight || .5))) : 0;
+    // gaitPhase is measured from ground covered so the procedural fallback can
+    // keep its feet planted.  At the return speed it advances much faster than
+    // a hand-drawn four-pose loop should: playing the painted strip directly
+    // from it made Sisyphus flicker through more than four strides per second.
+    // The artwork gets a calmer, readable cadence while his world movement and
+    // the fallback rig retain their distance-based timing.
+    const paintedWalkPhase = this.gaitPhase * 0.45;
+    const authored = this.sisArt.show(authoredState, slipping ? slipTime : glued ? this.pushClock : moving ? paintedWalkPhase : 0, reduced);
     // The delivery state is a 256 px art board; scale its painted figure to the
     // rig's stage height. Push art shifts forward so its palms meet the stone.
     this.sisArt.scale.set(0.76);
@@ -1041,18 +1292,21 @@ export class World {
     const reduced = s.options.reducedMotion;
     // A long absence settles in one batch: don't replay it on screen.
     if (events.length > 40) return;
+    const rich = s.options.richEffects && !reduced;
+    const stone = SITE_MATERIAL[selected] ?? SITE_MATERIAL.first_hill;
     for (const e of events) {
       if ('siteId' in e && e.siteId && e.siteId !== selected && e.type !== 'SiteOpened') continue;
       switch (e.type) {
         case 'SummitReached': {
           const p = routePoint(1);
           this.floatText(`+${formatMoney(e.amount)}`, p.x, p.y - 100);
-          if (!reduced) this.effect('fx_coin', 'small_grant', p.x, p.y - 60);
+          if (!reduced && !rich) this.effect('fx_coin', 'small_grant', p.x, p.y - 60);
+          if (rich) this.vfx.coins(p.x, p.y - 70, 2);
           break;
         }
         case 'ImpactResolved': {
           this.floatText(`+${formatMoney(e.amount)}`, IMPACT.x - 40, IMPACT.y - 110);
-          if (!e.bonus.isZero()) this.floatText(`+${formatMoney(e.bonus)} bonus`, TARGET.x - 60, TARGET.y - 170, true);
+          if (!e.bonus.isZero()) this.floatText(`+${formatMoney(e.bonus)} bonus`, TARGET.x - 60, TARGET.y - 215, true);
           this.wheelSpin += 14;
           this.squash = 0;
           // From level 25 the bronze-braced return lands harder (spec §03).
@@ -1061,8 +1315,16 @@ export class World {
           this.kick(IMPACT.x, GROUND_Y, Math.round(14 * force), 2.6 * force, 160 * force);
           if (!reduced) {
             const kind = e.targetId === 'expected' ? 'debris' : e.targetId;
-            this.effect(`target_${kind}`, 'shatter', TARGET.x - 30, TARGET.y - 20, level >= 25 ? 1.12 : 1);
+            if (!rich) this.effect(`target_${kind}`, 'shatter', TARGET.x - 30, TARGET.y - 20, level >= 25 ? 1.12 : 1);
             this.shake = 6 * force;
+            this.punchAt = { x: IMPACT.x, y: GROUND_Y };
+            this.punch = Math.min(1, 0.55 * force);
+            if (rich) {
+              this.kiln?.shockwave(IMPACT.x + 25, GROUND_Y - 10, 9 * force, 1000, 0.75);
+              this.kiln?.flash(0.16 * force);
+              this.vfx.impact(IMPACT.x + 25, GROUND_Y, force, stone, TARGET_MATERIAL[kind], { x: TARGET.x, y: surfaceY(TARGET.x), kind });
+              if (!e.bonus.isZero()) this.vfx.coins(TARGET.x - 10, TARGET.y - 60, kind === 'gilded_offering' ? 16 : 12);
+            }
           }
           break;
         }
@@ -1076,8 +1338,12 @@ export class World {
           } else this.floatText('Slipped', p.x, p.y - 130);
           this.kick(this.sisPos.x, this.sisPos.y, 8, 2.2, 110);
           if (!reduced) {
-            this.effect('fx_fall', 'dust', p.x - 30, p.y + 30);
+            if (!rich) this.effect('fx_fall', 'dust', p.x - 30, p.y + 30);
             this.shake = 5;
+            if (rich) {
+              this.kiln?.shockwave(p.x, surfaceY(p.x), 4, 600, 0.5);
+              this.vfx.slip(p.x, surfaceY(p.x), stone);
+            }
           }
           break;
         }
@@ -1086,8 +1352,14 @@ export class World {
           this.floatText(`+${formatMoney(e.amount)}`, p.x, p.y - 110);
           this.kick(p.x, GROUND_Y, 10, 2.4, 130);
           if (!reduced) {
-            this.effect('fx_fall', 'obol_toss', p.x, p.y - 20);
+            if (!rich) this.effect('fx_fall', 'obol_toss', p.x, p.y - 20);
             this.shake = 4;
+            if (rich) {
+              this.vfx.dust(p.x, surfaceY(p.x), 5, 70, 0.8);
+              this.kiln?.shockwave(p.x, surfaceY(p.x), 5, 700, 0.55);
+              this.vfx.slip(p.x, surfaceY(p.x), stone);
+              this.vfx.coins(p.x, p.y - 20, 3);
+            }
           }
           break;
         }
@@ -1098,8 +1370,15 @@ export class World {
           this.floatText(`+${formatMoney(e.offering)} offering`, p.x - 300, p.y + 115, false, 3);
           this.summitGlow = 1;
           if (!reduced) {
-            this.effect('fx_first_summit', 'burst', p.x - 40, p.y - 40);
+            if (!rich) this.effect('fx_first_summit', 'burst', p.x - 40, p.y - 40);
             this.shake = 12;
+            this.punchAt = { x: p.x, y: p.y };
+            this.punch = 1;
+            if (rich) {
+              this.kiln?.shockwave(p.x, p.y - 40, 16, 1300, 1.1);
+              this.kiln?.flash(0.45, [1, 0.9, 0.62]);
+              this.vfx.summit(p.x, p.y - 60);
+            }
           }
           break;
         }
@@ -1109,6 +1388,10 @@ export class World {
         case 'PurchaseCompleted':
           this.stonePulse = 1;
           this.confirmPurchase(e.kind);
+          if (rich && this.rings.length) {
+            const r = this.rings[this.rings.length - 1];
+            this.vfx.purchase(r.x, r.y);
+          }
           break;
         case 'MilestoneReached': {
           const p = routePoint(0.5);
@@ -1116,26 +1399,39 @@ export class World {
           const focus = install ? routePoint(install.u) : p;
           this.milestoneShot = { x: focus.x, y: focus.y, at: this.time };
           this.floatText(`Level ${e.level} · ×2`, p.x, p.y - 170, true);
-          if (!reduced) this.effect('fx_coin', 'milestone_grant', p.x - 50, p.y - 120);
+          this.chisel.play(e.siteId, e.level);
+          if (!reduced && !rich) this.effect('fx_coin', 'milestone_grant', p.x - 50, p.y - 120);
+          if (rich) this.vfx.milestone(focus.x, focus.y - 40);
           break;
         }
         case 'WorkInstalled':
           this.workEnteredAt.set(e.workId, this.time);
           break;
         case 'DecreeAvailable':
-          this.effect('decree_stamp', 'stamp', 800, 260, 0.6);
+          if (rich) this.vfx.stamp(800, 260);
+          else this.effect('decree_stamp', 'stamp', 800, 260, 0.6);
           // A brief sky accent; it never touches the stone or the route.
           if (!reduced) {
             this.decreeBolt = 1;
             this.boltSeed = Math.random() * 1000;
+            if (rich) {
+              const tip = this.boltTip();
+              this.kiln?.flash(0.22, [0.95, 0.93, 1]);
+              this.vfx.decree(tip.x, tip.y);
+            }
           }
           break;
-        case 'RelicGranted':
-          this.effect('fx_relic', 'rare_discovery', routePoint(1).x, routePoint(1).y - 160, 0.8);
+        case 'RelicGranted': {
+          // Out over the sea beside the summit, clear of the header.
+          const at = { x: routePoint(1).x + 250, y: routePoint(1).y + 40 };
+          if (rich) this.vfx.relic(at.x, at.y, e.relicId);
+          else this.effect('fx_relic', 'rare_discovery', at.x, at.y, 0.8);
           break;
+        }
         case 'SiteOpened':
           this.staticKey = '';
           this.lastStone = null;
+          this.vfx.clear();
           break;
       }
     }
@@ -1194,6 +1490,17 @@ export class World {
     });
   }
 
+  /** Where the decree bolt's jagged walk ends (the same walk drawBolt draws). */
+  private boltTip(): Vec {
+    let x = 1180 + (this.boltSeed % 160);
+    let y = -20;
+    for (let i = 0; y < 250; i++) {
+      y += 34 + ((this.boltSeed * (i + 3)) % 22);
+      x += ((this.boltSeed * (i + 7)) % 60) - 30;
+    }
+    return { x, y };
+  }
+
   /** Zeus's decree flourish: a jagged bolt in the far sky, with an optional soft flash. */
   private drawBolt(o: Graphics, flashFree: boolean): void {
     const k = this.decreeBolt;
@@ -1239,17 +1546,21 @@ export class World {
     });
     t.anchor.set(0.5);
     box.addChild(t);
-    // Money gets an obol beside it.
+    // Money gets an obol beside it, and a few more fly to the purse.
     if (text.startsWith('+')) {
-      const coin = new Graphics();
-      drawCoin(coin, 0, 0, highlight ? 15 : 13);
+      const coin = coinSprite(highlight ? 15 : 13);
       coin.x = -t.width / 2 - 14;
       t.x = 8;
       box.addChild(coin);
+      if (this.onPayout && this.game.state.options.richEffects && !this.reduced) {
+        const at = this.stage.toGlobal({ x, y });
+        const r = this.app.canvas.getBoundingClientRect();
+        this.onPayout(r.left + at.x, r.top + at.y, highlight || life > 2);
+      }
     }
     box.position.set(x, y);
     this.fx.addChild(box);
-    this.texts.push({ t: box, life, max: life, y0: y });
+    this.texts.push({ t: box, life, max: life, x0: x, y0: y });
     if (this.texts.length > 8) this.texts.shift()!.t.destroy({ children: true });
   }
 
@@ -1277,6 +1588,12 @@ export class World {
         f.t.y = f.y0 - 70 * (1 - Math.exp(-age * 1.6));
       }
       f.t.alpha = Math.min(1, Math.max(0, f.life / 0.45));
+      // Keep the whole line in view when the drawer narrows the frame.
+      const zoom = this.stage.scale.x;
+      const left = (this.insets.left - this.stage.x) / zoom;
+      const right = (this.app.screen.width - this.insets.right - this.stage.x) / zoom;
+      const half = f.t.width / 2 + 12;
+      f.t.x = Math.min(Math.max(f.x0, left + half), Math.max(left + half, right - half));
     }
     this.texts = this.texts.filter((f) => (f.life > 0 ? true : (f.t.destroy({ children: true }), false)));
   }

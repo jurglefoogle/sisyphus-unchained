@@ -2933,6 +2933,633 @@
       "status": "single pose / flattened source; rigging required"
     },
     {
+      "id": "sisyphus_strain",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_strain.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_strain.png",
+      "sha256": "f9a6928e06e0d21007d3cb6b1d7dd3596ed807991ebe0528c47987962464853f",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5283094098883573,
+        0.8939393939393939
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        43,
+        21,
+        1200,
+        1230
+      ],
+      "visibleAlphaBounds": [
+        137,
+        172,
+        1188,
+        1121
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_strain.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_summit",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_summit.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_summit.png",
+      "sha256": "58e74f54fe516f58e9ea1c52fc0a1afe19509d1550bb284be33a7583d3aeef79",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5199362041467305,
+        0.9011164274322169
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        59,
+        113,
+        1194,
+        1190
+      ],
+      "visibleAlphaBounds": [
+        398,
+        118,
+        906,
+        1130
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_summit.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "shade_idle",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/shade_idle.png",
+      "exportFile": "public/assets/pottery-v1/art/shade_idle.png",
+      "sha256": "3268a10295a599bb88f0b521a4c1f55c63ea65d8d44e2bb6a19c2ab1f0405665",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5203349282296651,
+        0.9473684210526315
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        57,
+        56,
+        1200,
+        1193
+      ],
+      "visibleAlphaBounds": [
+        451,
+        59,
+        854,
+        1188
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/shade_idle.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "shade_pull_recoil",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/shade_pull_recoil.png",
+      "exportFile": "public/assets/pottery-v1/art/shade_pull_recoil.png",
+      "sha256": "ea520ba7f541a2a845e598eab59fb237df504eb38edc38e2515bbac142cb251d",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5558213716108453,
+        0.9330143540669856
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        57,
+        21,
+        1199,
+        1230
+      ],
+      "visibleAlphaBounds": [
+        431,
+        88,
+        963,
+        1170
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/shade_pull_recoil.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "shade_purchase_reaction",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/shade_purchase_reaction.png",
+      "exportFile": "public/assets/pottery-v1/art/shade_purchase_reaction.png",
+      "sha256": "bad7e19de8434e2a173595c4c323b11dca798aa896ae143f74fc3858c3368853",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5358851674641149,
+        0.9449760765550239
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        59,
+        62,
+        977,
+        1254
+      ],
+      "visibleAlphaBounds": [
+        483,
+        66,
+        861,
+        1185
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/shade_purchase_reaction.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_walk_strip",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
+      "sha256": "777a62ad46bad0b060a4d2fde65150c977e6150deec48de00867ebb39bb4374a",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5085174953959485,
+        0.9447513812154696
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        25,
+        23,
+        2168,
+        692
+      ],
+      "visibleAlphaBounds": [
+        104,
+        46,
+        2105,
+        684
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "shade_walk_strip",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/shade_walk_strip.png",
+      "exportFile": "public/assets/pottery-v1/art/shade_walk_strip.png",
+      "sha256": "f2246afcf257d99d7c3276ebac150fcc7a9f1813f80b49b5b4bf2531c0065fb1",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.4903314917127072,
+        0.9709944751381215
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        69,
+        13,
+        2138,
+        708
+      ],
+      "visibleAlphaBounds": [
+        75,
+        22,
+        2055,
+        703
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/shade_walk_strip.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_step_aside",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_step_aside.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_step_aside.png",
+      "sha256": "57dea8002204dbc9e4620732dad01abd995c7da946ff360b5afedf69e422c1df",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5131578947368421,
+        0.916267942583732
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        57,
+        21,
+        1079,
+        1182
+      ],
+      "visibleAlphaBounds": [
+        335,
+        111,
+        952,
+        1149
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_step_aside.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_slip_strip",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_slip_strip.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_slip_strip.png",
+      "sha256": "999b4f86a6995d5736cb9796f2ffb01959d9560c7ce7a448aa8e92aeb65d2cd2",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5002302025782689,
+        0.888121546961326
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        19,
+        77,
+        2154,
+        692
+      ],
+      "visibleAlphaBounds": [
+        23,
+        121,
+        2150,
+        643
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_slip_strip.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_get_up_strip",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_get_up_strip.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_get_up_strip.png",
+      "sha256": "91cc4375eac1c25b88170034a35cda65ddc9a66f1f4298c4cc1c39040ff47d7b",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.4873388581952118,
+        0.9337016574585635
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        17,
+        30,
+        2124,
+        679
+      ],
+      "visibleAlphaBounds": [
+        25,
+        33,
+        2092,
+        676
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_get_up_strip.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_push_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+      "sha256": "b70e06108d85fad19bcd0c0cf9988f3a23faac0184b578af6eccaa137f0104ce",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.4996012759170654,
+        0.8819776714513556
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        125,
+        147,
+        1128,
+        1106
+      ],
+      "visibleAlphaBounds": [
+        125,
+        147,
+        1128,
+        1106
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_rest_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_rest_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_rest_feet_wrapped.png",
+      "sha256": "ef6137bf1ab1406c78ec648c6a5a4eaed984eed08730189c2e37e4ad86cd3dac",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.4996012759170654,
+        0.8995215311004785
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        414,
+        125,
+        839,
+        1128
+      ],
+      "visibleAlphaBounds": [
+        414,
+        125,
+        839,
+        1128
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_rest_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_push_recoil_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+      "sha256": "7779f12ae5c18e90b99bcbd6769f58dc003e5fe60e129b09ebde669c6c5ca500",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.4996012759170654,
+        0.8724082934609251
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        207,
+        160,
+        1046,
+        1094
+      ],
+      "visibleAlphaBounds": [
+        207,
+        160,
+        1046,
+        1094
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_strain_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_strain_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_strain_feet_wrapped.png",
+      "sha256": "c2d58cd013845bfda2d6bf9e312addb91a4c4c200e6a3a72d361cb077a6e11f3",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5322966507177034,
+        0.8125996810207337
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        125,
+        142,
+        1128,
+        1112
+      ],
+      "visibleAlphaBounds": [
+        216,
+        204,
+        1119,
+        1019
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_strain_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_summit_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_summit_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_summit_feet_wrapped.png",
+      "sha256": "6a46e69cba4a6c850bbd2683814b337c92f2a01580f3773e63f6c888d1139e4d",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.8995215311004785
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        374,
+        125,
+        880,
+        1128
+      ],
+      "visibleAlphaBounds": [
+        374,
+        125,
+        880,
+        1128
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_summit_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_walk_strip_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+      "sha256": "1c5ae0994519df6760d6697dd91ae8abdb7d2e16772aacdcfb4586617353b453",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.8895027624309392
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        217,
+        80,
+        1955,
+        644
+      ],
+      "visibleAlphaBounds": [
+        217,
+        80,
+        1955,
+        644
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_step_aside_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_step_aside_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_step_aside_feet_wrapped.png",
+      "sha256": "72709318d2c2c75dd6ec45a104b53f8e4b1d0d5e0bae07bb4ed0c61731558eb2",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.8995215311004785
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        330,
+        125,
+        924,
+        1128
+      ],
+      "visibleAlphaBounds": [
+        330,
+        125,
+        924,
+        1128
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_step_aside_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_slip_strip_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+      "sha256": "d5b148b0698187d8df895c6937e9c44e6c005a7160021cbb17d68f89b66deb38",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.7955801104972375
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        217,
+        147,
+        1955,
+        576
+      ],
+      "visibleAlphaBounds": [
+        217,
+        147,
+        1955,
+        576
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "sisyphus_get_up_strip_feet_wrapped",
+      "category": "character",
+      "url": "/assets/pottery-v1/art/sisyphus_get_up_strip_feet_wrapped.png",
+      "exportFile": "public/assets/pottery-v1/art/sisyphus_get_up_strip_feet_wrapped.png",
+      "sha256": "945e0622737c066686c3f1ff9401c7feb9f3562845318944f2b94d3aa0ffce36",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.8743093922651933
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        217,
+        91,
+        1955,
+        633
+      ],
+      "visibleAlphaBounds": [
+        217,
+        91,
+        1955,
+        633
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/sisyphus_get_up_strip_feet_wrapped.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "single pose / flattened source; rigging required"
+    },
+    {
       "id": "scene_first_hill_hill",
       "category": "scene-layer",
       "url": "/assets/pottery-v1/icons/scene_first_hill_hill.svg",
@@ -3421,7 +4048,7 @@
     "music": 3,
     "environment": 6,
     "stone": 6,
-    "character": 4,
+    "character": 23,
     "machine": 2,
     "installation": 7,
     "portrait": 8,
@@ -3450,6 +4077,14 @@
     "Tight edge padding: portrait_talos",
     "Tight edge padding: portrait_atlas",
     "Tight edge padding: portrait_zeus",
-    "Tight edge padding: portrait_thanatos"
+    "Tight edge padding: portrait_thanatos",
+    "Tight edge padding: sisyphus_strain",
+    "Tight edge padding: shade_pull_recoil",
+    "Tight edge padding: shade_purchase_reaction",
+    "Tight edge padding: sisyphus_walk_strip",
+    "Tight edge padding: shade_walk_strip",
+    "Tight edge padding: sisyphus_step_aside",
+    "Tight edge padding: sisyphus_slip_strip",
+    "Tight edge padding: sisyphus_get_up_strip"
   ]
 }

@@ -79,6 +79,9 @@ export class Telemetry {
         case 'PreludeCompleted':
           this.record(state, 'first_summit', { price: e.offering.serialize(), detail: 'prelude' });
           break;
+        case 'StoneSlipped':
+          this.record(state, 'prelude_fall', { site: e.siteId, detail: `${Math.round(e.height * 100)}%${e.record ? ':record' : ''}` });
+          break;
         case 'PurchaseCompleted':
           this.record(state, e.kind === 'flywheel' ? 'wheel_purchase' : e.kind === 'foreman' ? 'foreman_purchase' : 'purchase', {
             site: e.siteId ?? state.empire.selectedSiteId,
@@ -88,6 +91,14 @@ export class Telemetry {
           break;
         case 'FlywheelCharged':
           this.record(state, 'wheel_charge', { site: e.siteId });
+          break;
+        case 'ImpactResolved':
+          if (e.targetId !== 'debris' && e.targetId !== 'expected') {
+            this.record(state, 'bonus_target', { site: e.siteId, detail: e.targetId });
+          }
+          break;
+        case 'MilestoneReached':
+          this.record(state, 'milestone', { site: e.siteId, level: e.level });
           break;
         case 'SiteOpened':
           this.record(state, 'site_open', { site: e.siteId });
@@ -100,6 +111,9 @@ export class Telemetry {
           break;
         case 'PrestigeCompleted':
           this.record(state, 'prestige_confirm', { detail: e.award });
+          break;
+        case 'CharterSigned':
+          this.record(state, 'charter_signed');
           break;
       }
     }

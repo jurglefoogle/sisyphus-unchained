@@ -1,8 +1,8 @@
 {
-  "requiredAssets": 37,
-  "registeredAssets": 173,
-  "requiredStates": 79,
-  "availableStates": 68,
+  "requiredAssets": 43,
+  "registeredAssets": 197,
+  "requiredStates": 85,
+  "availableStates": 71,
   "blockedStates": [
     {
       "id": "sisyphus",
@@ -17,16 +17,6 @@
     {
       "id": "sisyphus",
       "state": "step_aside",
-      "status": "blocked-image-limit"
-    },
-    {
-      "id": "sisyphus",
-      "state": "walk",
-      "status": "blocked-image-limit"
-    },
-    {
-      "id": "sisyphus",
-      "state": "slip_knockdown",
       "status": "blocked-image-limit"
     },
     {
@@ -58,13 +48,38 @@
       "id": "stone_limestone_prelude",
       "state": "chipped",
       "status": "blocked-image-limit"
+    },
+    {
+      "id": "scene_tartarus_rim_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
+      "id": "scene_leaking_heights_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
+      "id": "scene_bronze_pass_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
+      "id": "scene_skyward_escarpment_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
+      "id": "scene_olympian_approach_mountain",
+      "state": "texture",
+      "status": "pending-art"
     }
   ],
   "variants": [
     {
       "id": "sisyphus",
       "variant": "feet_wrapped",
-      "status": "blocked-image-limit"
+      "status": "partial"
     }
   ],
   "complete": false,
@@ -116,6 +131,16 @@
     },
     {
       "id": "sisyphus",
+      "state": "walk",
+      "status": "available"
+    },
+    {
+      "id": "sisyphus",
+      "state": "slip_knockdown",
+      "status": "available"
+    },
+    {
+      "id": "sisyphus",
       "state": "strain_accent",
       "status": "blocked-image-limit"
     },
@@ -127,16 +152,6 @@
     {
       "id": "sisyphus",
       "state": "step_aside",
-      "status": "blocked-image-limit"
-    },
-    {
-      "id": "sisyphus",
-      "state": "walk",
-      "status": "blocked-image-limit"
-    },
-    {
-      "id": "sisyphus",
-      "state": "slip_knockdown",
       "status": "blocked-image-limit"
     },
     {
@@ -390,6 +405,11 @@
       "status": "available"
     },
     {
+      "id": "scene_first_hill_mountain",
+      "state": "texture",
+      "status": "available"
+    },
+    {
       "id": "scene_tartarus_rim",
       "state": "background",
       "status": "available"
@@ -403,6 +423,11 @@
       "id": "scene_tartarus_rim",
       "state": "foreground",
       "status": "available"
+    },
+    {
+      "id": "scene_tartarus_rim_mountain",
+      "state": "texture",
+      "status": "pending-art"
     },
     {
       "id": "scene_leaking_heights",
@@ -420,6 +445,11 @@
       "status": "available"
     },
     {
+      "id": "scene_leaking_heights_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
       "id": "scene_bronze_pass",
       "state": "background",
       "status": "available"
@@ -433,6 +463,11 @@
       "id": "scene_bronze_pass",
       "state": "foreground",
       "status": "available"
+    },
+    {
+      "id": "scene_bronze_pass_mountain",
+      "state": "texture",
+      "status": "pending-art"
     },
     {
       "id": "scene_skyward_escarpment",
@@ -450,6 +485,11 @@
       "status": "available"
     },
     {
+      "id": "scene_skyward_escarpment_mountain",
+      "state": "texture",
+      "status": "pending-art"
+    },
+    {
       "id": "scene_olympian_approach",
       "state": "background",
       "status": "available"
@@ -463,6 +503,11 @@
       "id": "scene_olympian_approach",
       "state": "foreground",
       "status": "available"
+    },
+    {
+      "id": "scene_olympian_approach_mountain",
+      "state": "texture",
+      "status": "pending-art"
     }
   ],
   "note": "Derived from deliveries; tests/asset-contract.test.ts verifies coverage against REQUIRED_ASSETS in assets.ts."

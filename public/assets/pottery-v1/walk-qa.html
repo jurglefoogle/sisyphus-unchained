@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sisyphus walk registration</title>
+<style>
+  :root{font:16px/1.4 system-ui;background:#ebdcc0;color:#211b17}
+  body{max-width:1100px;margin:24px auto;padding:0 16px}
+  h1{font:2rem Georgia,serif;margin-bottom:.2rem}
+  p{margin:.25rem 0 1rem}
+  a{color:#633214}
+  section{margin:24px 0}
+  h2{font:1.4rem Georgia,serif}
+  .frames{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .frame{background:#d99c6c;border:1px solid #6e513c;padding:8px;min-width:0}
+  .figure{height:240px;position:relative;overflow:hidden;background:repeating-linear-gradient(0deg,transparent 0 39px,#ebdcc026 40px)}
+  .baseline{position:absolute;top:205px;left:0;right:0;border-top:1px dashed #211b17;z-index:2}
+  .crop{position:absolute;overflow:hidden}
+  .crop img{position:absolute;max-width:none}
+  .frame small{display:block;margin-top:6px;font-variant-numeric:tabular-nums}
+  @media(max-width:700px){.frames{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<h1>Sisyphus walk registration</h1>
+<p>Each figure is cropped from its actual position in the sheet. The dashed line marks the common foot baseline. Compare head position, size, clothing, and intact hands and feet.</p>
+<p><a href="states.html">Animated state preview</a> · <a href="delivery.json">Frame data</a></p>
+<main id="rows">Loading frames…</main>
+<script type="module">
+const root=document.querySelector('#rows');
+function row(title,state){const section=document.createElement('section'),heading=document.createElement('h2'),grid=document.createElement('div');heading.textContent=title;grid.className='frames';section.append(heading,grid);root.append(section);for(const [i,layer] of state.layers.entries()){const panel=document.createElement('div'),figure=document.createElement('div'),line=document.createElement('div'),crop=document.createElement('div'),img=document.createElement('img'),label=document.createElement('small');const [x,y,w,h]=layer.frame.rect;panel.className='frame';figure.className='figure';line.className='baseline';crop.className='crop';crop.style.width=layer.size[0]+'px';crop.style.height=layer.size[1]+'px';crop.style.left=`calc(50% - ${layer.size[0]*layer.frame.pivot[0]}px)`;crop.style.top=(205-layer.size[1]*layer.frame.pivot[1])+'px';img.src=layer.frame.url;img.alt='';img.style.width=layer.frame.dimensions[0]/w*layer.size[0]+'px';img.style.height=layer.frame.dimensions[1]/h*layer.size[1]+'px';img.style.left=-x/w*layer.size[0]+'px';img.style.top=-y/h*layer.size[1]+'px';label.textContent=`Frame ${i+1} · crop x=${x} · ${w}×${h}`;crop.append(img);figure.append(crop,line);panel.append(figure,label);grid.append(panel)}}
+try{const response=await fetch('delivery.json');if(!response.ok)throw Error('Could not load animation data');const data=await response.json();root.replaceChildren();row('Bare feet',data.assets.sisyphus.states.walk);row('Wrapped feet',data.assets.sisyphus.variants.feet_wrapped.states.walk)}catch(error){root.textContent=error.message}
+</script>
+</html>

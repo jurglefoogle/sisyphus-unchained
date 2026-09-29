@@ -1,15 +1,21 @@
 import { ARCHIVE_SUBJECTS, type ArchiveSubject } from '../content/archive';
 import { catalog } from '../content/catalog';
+import { SCENE_FOR_STORY, SCENES, sceneSeenId } from '../content/scenes';
 import { en, t } from '../content/strings';
 import { ACHIEVEMENTS } from '../core/achievements';
+import { formatDuration, formatMoney } from '../core/format';
 import type { GameState } from '../core/state';
 
 export interface ArchiveView {
+  completion: { id: string; label: string; found: number; total: number }[];
+  records: { label: string; value: string }[];
   achievements: { id: string; name: string; desc: string; earned: boolean }[];
   earned: number;
   subjects: (ArchiveSubject & { unlocked: boolean })[];
   relics: { id: string; name: string; joke: string; found: boolean }[];
   decrees: { id: string; god: string; sis: string }[];
+  /** Cutscenes, rewatchable once seen. */
+  scenes: { id: string; title: string; when: string; seen: boolean }[];
   /** Every tutorial explanation, kept once it has been shown (spec §01). */
   guide: { id: string; title: string; text: string; seen: boolean }[];
   /** Earlier stones stay viewable here; there is no loadout (spec §03). */
@@ -83,7 +89,64 @@ function subjectUnlocked(s: GameState, id: string): boolean {
 
 export function buildArchive(s: GameState): ArchiveView {
   const owned = s.discoveries.achievementIds;
+  const subjects = ARCHIVE_SUBJECTS.map((subject) => ({ ...subject, unlocked: subjectUnlocked(s, subject.id) }));
+  const relics = catalog.relics.catalog.map((r) => ({
+    id: r.id,
+    name: t(`relic.${r.id}`),
+    joke: t(`relic.${r.id}.joke`),
+    found: s.discoveries.relicIds.includes(r.id),
+  }));
+  const guide = GUIDE.map((g) => ({
+    id: g.id,
+    title: g.title,
+    text: g.text,
+    seen:
+      g.after === null ||
+      s.discoveries.tutorialIds.includes(g.after) ||
+      (g.id === 'prestige' && s.counters.totalRuns > 0) ||
+      (g.id === 'grip' && s.prelude.complete),
+  }));
+  const stones = catalog.sites.map((site, i) => {
+    const [stone, material] = STONES[site.id] ?? ['stone_limestone', 'Stone'];
+    return {
+      siteId: site.id,
+      stone,
+      site: t(site.displayNameKey),
+      material,
+      found: i <= s.counters.highestSiteEver || s.empire.sites.some((x) => x.id === site.id),
+    };
+  });
+  const scenes = SCENES.map((scene) => ({
+    id: scene.id,
+    title: scene.title,
+    when: scene.when,
+    seen:
+      scene.id === 'sentence' ||
+      s.discoveries.tutorialIds.includes(sceneSeenId(scene.id)) ||
+      Object.entries(SCENE_FOR_STORY).some(([story, id]) => id === scene.id && s.discoveries.seenStoryIds.includes(story)),
+  }));
+  const decrees = STORY_IDS.filter((id) => s.discoveries.seenStoryIds.includes(id)).map((id) => ({
+    id,
+    god: t(`story.${id}.god`),
+    sis: t(`story.${id}.sis`),
+  }));
   return {
+    completion: [
+      { id: 'guide', label: 'Guide', found: guide.filter((x) => x.seen).length, total: guide.length },
+      { id: 'stamps', label: 'Stamps', found: ACHIEVEMENTS.filter((a) => owned.includes(a.id)).length, total: ACHIEVEMENTS.length },
+      { id: 'myths', label: 'Mythology', found: subjects.filter((x) => x.unlocked).length, total: subjects.length },
+      { id: 'relics', label: 'Relics', found: relics.filter((x) => x.found).length, total: relics.length },
+      { id: 'scenes', label: 'Scenes', found: scenes.filter((x) => x.seen).length, total: scenes.length },
+      { id: 'stones', label: 'Stones', found: stones.filter((x) => x.found).length, total: stones.length },
+    ],
+    records: [
+      { label: 'Best Defiance run', value: formatMoney(s.wallet.bestRunGross) },
+      { label: 'Begin Again', value: String(s.counters.totalRuns) },
+      { label: 'Completed climbs', value: String(s.counters.totalClimbs) },
+      { label: 'Resolved impacts', value: String(s.counters.totalImpacts) },
+      { label: 'Highest chapter', value: `${s.counters.highestSiteEver + 1} / ${catalog.sites.length}` },
+      { label: 'Active labor', value: formatDuration(s.counters.totalActiveSeconds) },
+    ],
     achievements: ACHIEVEMENTS.map((a) => ({
       id: a.id,
       name: t(`achievement.${a.id}`),
@@ -91,33 +154,10 @@ export function buildArchive(s: GameState): ArchiveView {
       earned: owned.includes(a.id),
     })),
     earned: ACHIEVEMENTS.filter((a) => owned.includes(a.id)).length,
-    subjects: ARCHIVE_SUBJECTS.map((subject) => ({ ...subject, unlocked: subjectUnlocked(s, subject.id) })),
-    relics: catalog.relics.catalog.map((r) => ({
-      id: r.id,
-      name: t(`relic.${r.id}`),
-      joke: t(`relic.${r.id}.joke`),
-      found: s.discoveries.relicIds.includes(r.id),
-    })),
-    guide: GUIDE.map((g) => ({
-      id: g.id,
-      title: g.title,
-      text: g.text,
-      seen:
-        g.after === null ||
-        s.discoveries.tutorialIds.includes(g.after) ||
-        (g.id === 'prestige' && s.counters.totalRuns > 0) ||
-        (g.id === 'grip' && s.prelude.complete),
-    })),
-    stones: catalog.sites.map((site, i) => {
-      const [stone, material] = STONES[site.id] ?? ['stone_limestone', 'Stone'];
-      return {
-        siteId: site.id,
-        stone,
-        site: t(site.displayNameKey),
-        material,
-        found: i <= s.counters.highestSiteEver || s.empire.sites.some((x) => x.id === site.id),
-      };
-    }),
+    subjects,
+    relics,
+    guide,
+    stones,
     odds: {
       targets: catalog.bonusTargets.map((b) => ({
         id: b.id,
@@ -129,10 +169,7 @@ export function buildArchive(s: GameState): ArchiveView {
       relicChance: percent(catalog.relics.chancePerDescent),
       relicPity: catalog.relics.pityDescents,
     },
-    decrees: STORY_IDS.filter((id) => s.discoveries.seenStoryIds.includes(id)).map((id) => ({
-      id,
-      god: t(`story.${id}.god`),
-      sis: t(`story.${id}.sis`),
-    })),
+    decrees,
+    scenes,
   };
 }

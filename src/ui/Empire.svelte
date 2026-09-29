@@ -209,11 +209,13 @@
     z-index: 12;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(180deg, rgba(33, 27, 23, 0.9), rgba(33, 27, 23, 0.82));
+    /* The same basalt as the goal tablet, darkened so the painted cards stand out. */
+    background:
+      linear-gradient(180deg, rgba(14, 10, 8, 0.5), rgba(14, 10, 8, 0.3)),
+      var(--basalt, none) 0 0 / var(--stone-tile, 300px) var(--stone-tile, 300px),
+      rgba(33, 27, 23, 0.94);
     color: var(--ivory);
-    border-top: 1px solid var(--bronze);
-    border-bottom: 1px solid var(--bronze);
-    backdrop-filter: blur(2px);
+    box-shadow: inset 0 10px 14px -8px rgba(0, 0, 0, 0.6), inset 0 -1px 0 rgba(255, 236, 210, 0.14), 0 6px 14px rgba(0, 0, 0, 0.4);
   }
   header {
     display: flex;
@@ -239,7 +241,8 @@
   .close {
     background: transparent;
     color: var(--ivory);
-    border-color: rgba(246, 236, 220, 0.5);
+    border-color: rgba(246, 236, 220, 0.4);
+    box-shadow: none;
   }
   .strip {
     flex: 1;
@@ -273,14 +276,16 @@
     text-align: left;
     color: var(--ink);
     background: var(--parchment);
-    border: 1.5px solid var(--bronze);
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    border: 1px solid #1a120c;
+    border-radius: 3px;
+    outline: 1px solid rgba(200, 156, 85, 0.5);
+    outline-offset: -6px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 236, 210, 0.12);
     user-select: none;
   }
   .card.selected {
-    border-color: var(--pale-clay);
-    box-shadow: 0 0 0 3px var(--pale-clay), 0 8px 24px rgba(0, 0, 0, 0.35);
+    outline-color: #e2bd78;
+    box-shadow: 0 0 0 2px #c89c55, 0 0 18px rgba(214, 170, 98, 0.35), 0 10px 24px rgba(0, 0, 0, 0.45);
   }
   .card:focus-visible { outline: 3px solid var(--ivory); outline-offset: 3px; }
   .card.locked { background: #3a302a; color: var(--parchment); }
@@ -320,7 +325,7 @@
     padding: 4px 8px 4px 4px;
     background: rgba(246, 236, 220, 0.86);
     border: 1px solid var(--rule);
-    border-radius: 999px;
+    border-radius: 2px;
     font-size: 0.8rem;
   }
   .worker img { height: 28px; width: auto; }
@@ -358,7 +363,7 @@
   .locked .stats { color: rgba(246, 236, 220, 0.7); }
   .stats.ready { color: var(--pale-clay); font-weight: 600; }
   .works { display: flex; gap: 4px; margin-top: 4px; }
-  .works img { height: 30px; width: 30px; object-fit: contain; background: var(--ivory); border: 1px solid var(--rule); border-radius: 6px; }
+  .works img { height: 30px; width: 30px; object-fit: contain; background: var(--ivory); border: 1px solid var(--rule); border-radius: 2px; }
 
   @media (max-width: 760px) {
     .hint { display: none; }

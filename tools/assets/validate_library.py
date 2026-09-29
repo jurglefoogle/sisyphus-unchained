@@ -59,6 +59,20 @@ for task in queue['tasks']:
     queued_ids.add(task['id'])
 if delivery_path.exists():
     delivery=json.loads(delivery_path.read_text(encoding='utf-8'))
+    for name,state in [('bare',delivery['assets']['sisyphus']['states']['walk']),('wrapped',delivery['assets']['sisyphus']['variants']['feet_wrapped']['states']['walk'])]:
+        baselines=[]
+        for layer in state['layers']:
+            source=ROOT/'public'/layer['frame']['url'].lstrip('/')
+            x,y,w,h=layer['frame']['rect']
+            with Image.open(source) as im:
+                alpha=im.getchannel('A').crop((x,y,x+w,y+h)).point(lambda value:255 if value>=128 else 0)
+                bounds=alpha.getbbox()
+            require(bounds is not None,f'Empty {name} walk frame')
+            if bounds:
+                require(bounds[0]>=12 and w-bounds[2]>=12,f'Clipped {name} walk frame {layer["id"]}')
+                require(abs((bounds[0]+bounds[2])/2-w/2)<=2,f'Unregistered {name} walk frame {layer["id"]}')
+                baselines.append(bounds[3])
+        require(max(baselines)-min(baselines)<=2,f'Unaligned {name} walk foot baseline')
     for asset,spec in delivery['assets'].items():
         for name,state in spec['states'].items():
             if state['status']!='available':

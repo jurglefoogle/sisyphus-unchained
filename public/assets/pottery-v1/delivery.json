@@ -642,6 +642,888 @@
           ],
           "notes": "Reviewed resting pose with transparent cutout; in-game scale acceptance pending."
         },
+        "walk": {
+          "status": "available",
+          "duration": 1,
+          "loop": true,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "walk_0",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.9447513812154696
+                ],
+                "rect": [
+                  48,
+                  0,
+                  500,
+                  724
+                ]
+              },
+              "size": [
+                160,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            },
+            {
+              "id": "walk_1",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.9447513812154696
+                ],
+                "rect": [
+                  571,
+                  0,
+                  500,
+                  724
+                ]
+              },
+              "size": [
+                160,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_2",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.9447513812154696
+                ],
+                "rect": [
+                  1127,
+                  0,
+                  500,
+                  724
+                ]
+              },
+              "size": [
+                160,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_3",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.9447513812154696
+                ],
+                "rect": [
+                  1662,
+                  0,
+                  500,
+                  724
+                ]
+              },
+              "size": [
+                160,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            }
+          ],
+          "notes": "Four registered crops of the same painted character; one frame per quarter stride."
+        },
+        "slip_knockdown": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 1,
+          "layers": [
+            {
+              "id": "walk_0",
+              "frame": {
+                "assetId": "sisyphus_slip_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_slip_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.888121546961326
+                ],
+                "rect": [
+                  0,
+                  0,
+                  543,
+                  724
+                ]
+              },
+              "size": [
+                213,
+                284
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_1",
+              "frame": {
+                "assetId": "sisyphus_slip_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_slip_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.888121546961326
+                ],
+                "rect": [
+                  543,
+                  0,
+                  543,
+                  724
+                ]
+              },
+              "size": [
+                213,
+                284
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_2",
+              "frame": {
+                "assetId": "sisyphus_slip_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_slip_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.888121546961326
+                ],
+                "rect": [
+                  1086,
+                  0,
+                  543,
+                  724
+                ]
+              },
+              "size": [
+                213,
+                284
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_3",
+              "frame": {
+                "assetId": "sisyphus_slip_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_slip_strip.png",
+                "dimensions": [
+                  2172,
+                  724
+                ],
+                "pivot": [
+                  0.5,
+                  0.888121546961326
+                ],
+                "rect": [
+                  1629,
+                  0,
+                  543,
+                  724
+                ]
+              },
+              "size": [
+                213,
+                284
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Four registered crops of the same painted character; four poses from the slip to the landing."
+        },
         "strain_accent": {
           "status": "blocked-image-limit",
           "duration": 1,
@@ -675,28 +1557,6 @@
           ],
           "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
         },
-        "walk": {
-          "status": "blocked-image-limit",
-          "duration": 1,
-          "loop": false,
-          "reducedMotionTime": 0,
-          "layers": [],
-          "plannedAssets": [
-            "sisyphus_walk_strip"
-          ],
-          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
-        },
-        "slip_knockdown": {
-          "status": "blocked-image-limit",
-          "duration": 1,
-          "loop": false,
-          "reducedMotionTime": 0,
-          "layers": [],
-          "plannedAssets": [
-            "sisyphus_slip_strip"
-          ],
-          "notes": "New character/stone raster artwork requires image generation. No unrelated pose substituted."
-        },
         "get_up": {
           "status": "blocked-image-limit",
           "duration": 1,
@@ -712,9 +1572,1213 @@
       "notes": "In-game acceptance pending.",
       "variants": {
         "feet_wrapped": {
-          "status": "blocked-image-limit",
-          "states": {},
-          "notes": "Rag-wrapped feet artwork required for every character state after Wrap Your Feet. Existing barefoot images must not be relabeled."
+          "status": "partial",
+          "states": {
+            "rest": {
+              "status": "available",
+              "duration": 1,
+              "loop": false,
+              "reducedMotionTime": 0,
+              "layers": [
+                {
+                  "id": "sisyphus_rest_feet_wrapped",
+                  "frame": {
+                    "assetId": "sisyphus_rest_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_rest_feet_wrapped.png",
+                    "dimensions": [
+                      1254,
+                      1254
+                    ],
+                    "pivot": [
+                      0.4996012759170654,
+                      0.8995215311004785
+                    ]
+                  },
+                  "size": [
+                    256,
+                    256
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    }
+                  ]
+                }
+              ],
+              "notes": ""
+            },
+            "push_loop": {
+              "status": "available",
+              "duration": 1.2,
+              "loop": true,
+              "reducedMotionTime": 0,
+              "layers": [
+                {
+                  "id": "push",
+                  "frame": {
+                    "assetId": "sisyphus_push_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+                    "dimensions": [
+                      1254,
+                      1254
+                    ],
+                    "pivot": [
+                      0.4996012759170654,
+                      0.8819776714513556
+                    ]
+                  },
+                  "size": [
+                    256,
+                    256
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.54,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1.01,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.6,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.14,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.2,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "recoil",
+                  "frame": {
+                    "assetId": "sisyphus_push_recoil_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+                    "dimensions": [
+                      1254,
+                      1254
+                    ],
+                    "pivot": [
+                      0.4996012759170654,
+                      0.8724082934609251
+                    ]
+                  },
+                  "size": [
+                    270,
+                    270
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.54,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.14,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.2,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                }
+              ],
+              "notes": "Wrapped-feet push and recovery poses."
+            },
+            "manual_assist": {
+              "status": "available",
+              "duration": 1.2,
+              "loop": true,
+              "reducedMotionTime": 0,
+              "layers": [
+                {
+                  "id": "push",
+                  "frame": {
+                    "assetId": "sisyphus_push_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_push_feet_wrapped.png",
+                    "dimensions": [
+                      1254,
+                      1254
+                    ],
+                    "pivot": [
+                      0.4996012759170654,
+                      0.8819776714513556
+                    ]
+                  },
+                  "size": [
+                    256,
+                    256
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.54,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1.01,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.6,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.14,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.2,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "recoil",
+                  "frame": {
+                    "assetId": "sisyphus_push_recoil_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_push_recoil_feet_wrapped.png",
+                    "dimensions": [
+                      1254,
+                      1254
+                    ],
+                    "pivot": [
+                      0.4996012759170654,
+                      0.8724082934609251
+                    ]
+                  },
+                  "size": [
+                    270,
+                    270
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.54,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.14,
+                      "x": 2,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.2,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                }
+              ],
+              "notes": "Wrapped-feet push and recovery poses."
+            },
+            "walk": {
+              "status": "available",
+              "duration": 1,
+              "loop": true,
+              "reducedMotionTime": 0,
+              "layers": [
+                {
+                  "id": "walk_0",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.8895027624309392
+                    ],
+                    "rect": [
+                      140,
+                      0,
+                      500,
+                      724
+                    ]
+                  },
+                  "size": [
+                    181,
+                    262
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_1",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.8895027624309392
+                    ],
+                    "rect": [
+                      600,
+                      0,
+                      500,
+                      724
+                    ]
+                  },
+                  "size": [
+                    181,
+                    262
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_2",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.8895027624309392
+                    ],
+                    "rect": [
+                      1088,
+                      0,
+                      500,
+                      724
+                    ]
+                  },
+                  "size": [
+                    181,
+                    262
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_3",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.8895027624309392
+                    ],
+                    "rect": [
+                      1532,
+                      0,
+                      500,
+                      724
+                    ]
+                  },
+                  "size": [
+                    181,
+                    262
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                }
+              ],
+              "notes": "Four registered crops of the same painted character; one frame per quarter stride."
+            },
+            "slip_knockdown": {
+              "status": "available",
+              "duration": 1,
+              "loop": false,
+              "reducedMotionTime": 1,
+              "layers": [
+                {
+                  "id": "walk_0",
+                  "frame": {
+                    "assetId": "sisyphus_slip_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.7955801104972375
+                    ],
+                    "rect": [
+                      0,
+                      0,
+                      543,
+                      724
+                    ]
+                  },
+                  "size": [
+                    259,
+                    345
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_1",
+                  "frame": {
+                    "assetId": "sisyphus_slip_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.7955801104972375
+                    ],
+                    "rect": [
+                      543,
+                      0,
+                      543,
+                      724
+                    ]
+                  },
+                  "size": [
+                    259,
+                    345
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_2",
+                  "frame": {
+                    "assetId": "sisyphus_slip_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.7955801104972375
+                    ],
+                    "rect": [
+                      1086,
+                      0,
+                      543,
+                      724
+                    ]
+                  },
+                  "size": [
+                    259,
+                    345
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_3",
+                  "frame": {
+                    "assetId": "sisyphus_slip_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_slip_strip_feet_wrapped.png",
+                    "dimensions": [
+                      2172,
+                      724
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.7955801104972375
+                    ],
+                    "rect": [
+                      1629,
+                      0,
+                      543,
+                      724
+                    ]
+                  },
+                  "size": [
+                    259,
+                    345
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    }
+                  ]
+                }
+              ],
+              "notes": "Four registered crops of the same painted character; four poses from the slip to the landing."
+            }
+          },
+          "notes": "Wrapped feet delivered for rest, push, assist and walk; other transitions still use a rig fallback."
         }
       },
       "skeleton": {
@@ -5169,6 +7233,50 @@
       },
       "notes": "In-game acceptance pending."
     },
+    "scene_first_hill_mountain": {
+      "states": {
+        "texture": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "scene_first_hill_mountain",
+              "frame": {
+                "assetId": "scene_first_hill_mountain",
+                "url": "/assets/pottery-v1/art/scene_first_hill_mountain.png",
+                "dimensions": [
+                  1600,
+                  900
+                ],
+                "pivot": [
+                  0,
+                  0
+                ]
+              },
+              "size": [
+                1600.0,
+                900.0
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": "Authored transparent mountain layer aligned to geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
     "scene_tartarus_rim": {
       "states": {
         "background": {
@@ -5287,6 +7395,22 @@
             }
           ],
           "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_tartarus_rim_mountain": {
+      "states": {
+        "texture": {
+          "status": "pending-art",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "scene_tartarus_rim_mountain"
+          ],
+          "notes": "Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback."
         }
       },
       "notes": "In-game acceptance pending."
@@ -5413,6 +7537,22 @@
       },
       "notes": "In-game acceptance pending."
     },
+    "scene_leaking_heights_mountain": {
+      "states": {
+        "texture": {
+          "status": "pending-art",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "scene_leaking_heights_mountain"
+          ],
+          "notes": "Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
     "scene_bronze_pass": {
       "states": {
         "background": {
@@ -5531,6 +7671,22 @@
             }
           ],
           "notes": "1600\u00d7900 stage layer; transparent hill/foreground follows geometry.ts."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "scene_bronze_pass_mountain": {
+      "states": {
+        "texture": {
+          "status": "pending-art",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "scene_bronze_pass_mountain"
+          ],
+          "notes": "Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback."
         }
       },
       "notes": "In-game acceptance pending."
@@ -5657,6 +7813,22 @@
       },
       "notes": "In-game acceptance pending."
     },
+    "scene_skyward_escarpment_mountain": {
+      "states": {
+        "texture": {
+          "status": "pending-art",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "scene_skyward_escarpment_mountain"
+          ],
+          "notes": "Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
     "scene_olympian_approach": {
       "states": {
         "background": {
@@ -5778,8 +7950,24 @@
         }
       },
       "notes": "In-game acceptance pending."
+    },
+    "scene_olympian_approach_mountain": {
+      "states": {
+        "texture": {
+          "status": "pending-art",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [],
+          "plannedAssets": [
+            "scene_olympian_approach_mountain"
+          ],
+          "notes": "Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback."
+        }
+      },
+      "notes": "In-game acceptance pending."
     }
   },
   "coordinateSystem": "Layer x/y offsets are stage pixels relative to the requested asset pivot. size is the full source canvas rendered size; pivots are normalized. rotation is radians. Keyframes are linearly interpolated; frame is held. Empty uninstalled layers are intentional.",
-  "status": "All non-character contract states delivered except two prelude stone illustrations. Character pose generation blocked by image quota."
+  "status": "Core fallbacks are playable. Six character states, three shade states, two prelude stones and five later-hill mountain layers remain pending; see coverage.json."
 }

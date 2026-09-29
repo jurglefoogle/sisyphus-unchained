@@ -98,6 +98,19 @@ function rowIcon(row: PurchaseRow): string {
   }
 }
 
+export interface InsightShopRow {
+  id: string;
+  title: string;
+  effect: string;
+  cost: number;
+  /** Upgrades are bought in order: owned, the one on offer, or waiting on an earlier one. */
+  state: 'owned' | 'next' | 'locked';
+  affordable: boolean;
+  /** The earlier upgrade a locked one waits for. */
+  after?: string;
+  pinned: boolean;
+}
+
 export interface GameView {
   revision: number;
   obols: string;
@@ -105,6 +118,12 @@ export interface GameView {
   automated: boolean;
   paused: boolean;
   insight: number;
+  /** Every permanent upgrade in order, for the Insight menu. */
+  insightShop: InsightShopRow[];
+  /** The Insight menu appears once any Insight has been awarded. */
+  insightMenu: boolean;
+  /** The permanent income factor from lifetime Insight. */
+  insightFactor: string;
   site: {
     id: string;
     name: string;
@@ -124,6 +143,8 @@ export interface GameView {
   /** Progress marker for the objective line (the pinned goal's affordability). */
   objectiveProgress: number | null;
   goal: GoalView | null;
+  /** Three horizons keep the immediate action and the larger discovery visible together. */
+  goalStack: { now: string; next: string; beyond: string };
   /** The first worthwhile Begin Again, offered once and dismissible (spec §01). */
   suggestPrestige: boolean;
   empire: EmpireSite[];
@@ -140,6 +161,7 @@ export interface GameView {
     nextTarget: string;
   };
   relics: { id: string; name: string; joke: string }[];
+  relicHunt: { site: string; chance: string; guarantee: string } | null;
 }
 
 export interface GoalView {
@@ -457,6 +479,33 @@ function objective(state: GameState, site: SiteState): string {
   return `Next decree at ${formatMoney(next.defianceGate)} Defiance: ${t(next.displayNameKey)}.`;
 }
 
+function goalHorizons(state: GameState, site: SiteState, now: string): GameView['goalStack'] {
+  if (preludeActive(state)) {
+    const grip = nextPreludeUpgrade(state);
+    return {
+      now,
+      next: grip ? `Reach farther with ${t(`prelude.${grip.id}`)}.` : 'Reach the summit and complete the first descent.',
+      beyond: 'Turn the returning stone into useful motion.',
+    };
+  }
+
+  const milestone = nextMilestone(site.productionLevel);
+  let next = milestone === null ? `${t(siteDef(site.id).displayNameKey)} is fully improved.` : `Level ${milestone}: double this operation's output.`;
+  if (!site.wheelOwned && flywheelUnlocked(state)) next = 'Install and charge the flywheel.';
+  else if (!isAutomated(state) && foremanUnlocked(state)) next = 'Hire the Foreman and automate every operation.';
+
+  const nextSite = nextUnownedSite(state);
+  let beyond = 'Complete the Eternal Labor Charter.';
+  if (nextSite) {
+    beyond = state.empire.offeredSiteIds.includes(nextSite.id)
+      ? `Open ${t(nextSite.displayNameKey)}.`
+      : `Provoke the decree for ${t(nextSite.displayNameKey)}.`;
+  } else if (state.empire.purchasedWorkIds.includes('charter')) {
+    beyond = 'Improve your records and complete the Archive.';
+  }
+  return { now, next, beyond };
+}
+
 export function buildView(state: GameState): GameView {
   const site = findSite(state, state.empire.selectedSiteId) ?? state.empire.sites[0];
   const def = siteDef(site.id);
@@ -573,18 +622,23 @@ export function buildView(state: GameState): GameView {
     });
   }
 
-  const nextUpgrade = catalog.insightUpgrades.find((u) => !state.prestige.permanentUpgradeIds.includes(u.id));
-  if (nextUpgrade && lifetime > 0) {
-    rows.push({
-      key: `upgrade-${nextUpgrade.id}`,
-      title: t(`upgrade.${nextUpgrade.id}`),
-      effect: t(`upgrade.${nextUpgrade.id}.desc`),
-      cost: `${nextUpgrade.cost} Insight`,
-      affordable: spendableInsight(state) >= nextUpgrade.cost,
-      action: { kind: 'upgrade', upgradeId: nextUpgrade.id },
-      accent: 'insight',
-    });
-  }
+  // Insight upgrades have their own menu, apart from the run's purchases.
+  const remembered = state.prestige.permanentUpgradeIds;
+  const nextUpgrade = catalog.insightUpgrades.find((u) => !remembered.includes(u.id));
+  const spendable = spendableInsight(state);
+  const insightShop: InsightShopRow[] = catalog.insightUpgrades.map((u, i) => {
+    const prev = catalog.insightUpgrades[i - 1];
+    return {
+      id: u.id,
+      title: t(`upgrade.${u.id}`),
+      effect: t(`upgrade.${u.id}.desc`),
+      cost: u.cost,
+      state: remembered.includes(u.id) ? 'owned' : u === nextUpgrade ? 'next' : 'locked',
+      affordable: u === nextUpgrade && spendable >= u.cost,
+      after: prev && !remembered.includes(prev.id) ? t(`upgrade.${prev.id}`) : undefined,
+      pinned: state.pinnedGoal === goalKey({ kind: 'upgrade', upgradeId: u.id }, site.id),
+    };
+  });
 
   for (const r of rows) {
     r.pinKey = r.key.startsWith('decree-') ? undefined : goalKey(r.action, site.id);
@@ -592,16 +646,21 @@ export function buildView(state: GameState): GameView {
   }
   const goal = state.pinnedGoal ? resolveGoal(state, state.pinnedGoal) : null;
   const plainObjective = objective(state, site);
+  const now = goal ? goalObjective(state, goal, plainObjective) : plainObjective;
 
   const nm = nextMilestone(site.productionLevel);
   const prevM = [...catalog.levels.milestones].reverse().find((m) => m <= site.productionLevel) ?? 1;
+  const pendingRelic = catalog.relics.catalog.find((r) => r.eligibleSiteId === site.id && !state.discoveries.relicIds.includes(r.id));
   return {
     revision: state.revision,
     obols: formatMoney(state.wallet.obols),
     rate: automated ? formatRate(empireIncomePerSecond(state)) : 'manual',
     automated,
     paused: state.paused,
-    insight: spendableInsight(state),
+    insight: spendable,
+    insightShop,
+    insightMenu: lifetime > 0,
+    insightFactor: formatMultiplier(insightFactor(lifetime)),
     site: {
       id: site.id,
       name: t(def.displayNameKey),
@@ -621,9 +680,10 @@ export function buildView(state: GameState): GameView {
       best: state.prelude.bestHeight,
       attempts: state.prelude.attempts,
     },
-    objective: goal ? goalObjective(state, goal, plainObjective) : plainObjective,
+    objective: now,
     objectiveProgress: goal && !goal.stale ? goal.progress : null,
     goal,
+    goalStack: goalHorizons(state, site, now),
     suggestPrestige: award >= PRESTIGE_PROMPT_INSIGHT && (automated || has(state, 'foreman')) && !has(state, 'prestige_prompt'),
     empire: empireView(state),
     charterSigned: state.empire.purchasedWorkIds.includes('charter'),
@@ -638,5 +698,12 @@ export function buildView(state: GameState): GameView {
       nextTarget: formatMoney(nextRecordTarget(state)),
     },
     relics: state.discoveries.relicIds.map((id) => ({ id, name: t(`relic.${id}`), joke: t(`relic.${id}.joke`) })),
+    relicHunt: pendingRelic
+      ? {
+          site: t(def.displayNameKey),
+          chance: `${+(catalog.relics.chancePerDescent * 100).toFixed(2)}% per descent`,
+          guarantee: pendingRelic.guaranteedBy.startsWith('open:') ? 'guaranteed when the next operation opens' : 'guaranteed by the Charter',
+        }
+      : null,
   };
 }

@@ -93,6 +93,19 @@ export const REQUIRED_ASSETS: AssetSpec[] = [
     pivot: 'top-left of the 1600×900 stage',
     notes: 'Layers must keep the route geometry in src/world/geometry.ts clear.',
   })),
+  ...[
+    'scene_first_hill_mountain',
+    'scene_tartarus_rim_mountain',
+    'scene_leaking_heights_mountain',
+    'scene_bronze_pass_mountain',
+    'scene_skyward_escarpment_mountain',
+    'scene_olympian_approach_mountain',
+  ].map((id) => ({
+    id,
+    states: ['texture'],
+    pivot: 'top-left of the 1600×900 stage',
+    notes: 'Authored transparent mountain used by paintHill; route geometry must match src/world/geometry.ts.',
+  })),
 ];
 
 const delivered = deliveries.assets as Record<string, AssetDelivery>;
@@ -142,4 +155,9 @@ export const ASSET_MANIFEST: AssetSpec[] = [
 
 export function getAssetState(id: string, state: string): AssetState | undefined {
   return ASSET_MANIFEST.find((asset) => asset.id === id)?.delivery?.states[state];
+}
+
+/** Variant states are explicit: callers fall back to the regular pose only when absent. */
+export function getAssetVariantState(id: string, variant: string, state: string): AssetState | undefined {
+  return ASSET_MANIFEST.find((asset) => asset.id === id)?.delivery?.variants?.[variant]?.states[state];
 }

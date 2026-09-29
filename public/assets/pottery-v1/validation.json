@@ -1,6 +1,6 @@
 {
   "technicalChecks": "PASS",
-  "assetCount": 159,
+  "assetCount": 178,
   "errors": [],
   "artWarnings": [
     "Tight edge padding: stone_basalt",
@@ -24,7 +24,15 @@
     "Tight edge padding: portrait_talos",
     "Tight edge padding: portrait_atlas",
     "Tight edge padding: portrait_zeus",
-    "Tight edge padding: portrait_thanatos"
+    "Tight edge padding: portrait_thanatos",
+    "Tight edge padding: sisyphus_strain",
+    "Tight edge padding: shade_pull_recoil",
+    "Tight edge padding: shade_purchase_reaction",
+    "Tight edge padding: sisyphus_walk_strip",
+    "Tight edge padding: shade_walk_strip",
+    "Tight edge padding: sisyphus_step_aside",
+    "Tight edge padding: sisyphus_slip_strip",
+    "Tight edge padding: sisyphus_get_up_strip"
   ],
   "audio": [
     {

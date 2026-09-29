@@ -3,7 +3,7 @@
   import { artUrl, iconUrl } from '../world/library';
 
   /** The short, skippable ending after the Eternal Labor Charter (spec §01). Production continues underneath. */
-  let { onclose }: { onclose: () => void } = $props();
+  let { onclose }: { onclose: (reason: 'complete' | 'skip') => void } = $props();
   let skip: HTMLButtonElement;
 
   const LINES: [string, string][] = [
@@ -20,7 +20,7 @@
 
   onMount(() => {
     skip.focus();
-    const timer = setTimeout(onclose, 26_000);
+    const timer = setTimeout(() => onclose('complete'), 26_000);
     return () => clearTimeout(timer);
   });
 
@@ -28,7 +28,7 @@
     if (e.key === 'Escape') {
       e.preventDefault();
       e.stopPropagation();
-      onclose();
+      onclose('skip');
     }
   }
 </script>
@@ -44,7 +44,7 @@
       </section>
     {/each}
   </div>
-  <button class="skip" bind:this={skip} onclick={onclose}>Back to the First Hill</button>
+  <button class="skip" bind:this={skip} onclick={() => onclose('skip')}>Back to the First Hill</button>
 </div>
 
 <style>

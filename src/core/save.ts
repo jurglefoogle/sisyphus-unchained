@@ -284,6 +284,8 @@ export function stateFromJson(data: unknown): GameState {
       highContrast: typeof options.highContrast === 'boolean' ? options.highContrast : DEFAULT_OPTIONS.highContrast,
       screenShake: typeof options.screenShake === 'boolean' ? options.screenShake : DEFAULT_OPTIONS.screenShake,
       flashFree: typeof options.flashFree === 'boolean' ? options.flashFree : DEFAULT_OPTIONS.flashFree,
+      richEffects: typeof options.richEffects === 'boolean' ? options.richEffects : DEFAULT_OPTIONS.richEffects,
+      effectsQuality: options.effectsQuality === 'balanced' ? 'balanced' : 'full',
       pushKey:
         typeof options.pushKey === 'string' && /^[A-Za-z0-9]{1,24}$/.test(options.pushKey) ? options.pushKey : DEFAULT_OPTIONS.pushKey,
       telemetry: typeof options.telemetry === 'boolean' ? options.telemetry : DEFAULT_OPTIONS.telemetry,

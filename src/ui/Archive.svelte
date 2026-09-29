@@ -3,16 +3,18 @@
   import { artUrl, iconUrl } from '../world/library';
   import Modal from './Modal.svelte';
 
-  let { archive, onclose }: { archive: ArchiveView; onclose: () => void } = $props();
+  let { archive, onclose, onscene }: { archive: ArchiveView; onclose: () => void; onscene: (id: string) => void } = $props();
 
-  type Tab = 'guide' | 'stamps' | 'myths' | 'relics' | 'decrees' | 'stones' | 'odds';
-  let tab = $state<Tab>('stamps');
+  type Tab = 'overview' | 'guide' | 'stamps' | 'myths' | 'relics' | 'decrees' | 'scenes' | 'stones' | 'odds';
+  let tab = $state<Tab>('overview');
   const tabs: [Tab, string][] = [
+    ['overview', 'Overview'],
     ['guide', 'Guide'],
     ['stamps', 'Stamps'],
     ['myths', 'Mythology'],
     ['relics', 'Relics'],
     ['decrees', 'Decrees'],
+    ['scenes', 'Scenes'],
     ['stones', 'Stones'],
     ['odds', 'Odds'],
   ];
@@ -26,7 +28,23 @@
     {/each}
   </div>
 
-  {#if tab === 'guide'}
+  {#if tab === 'overview'}
+    <p class="muted">A record of what this sentence has become. Completion is for the record and grants no production advantage.</p>
+    <div class="completion">
+      {#each archive.completion as item (item.id)}
+        <button onclick={() => (tab = item.id as Tab)} aria-label="Open {item.label}: {item.found} of {item.total}">
+          <span><strong>{item.label}</strong><b>{item.found} / {item.total}</b></span>
+          <span class="completion-bar" aria-hidden="true"><i style:width="{item.total ? item.found / item.total * 100 : 0}%"></i></span>
+        </button>
+      {/each}
+    </div>
+    <h3>Records</h3>
+    <dl class="records">
+      {#each archive.records as record (record.label)}
+        <div><dt>{record.label}</dt><dd>{record.value}</dd></div>
+      {/each}
+    </dl>
+  {:else if tab === 'guide'}
     <p class="muted">Every instruction the game has given you, kept for reference.</p>
     <ul class="entries">
       {#each archive.guide.filter((g) => g.seen) as g (g.id)}
@@ -106,6 +124,19 @@
     <p class="muted">Expected bonus per descent: {archive.odds.expectedBonus} base reward. Offline time pays exactly this expectation.</p>
     <h3>Relics</h3>
     <p>While a relic can be found, each descent at its site has a {archive.odds.relicChance} chance to turn it up, and it is guaranteed within {archive.odds.relicPity} descents. Opening the next operation (or signing the Charter, for the last one) delivers any relic still missing.</p>
+  {:else if tab === 'scenes'}
+    <ul class="entries">
+      {#each archive.scenes as sc (sc.id)}
+        <li class="scene-row">
+          {#if sc.seen}
+            <span><strong>{sc.title}</strong> <small class="muted">{sc.when}</small></span>
+            <button onclick={() => onscene(sc.id)}>Watch</button>
+          {:else}
+            <span class="muted">Not yet seen <small>· {sc.when}</small></span>
+          {/if}
+        </li>
+      {/each}
+    </ul>
   {:else}
     {#if archive.decrees.length === 0}
       <p class="muted">No decrees yet. Keep pushing; the gods will have something to say.</p>
@@ -122,6 +153,25 @@
 </Modal>
 
 <style>
+  .completion {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.6rem;
+  }
+  .completion button {
+    display: grid;
+    gap: 0.45rem;
+    text-align: left;
+    background: rgba(255, 252, 245, 0.55);
+    border: 1px solid var(--rule);
+  }
+  .completion button > span:first-child { display: flex; justify-content: space-between; gap: 0.5rem; }
+  .completion-bar { height: 5px; overflow: hidden; border-radius: 3px; background: rgba(33, 27, 23, 0.15); }
+  .completion-bar i { display: block; height: 100%; background: var(--clay); }
+  .records { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; }
+  .records div { border-bottom: 1px solid var(--rule); padding: 0.4rem 0; }
+  .records dt { color: var(--muted); font-size: 0.82rem; }
+  .records dd { margin: 0.1rem 0 0; font-family: var(--display); font-size: 1.2rem; font-weight: 700; }
   .stones {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -155,6 +205,12 @@
   }
   .muted {
     color: var(--muted);
+  }
+  .scene-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
   }
   /* Scrawled beside the entry by its least reliable reader. */
   .margin {

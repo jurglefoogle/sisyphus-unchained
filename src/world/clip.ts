@@ -1,4 +1,4 @@
-import { Container, Sprite, type Texture } from 'pixi.js';
+import { Container, Rectangle, Sprite, Texture } from 'pixi.js';
 import { sampleAssetState } from './asset-animation';
 import type { AssetFrame, AssetState } from './asset-types';
 
@@ -13,6 +13,7 @@ export type FrameTextures = (frame: AssetFrame) => Texture | null;
 export class Clip extends Container {
   private sprites = new Map<string, Sprite>();
   private order = '';
+  private crops = new Map<string, Texture>();
 
   constructor(private textures: FrameTextures) {
     super();
@@ -46,7 +47,17 @@ export class Clip extends Container {
     let ready = true;
     for (const l of layers) {
       const sp = this.sprites.get(l.id)!;
-      const tex = this.textures(l.frame);
+      const source = this.textures(l.frame);
+      let tex = source;
+      if (source && l.frame.rect) {
+        const rect = l.frame.rect;
+        const id = `${l.frame.url}:${rect.join(',')}`;
+        tex = this.crops.get(id) ?? null;
+        if (!tex) {
+          tex = new Texture({ source: source.source, frame: new Rectangle(rect[0], rect[1], rect[2], rect[3]) });
+          this.crops.set(id, tex);
+        }
+      }
       sp.visible = !!tex;
       if (!tex) {
         ready = false;

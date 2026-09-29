@@ -58,11 +58,15 @@ Deterministic progression with small optional surprises
 Random gates, loot boxes and consumable production boosts
 A defined ending followed by score chasing
 A promise of unlimited authored content
-The action-game mockup with perfect shoves, grip and lightning hazards is retired. Its sense of motion is useful; its mechanics do not belong in this game. Earlier factory-lane and parchment-dashboard mockups are also not interface specifications.
+The action-game mockup with perfect shoves, grip and lightning hazards is retired. Its sense of motion is useful; its mechanics do not belong in this game. The grip limit in the opening prelude (below) is a different thing: a short scripted introduction with a fixed shopping list, not a timing or skill test. Earlier factory-lane and parchment-dashboard mockups are also not interface specifications.
 ## What the player does
-During the opening, the player presses the boulder, holds Space, or enables an equivalent accessibility toggle. Sisyphus pushes uphill. Releasing pauses the ascent; it does not lose distance. At the summit, the player receives a payout automatically. The stone then descends without input, breaks a target and resets. The descent itself is the payoff, never a failure.
-The player can open a purchase drawer while the cycle continues. They choose an operation level, a strength improvement, an impact improvement, a flywheel, a foreman contract, a mythic work or the next operation. Available choices appear gradually. The opening shows only operation levels; later purchases explain one new concept at a time.
+During the opening, the player presses the boulder, holds Space, or enables an equivalent accessibility toggle. Sisyphus pushes uphill. Releasing pauses the ascent; it does not lose distance. In the first minutes of a new save his grip gives out partway up and the stone rolls back (see The opening prelude). Once the stone has made its first summit, every summit pays automatically. The stone then descends without input, breaks a target and resets. The descent itself is the payoff, never a failure.
+The player can open a purchase drawer while the cycle continues. They choose an operation level, a strength improvement, an impact improvement, a flywheel, a foreman contract, a mythic work or the next operation. Available choices appear gradually. The prelude shows only the four grip improvements, and the first cycles show only operation levels; later purchases explain one new concept at a time.
 After the foreman contract is purchased, the selected site cycles indefinitely. Holding Push adds a modest ascent speed bonus only to the selected site. The maximum ascent bonus is 50 percent, and its effect on total income is smaller because descent and reset still take time. Active input neither changes loot odds nor unlocks exclusive rewards. Holding the button has the same result as tapping continuously, so click speed is irrelevant.
+### The opening prelude
+A new save opens with the sentence cutscene and the stone at the foot of the First Hill. At first Sisyphus can push it only 30 percent of the way before his grip gives out. The stone then rolls back to the foot, taking 0.6 seconds plus 1.6 seconds per full hill of height, and the watching shades toss 10 Obols per full hill of height, rounded up, with a minimum of 1. A fall is never a failure: it pays, it records the best height, and the next push can start at once. The first fall plays the decree that the stone shall never reach the summit. Most falls earn a bark, with a separate pool for a new height record.
+The drawer offers four grip improvements, bought once each and in order: Chip Off the Burrs (5 Obols, +20 percent reach), Wrap Your Feet (8, +20), Grind It Round (12, +15) and Cut Footholds (16, +15). Each shows in the scene: the stone loses its burrs, Sisyphus's feet are bound in rags, the stone becomes round, and steps appear on the steepest stretch. With all four, reach is 100 percent. While the prelude lasts, the header shows the best height as a record track and the drawer shows where grip gives out. The objective line names the next improvement and its price.
+The first summit ends the prelude. The astonished shades pay a 50 Obol offering, the first-summit decree plays, and the ordinary cycle begins: summit payout, descent, impact and reset, with operation levels in the drawer. The prelude costs 41 Obols in all. It is played once per save and stays complete through Begin Again. A save from before the prelude existed that had already reached a summit skips it. Only the First Hill has a prelude, and nothing is earned offline during it.
 The player can watch any operation or zoom out to the empire frieze. Automated operations earn equally whether on screen, off screen or in a closed panel. There is one Sisyphus, displayed at the selected site; previous sites show shades or machinery rather than duplicate Sisyphuses. Navigation is instant and free. Moving focus changes only the location receiving voluntary manual assistance.
 ## Operation lifecycle
 Each operation uses these states: locked, available, owned, ascending, descending and returning. Automated is a flag, not an alternate economy. Locked sites contribute nothing. A decree makes the next site available when its gross-earnings requirement is met. The player opens it by paying the displayed cost. Ownership starts at production level 1, or level 5 with the relevant permanent upgrade.
@@ -70,7 +74,7 @@ The foreman is an empire contract. Once hired in a run, all owned and subsequent
 Ascent progress is measured in normalized work. Strength, the flywheel and manual effort change its rate. Descent takes four seconds and return takes one second. The summit grants 70 percent of the cycle base payout; the impact grants the remaining 30 percent plus any impact-level benefit. A cycle's payout is snapshotted when it begins. Purchases can change ascent speed immediately but change that cycle's payout only when the following cycle starts. The tooltip states this clearly.
 When any terminal or milestone animation runs, the simulation continues. A newly earned resource or unlock never waits for a camera shot, dialogue dismissal or particle effect. Pausing through the pause control stops simulation; opening a shop does not. A paused save resumes paused and receives no offline income for the paused interval.
 ## Capturing the descent
-The first flywheel is the defining discovery. Before purchase, the stone crashes and its motion is wasted. After purchase, its return drives a visible wheel and turns a rope drum. That stored assistance makes future ascents 25 percent faster. A later permanent upgrade increases this to 50 percent.
+The first flywheel is the defining discovery. It is offered once the First Hill reaches production level 25, which a toast announces. The Foreman contract follows at First Hill level 35, and only once a flywheel is installed. Both are remembered once bought: in later runs the flywheel is offered from the start, and the Foreman as soon as a flywheel is installed. Before purchase, the stone crashes and its motion is wasted. After purchase, its return drives a visible wheel and turns a rope drum. That stored assistance makes future ascents 25 percent faster. A later permanent upgrade increases this to 50 percent.
 Energy is represented as a machine effect and a short charge animation, not a second resource balance. There are no conversion buttons, fuel deliveries or variable battery upkeep. The speed effect begins after the first completed descent following purchase and remains available. The first cycle after a new flywheel therefore receives no retroactive benefit. The rate model approximates this steady state.
 The story does not claim that a closed mechanical loop generates free physical energy. Recovered descent energy contributes assistance; Sisyphus, shades and later supernatural works supply the rest. Ixion's unending rotation is explicitly a mythological input. This explanation makes the gag coherent without adding an engineering simulation.
 ## Engagement and the Hooked framework
@@ -113,19 +117,22 @@ Moment
 Interaction and response
 What the player understands
 First 20 seconds
-A single Push prompt; first summit and descent
-Uphill effort earns money and the fall repeats
-First minute
-Buy production levels; the payout visibly grows
+A single Push prompt; grip gives out and the stone rolls back
+Even a fall pays, and the next attempt can go higher
+First 3 minutes
+Buy the four grip improvements; the first summit and descent
+The summit pays and the fall repeats
+Around 3 to 8 minutes
+Buy production levels; level 10 doubles output and reveals Hermes Dispatch
 Earnings can improve the next cycle
-Around 1 to 3 minutes
-Buy the flywheel and see one descent charge it
+Around 8 to 15 minutes
+Reach level 25; buy the flywheel and see one descent charge it
 The fall is useful
-Around 2 to 5 minutes
-Buy the foreman; Sisyphus steps back briefly
+Around 12 to 20 minutes
+Reach level 35; buy the foreman and Sisyphus steps back briefly
 Production can continue without input
-Around 5 to 12 minutes
-Reach Hermes and the next operation goal
+Around 20 to 30 minutes
+Buy Hermes Dispatch and chase the next operation goal
 A larger world is opening
 Around 15 to 40 minutes
 First worthwhile Begin Again preview
@@ -136,6 +143,9 @@ The first Begin Again prompt appears only at 10 available Insight or more and at
 Control
 First appearance
 Later runs
+Grip improvements
+New save
+Never; the prelude is played once per save
 Improve Operation
 First summit payout
 Immediately available
@@ -143,13 +153,13 @@ Strength and Impact
 First production-level purchase
 Immediately available on owned sites
 Flywheel
-First completed descent
+First Hill production level 25, announced by a toast
 Visible on sites without the permanent starting wheel
 Foreman
-First flywheel installed
-Hidden when the contract is already active
+First Hill production level 35 with a flywheel installed, announced by a toast
+Once a flywheel is installed; hidden when the contract is already active
 Named work
-Owning its site reveals a teaser; required production level enables purchase
+Owning its site reveals its first work as a teaser, and each later work once the one before it is bought; the required production level enables purchase. Hermes Dispatch stays hidden until First Hill level 10 or automation
 Same level requirement, with eligible free restoration applied
 Next decree goal
 First foreman purchase, or reaching its gate sooner
@@ -172,7 +182,7 @@ Defiance is the current run's total gross Obols earned, including bonus income. 
 ## What keeps choices interesting
 The player chooses between immediate output, shorter cycles, stronger impacts, the next level milestone, a global work and a new operation. These options share Obols. A decision matters because paying for one postpones another; it does not need to lock out content permanently.
 The UI shows cost, exact expected income change and the next milestone. It offers Buy 1, Buy 10 and Buy to Milestone. Buy Max is a convenience after the first automation. It does not automatically choose a strategy. When a player cannot afford a purchase, the interface shows the remaining cost and an estimated wait based on current automated income, labeled as an estimate.
-Milestones at production levels 10, 25, 50, 100, 150 and 200 double that operation's output each time. Visible transformations occur at 10, 25 and 50; later milestones use a smaller stamp and effects so the asset workload stays finite. The generic button says Improve Operation; buying levels does not imply that hundreds of actors must be rendered.
+Milestones at production levels 10, 25, 50, 100, 150 and 200 double that operation's output each time. Visible transformations occur at 10, 25 and 50; later milestones use the carved level stamp (see Installation and visible growth) instead of new structures, so the asset workload stays finite. The generic button says Improve Operation; buying levels does not imply that hundreds of actors must be rendered.
 ## Long term shape
 Buying the Eternal Labor Charter at the sixth operation completes the authored story. Zeus accepts the enterprise as the contractor for its own punishment. The first hill is shown again with Sisyphus still technically participating. Credits are short and skippable; production continues afterward.
 The player may keep earning, complete achievements or prestige for a higher record. There is no second prestige currency or additional procedural map promised at launch. Levels remain capped at their documented limits. Post-story score chasing has no guaranteed pacing target; if players want a much longer endgame, design it after observing the completed campaign. The product should advertise a complete incremental campaign with optional continued play, not infinite novel content.
@@ -249,7 +259,7 @@ nextStrengthCost = ceil(siteBaseLevelCost * 5 * 1.45 ** p)
 nextImpactCost = ceil(siteBaseLevelCost * 12.5 * 2.4 ** r)
 flywheelCost = siteBaseLevelCost * 10
 foremanCost = firstHillBaseLevelCost * 45 = 360
-Production stops at level 200, strength at 25, and impact at 10. The foreman is purchased once per run, after installing the first flywheel. It automates every owned and future operation. Later sites have no additional foreman bill. Mythic works and site openings have fixed prices in the content table. Permanent Insight upgrades have fixed costs and sequential prerequisites.
+Production stops at level 200, strength at 25, and impact at 10. The foreman is purchased once per run, after installing a flywheel. In the first run the flywheel also waits for First Hill level 25, and the foreman for level 35. It automates every owned and future operation. Later sites have no additional foreman bill. Mythic works and site openings have fixed prices in the content table. Permanent Insight upgrades have fixed costs and sequential prerequisites. They are bought from their own Insight menu, not from Improve. The menu opens from the Insight count at the top of the screen once any Insight has been awarded. It lists all eight in order: remembered, the one on offer (which can be pinned as a goal) and those still locked, each with its cost. A glaze bead on the count marks an affordable upgrade. Begin Again itself stays in Improve.
 Buy to Milestone purchases only the remaining levels to the next threshold. It is disabled if the player cannot afford the entire bundle. Buy Max uses a bounded search on cost, verifies the exact summed price, and purchases the largest affordable count. It never includes opening another operation or buying an unrelated work.
 Before any spend, advance the simulation to the command timestamp. Check ownership, prerequisites, level cap and wallet against a single state revision. Debit and grant the upgrade together, then save the change. A double click cannot buy from a stale wallet.
 ## Operation scaling
@@ -428,7 +438,8 @@ Zeus has created a larger customer base for his own problem
 Buy the Eternal Labor Charter
 Boulders unlock with their chapters. Players can view earlier stones in the archive, but the launch game has no boulder loadout screen. Each operation keeps its assigned stone. This preserves the appeal of discovering new boulders without introducing a second optimization system or a risk that the wrong stone stalls progress.
 ## Installation and visible growth
-At production level 1, each site contains its assigned stone and a simple route. At level 10, the hauling animation becomes visibly stronger and an extra scaffold appears. At level 25, a bronze support and a more forceful return impact replace the earlier assets. At level 50, the completed installation receives an animated belt, capstan or equivalent chapter prop. At levels 100, 150 and 200, small multiplier stamps and richer sound replace new major structures.
+At production level 1, each site contains its assigned stone and a simple route. At level 10, the hauling animation becomes visibly stronger and an extra scaffold appears. At level 25, a bronze support and a more forceful return impact replace the earlier assets. At level 50, the completed installation receives an animated belt, capstan or equivalent chapter prop. At levels 100, 150 and 200, a level stamp and richer sound replace new major structures.
+The level stamp is a giant on-screen carving, painted with the same richness as the other effects. A pinax of fired clay, grained and bevelled with meander bands and a chipped corner, slams down over the scene. Its sunken black glaze field has a gloss streak. The slam sends a kiln shockwave, a dashed ring along its foot and billows of dust. A giant mallet and chisel float in and cut the level into the glaze as a Roman numeral (C, CL or CC), stroke by stroke. The mallet is timber with a cord grip and glaze bands; the chisel has a bronze ferrule and a steel blade that glints. Each cut is a deep V with a lit wall, a shaded wall and bright and dark lips. Each blow thuds, stops the flying pieces for a beat, shakes the camera slightly and flashes a glint at the edge. It throws glowing sparks, painted glaze sherds, clay grit and a puff of dust, and each new cut flashes pale. When the numeral is done, a band of light sweeps across it, a gold star glints and a bronze ray burst opens behind the pinax. The pinax then shrinks and flies into a glazed cartouche on the hillside, landing in a spray of sparks. The cartouche keeps every stamp that operation has earned (for example C · CL), and each numeral stays hidden there until its own pinax lands. Stamps queue and play one at a time. The carving takes two to four seconds, then a one-second pause and a flight of under a second; the simulation never waits for it. Effects Off drops the sparks, pieces, dust, rays and shockwave. Reduced motion shows the finished pinax fading in and out for about two seconds, with no slam, blows or flight.
 These changes are scripted at fixed anchors. They do not introduce construction selection, collision simulation or pathfinding. The original Sisyphus pose remains available for manual assistance even after machines operate the route.
 The first foreman uses one shade attendant on the original hill. Later routes use the same attendant rig recolored and combined with their chapter machinery. Additional production levels increase throughput mathematically; they never require 200 independently animated workers.
 ## Mythic works and managers
@@ -473,6 +484,7 @@ Eternal Labor Charter
 Olympian Approach level 25
 20 quadrillion
 All income x2 and story completion
+Works on a site are offered one at a time: the next is teased only after the previous one is bought. Hermes Dispatch is the exception to teasing on ownership. Its row stays out of the drawer until the First Hill reaches level 10 or the foreman is hired, so the opening introduces one idea at a time. The objective line points to it only after automation.
 Hermes stamps a delivery docket and small wing motifs appear on payout effects. Daedalus replaces a rough linkage with an elegant geared connection. Ixion's wheel starts turning a belt. Water pours through the Danaids' leaking vessel and rotates a paddle wheel. Talos moves a massive lever without effort. Atlas's frame visibly takes a route's load while he still carries the sky. The Charter stamps all six operation labels with divine approval, to Sisyphus's amusement.
 These are intentionally straightforward global multipliers. Distinct mechanics belong in a later expansion only if tests show that the fixed loop needs them. The first release's variety comes from discovery, animation and purchase pacing rather than seven separate rule systems.
 ## Decrees and story beats
@@ -529,7 +541,7 @@ Respect. Also, every statue shows you holding a globe. Want me to sue somebody?
 Olympus offer
 Zeus
 Enough. Your punishment will now be administered by Olympus. By me. Personally.
-The CEO is doing QA himself. That’s how you know the product’s in trouble.
+Zeus is inspecting the work himself. That’s how you know Olympus is worried.
 Charter purchase
 Zeus
 Olympus will now pay you to punish yourself. I hate that this is the best option.
@@ -539,6 +551,44 @@ Thanatos
 Remember me? You chained me up. Nobody died until Ares got bored. Back to the bottom.
 Thanatos! Same hill, fresh start. And for the record, the chains looked great on you.
 The gods create opportunities; they do not attack the player's controls or interrupt production. Lightning is a brief decree flourish with reduced-motion support. It never knocks a boulder backward or destroys a purchase.
+## Cutscenes
+Ten short scenes carry the authored story: the sentence, each new hill's decree, the two Tartarus works, the first Begin Again and the ending. They are staged from existing art: a scene painting pans behind the speakers, Sisyphus stands at left, and the gods loom from the right as mirrored portrait busts. Hades has no portrait yet, so he speaks from offstage as an ember glow from below. Lines type onto a papyrus scroll between meander letterbox bands, with a decree stamp, a lightning accent or a stone thud where a beat calls for one. No new art or voice acting is required.
+Scene
+Plays
+Content
+The Sentence
+Once, on a new game, before the first push
+The court of Olympus reads the three charges (Asopus, the chaining of Thanatos, the escape from Persephone) and sets the stone. Hermes escorts him to the First Hill.
+The Larger Stone
+In place of the Tartarus Rim decree, on first viewing
+Zeus answers competence with a bigger stone. At the Rim, Hades objects from the dark until Sisyphus offers him a cut of everything that falls.
+The Workshop
+In place of the Daedalus purchase decree, on first viewing
+Daedalus arrives with plans, a warning about the gearbox and a condition: if Hephaestus asks, Sisyphus built it.
+The Burning Wheel
+In place of the Ixion purchase decree, on first viewing
+Ixion explains the cloud and the wheel. Sisyphus belts the wheel to his drum; Ixion is useful, not freed.
+The Waters of Lethe
+In place of the First Begin Again decree, on first viewing
+Thanatos comes to collect; Sisyphus declines the Lethe and keeps what he learned. This is the story reason that prestige keeps permanent growth.
+The Leaking Heights
+In place of the Leaking Heights decree, on first viewing
+The Danaids introduce their jar. Sisyphus promises it will never fill and asks only for a wheel under the leak.
+The Bronze Pass
+In place of the Bronze Pass decree, on first viewing
+Talos, Hephaestus's guardian, has walked off the map of Crete. Sisyphus recognises tireless staff.
+The Skyward Escarpment
+In place of the Skyward Escarpment decree, on first viewing
+Atlas holds the heavens (not a globe) and remembers Heracles's trick. Sisyphus offers a contract and bracing; the sky stays exactly where it is.
+The Personal Touch
+In place of the Olympian Approach decree, on first viewing
+Zeus takes over the punishment himself with the sealed stone; Hermes raises his pay at the worst moment.
+The Eternal Labor Charter
+In place of the Charter purchase decree, on first viewing; the credits follow
+Olympus cannot win, so it hires him. Hermes brings the Charter, the seal lands, and the First Hill closes the story.
+A scene replaces its story panel only on first viewing; later triggers use the normal decree and comeback. Each scene is recorded when it closes, whether finished or skipped, and never plays again on its own. The archive lists the scenes; any scene viewed or unlocked by its story can be rewatched there, and The Sentence is always available.
+Space, Enter, the right arrow, a click or a tap finishes the current line or advances. Escape or the Skip button closes the scene at once. Scenes never pause the simulation, block a purchase or hold rewards; production and offline accounting run underneath as usual (§01). Music and ambience duck while a scene is open, and ambient captions are held back.
+Reduced motion removes the camera pan, entrance movement and shake. Flash-free softens the lightning to a dim pulse. Lines stay within the scroll at 120 English characters, with expansion space for translation, and follow the voice and accuracy rules for decrees.
 ## Relic catalog
 Each relic supplies the same small permanent income multiplier, x1.10, and a distinct archive illustration. It arrives early through the bounded discovery system or no later than its listed guarantee. The art depicts collectible symbols, not equipment that must be worn.
 ID
@@ -667,8 +717,6 @@ Prometheus, Tantalus, the Hydra, Ariadne, the Trojan horse and Zeno are reserved
 The launch target is 72 short ambient reactions: 12 per chapter, mixing the local machine, the gods' rules and Sisyphus's opinion of both. Display at most one ambient line per 90 seconds, never over a purchase or story interaction. Choose from unseen lines first, then enforce a no-repeat window of ten minutes. Store only the identifiers required for this behavior.
 Ambient lines have no reward and do not pause play. They live in a small caption area, not in a speech balloon covering the path. They can be disabled independently. Text should fit in 80 English characters when practical, with expansion space for translation.
 The asset budget covers six chapter environments assembled from three shared landscape kits, six stone textures, one Sisyphus rig, one shade rig, seven work installations, eight mythological portraits including Thanatos, six relic icons, three target types and roughly twenty interface icons.
-Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one, and summits and flywheel charges on the hill in view get one rarely, with at least 45 seconds between those. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
-Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one; summits, flywheel charges and bonus-target hits on the hill in view get one rarely, with at least 45 seconds between those; level purchases get one about one time in eight, at most once a minute. Pausing always gets one. Before the foreman, a minute without input earns one remark until the player acts again. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
 Sisyphus also reacts to live play in the same caption area. A bark is a short quip chosen by chance: most prelude falls get one; summits, flywheel charges and bonus-target hits on the hill in view get one rarely, with at least 45 seconds between those; level purchases get one about one time in eight, at most once a minute. Pausing always gets one. Before the foreman, a minute without input earns one remark until the player acts again. Barks follow the ambient rules above, share its switch and never respond to offline settlement. A bark pushes the next ambient line back by 30 seconds so they never arrive together.
 The following copy supplies the first complete set. Final copy can change after voice and localization review.
 ### Ambient copy for the First Hill
@@ -978,6 +1026,8 @@ Use DOM controls for text, buttons, navigation, purchase rows and dialogs. The c
 Opening the drawer never pauses or resets the cycle. The selected site remains visible and sounds continue at reduced volume. The drawer presents the current operation level and the next milestone, then Strength, Impact and special purchases that meet their discovery conditions. Locked late-game systems are not listed in a long wall of disabled rows.
 Each purchase shows its exact price, affordable state and consequence. For repeatable purchases, show the resulting expected unassisted income change. For automation, show Works while away. For a flywheel, show Helps after the next descent. A purchase produces a small confirmation motion on the corresponding machine, so the world explains where the money went.
 The player can pin one next purchase as a goal. Pinning changes only the displayed progress line and never reserves money. When it becomes affordable, use a quiet highlight. There are no flashing repeated alerts. If the chosen purchase becomes irrelevant or capped, suggest the next milestone without replacing the pin automatically.
+The drawer is a papyrus scroll hung from a turned wooden rod with bronze finials beneath the top bar. Rolled up, it is a single cylinder carrying a clay seal that counts the offers within reach. Up to three of those offers (two on phones) hang below it as sillyboi, the small title tags of ancient scrolls; the pinned goal comes first, and one click buys the tag's offer. Unrolled, the sheet runs down the right column with the roll at its foot, and on phones it drops over the top half of the screen. Entries are written in ink with a paragraphos in the margin, affordable buttons are pressed clay seals, and pins are drops of wax. The papyrus is painted in the browser from layered pith strips and fibres, with ragged edges; nothing is cartoon-outlined. The sheet stays DOM text, and Reduced Motion opens and closes it without the unrolling.
+The rest of the interface frames the world as architecture, in the same browser-painted materials. Across the top is a limestone beam. The balance and the site name are cut into it, flanked by the site arrows. Empire, Pause, Archive and Settings are buttons sunk into the stone, and Insight is a violet-glazed plaque. A terracotta band with a running key runs along the beam's lower face, and the scroll's rod hangs from it on bronze straps. At the foot of the world is a basalt tabula ansata (an inscription tablet with dovetail handles). The current goal is cut into it with its progress inlaid in bronze and Next and Beyond beneath, and the glazed clay Push is set beside the goal. The scroll's roll is the only Improve control. On phones the tablet stacks the goal above Push, and the decree runs as one line under the site name. Dialogs are papyrus sheets held open between two rods, titled over the same running key. Whatever speaks over the world is cut in basalt: god lines (the portrait a bronze-rimmed medallion), captions, notices and the pause banner. The Begin Again prompt is a papyrus slip marked in violet, and notices appear beside the scroll rather than over it. The Empire strip lies on darkened basalt, and its cards are squared with a bronze fillet.
 The upgrade drawer closes with Escape, a close button or a swipe gesture. Clicking the world outside it can close it, but never also triggers a push or purchase. Modal confirmations trap keyboard focus and return it to the initiating control when dismissed.
 ## Art palette and typography
 Role
@@ -1031,6 +1081,10 @@ Seal stamp and short sky accent
 One reusable transition
 No individual sprite needs physically simulated joints. Use deterministic path splines and authored loops. Expensive effects are cosmetic and can be disabled without changing timing or rewards. A maximum of one major reward flourish should occupy the screen at once; aggregate additional awards into a small counter.
 The expected scene budget is 100 to 250 visible sprites in a normal detailed site and fewer than 500 in the empire view. These are profiling targets to validate on reference devices, not measured performance claims. Limit active particle counts and reuse sprite objects.
+### Pottery effects
+The effects layer keeps the vase look. Marks such as rays, cracks and speed lines are shapes in the palette with an incised ink line. The pieces are painted by the renderer rather than drawn as flat vector: struck obols with an owl face and a Σ reverse, black-figure, glazed and gilded sherds, faceted stone chips and billows of dust. The waiting targets are a figured amphora of obols, a bronze tripod hoard and a heap of debris. The machinery uses grained timber posts with bronze collars and cast sheaves. A struck target breaks into pieces cut from its own painting; bronze rings with a chime and gold sparks instead. Each hill answers a blow in its own way: cinders on the Tartarus Rim, splashing water in the Leaking Heights, bronze sparks on the Bronze Pass, silver stars on the Skyward Escarpment and gold leaf on the Olympian Approach. Pieces lie where they land for a few seconds, and broken sherds lie about the impact ground. A summit throws gold and bay laurel and bevelled gold stars. A relic rises and turns in a painted ray burst, painted as itself, and a decree is sealed in red wax with Zeus's thunderbolt. The hill's light stays fixed on the stone as it rolls. The Effects setting offers Full, Balanced (no distortion or rim light, a lighter bloom and half the particles) and Off. Light is the one thing allowed to be more than paint: sparks, embers, gold, stars and the hit frame carry additive glow, so they really shine. Impacts get a hit-stop of a few frames, a glint, a dashed shockwave ring, incised cracks and shards of the stone's own material that bounce and settle. A summit prelude gets a black-figure ray burst with ink laurel, gold stars and flipping obols. Production levels 100, 150 and 200 are carved on screen as Roman numerals by a floating giant mallet and chisel (see Installation and visible growth). Fast descents leave ink speed lines. Each hill has its own air: shafts of light on the First Hill, the Bronze Pass and the Olympian Approach, heat bands, embers and ash at the Tartarus Rim, mist and drips in the Leaking Heights, and twinkling stars and meteors on the Skyward Escarpment. On WebGL, a post pipeline (the kiln) runs over the whole scene. It distorts first: heavy blows send a shockwave ring through the picture, heat haze rises over the Tartarus pit, and painted sea swells and glitters. Then it lights: a bloom pass on what is truly bright, and light scattered from each hill's painted sun, so hills, temples and trees cut shafts out of it. Last it finishes: a per-hill split-tone grade with a soft shoulder, a brief flash on the hit frame and at the summit, the fine grain of the slip, faint crazing fixed to the world, and a darkened rim like the foot of a pot. Sisyphus, the stone, the shade and the wheel are rim-lit on the edges that face the hill's light and shaded on the far side. Hills blend their looks as the player moves between them. Particles are capped at 360.
+Heavy moments lean the camera a few percent toward the blow and shake it with a smooth tremor rather than per-frame noise. Earned obols arc from the payout to the purse, which knocks and brightens as each lands, with a soft metallic tink. The interface moves in the same register: dialogs are set down like tablets, drawer rows rise in turn, a buy button glazes over with light when it comes within reach and stamps the row gold when used, bars carry a travelling glint, and changing hills passes a chapter card across the scene. Cutscenes share the fired finish (grain and a darkened rim), busts breathe, and dust rises through the painting.
+Setting Effects to Off turns off particles, air, the kiln and the coin flights together. Reduced motion keeps the still light, grade and rim light but drops all moving particles, shockwaves, haze, sea motion and flashes. None of it changes timing or rewards.
 ## Sound and music
 Audio gives the loop weight without becoming exhausting. The push uses restrained stone scrape, cloth movement and a low exertion accent. The summit has a short two-note reward. The descent rolls faster, followed by a pottery or bronze impact appropriate to the target. Automation adds a soft mechanical pulse that can blend into the music.
 Use a small original musical palette inspired by plucked strings, reeds and frame percussion. It is an artistic interpretation rather than a claim of historically reconstructed Greek music. Three evolving ambient arrangements cover early labor, the underworld enterprise and the approach to Olympus. Each can loop without a conspicuous seam.
@@ -1038,7 +1092,7 @@ Use a sound concurrency limit: one foreground scrape, one rolling stone and one 
 Launch audio scope is approximately 20 reusable effect families with a few pitch variants, three music arrangements and no required voice acting. A future narrator is optional. Browser playback begins only after the first user interaction to respect platform audio behavior.
 ## Accessibility and comfort
 Space, mouse and touch all support the same manual effort. A toggle mode replaces holding. Rebinding is supported on desktop. No action demands rapid input, precise timing or hearing a cue. Buttons target at least 44 logical pixels, with larger touch controls where layout permits. The final device test verifies actual sizing rather than trusting a CSS label.
-Offer text scaling, high-contrast panels, reduced motion, screen-shake off, flash-free decree effects and an independent ambient-caption switch. Reduced motion keeps essential phase changes but removes camera sweeps and particle bursts. The game should not depend on repeated full-screen flashes.
+Offer text scaling, high-contrast panels, reduced motion, a rich-effects switch, screen-shake off, flash-free decree effects and an independent ambient-caption switch. Reduced motion keeps essential phase changes but removes camera sweeps and particle bursts. The game should not depend on repeated full-screen flashes.
 Controller navigation covers world selection, opening a drawer, moving between rows, purchasing, backing out and prestige confirmation. Screen-reader labels expose balances, selected operation, next goal and purchase effects. Do not announce every coin; announce a summarized change on request or at meaningful milestones.
 ## Asset acceptance
 Every delivered asset has an identifier, source file, export file, dimensions, pivot, license or creation provenance, and intended use. Sprite exports use transparent backgrounds, sufficient edge padding and a consistent scale. Do not deliver a generated screenshot as if it were a production sprite sheet.

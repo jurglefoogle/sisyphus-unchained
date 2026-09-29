@@ -25,7 +25,7 @@ import type { GameEvent, GameState, Options } from '../core/state';
 import { detectPlatform, type Platform } from '../platform/platform';
 import { CURRENT, PRE_RESET, backupKey, type SaveStore } from '../platform/storage';
 import { Telemetry } from './telemetry';
-import { buildView, type GameView } from './view';
+import { buildView, resolveGoal, type GameView } from './view';
 
 /** Foreground gaps longer than this (hidden tab, sleep) settle as an absence. */
 const LARGE_GAP_SECONDS = 5;
@@ -35,6 +35,8 @@ const AMBIENT_INTERVAL_MS = 90_000;
 const AMBIENT_REPEAT_WINDOW_MS = 10 * 60_000;
 /** Standing idle this long by hand (before the foreman) earns a remark. */
 const IDLE_BARK_MS = 60_000;
+/** Events that change durable progress and so save immediately. */
+const PERMANENT = new Set<GameEvent['type']>(['RelicGranted', 'AchievementUnlocked', 'DecreeAvailable', 'PreludeCompleted', 'FeatureUnlocked']);
 
 export interface Notice {
   kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast' | 'achievement';
@@ -141,7 +143,9 @@ export class Game {
     } else {
       this.state = newGame(Date.now());
     }
-    this.settleAbsence(Date.now(), true);
+    const sessionStarted = Date.now();
+    const returnSeconds = Math.max(0, Math.round((sessionStarted - this.state.lastSettledUtc) / 1000));
+    this.settleAbsence(sessionStarted, true);
     this.reconcile();
     this.lastFrame = performance.now();
     this.lastAmbient = Date.now();
@@ -149,7 +153,7 @@ export class Game {
     this.dirty = true;
     await this.save();
     this.viewTimer = setInterval(() => this.publishView(), 100);
-    this.telemetry.record(this.state, 'session_start');
+    this.telemetry.record(this.state, 'session_start', { detail: returnSeconds });
     // Store fronts may have missed unlocks earned offline or on another device.
     for (const id of this.state.discoveries.achievementIds) this.platform.unlockAchievement(id);
     this.platform.onQuit(() => {
@@ -232,6 +236,9 @@ export class Game {
       if (e.type === 'PreludeCompleted') {
         this.notify({ kind: 'toast', text: `${t('prelude.offering')}: +${formatMoney(e.offering)} Obols` });
       }
+      if (e.type === 'FallResolved' && !this.state.prelude.complete) {
+        this.notify({ kind: 'toast', text: `The fall paid +${formatMoney(e.amount)} Obol${e.amount.eq(1) ? '' : 's'}. Improve your grip and the next attempt reaches higher.` });
+      }
       if (e.type === 'FeatureUnlocked') this.notify({ kind: 'toast', text: t(`unlock.${e.feature}`) });
     }
     for (const fn of this.listeners) fn(events);
@@ -283,6 +290,8 @@ export class Game {
       this.emit(events);
       this.react(events, utc);
       this.checkIdle(utc);
+      // Permanent grants save at once rather than waiting for the autosave (spec §02, §05).
+      if (events.some((e) => PERMANENT.has(e.type))) void this.save();
     }
 
     this.tickAmbient(utc);
@@ -297,12 +306,17 @@ export class Game {
 
   private run(fn: (events: GameEvent[]) => CommandResult, saveAfter = true): CommandResult {
     this.settleNow();
+    const pinnedBefore = this.state.pinnedGoal;
+    const pinnedWasActive = !!pinnedBefore && !resolveGoal(this.state, pinnedBefore).stale;
     const events: GameEvent[] = [];
     const result = fn(events);
     if (result.ok) {
       this.dirty = true;
       this.emit(events);
       this.react(events, Date.now());
+      if (pinnedBefore && pinnedWasActive && resolveGoal(this.state, pinnedBefore).stale) {
+        this.telemetry.record(this.state, 'goal_completed', { detail: pinnedBefore });
+      }
       this.publishView();
       if (saveAfter) void this.save();
     }
@@ -407,7 +421,9 @@ export class Game {
 
   /** Pin one purchase as the goal (null unpins). Changes only the objective line. */
   pinGoal(key: string | null): void {
+    const previous = this.state.pinnedGoal;
     this.state.pinnedGoal = key;
+    this.telemetry.record(this.state, key ? (previous ? 'goal_replaced' : 'goal_set') : 'goal_cleared', { detail: key ?? previous ?? '' });
     this.dirty = true;
     this.publishView();
     void this.save();
@@ -440,7 +456,8 @@ export class Game {
     this.dirty = true;
     this.publishView();
     void this.save();
-    if (paused) this.bark(barks.pause, Date.now(), 1, 20_000);
+    // Pausing always gets a remark (spec §03).
+    if (paused) this.bark(barks.pause, Date.now(), 1, 0);
   }
 
   setOption<K extends keyof Options>(key: K, value: Options[K]): void {

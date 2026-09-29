@@ -1,16 +1,17 @@
-import type { Graphics } from 'pixi.js';
+import { Container, Graphics, Sprite } from 'pixi.js';
+import type { SpriteLayer } from './glow';
 import { HILL, PULLEY, UP_NORMAL, type Vec } from './geometry';
 import { POTTERY } from './palette';
+import { DUST_R, dustTextures, obolScale, obolTexture, plankTexture, postAnchor, postTexture, sheaveLight, sheaveTexture } from './painted';
 
 /**
- * Renderer-drawn machinery. The delivered install frames read as a gallows
- * and a door at game scale, so the milestone structures are drawn here on the
- * route geometry: a timber rope guide along the route (level 10), bronze
- * bracing (level 25) and a running belt with a capstan (level 50). Also the
- * summit pulley and hauling rope.
+ * Renderer-built machinery. The delivered install frames read as a gallows
+ * and a door at game scale, so the milestone structures are built here on the
+ * route geometry from painted timber and cast bronze (see painted.ts): a rope
+ * guide along the route (level 10), bronze bracing (level 25) and a running
+ * belt (level 50). Also the summit pulley and the hauling rope.
  */
 const INK = POTTERY.ink;
-const WOOD = 0xc4935a;
 const WOOD_DARK = 0x8a5a33;
 const BRONZE = POTTERY.bronze;
 const BRONZE_LIT = 0xd7b066;
@@ -27,24 +28,33 @@ const path = (u: number, h: number): Vec => {
   return { x: a.x + (b.x - a.x) * u + UP_NORMAL.x * h, y: a.y + (b.y - a.y) * u + UP_NORMAL.y * h };
 };
 
-function plank(g: Graphics, a: Vec, b: Vec, w: number, fill: number) {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const l = Math.hypot(dx, dy) || 1;
-  const nx = (-dy / l) * (w / 2);
-  const ny = (dx / l) * (w / 2);
-  g.poly([a.x + nx, a.y + ny, b.x + nx, b.y + ny, b.x - nx, b.y - ny, a.x - nx, a.y - ny]).fill(fill).stroke({ width: 2, color: INK, join: 'round' });
+/** A painted plank from `a` to `b`, `w` units thick. */
+function plank(a: Vec, b: Vec, w: number, stained: boolean): Sprite {
+  const s = new Sprite(plankTexture(stained));
+  s.anchor.set(0, 0.5);
+  s.position.set(a.x, a.y);
+  s.rotation = Math.atan2(b.y - a.y, b.x - a.x);
+  s.width = Math.hypot(b.x - a.x, b.y - a.y);
+  s.height = (w * 8) / 6;
+  return s;
 }
 
-function roller(g: Graphics, c: Vec, r: number, bronze: boolean, spin: number) {
-  g.circle(c.x, c.y, r).fill(bronze ? BRONZE : WOOD).stroke({ width: 2.2, color: INK });
-  for (let k = 0; k < 3; k++) {
-    const a = spin + (k * Math.PI) / 3;
-    g.moveTo(c.x - Math.cos(a) * r * 0.8, c.y - Math.sin(a) * r * 0.8)
-      .lineTo(c.x + Math.cos(a) * r * 0.8, c.y + Math.sin(a) * r * 0.8)
-      .stroke({ width: 1.4, color: INK, alpha: 0.8 });
+/** A bronze sheave that turns under a fixed light. */
+class Sheave extends Container {
+  private wheel: Sprite;
+
+  constructor(r: number) {
+    super();
+    this.wheel = new Sprite(sheaveTexture(r));
+    this.wheel.anchor.set(0.5);
+    const light = new Sprite(sheaveLight(r));
+    light.anchor.set(0.5);
+    this.addChild(this.wheel, light);
   }
-  g.circle(c.x, c.y, r * 0.3).fill(INK);
+
+  set turn(a: number) {
+    this.wheel.rotation = a;
+  }
 }
 
 /**
@@ -52,105 +62,171 @@ function roller(g: Graphics, c: Vec, r: number, bronze: boolean, spin: number) {
  * 2 bronze-braced, 3 with a running belt). `clock` drives the rollers and
  * belt; it only advances while the stone is hauled.
  */
-export function drawInstalls(g: Graphics, tier: number, clock: number): void {
-  g.clear();
-  if (tier <= 0) return;
-  const bronze = tier >= 2;
-  const postFill = bronze ? WOOD_DARK : WOOD;
-  // Posts, planted behind the path on the hill shoulder.
-  for (const u of POSTS) {
-    const foot = path(u, 2);
-    const top = path(u, RAIL_H + 10);
-    const base = { x: foot.x, y: foot.y };
-    // Posts stand plumb: the head sits straight above the foot.
-    const head = { x: base.x, y: top.y };
-    plank(g, base, head, 9, postFill);
-    if (bronze) {
-      // Diagonal braces and bronze collars.
-      const brace = { x: base.x + 30, y: base.y - 16 };
-      plank(g, brace, { x: head.x, y: head.y + 50 }, 5, postFill);
-      for (const t of [0.25, 0.6]) {
-        const y = base.y + (head.y - base.y) * t;
-        g.rect(base.x - 7, y - 3, 14, 6).fill(BRONZE).stroke({ width: 1.6, color: INK });
+export class Installs extends Container {
+  private tier = -1;
+  private frame = new Container();
+  private rollers: Sheave[] = [];
+  private ends: Sheave[] = [];
+  private belt = new Graphics();
+
+  constructor() {
+    super();
+    this.addChild(this.frame, this.belt);
+  }
+
+  draw(tier: number, clock: number): void {
+    if (tier !== this.tier) this.build(tier);
+    for (const r of this.rollers) r.turn = clock * 3;
+    for (const r of this.ends) r.turn = clock * 4;
+    this.belt.clear();
+    if (tier >= 3) drawBelt(this.belt, clock);
+  }
+
+  private build(tier: number): void {
+    this.tier = tier;
+    for (const child of this.frame.removeChildren()) child.destroy({ children: true });
+    this.rollers = [];
+    this.ends = [];
+    if (tier <= 0) return;
+    const bronze = tier >= 2;
+    // Posts, planted behind the path on the hill shoulder, stand plumb.
+    for (const u of POSTS) {
+      const base = path(u, 2);
+      const head = { x: base.x, y: path(u, RAIL_H + 10).y };
+      if (bronze) this.frame.addChild(plank({ x: base.x + 30, y: base.y - 16 }, { x: head.x, y: head.y + 50 }, 5, true));
+      const h = base.y - head.y;
+      const post = new Sprite(postTexture(h, bronze));
+      const anchor = postAnchor(h);
+      post.anchor.set(anchor.x, anchor.y);
+      post.position.set(base.x, base.y);
+      this.frame.addChild(post);
+    }
+    // Rollers on each post that carry the hauling rope.
+    for (const u of POSTS) {
+      const r = new Sheave(8.5);
+      r.position.set(path(u, 2).x, path(u, RAIL_H + 12).y);
+      this.rollers.push(r);
+      this.frame.addChild(r);
+    }
+    if (tier >= 3) {
+      for (const u of [RAIL_FROM, RAIL_TO]) {
+        const c = path(u, (BELT_LO + BELT_HI) / 2);
+        const r = new Sheave(9);
+        r.position.set(c.x, c.y);
+        this.ends.push(r);
+        this.addChild(r);
       }
     }
   }
-  // Rollers on each post that carry the hauling rope.
-  for (const u of POSTS) {
-    const c = path(u, RAIL_H + 12);
-    c.x = path(u, 2).x;
-    roller(g, c, 8.5, bronze, clock * 3);
+}
+
+const BELT_LO = RAIL_H + 22;
+const BELT_HI = RAIL_H + 34;
+
+/** Belt: an endless leather loop over the rail with cleats that march uphill. */
+function drawBelt(g: Graphics, clock: number): void {
+  const b0 = path(RAIL_FROM, BELT_LO);
+  const b1 = path(RAIL_TO, BELT_LO);
+  const c0 = path(RAIL_FROM, BELT_HI);
+  const c1 = path(RAIL_TO, BELT_HI);
+  for (const [a, b] of [
+    [b0, b1],
+    [c0, c1],
+  ] as const) {
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 4.2, color: INK });
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2.4, color: 0x5a3519 });
+    g.moveTo(a.x - 0.4, a.y - 0.8).lineTo(b.x - 0.4, b.y - 0.8).stroke({ width: 0.8, color: 0xb98555, alpha: 0.8 });
   }
-  if (tier >= 3) {
-    // Belt: an endless loop over the rail with cleats that march uphill.
-    const lo = RAIL_H + 22;
-    const hi = RAIL_H + 34;
-    const b0 = path(RAIL_FROM, lo);
-    const b1 = path(RAIL_TO, lo);
-    const c0 = path(RAIL_FROM, hi);
-    const c1 = path(RAIL_TO, hi);
-    g.moveTo(b0.x, b0.y).lineTo(b1.x, b1.y).stroke({ width: 3, color: INK });
-    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 3, color: INK });
-    const len = Math.hypot(b1.x - b0.x, b1.y - b0.y);
-    const gap = 26;
-    const off = (clock * 60) % gap;
-    for (let d = off; d < len; d += gap) {
-      const t = d / len;
-      const p = { x: b0.x + (b1.x - b0.x) * t, y: b0.y + (b1.y - b0.y) * t };
-      const q = { x: c0.x + (c1.x - c0.x) * (1 - t), y: c0.y + (c1.y - c0.y) * (1 - t) };
-      g.moveTo(p.x, p.y).lineTo(p.x + UP_NORMAL.x * 5, p.y + UP_NORMAL.y * 5).stroke({ width: 3, color: BRONZE });
-      g.moveTo(q.x, q.y).lineTo(q.x - UP_NORMAL.x * 5, q.y - UP_NORMAL.y * 5).stroke({ width: 3, color: BRONZE });
-    }
-    // End wheels.
-    for (const u of [RAIL_FROM, RAIL_TO]) {
-      const c = path(u, (lo + hi) / 2);
-      roller(g, c, 9, true, clock * 4);
+  const len = Math.hypot(b1.x - b0.x, b1.y - b0.y);
+  const gap = 26;
+  const off = (clock * 60) % gap;
+  for (let d = off; d < len; d += gap) {
+    const t = d / len;
+    const p = { x: b0.x + (b1.x - b0.x) * t, y: b0.y + (b1.y - b0.y) * t };
+    const q = { x: c0.x + (c1.x - c0.x) * (1 - t), y: c0.y + (c1.y - c0.y) * (1 - t) };
+    for (const [o, dir] of [
+      [p, 1],
+      [q, -1],
+    ] as const) {
+      const e = { x: o.x + UP_NORMAL.x * 5 * dir, y: o.y + UP_NORMAL.y * 5 * dir };
+      g.moveTo(o.x, o.y).lineTo(e.x, e.y).stroke({ width: 4, color: INK, cap: 'round' });
+      g.moveTo(o.x, o.y).lineTo(e.x, e.y).stroke({ width: 2.4, color: BRONZE, cap: 'round' });
+      g.circle(e.x - 0.4, e.y - 0.5, 0.8).fill({ color: BRONZE_LIT });
     }
   }
 }
 
-/** The summit A-frame and its sheave. `spin` turns the sheave while hauling. */
-export function drawPulley(g: Graphics, spin: number): void {
-  const foot = HILL.summitRight.y + 4;
-  const spread = 26;
-  plank(g, { x: PULLEY.x - spread, y: foot }, { x: PULLEY.x, y: PULLEY.y - 4 }, 8, WOOD_DARK);
-  plank(g, { x: PULLEY.x + spread, y: foot }, { x: PULLEY.x, y: PULLEY.y - 4 }, 8, WOOD_DARK);
-  plank(g, { x: PULLEY.x - spread * 0.6, y: foot - 28 }, { x: PULLEY.x + spread * 0.6, y: foot - 28 }, 5, WOOD);
-  g.circle(PULLEY.x, PULLEY.y, 14).fill(BRONZE).stroke({ width: 2.6, color: INK });
-  g.circle(PULLEY.x, PULLEY.y, 9).stroke({ width: 1.4, color: INK, alpha: 0.8 });
-  for (let k = 0; k < 4; k++) {
-    const a = spin + (k * Math.PI) / 2;
-    g.moveTo(PULLEY.x, PULLEY.y)
-      .lineTo(PULLEY.x + Math.cos(a) * 9, PULLEY.y + Math.sin(a) * 9)
-      .stroke({ width: 2, color: INK });
+/** The summit A-frame of stained timber and its bronze sheave. */
+export class SummitPulley extends Container {
+  private sheave = new Sheave(14);
+
+  constructor() {
+    super();
+    const foot = HILL.summitRight.y + 4;
+    const spread = 26;
+    const top = { x: PULLEY.x, y: PULLEY.y - 4 };
+    this.addChild(
+      plank({ x: PULLEY.x - spread * 0.6, y: foot - 28 }, { x: PULLEY.x + spread * 0.6, y: foot - 28 }, 5, false),
+      plank({ x: PULLEY.x - spread, y: foot }, top, 8, true),
+      plank({ x: PULLEY.x + spread, y: foot }, top, 8, true),
+    );
+    this.sheave.position.set(PULLEY.x, PULLEY.y);
+    this.addChild(this.sheave);
   }
-  g.circle(PULLEY.x, PULLEY.y, 3.5).fill(BRONZE_LIT).stroke({ width: 1.2, color: INK });
+
+  set spin(a: number) {
+    this.sheave.turn = a;
+  }
 }
 
 /** A twisted rope along `pts`; `crawl` slides the twist so it reads as moving. */
-export function drawRope(g: Graphics, pts: Vec[], crawl: number): void {
+export function drawRope(g: Graphics, pts: Vec[], crawl: number, sag = 0, hum = 0, time = 0): void {
   if (pts.length < 2) return;
-  g.moveTo(pts[0].x, pts[0].y);
-  for (const p of pts.slice(1)) g.lineTo(p.x, p.y);
-  g.stroke({ width: 5.5, color: INK, cap: 'round', join: 'round' });
-  g.moveTo(pts[0].x, pts[0].y);
-  for (const p of pts.slice(1)) g.lineTo(p.x, p.y);
-  g.stroke({ width: 3, color: POTTERY.rope, cap: 'round', join: 'round' });
-  const step = 7;
+  // Each span hangs in a shallow curve (`sag` of its length) and, under
+  // load, hums with a small travelling tremor.
+  const line: Vec[] = [pts[0]];
   for (let i = 1; i < pts.length; i++) {
     const a = pts[i - 1];
     const b = pts[i];
     const l = Math.hypot(b.x - a.x, b.y - a.y);
-    if (l < 1) continue;
+    const n = sag > 0 || hum > 0 ? Math.max(2, Math.ceil(l / 24)) : 1;
+    for (let k = 1; k <= n; k++) {
+      const t = k / n;
+      const drop = sag * l * 4 * t * (1 - t) + hum * Math.sin(t * Math.PI * 3 - time * 38 + i) * Math.sin(t * Math.PI);
+      line.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t + drop });
+    }
+  }
+  const trace = (dx = 0, dy = 0) => {
+    g.moveTo(line[0].x + dx, line[0].y + dy);
+    for (const p of line.slice(1)) g.lineTo(p.x + dx, p.y + dy);
+  };
+  trace();
+  g.stroke({ width: 5.5, color: INK, cap: 'round', join: 'round' });
+  trace();
+  g.stroke({ width: 3, color: POTTERY.rope, cap: 'round', join: 'round' });
+  trace(-0.5, -0.8);
+  g.stroke({ width: 0.9, color: POTTERY.ivory, alpha: 0.55, cap: 'round', join: 'round' });
+  // The lay of the rope, crawling as it runs.
+  const step = 7;
+  let run = 0;
+  let next = ((crawl % step) + step) % step;
+  for (let i = 1; i < line.length; i++) {
+    const a = line[i - 1];
+    const b = line[i];
+    const l = Math.hypot(b.x - a.x, b.y - a.y);
+    if (l < 0.01) continue;
     const ux = (b.x - a.x) / l;
     const uy = (b.y - a.y) / l;
-    for (let d = ((crawl % step) + step) % step; d < l; d += step) {
+    while (next < run + l) {
+      const d = next - run;
       const x = a.x + ux * d;
       const y = a.y + uy * d;
       g.moveTo(x - uy * 1.4 - ux * 1.5, y + ux * 1.4 - uy * 1.5)
         .lineTo(x + uy * 1.4 + ux * 1.5, y - ux * 1.4 + uy * 1.5)
         .stroke({ width: 1, color: WOOD_DARK, alpha: 0.9 });
+      next += step;
     }
+    run += l;
   }
 }
 
@@ -201,26 +277,18 @@ export function drawBird(g: Graphics, x: number, y: number, s: number, flap: num
     .stroke({ width: 2.2 * s, color: INK, alpha: 0.8, cap: 'round', join: 'round' });
 }
 
-/** A dust puff in the pottery style: pale clay lobes with an ink outline. */
-export function drawPuff(g: Graphics, x: number, y: number, r: number, alpha: number, seed: number): void {
-  const lobes = [
-    [0, 0, 1],
-    [-0.7, 0.2, 0.7],
-    [0.7, 0.25, 0.65],
-  ] as const;
-  for (const [dx, dy, k] of lobes) {
-    g.circle(x + dx * r, y + dy * r, r * k).stroke({ width: 2.2, color: INK, alpha: alpha * 0.55 });
-  }
-  for (const [dx, dy, k] of lobes) g.circle(x + dx * r, y + dy * r, r * k).fill({ color: POTTERY.paleClay, alpha });
-  // A small incised swirl on the largest lobe.
-  const a0 = seed * 6;
-  g.arc(x, y, r * 0.45, a0, a0 + 2.4).stroke({ width: 1.3, color: INK, alpha: alpha * 0.4, cap: 'round' });
+/** A painted billow of dust, `r` units in radius, tinted pale clay. */
+export function drawPuff(layer: SpriteLayer, x: number, y: number, r: number, alpha: number, seed: number): void {
+  const textures = dustTextures();
+  const tex = textures[Math.floor(seed * textures.length) % textures.length];
+  const w = r * (100 / DUST_R) * 0.95;
+  layer.put(tex, x, y, w, w * 0.85, seed * 6, alpha, POTTERY.paleClay);
 }
 
-/** A gold obol, for float text. */
-export function drawCoin(g: Graphics, x: number, y: number, r: number): void {
-  g.circle(x, y + 2, r).fill(INK);
-  g.circle(x, y, r).fill(0xd8b25a).stroke({ width: 2.4, color: INK });
-  g.circle(x, y, r * 0.62).stroke({ width: 1.6, color: 0x9c7428 });
-  g.moveTo(x - r * 0.35, y - r * 0.5).quadraticCurveTo(x - r * 0.7, y, x - r * 0.3, y + r * 0.45).stroke({ width: 1.6, color: POTTERY.ivory, alpha: 0.7, cap: 'round' });
+/** A struck gold obol, `r` units in radius, for float text. */
+export function coinSprite(r: number): Sprite {
+  const coin = new Sprite(obolTexture('face'));
+  coin.anchor.set(0.5);
+  coin.scale.set(obolScale(r));
+  return coin;
 }

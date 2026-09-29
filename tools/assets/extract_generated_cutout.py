@@ -42,7 +42,19 @@ def extract(source: Path, output: Path) -> None:
         if count < 2:
             raise RuntimeError("No foreground component found")
         largest = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
-        solid = (labels == largest).astype(np.uint8)
+        largest_area = stats[largest, cv2.CC_STAT_AREA]
+        if source_image.width >= source_image.height * 2:
+            # Animation strips contain one disconnected figure per cell. Keep
+            # every figure-sized component while still rejecting isolated
+            # checkerboard cells and compression flecks.
+            keep = [
+                index
+                for index in range(1, count)
+                if stats[index, cv2.CC_STAT_AREA] >= largest_area * 0.22
+            ]
+            solid = np.isin(labels, keep).astype(np.uint8)
+        else:
+            solid = (labels == largest).astype(np.uint8)
 
         # Recover tiny antialiased edge pixels adjacent to the main silhouette
         # while leaving the open spaces between limbs and fingers transparent.

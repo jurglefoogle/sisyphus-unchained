@@ -2,36 +2,20 @@
   import type { Game } from '../app/game';
   import type { GameView, PurchaseRow } from '../app/view';
   import { iconUrl, imageUrl } from '../world/library';
+  import { act, price, still } from './purchase';
 
   let { game, view, onprestige }: { game: Game; view: GameView; onprestige: () => void } = $props();
 
-  /** Prices are Obols unless they name Insight. */
-  function price(cost: string): { icon: string; amount: string } {
-    return cost.endsWith(' Insight') ? { icon: 'ui_insight', amount: cost.slice(0, -' Insight'.length) } : { icon: 'ui_obols', amount: cost };
-  }
-
-  function act(row: PurchaseRow, count = 1) {
-    const a = row.action;
-    // One request per offer as displayed: a double click on the same offer buys once.
-    const id = `${view.revision}:${view.site.id}:${row.key}:${count}`;
-    switch (a.kind) {
-      case 'levels':
-        return game.buyLevels(a.track, count, id);
-      case 'flywheel':
-        return game.buyFlywheel(id);
-      case 'foreman':
-        return game.hireForeman(id);
-      case 'work':
-        return game.buyWork(a.workId, id);
-      case 'site':
-        return game.openSite(a.siteId, id);
-      case 'upgrade':
-        return game.buyUpgrade(a.upgradeId, id);
-      case 'prelude':
-        return game.buyPreludeUpgrade(a.upgradeId, id);
-      case 'prestige':
-        return onprestige();
-    }
+  /** Buy, and if it went through, stamp the row: warm light in the fibres and a press of the seal. */
+  function buy(e: MouseEvent, row: PurchaseRow, count = 1) {
+    const btn = e.currentTarget as HTMLElement;
+    const r = act(game, view, row, count, onprestige);
+    if (!r || !r.ok || still()) return;
+    btn.animate([{ transform: 'scale(0.93)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }], { duration: 280, easing: 'ease-out' });
+    btn.closest('.row')?.animate(
+      [{ offset: 0, backgroundColor: 'rgba(255, 226, 150, 0.55)' }, { backgroundColor: 'rgba(255, 226, 150, 0)' }],
+      { duration: 800, easing: 'ease-out' },
+    );
   }
 </script>
 
@@ -65,8 +49,8 @@
   {/if}
 
   <ul>
-    {#each view.rows as row (row.key)}
-      <li class="row" class:affordable={row.affordable && !row.disabled} class:pinned={row.pinned} data-accent={row.accent ?? 'plain'}>
+    {#each view.rows as row, i (row.key)}
+      <li style:--i={i} class="row" class:affordable={row.affordable && !row.disabled} class:pinned={row.pinned} data-accent={row.accent ?? 'plain'}>
         <div class="row-head">
           {#if row.icon}<img class="row-icon" class:art={row.icon.startsWith('work_')} src={imageUrl(row.icon)} alt="" />{/if}
           <strong>{row.title}</strong>
@@ -95,12 +79,12 @@
             {#if row.options}
               {#each row.options as opt (opt.label)}
                 {@const p = price(opt.cost)}
-                <button disabled={!opt.affordable} onclick={() => act(row, opt.count)} aria-label="{row.title}: {opt.label} for {opt.cost} Obols">
+                <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label} for {opt.cost} Obols">
                   <span>{opt.label}</span><small class="cost"><img src={iconUrl(p.icon)} alt="" />{p.amount}</small>
                 </button>
               {/each}
             {:else}
-              <button disabled={!row.affordable} onclick={() => act(row)} aria-label="{row.title}{row.cost ? ` for ${row.cost}` : ''}">
+              <button disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost}` : ''}">
                 <span>{row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : 'Buy'}</span>
                 {#if row.cost}{@const p = price(row.cost)}<small class="cost"><img src={iconUrl(p.icon)} alt="" />{p.amount}</small>{/if}
               </button>
@@ -111,6 +95,13 @@
       </li>
     {/each}
   </ul>
+
+  {#if view.relicHunt}
+    <section class="relic-hunt">
+      <h3>Something in the debris</h3>
+      <p><img src={iconUrl('ui_lock')} alt="" /><span><strong>Undiscovered relic</strong><small>{view.relicHunt.site} · permanent income ×1.1</small><small>{view.relicHunt.chance} · {view.relicHunt.guarantee}</small></span></p>
+    </section>
+  {/if}
 
   {#if view.relics.length}
     <section class="relics">
@@ -124,24 +115,26 @@
 
 <style>
   .drawer-body {
-    padding: 1rem 1rem 1.5rem;
+    padding: 0.4rem 1.5rem 1.5rem 1.7rem;
+    color: #2a1d12;
   }
   h2 {
     margin: 0;
     font-family: var(--display);
     font-weight: 600;
-    font-size: 1.45rem;
+    font-size: 1.55rem;
     letter-spacing: 0.02em;
+    color: #231710;
   }
   h3 {
-    margin: 1.2rem 0 0.4rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
+    margin: 1.3rem 0 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(58, 38, 20, 0.72);
   }
   .muted {
-    color: var(--muted);
+    color: rgba(58, 38, 20, 0.74);
     margin: 0.15rem 0 0.4rem;
     font-size: 0.9rem;
   }
@@ -152,71 +145,81 @@
   ul {
     list-style: none;
     padding: 0;
-    margin: 0.9rem 0 0;
+    margin: 0.6rem 0 0;
     display: grid;
-    gap: 0.6rem;
   }
+  /* Entries written down the sheet, each marked in the margin with a paragraphos. */
   .row {
-    border: 0;
-    border-left: 4px solid var(--rule);
-    border-radius: 0;
-    padding: 0.8rem 0.85rem;
-    background: rgba(255, 252, 245, 0.48);
-    box-shadow: inset 0 -1px var(--rule);
+    position: relative;
+    padding: 0.85rem 0.3rem 0.9rem 0.2rem;
+    background-image: linear-gradient(90deg, transparent, rgba(92, 60, 26, 0.28) 8%, rgba(92, 60, 26, 0.22) 60%, transparent);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-color 300ms ease;
+    --mark: rgba(58, 38, 20, 0.45);
   }
+  .row::before {
+    content: '';
+    position: absolute;
+    left: -1.05rem;
+    top: 1.25rem;
+    width: 0.75rem;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--mark);
+    transform: rotate(-4deg);
+  }
+  .row[data-accent='machine'] { --mark: var(--bronze); }
+  .row[data-accent='work'] { --mark: var(--clay); }
+  .row[data-accent='decree'] { --mark: #1c130c; }
+  .row[data-accent='grip'] { --mark: #b27a4c; }
+  .row[data-accent='insight'] { --mark: #6b4f8a; }
+  /* Within reach: the ink is fresh and the fibres warm around it. */
   .row.affordable {
-    background: #fff7e8;
-    box-shadow: inset 0 0 0 1px var(--bronze);
+    background-color: rgba(255, 240, 200, 0.22);
+    box-shadow: inset 0 0 18px rgba(255, 236, 190, 0.45);
   }
-  .row[data-accent='machine'] {
-    border-left-color: var(--bronze);
+  .row:not(.affordable) .effect { color: rgba(42, 29, 18, 0.78); }
+  .row.pinned::after {
+    content: '';
+    position: absolute;
+    inset: 0.3rem -0.4rem 0.3rem -0.5rem;
+    border: 1px solid rgba(149, 68, 33, 0.55);
+    border-radius: 2px;
+    pointer-events: none;
   }
-  .row[data-accent='work'] {
-    border-left-color: var(--clay);
-  }
-  .row[data-accent='decree'] {
-    border-left-color: var(--ink);
-  }
-  .row[data-accent='grip'] {
-    border-left-color: var(--pale-clay);
-  }
-  .row[data-accent='insight'] {
-    border-left-color: #6b4f8a;
-  }
-  .row.pinned {
-    box-shadow: inset 0 0 0 2px var(--clay);
-  }
-  .row.pinned.affordable {
-    background: #fff6e2;
-  }
+  /* Pins are drops of wax: a faint ring until pressed, then sealed. */
   .pin {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     margin: -6px -4px -6px 0;
     padding: 0;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    border: 1px solid var(--rule);
+    border: 1px solid rgba(92, 60, 26, 0.35);
     background: transparent;
+    box-shadow: none;
     flex: none;
   }
   .pin svg {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
     fill: none;
-    stroke: var(--muted);
+    stroke: rgba(58, 38, 20, 0.7);
     stroke-width: 1.8;
     stroke-linejoin: round;
     stroke-linecap: round;
   }
   .pin[aria-pressed='true'] {
-    background: var(--clay);
-    border-color: var(--clay);
+    border-color: #6e1f10;
+    background: radial-gradient(circle at 36% 30%, #e08466 0%, #b23e24 38%, #83240f 72%, #5a150a 100%);
+    box-shadow: inset 0 -2px 3px rgba(40, 8, 2, 0.45), 0 1px 2px rgba(40, 20, 8, 0.4);
   }
   .pin[aria-pressed='true'] svg {
-    stroke: var(--ivory);
-    fill: var(--ivory);
+    stroke: #f6dccb;
+    fill: #f6dccb;
   }
   .stale-goal {
     margin-top: 0.8rem;
@@ -225,8 +228,7 @@
     gap: 0.6rem;
     font-size: 0.88rem;
     padding: 0.5rem 0.7rem;
-    border: 1px dashed var(--rule);
-    border-radius: var(--radius);
+    border: 1px dashed rgba(92, 60, 26, 0.45);
   }
   .stale-goal span { flex: 1; }
   .row-head {
@@ -237,23 +239,28 @@
   .row-head strong {
     flex: 1;
     font-family: var(--display);
-    font-size: 1.15rem;
+    font-size: 1.18rem;
     font-weight: 700;
     line-height: 1.15;
+    color: #1f140c;
   }
   .row-icon {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     flex: none;
+    opacity: 0.88;
+    mix-blend-mode: multiply;
   }
   .row-icon.art {
     width: 46px;
     height: 46px;
     object-fit: contain;
     margin: -6px 0;
+    opacity: 1;
+    mix-blend-mode: normal;
   }
   .level {
-    color: var(--muted);
+    color: rgba(58, 38, 20, 0.74);
     font-size: 0.85rem;
     font-variant-numeric: tabular-nums;
   }
@@ -268,6 +275,12 @@
     height: 40px;
     flex: none;
   }
+  .relic-hunt { margin-top: 1.1rem; border: 1px dashed rgba(92, 60, 26, 0.5); padding: 0.6rem 0.75rem; background: rgba(165, 123, 59, 0.08); }
+  .relic-hunt h3 { margin-top: 0; }
+  .relic-hunt p { display: flex; align-items: center; gap: 0.65rem; margin: 0; }
+  .relic-hunt img { width: 40px; height: 40px; opacity: 0.55; }
+  .relic-hunt span { display: grid; gap: 0.08rem; }
+  .relic-hunt small { color: rgba(58, 38, 20, 0.74); }
   .effect,
   .note,
   .wait {
@@ -277,7 +290,7 @@
   }
   .note,
   .wait {
-    color: var(--muted);
+    color: rgba(58, 38, 20, 0.74);
   }
   .wait {
     font-style: italic;
@@ -286,21 +299,51 @@
   .buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.5rem;
+    gap: 0.45rem;
+    margin-top: 0.55rem;
   }
+  /* Offers out of reach are only scored into the sheet. */
   .buttons button {
+    position: relative;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    min-height: 40px;
+    padding: 0 0.85rem;
     border-radius: 3px;
-    padding: 0 0.9rem;
     font-weight: 700;
-    background: transparent;
+    color: rgba(42, 29, 18, 0.6);
+    background: rgba(92, 60, 26, 0.05);
+    border: 1px solid rgba(92, 60, 26, 0.3);
+    box-shadow: none;
   }
+  /* Within reach they are pressed clay seals: a lit lip, a shaded foot and an ink edge. */
   .buttons button:not(:disabled) {
-    background: var(--clay);
-    color: var(--ivory);
+    color: #f7e9d6;
+    border-color: #3a170a;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255, 214, 170, 0.28), transparent 60%),
+      linear-gradient(180deg, #a44d27 0%, #8c3b1b 55%, #6c2a11 100%);
+    box-shadow: inset 0 1px rgba(255, 220, 180, 0.3), inset 0 -2px 3px rgba(40, 12, 2, 0.35), 0 2px 0 #2a150a, 0 3px 6px rgba(40, 20, 8, 0.25);
+    transform: translateY(-1px);
+  }
+  .buttons button:not(:disabled):active {
+    transform: translateY(1px);
+    box-shadow: inset 0 1px 3px rgba(33, 12, 4, 0.5), 0 0 0 #2a150a;
+  }
+  /* When an offer comes within reach, light runs once across the glaze. */
+  .buttons button:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 236, 200, 0.4) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: sheen 900ms ease-out 120ms 1 both;
+    pointer-events: none;
+  }
+  @keyframes sheen {
+    to { transform: translateX(120%); }
   }
   .cost {
     display: inline-flex;
@@ -315,20 +358,42 @@
     width: 1.05em;
     height: 1.05em;
   }
+  .buttons button:disabled .cost img {
+    opacity: 0.6;
+  }
   .buttons button:not(:disabled) .cost img {
     filter: invert(94%) sepia(8%) saturate(400%) hue-rotate(340deg);
   }
   .bar {
     height: 6px;
-    background: rgba(33, 27, 23, 0.14);
+    background: rgba(92, 60, 26, 0.14);
     border-radius: 3px;
     overflow: hidden;
     margin: 0.35rem 0;
+    box-shadow: inset 0 1px 2px rgba(58, 38, 20, 0.25);
   }
+  /* A bronze glaze with a highlight along its top, and a glint that travels it. */
   .bar span {
     display: block;
     height: 100%;
-    background: var(--bronze);
-    transition: width 0.4s ease;
+    border-radius: 3px;
+    background:
+      linear-gradient(180deg, rgba(255, 236, 196, 0.55), transparent 55%),
+      linear-gradient(90deg, #7c5626, var(--bronze) 70%, #c89c55);
+    transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .bar span::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 244, 214, 0.7), transparent);
+    width: 40%;
+    animation: glint 3.2s ease-in-out infinite;
+  }
+  @keyframes glint {
+    0% { transform: translateX(-120%); }
+    45%, 100% { transform: translateX(260%); }
   }
 </style>

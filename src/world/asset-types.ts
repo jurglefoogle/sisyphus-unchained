@@ -15,6 +15,8 @@ export interface AssetFrame {
   dimensions: number[];
   /** Normalized against the complete source canvas, including padding. */
   pivot: number[];
+  /** Pixel rectangle within a shared sprite sheet, when this frame is cropped. */
+  rect?: number[];
 }
 
 export interface AssetLayer {

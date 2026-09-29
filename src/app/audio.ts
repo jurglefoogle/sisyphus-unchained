@@ -161,6 +161,91 @@ export class Sound {
     });
   }
 
+  private noise: AudioBuffer | null = null;
+
+  /**
+   * The level stamp's chisel: a dry tock of iron on stone for each blow
+   * (weight 1), a deep thud as the slab lands (2), a soft set as the stamp
+   * joins the wall (0.5). Synthesised so rapid blows never sound identical.
+   */
+  chisel(weight: number): void {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state !== 'running' || this.volumes.effects <= 0) return;
+    const now = ctx.currentTime;
+    if (!this.noise) {
+      const len = Math.floor(ctx.sampleRate * 0.4);
+      this.noise = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = this.noise.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    }
+    const out = ctx.createGain();
+    out.connect(this.buses.effects!);
+    const heavy = weight >= 2;
+    const soft = weight < 1;
+    // Grit: filtered noise, bright for a blow, low for the slab.
+    const grit = ctx.createBufferSource();
+    grit.buffer = this.noise;
+    grit.playbackRate.value = 0.9 + Math.random() * 0.2;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.value = heavy ? 380 : soft ? 1200 : 2600 + Math.random() * 900;
+    band.Q.value = heavy ? 0.7 : 1.3;
+    const gg = ctx.createGain();
+    const decay = heavy ? 0.35 : soft ? 0.12 : 0.07;
+    gg.gain.setValueAtTime(0, now);
+    gg.gain.linearRampToValueAtTime(heavy ? 0.9 : soft ? 0.25 : 0.55, now + 0.003);
+    gg.gain.exponentialRampToValueAtTime(0.0001, now + decay);
+    grit.connect(band).connect(gg).connect(out);
+    grit.start(now);
+    grit.stop(now + decay + 0.02);
+    // Body: a short pitched knock (iron on stone) or the slab's boom.
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    const f = heavy ? 70 : soft ? 240 : 330 + Math.random() * 90;
+    o.frequency.setValueAtTime(f * 1.6, now);
+    o.frequency.exponentialRampToValueAtTime(f, now + 0.03);
+    const og = ctx.createGain();
+    const body = heavy ? 0.45 : soft ? 0.1 : 0.09;
+    og.gain.setValueAtTime(0, now);
+    og.gain.linearRampToValueAtTime(heavy ? 0.8 : 0.35, now + 0.004);
+    og.gain.exponentialRampToValueAtTime(0.0001, now + body);
+    o.connect(og).connect(out);
+    o.start(now);
+    o.stop(now + body + 0.02);
+  }
+
+  /**
+   * A coin dropping into the purse: a short bright tink, synthesised rather
+   * than sampled so rapid landings can each take a slightly different pitch.
+   */
+  tink(): void {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state !== 'running' || this.volumes.interface <= 0) return;
+    const now = ctx.currentTime;
+    if (now - (this.lastPlayed.get('tink') ?? -1) < 0.06) return;
+    this.lastPlayed.set('tink', now);
+    const f = 2300 + Math.random() * 700;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.09, now + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+    g.connect(this.buses.interface!);
+    // A struck metal disc: the fundamental and an inharmonic partial.
+    for (const [ratio, level] of [
+      [1, 1],
+      [2.76, 0.35],
+    ] as const) {
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = f * ratio;
+      const og = ctx.createGain();
+      og.gain.value = level;
+      o.connect(og).connect(g);
+      o.start(now);
+      o.stop(now + 0.25);
+    }
+  }
+
   /** Crossfade to a looping track (the 24 s loops wrap their note tails). */
   setMusic(id: string | null): void {
     this.wantedMusic = id;

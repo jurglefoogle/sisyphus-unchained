@@ -63,7 +63,7 @@ export const en: Record<string, string> = {
   'story.skyward_offer.god': 'I have held up the sky since the Titans lost. Your little rock is adorable.',
   'story.skyward_offer.sis': 'Respect. Also, every statue shows you holding a globe. Want me to sue somebody?',
   'story.olympus_offer.god': 'Enough. Your punishment will now be administered by Olympus. By me. Personally.',
-  'story.olympus_offer.sis': 'The CEO is doing QA himself. That’s how you know the product’s in trouble.',
+  'story.olympus_offer.sis': 'Zeus is inspecting the work himself. That’s how you know Olympus is worried.',
   'story.charter_purchase.god': 'Olympus will now pay you to punish yourself. I hate that this is the best option.',
   'story.charter_purchase.sis': 'One must imagine Sisyphus invoicing.',
   'story.first_prestige.god': 'Remember me? You chained me up. Nobody died until Ares got bored. Back to the bottom.',

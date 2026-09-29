@@ -7,6 +7,8 @@ import hashlib
 import json
 import math
 import re
+import numpy as np
+from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'public/assets/pottery-v1'
@@ -119,8 +121,8 @@ def build_contract(assets,emit_svg):
     def state(layers,duration=1,loop=False,note='',poster=0):
         return dict(status='available',duration=duration,loop=loop,reducedMotionTime=poster,layers=layers,notes=note)
     def put(asset,state_id,data):delivery.setdefault(asset,dict(states={},notes='In-game acceptance pending.'))['states'][state_id]=data
-    def blocked(asset,state_id,planned):
-        put(asset,state_id,dict(status='blocked-image-limit',duration=1,loop=False,reducedMotionTime=0,layers=[],plannedAssets=planned,notes='New character/stone raster artwork requires image generation. No unrelated pose substituted.'))
+    def blocked(asset,state_id,planned,status='blocked-image-limit',notes='New character/stone raster artwork requires image generation. No unrelated pose substituted.'):
+        put(asset,state_id,dict(status=status,duration=1,loop=False,reducedMotionTime=0,layers=[],plannedAssets=planned,notes=notes))
     def hold(asset):return state([layer(asset)])
     for asset in ('stone_limestone','stone_basalt','stone_marble','stone_bronze','stone_star','stone_decree'):put(asset,'texture',hold(asset))
     if 'sisyphus_push_recoil' in lookup:
@@ -133,8 +135,56 @@ def build_contract(assets,emit_svg):
     if 'sisyphus_rest' in lookup:
         put('sisyphus','rest',state([layer('sisyphus_rest')],note='Reviewed resting pose with transparent cutout; in-game scale acceptance pending.'))
     else:blocked('sisyphus','rest',['sisyphus_rest'])
-    for name,planned in [('strain_accent',['sisyphus_strain']),('summit_reaction',['sisyphus_summit']),('step_aside',['sisyphus_step_aside']),('walk',['sisyphus_walk_strip']),('slip_knockdown',['sisyphus_slip_strip']),('get_up',['sisyphus_get_up_strip'])]:blocked('sisyphus',name,planned)
-    delivery['sisyphus']['variants']={'feet_wrapped':dict(status='blocked-image-limit',states={},notes='Rag-wrapped feet artwork required for every character state after Wrap Your Feet. Existing barefoot images must not be relabeled.')}
+    def four_pose_strip(asset_id,baseline,render_height,loop,align_figures=False):
+        sheet=lookup[asset_id]
+        width,height=sheet['dimensions']
+        if width%4:raise ValueError('Sisyphus walk strip requires four equal-width cells')
+        cell=width//4
+        boxes=[]
+        if align_figures:
+            alpha=np.asarray(Image.open(ROOT/sheet['exportFile']).convert('RGBA').getchannel('A'))
+            occupied=np.any(alpha>=128,axis=0)
+            starts=np.flatnonzero(occupied & ~np.r_[False,occupied[:-1]])
+            ends=np.flatnonzero(occupied & ~np.r_[occupied[1:],False])+1
+            figures=[(int(a),int(b)) for a,b in zip(starts,ends) if b-a>=200]
+            if len(figures)!=4:raise ValueError(f'{asset_id}: expected four separated figures, found {figures}')
+            crop_width=500
+            for a,b in figures:
+                left=max(0,min(width-crop_width,round((a+b-crop_width)/2)))
+                if left>a-12 or left+crop_width<b+12:raise ValueError(f'{asset_id}: figure does not fit a registered crop')
+                boxes.append([left,0,crop_width,height])
+        else:boxes=[[i*cell,0,cell,height] for i in range(4)]
+        walk=[]
+        for i in range(4):
+            visible=[key(0,alpha=1 if i==0 else 0)]
+            for j in range(1,5):
+                t=j/4
+                visible.append(key(t-.0001,alpha=1 if i==j-1 else 0))
+                visible.append(key(t,alpha=1 if i==(j%4 if loop else min(j,3)) else 0))
+            crop=frame(asset_id)
+            crop['rect']=boxes[i]
+            crop['pivot']=[.5,baseline/height]
+            walk.append(dict(id=f'walk_{i}',frame=crop,size=[round(boxes[i][2]*render_height/height),render_height],keyframes=visible))
+        return state(walk,1,loop,'Four registered crops of the same painted character; '+('one frame per quarter stride.' if loop else 'four poses from the slip to the landing.'),poster=0 if loop else 1)
+    if 'sisyphus_walk_strip' in lookup:
+        put('sisyphus','walk',four_pose_strip('sisyphus_walk_strip',684,231,True,True))
+    else:blocked('sisyphus','walk',['sisyphus_walk_strip'])
+    if 'sisyphus_slip_strip' in lookup:
+        put('sisyphus','slip_knockdown',four_pose_strip('sisyphus_slip_strip',643,284,False))
+    else:blocked('sisyphus','slip_knockdown',['sisyphus_slip_strip'])
+    for name,planned in [('strain_accent',['sisyphus_strain']),('summit_reaction',['sisyphus_summit']),('step_aside',['sisyphus_step_aside']),('get_up',['sisyphus_get_up_strip'])]:blocked('sisyphus',name,planned)
+    wrapped_states={}
+    if 'sisyphus_rest_feet_wrapped' in lookup:
+        wrapped_states['rest']=hold('sisyphus_rest_feet_wrapped')
+    if all(asset in lookup for asset in ('sisyphus_push_feet_wrapped','sisyphus_push_recoil_feet_wrapped')):
+        wrapped_push=state([layer('sisyphus_push_feet_wrapped','push',push_keys),layer('sisyphus_push_recoil_feet_wrapped','recoil',recoil_keys,270)],1.2,True,'Wrapped-feet push and recovery poses.')
+        wrapped_states['push_loop']=wrapped_push
+        wrapped_states['manual_assist']=wrapped_push
+    if 'sisyphus_walk_strip_feet_wrapped' in lookup:
+        wrapped_states['walk']=four_pose_strip('sisyphus_walk_strip_feet_wrapped',644,262,True,True)
+    if 'sisyphus_slip_strip_feet_wrapped' in lookup:
+        wrapped_states['slip_knockdown']=four_pose_strip('sisyphus_slip_strip_feet_wrapped',576,345,False)
+    delivery['sisyphus']['variants']={'feet_wrapped':dict(status='partial',states=wrapped_states,notes='Wrapped feet delivered for rest, push, assist and walk; other transitions still use a rig fallback.')}
     put('shade_attendant','pull_loop',state([layer('shade_attendant',keys=[key(0),key(.65,x=-2,rotation=-.012),key(1.3)])],1.3,True,'Single-pose working motion; articulated arms pending.'))
     for name,planned in [('idle',['shade_idle']),('purchase_reaction',['shade_purchase_reaction']),('walk',['shade_walk_strip'])]:blocked('shade_attendant',name,planned)
     figure_bones=[
@@ -190,7 +240,19 @@ def build_contract(assets,emit_svg):
         for name,source in [('background',asset),('hill',asset+'_hill'),('foreground',asset+'_foreground')]:
             item=layer(source);item['size']=list(stage);item['frame']['pivot']=[0,0]
             put(asset,name,state([item],note='1600×900 stage layer; transparent hill/foreground follows geometry.ts.'))
-    report=dict(version=1,geometry=geometry,assets=delivery,coordinateSystem='Layer x/y offsets are stage pixels relative to the requested asset pivot. size is the full source canvas rendered size; pivots are normalized. rotation is radians. Keyframes are linearly interpolated; frame is held. Empty uninstalled layers are intentional.',status='All non-character contract states delivered except two prelude stone illustrations. Character pose generation blocked by image quota.')
+        mountain=asset+'_mountain'
+        if mountain in lookup:
+            item=layer(mountain);item['size']=list(stage);item['frame']['pivot']=[0,0]
+            put(mountain,'texture',state([item],note='Authored transparent mountain layer aligned to geometry.ts.'))
+        else:
+            blocked(
+                mountain,
+                'texture',
+                [mountain],
+                status='pending-art',
+                notes='Authored mountain layer is queued. The renderer currently uses its deliberate painted-slope fallback.',
+            )
+    report=dict(version=1,geometry=geometry,assets=delivery,coordinateSystem='Layer x/y offsets are stage pixels relative to the requested asset pivot. size is the full source canvas rendered size; pivots are normalized. rotation is radians. Keyframes are linearly interpolated; frame is held. Empty uninstalled layers are intentional.',status='Core fallbacks are playable. Six character states, three shade states, two prelude stones and five later-hill mountain layers remain pending; see coverage.json.')
     (OUT/'delivery.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     rows=[dict(id=asset,state=name,status=clip['status']) for asset,spec in delivery.items() for name,clip in spec['states'].items()]
     blocked_rows=[row for row in rows if row['status']!='available']

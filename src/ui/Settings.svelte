@@ -102,6 +102,21 @@
     <label><input type="checkbox" checked={options.reducedMotion} onchange={(e) => set('reducedMotion', e.currentTarget.checked)} /> Reduced motion (no shake, bursts or camera easing)</label>
     <label><input type="checkbox" checked={options.screenShake} onchange={(e) => set('screenShake', e.currentTarget.checked)} /> Screen shake on impacts</label>
     <label><input type="checkbox" checked={options.flashFree} onchange={(e) => set('flashFree', e.currentTarget.checked)} /> Flash-free decree effects</label>
+    <label>
+      Effects
+      <select
+        value={options.richEffects ? options.effectsQuality : 'off'}
+        onchange={(e) => {
+          const v = e.currentTarget.value;
+          set('richEffects', v !== 'off');
+          if (v !== 'off') set('effectsQuality', v === 'balanced' ? 'balanced' : 'full');
+        }}
+      >
+        <option value="full">Full (particles, light, glaze and distortion)</option>
+        <option value="balanced">Balanced (lighter light and fewer particles)</option>
+        <option value="off">Off (plain painted scene)</option>
+      </select>
+    </label>
     <label><input type="checkbox" checked={options.ambientCaptions} onchange={(e) => set('ambientCaptions', e.currentTarget.checked)} /> Ambient captions</label>
     <label><input type="checkbox" checked={options.highContrast} onchange={(e) => set('highContrast', e.currentTarget.checked)} /> High-contrast panels</label>
     <button onclick={() => game.platform.toggleFullscreen()}>Toggle fullscreen{game.platform.kind === 'desktop' ? ' (F11)' : ''}</button>

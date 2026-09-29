@@ -6,7 +6,7 @@ import { buyFlywheel, buyLevels, confirmPrestige, hireForeman } from '../src/cor
 import { Money } from '../src/core/money';
 import { checksum, deserializeSave, serializeSave } from '../src/core/save';
 import { stepSites } from '../src/core/sim';
-import { ctx, give, knowsAutomation, makeState } from './helpers';
+import { ctx, freshState, give, knowsAutomation, makeState } from './helpers';
 
 function automated() {
   const s = knowsAutomation(makeState());
@@ -62,6 +62,19 @@ describe('pinned goal', () => {
     expect(resolveGoal(s, `site:${next.id}`).affordable).toBe(false);
     s.empire.offeredSiteIds.push(next.id);
     expect(resolveGoal(s, `site:${next.id}`).affordable).toBe(true);
+  });
+
+  it('keeps immediate, next, and larger goals visible together', () => {
+    const opening = buildView(freshState());
+    expect(opening.goalStack.now).toMatch(/Push|Best height/);
+    expect(opening.goalStack.next).toMatch(/Reach farther|summit/);
+    expect(opening.goalStack.beyond).toMatch(/returning stone/);
+
+    const s = automated();
+    const v = buildView(s);
+    expect(v.goalStack.now.length).toBeGreaterThan(0);
+    expect(v.goalStack.next).toMatch(/Level|flywheel|Foreman/);
+    expect(v.goalStack.beyond).toMatch(/Tartarus Rim/);
   });
 });
 
@@ -138,6 +151,23 @@ describe('archive odds and stones', () => {
     const a = buildArchive(makeState());
     expect(a.stones).toHaveLength(6);
     expect(a.stones.filter((x) => x.found).map((x) => x.siteId)).toEqual(['first_hill']);
+  });
+
+  it('teases the eligible relic with honest odds and its guarantee', () => {
+    const v = buildView(makeState());
+    expect(v.relicHunt).toMatchObject({ site: 'The First Hill', chance: '1.25% per descent' });
+    expect(v.relicHunt?.guarantee).toMatch(/next operation/);
+  });
+
+  it('summarizes collection completion and durable records', () => {
+    const s = makeState();
+    s.counters.totalClimbs = 12;
+    s.counters.totalImpacts = 9;
+    const a = buildArchive(s);
+    expect(a.completion.map((x) => x.id)).toEqual(['guide', 'stamps', 'myths', 'relics', 'scenes', 'stones']);
+    expect(a.completion.every((x) => x.found >= 0 && x.found <= x.total)).toBe(true);
+    expect(a.records).toContainEqual({ label: 'Completed climbs', value: '12' });
+    expect(a.records).toContainEqual({ label: 'Resolved impacts', value: '9' });
   });
 });
 

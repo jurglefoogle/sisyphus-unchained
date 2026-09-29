@@ -1,35 +1,51 @@
 <script lang="ts">
   import { onMount, untrack } from 'svelte';
+  import { fly } from 'svelte/transition';
+  import { backOut as overshoot, cubicOut } from 'svelte/easing';
   import type { Game, Notice } from '../app/game';
   import type { GameView } from '../app/view';
   import type { PrestigePreview } from '../core/commands';
+  import { insightFactor } from '../core/formulas';
   import { formatDuration, formatMoney, formatMultiplier } from '../core/format';
   import { t } from '../content/strings';
   import { World } from '../world/world';
+  import { CoinFlight } from './coinFlight';
   import { artUrl, iconUrl, storyPortrait, storyPortraitName } from '../world/library';
   import { Sound } from '../app/audio';
   import { buildArchive } from '../app/archive';
   import Archive from './Archive.svelte';
   import Credits from './Credits.svelte';
-  import Drawer from './Drawer.svelte';
+  import Cutscene from './Cutscene.svelte';
+  import { SCENE_FOR_STORY, sceneById, sceneSeenId, type Scene, type SceneFx } from '../content/scenes';
+  import Scroll from './Scroll.svelte';
+  import { KEY_H, KEY_W, STONE_TILE, stone } from './stone';
+  import { papyrus, TILE } from './papyrus';
   import Empire from './Empire.svelte';
   import { GamepadInput, PAD, stepFocus } from './gamepad';
   import Modal from './Modal.svelte';
+  import Insight from './Insight.svelte';
   import Recovery from './Recovery.svelte';
   import Settings from './Settings.svelte';
+  import StartScreen from './StartScreen.svelte';
+  import PauseScreen from './PauseScreen.svelte';
 
   let { game }: { game: Game } = $props();
 
   let view = $state<GameView>(untrack(() => game.view()));
   let worldHost: HTMLDivElement;
-  let drawerToggle: HTMLButtonElement;
+  const rock = stone();
+  const slip = papyrus().tag;
+  let pushButton: HTMLButtonElement;
   let world = $state.raw<World | null>(null);
   let drawerOpen = $state(false);
   let settingsOpen = $state(false);
   let archiveOpen = $state(false);
+  let insightOpen = $state(false);
   let empireOpen = $state(false);
   let empirePanel = $state<Empire | null>(null);
   let creditsOpen = $state(false);
+  let scene = $state<Scene | null>(null);
+  let afterScene: (() => void) | null = null;
   let recoveryOpen = $state(untrack(() => !!game.loadProblem));
   let announcement = $state('');
   // Rebuilt with each view refresh so stamps earned while it is open appear.
@@ -37,6 +53,7 @@
   let stamp = $state<{ id: string; text: string } | null>(null);
   let stampTimer: ReturnType<typeof setTimeout> | undefined;
   let prestige = $state<PrestigePreview | null>(null);
+  let prestigeMemory = $state<{ award: number; factor: string; relics: number; upgrades: string[]; conveniences: string[] } | null>(null);
   let story = $state<Notice | null>(null);
   let recap = $state<Notice | null>(null);
   let toast = $state<string | null>(null);
@@ -48,13 +65,31 @@
   let hudHeight = $state(80);
   let controlsHeight = $state(150);
   let worldReady = $state(false);
+  let startOpen = $state(true);
+  let openingHandoff = $state(false);
+  let purseCoin: HTMLImageElement | undefined = $state();
+  let purseCount: HTMLSpanElement | undefined = $state();
+  /** Panels slide in and out; reduced motion places them at once. */
+  const enter = (x: number, y: number, duration = 320) => ({ x, y, duration: options.reducedMotion ? 0 : duration, easing: overshoot, opacity: 0 });
+  const leave = (x: number, y: number) => ({ x, y, duration: options.reducedMotion ? 0 : 180, easing: cubicOut, opacity: 0 });
   let options = $state(untrack(() => ({ ...game.state.options })));
   const sound = new Sound();
 
   const narrow = $derived(width < 760);
-  const modalOpen = $derived(settingsOpen || archiveOpen || !!prestige || !!recap || creditsOpen || recoveryOpen);
+  const modalOpen = $derived(startOpen || settingsOpen || archiveOpen || insightOpen || !!prestige || !!prestigeMemory || !!recap || creditsOpen || recoveryOpen || !!scene);
+  const hasProgress = $derived(
+    game.state.prelude.attempts > 0 ||
+      game.state.prelude.complete ||
+      game.state.counters.totalRuns > 0 ||
+      game.state.empire.sites.length > 1 ||
+      game.state.discoveries.seenStoryIds.length > 0 ||
+      game.state.discoveries.tutorialIds.length > 0,
+  );
   const keyLabel = $derived(options.pushKey.replace(/^Key/, '').replace(/^Digit/, ''));
-  const drawerWidth = $derived(drawerOpen && !narrow ? Math.max(300, Math.min(420, width * 0.3)) : 0);
+  /** The Improve scroll's column, and the room the world gives it while unrolled. */
+  const scrollWidth = $derived(Math.round(Math.max(300, Math.min(420, width * 0.3))));
+  const drawerWidth = $derived(drawerOpen && !narrow ? scrollWidth + 40 : 0);
+  const sheetHeight = $derived(Math.max(220, Math.round(narrow ? height * 0.5 : height - hudHeight - 40)));
   const availableUpgrades = $derived(view.rows.filter((row) => row.affordable && !row.disabled).length);
   const storyQueue: Notice[] = [];
   let storyTimer: ReturnType<typeof setTimeout> | undefined;
@@ -76,7 +111,61 @@
     creditsOpen = true;
     releaseInput();
   }
-  function closeCredits() {
+
+  function enterGame() {
+    startOpen = false;
+    requestAnimationFrame(() => {
+      if (!introDue()) pushButton?.focus();
+    });
+  }
+
+  async function beginNewGame() {
+    await game.resetSave();
+    view = game.view();
+    startOpen = false;
+  }
+  const seen = (id: string) => game.state.discoveries.tutorialIds.includes(id);
+
+  /** Play a cutscene over the running game, then run `then` (e.g. the credits). */
+  function playScene(id: string, then?: () => void) {
+    const next = sceneById(id);
+    if (!next) return then?.();
+    releaseInput();
+    story = null;
+    afterScene = then ?? null;
+    scene = next;
+    game.telemetry.record(game.state, 'scene_start', { detail: id });
+    sound.duck(3600);
+  }
+  function closeScene(reason: 'complete' | 'skip' = 'skip', beat = 0) {
+    if (!scene) return;
+    const id = scene.id;
+    game.markSeen(sceneSeenId(id));
+    game.telemetry.record(game.state, reason === 'complete' ? 'scene_complete' : 'scene_skip', { detail: `${id}:${beat + 1}` });
+    scene = null;
+    sound.duck(0.2);
+    const then = afterScene;
+    afterScene = null;
+    if (then) then();
+    else showStory();
+    if (id === 'sentence' && game.state.prelude.attempts === 0) {
+      openingHandoff = true;
+      requestAnimationFrame(() => pushButton?.focus());
+    }
+  }
+  function sceneFx(fx: SceneFx) {
+    if (fx === 'bolt') sound.play('sfx_decree');
+    else if (fx === 'seal') sound.play('sfx_charter');
+    else if (fx === 'thud') sound.play('sfx_impact_pottery');
+  }
+  /** A brand-new game opens on the sentencing. */
+  function introDue(): boolean {
+    const s = game.state;
+    return !seen(sceneSeenId('sentence')) && s.prelude.attempts === 0 && !s.prelude.complete && s.counters.totalRuns === 0;
+  }
+
+  function closeCredits(reason: 'complete' | 'skip' = 'skip') {
+    game.telemetry.record(game.state, reason === 'complete' ? 'credits_complete' : 'credits_skip');
     creditsOpen = false;
     game.markSeen('credits');
     // The ending returns to where it began; production never stopped.
@@ -92,11 +181,13 @@
   function toggleDrawer() {
     empireOpen = false;
     drawerOpen = !drawerOpen;
-    if (!drawerOpen) drawerToggle?.focus();
+    // Focus returns to the roll, which is what opens the scroll again.
+    if (!drawerOpen) document.querySelector<HTMLElement>('button[aria-controls="drawer"]')?.focus();
     sound.play(drawerOpen ? 'sfx_ui_open' : 'sfx_ui_close', 'interface');
   }
 
   function pushDown() {
+    openingHandoff = false;
     if (options.toggleMode) setHeld(!held);
     else setHeld(true);
   }
@@ -105,7 +196,7 @@
   }
 
   function showStory() {
-    if (story || !storyQueue.length) return;
+    if (story || scene || !storyQueue.length) return;
     story = storyQueue.shift()!;
     // A repeat is shorter, but leaves time to read Sisyphus's comeback.
     const hold = story.firstTime ? 7 : story.sis ? 5 : 2.5;
@@ -120,11 +211,16 @@
 
   function onNotice(n: Notice) {
     if (n.kind === 'story' && n.storyId) {
+      const sceneId = SCENE_FOR_STORY[n.storyId];
+      const creditsDue = n.storyId === 'charter_purchase' && !seen('credits');
+      // A first viewing of a big moment gets the full scene instead of the banner.
+      if (sceneId && n.firstTime && !seen(sceneSeenId(sceneId))) {
+        playScene(sceneId, creditsDue ? openCredits : undefined);
+        return;
+      }
       storyQueue.push(n);
       showStory();
-      if (n.storyId === 'charter_purchase' && !game.state.discoveries.tutorialIds.includes('credits')) {
-        setTimeout(openCredits, n.firstTime ? 7200 : 2600);
-      }
+      if (creditsDue) setTimeout(openCredits, n.firstTime ? 7200 : 2600);
     } else if (n.kind === 'recap') {
       recap = n;
       sound.play('sfx_offline_return', 'interface');
@@ -147,7 +243,7 @@
     } else if (n.kind === 'error' && n.text) {
       error = n.text;
     } else if (n.kind === 'info' && n.text) {
-      if (n.storyId === 'ambient' && (story || drawerOpen && narrow)) return;
+      if (n.storyId === 'ambient' && (story || scene || drawerOpen && narrow)) return;
       caption = n.text;
       clearTimeout(captionTimer);
       clearTimeout(stampTimer);
@@ -158,11 +254,47 @@
   function openPrestige() {
     prestige = game.previewPrestige();
   }
+  function closePrestige() {
+    if (prestige) game.telemetry.record(game.state, 'prestige_dismiss', { detail: prestige.award });
+    prestige = null;
+  }
   async function confirmPrestige() {
+    const before = game.state.prestige.lifetimeInsightAwarded;
     const r = await game.confirmPrestige();
     prestige = null;
     held = false;
-    if (!r.ok) error = 'Begin Again is not available right now.';
+    if (!r.ok) {
+      error = 'Begin Again is not available right now.';
+      return;
+    }
+    const upgrades = game.state.prestige.permanentUpgradeIds.map((id) => t(`upgrade.${id}`));
+    const conveniences: string[] = [];
+    if (game.state.empire.foremanOwned) conveniences.push('The Foreman begins this run already hired.');
+    if (game.state.empire.sites[0]?.wheelOwned) conveniences.push('The First Hill begins with its flywheel installed.');
+    if (game.state.empire.sites[0]?.wheelCharged) conveniences.push('Starting flywheels begin charged.');
+    prestigeMemory = {
+      award: game.state.prestige.lifetimeInsightAwarded - before,
+      factor: formatMultiplier(insightFactor(game.state.prestige.lifetimeInsightAwarded)),
+      relics: game.state.discoveries.relicIds.length,
+      upgrades,
+      conveniences,
+    };
+  }
+
+  function recapImprove() {
+    game.telemetry.record(game.state, 'offline_recap_action', { detail: 'improve' });
+    recap = null;
+    drawerOpen = true;
+  }
+  function recapEmpire() {
+    game.telemetry.record(game.state, 'offline_recap_action', { detail: 'empire' });
+    recap = null;
+    empireOpen = true;
+  }
+  function recapArchive() {
+    game.telemetry.record(game.state, 'offline_recap_action', { detail: 'archive' });
+    recap = null;
+    archiveOpen = true;
   }
 
   function isTyping(e: KeyboardEvent) {
@@ -189,11 +321,9 @@
     } else if (empireOpen) {
       return;
     } else if (e.key === 'ArrowLeft' && view.site.prevId && !drawerOpen) {
-      game.selectSite(view.site.prevId);
-      held = false;
+      selectSite(view.site.prevId);
     } else if (e.key === 'ArrowRight' && view.site.nextId && !drawerOpen) {
-      game.selectSite(view.site.nextId);
-      held = false;
+      selectSite(view.site.nextId);
     }
   }
   function onkeyup(e: KeyboardEvent) {
@@ -208,10 +338,25 @@
     if (held) setHeld(false);
   }
 
+  /** A chapter card sweeps over the world while the hill changes beneath it. */
+  let wipe = $state<{ name: string; chapter: number; phase: 'in' | 'out' } | null>(null);
+  let wipeTimer: ReturnType<typeof setTimeout> | undefined;
+
   function selectSite(id: string | null) {
     if (!id) return;
-    game.selectSite(id);
     held = false;
+    const site = view.empire.find((s) => s.id === id);
+    if (options.reducedMotion || !site || id === view.site.id || wipe) {
+      game.selectSite(id);
+      return;
+    }
+    wipe = { name: site.name, chapter: site.chapter, phase: 'in' };
+    clearTimeout(wipeTimer);
+    wipeTimer = setTimeout(() => {
+      game.selectSite(id);
+      wipe = wipe && { ...wipe, phase: 'out' };
+      wipeTimer = setTimeout(() => (wipe = null), 520);
+    }, 420);
   }
 
   // -------------------------------------------------------------- controller
@@ -221,20 +366,24 @@
 
   /** The layer that owns focus: dialog, frieze, drawer, or the world. */
   function focusLayer(): HTMLElement | null {
+    const dialogs = document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"]');
     return (
-      document.querySelector<HTMLElement>('[role="dialog"][aria-modal="true"]') ??
+      dialogs.item(dialogs.length - 1) ??
+      (view.paused ? document.querySelector<HTMLElement>('.pause-screen') : null) ??
       (empireOpen ? document.querySelector<HTMLElement>('.empire') : null) ??
       (drawerOpen ? document.getElementById('drawer') : null)
     );
   }
 
   function backOut() {
-    if (creditsOpen) closeCredits();
+    if (scene) closeScene();
+    else if (creditsOpen) closeCredits();
     else if (recoveryOpen) recoveryOpen = false;
     else if (prestige) prestige = null;
     else if (recap) recap = null;
     else if (settingsOpen) settingsOpen = false;
     else if (archiveOpen) archiveOpen = false;
+    else if (insightOpen) insightOpen = false;
     else if (empireOpen) toggleEmpire();
     else if (drawerOpen) toggleDrawer();
   }
@@ -314,22 +463,19 @@
     selectSite(dx < 0 ? view.site.nextId : view.site.prevId);
   }
 
-  let sheetDrag: number | null = null;
-  function sheetStart(e: PointerEvent) {
-    if (narrow) sheetDrag = e.clientY;
-  }
-  function sheetEnd(e: PointerEvent) {
-    if (sheetDrag !== null && e.clientY - sheetDrag > 60 && drawerOpen) toggleDrawer();
-    sheetDrag = null;
-  }
-
   $effect(() => {
-    const bottom = controlsHeight + 18 + (narrow && drawerOpen ? height * 0.45 : 0);
-    world?.setInsets({ top: hudHeight + 12, right: drawerWidth, bottom, left: 0 });
+    // On phones the scroll unrolls over the top half; the world frames what is left below it.
+    const top = hudHeight + 12 + (narrow && drawerOpen ? sheetHeight + 20 : 0);
+    world?.setInsets({ top, right: drawerWidth, bottom: controlsHeight + 18, left: 0 });
   });
 
   $effect(() => {
     if (modalOpen || view.paused) releaseInput();
+  });
+
+  $effect(() => {
+    void view;
+    if (worldReady && !startOpen && !scene && !recoveryOpen && untrack(introDue)) playScene('sentence');
   });
 
   $effect(() => {
@@ -363,6 +509,9 @@
     window.addEventListener('keydown', unlock, true);
     world = new World(game);
     if (import.meta.env.DEV) (window as unknown as { world: World }).world = world;
+    const coins = new CoinFlight(iconUrl('ui_obols'), () => purseCoin ?? null, () => purseCount ?? null, () => sound.tink());
+    world.onPayout = (x, y, grand) => coins.launch(x, y, grand);
+    world.onChisel = (weight) => sound.chisel(weight);
     world.onPush = (down) => {
       // On phones the world closes the bottom sheet without also pushing.
       if (down && drawerOpen && narrow) {
@@ -397,10 +546,12 @@
       clearTimeout(storyTimer);
       clearTimeout(toastTimer);
       clearTimeout(captionTimer);
+      clearTimeout(wipeTimer);
       sound.setMusic(null);
       window.removeEventListener('pointerdown', unlock, true);
       window.removeEventListener('keydown', unlock, true);
       world?.destroy();
+      coins.destroy();
       document.removeEventListener('visibilitychange', onVis);
       window.removeEventListener('blur', releaseInput);
       window.removeEventListener('pagehide', onHide);
@@ -410,17 +561,17 @@
 
 <svelte:window {onkeydown} {onkeyup} bind:innerWidth={width} bind:innerHeight={height} />
 
-<main class:narrow style:--drawer-width="{drawerWidth}px" style:--hud-h="{hudHeight}px" style:--controls-h="{controlsHeight}px">
-  <div class="playfield" inert={modalOpen}>
+<main class:narrow style:--drawer-width="{drawerWidth}px" style:--scroll-w="{scrollWidth}px" style:--hud-h="{hudHeight}px" style:--controls-h="{controlsHeight}px" style:--limestone="url({rock.limestone})" style:--basalt="url({rock.basalt})" style:--key="url({rock.key})" style:--stone-tile="{STONE_TILE}px" style:--key-w="{KEY_W}px" style:--key-h="{KEY_H}px" style:--slip="url({slip})" style:--tile="{TILE}px">
+  <div class="playfield" inert={modalOpen || view.paused}>
   <div class="world" bind:this={worldHost} onpointerdowncapture={swipeStart} onpointerupcapture={swipeEnd} role="presentation"></div>
   {#if !worldReady}<div class="loading" role="status">Preparing the hill…</div>{/if}
 
   <header class="hud" bind:clientHeight={hudHeight}>
     <div class="hud-left">
       <div class="wallet" aria-live="off">
-        <img class="coin" src={iconUrl('ui_obols')} alt="" />
+        <img class="coin" src={iconUrl('ui_obols')} alt="" bind:this={purseCoin} />
         <div class="wallet-text">
-          <span class="obols"><span class="visually-hidden">Obols: </span>{view.obols}<small> Obols</small></span>
+          <span class="obols" bind:this={purseCount}><span class="visually-hidden">Obols: </span>{view.obols}<small> Obols</small></span>
           <span class="rate">{view.automated ? view.rate : 'Manual labor'}</span>
         </div>
       </div>
@@ -435,7 +586,11 @@
       {/if}
     </div>
     <div class="chapter">
-      <h1>{view.site.name}{#if view.charterSigned}<img class="approved" src={iconUrl('decree_seal')} alt="Approved by Olympus" title="Approved by Olympus" />{/if}</h1>
+      <div class="title-row">
+        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.prevId)} disabled={!view.site.prevId} aria-label="Previous operation"><img class="icon small" src={iconUrl('ui_back')} alt="" /></button>{/if}
+        {#key view.site.id}<h1>{view.site.name}{#if view.charterSigned}<img class="approved" src={iconUrl('decree_seal')} alt="Approved by Olympus" title="Approved by Olympus" />{/if}</h1>{/key}
+        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.nextId)} disabled={!view.site.nextId} aria-label="Next operation"><img class="icon small" src={iconUrl('ui_next')} alt="" /></button>{/if}
+      </div>
       {#if view.prelude.active && view.prelude.attempts > 0}
         <div class="record">
           <span>Best height</span>
@@ -448,26 +603,25 @@
     </div>
     <div class="menu">
       <button class="visually-hidden-focusable" onclick={announceStatus}>Announce status</button>
-      {#if view.insight > 0}<span class="insight" title="Existential Insight"><img class="icon small" src={iconUrl('ui_insight')} alt="Insight" /> {view.insight}</span>{/if}
+      {#if view.insightMenu}
+        {@const ready = view.insightShop.some((u) => u.affordable)}
+        <button class="insight" title="Insight upgrades" onclick={() => (insightOpen = true)} aria-label="Insight upgrades: {view.insight} Insight{ready ? ', an upgrade is affordable' : ''}">
+          <img class="icon small" src={iconUrl('ui_insight')} alt="" /> {view.insight}
+          {#if ready}<span class="insight-ready" aria-hidden="true"></span>{/if}
+        </button>
+      {/if}
+      {#if view.site.ownedCount > 1 || view.decree?.shown}
+        <button class="empire-toggle" title="Empire" aria-expanded={empireOpen} onclick={toggleEmpire}>
+          <img class="icon small" src={iconUrl('ui_empire')} alt="" />
+          <span class="empire-label">{empireOpen ? 'Close' : 'Empire'}</span>
+        </button>
+      {/if}
       <button class="round" title={view.paused ? 'Resume' : 'Pause'} onclick={() => game.setPaused(!view.paused)} aria-pressed={view.paused}><img class="icon small" src={iconUrl(view.paused ? 'ui_play' : 'ui_pause')} alt="" /><span class="visually-hidden">{view.paused ? 'Resume' : 'Pause'}</span></button>
       <button class="round" title="Archive" onclick={() => (archiveOpen = true)}><img class="icon small" src={iconUrl('ui_archive')} alt="" /><span class="visually-hidden">Archive</span></button>
       <button class="round" title="Settings" onclick={() => (settingsOpen = true)}><img class="icon small" src={iconUrl('ui_settings')} alt="" /><span class="visually-hidden">Settings</span></button>
     </div>
+    <div class="fascia" aria-hidden="true"></div>
   </header>
-
-  {#if view.site.ownedCount > 1 || view.decree?.shown}
-    <nav class="sites" aria-label="Operations">
-      {#if view.site.ownedCount > 1}
-        <button onclick={() => selectSite(view.site.prevId)} disabled={!view.site.prevId} aria-label="Previous operation"><img class="icon small" src={iconUrl('ui_back')} alt="" /></button>
-        <span>{view.site.name}</span>
-        <button onclick={() => selectSite(view.site.nextId)} disabled={!view.site.nextId} aria-label="Next operation"><img class="icon small" src={iconUrl('ui_next')} alt="" /></button>
-      {/if}
-      <button class="empire-toggle" aria-expanded={empireOpen} onclick={toggleEmpire}>
-        <img class="icon small" src={iconUrl('ui_empire')} alt="" />
-        <span>{empireOpen ? 'Close' : 'Empire'}</span>
-      </button>
-    </nav>
-  {/if}
 
   {#if empireOpen}
     <Empire
@@ -487,7 +641,7 @@
   {/if}
 
   {#if view.suggestPrestige && !prestige}
-    <div class="suggest" role="status">
+    <div class="suggest" role="status" in:fly={enter(0, 16)} out:fly={leave(0, 10)}>
       <img src={iconUrl('ui_prestige')} alt="" />
       <p><strong>Begin Again is worthwhile.</strong> Claim {view.prestige.award} Insight: income {view.prestige.factorBefore} → {view.prestige.factorAfter}.</p>
       <div class="suggest-actions">
@@ -498,7 +652,14 @@
   {/if}
 
   {#if caption && options.ambientCaptions}
-    <p class="caption" aria-live="polite">“{caption}”</p>
+    <p class="caption" aria-live="polite" in:fly={enter(0, 10, 260)} out:fly={leave(0, 6)}>“{caption}”</p>
+  {/if}
+
+  {#if wipe}
+    <div class="wipe {wipe.phase}" aria-hidden="true">
+      <span class="wipe-chapter">Chapter {wipe.chapter}</span>
+      <span class="wipe-name">{wipe.name}</span>
+    </div>
   {/if}
 
   {#if view.paused}
@@ -506,50 +667,52 @@
   {/if}
 
   <footer class="controls" bind:clientHeight={controlsHeight}>
-    <p class="objective" class:goal-ready={view.goal?.affordable} class:pinned={!!view.goal}>
-      {#if view.goal}<span class="pin-mark" aria-hidden="true">◆</span>{/if}{view.objective}
-      {#if view.objectiveProgress !== null}
-        <span class="objective-bar" role="progressbar" aria-label="Goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.objectiveProgress * 100)}><span style:width="{view.objectiveProgress * 100}%"></span></span>
-      {/if}
-    </p>
-    <div class="control-row">
-      <button
-        class="push"
-        data-push
-        class:held
-        aria-pressed={held}
-        aria-describedby="push-hint"
-        disabled={view.paused}
-        onpointerdown={(e) => {
-          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-          pushDown();
-        }}
-        onpointerup={pushUp}
-        onpointercancel={releaseInput}
-        onkeydown={(e) => e.key === 'Enter' && !e.repeat && pushDown()}
-        onkeyup={(e) => e.key === 'Enter' && pushUp()}
-      >
-        <img class="icon" src={iconUrl('ui_push')} alt="" />
-        <span>{view.automated ? 'Help push' : 'Push'}{options.toggleMode ? (held ? ' (on)' : ' (off)') : ''}</span>
-        <kbd aria-hidden="true">{keyLabel}</kbd>
-      </button>
-      <button class="drawer-toggle" bind:this={drawerToggle} aria-expanded={drawerOpen} aria-controls="drawer" onclick={toggleDrawer}>
-        <img class="icon" src={iconUrl(drawerOpen ? 'ui_close' : 'ui_empire')} alt="" />
-        {drawerOpen ? 'Close' : 'Improve'}
-        {#if !drawerOpen && availableUpgrades > 0}<span class="purchase-count" aria-label="{availableUpgrades} affordable improvements">{availableUpgrades}</span>{/if}
-      </button>
+    <div class="tablet" class:goal-ready={view.goal?.affordable}>
+      <div class="slab">
+        <div class="goal-stack">
+          <p class="objective" class:pinned={!!view.goal}>
+            <span class="horizon-label">Now</span>{#if view.goal}<span class="pin-mark" aria-hidden="true">◆</span>{/if}{view.goalStack.now}
+          </p>
+          {#if view.objectiveProgress !== null}
+            <span class="objective-bar" role="progressbar" aria-label="Goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.objectiveProgress * 100)}><span style:width="{view.objectiveProgress * 100}%"></span></span>
+          {/if}
+          <p class="horizons" aria-label="Upcoming goals">
+            <span><b>Next</b>{view.goalStack.next}</span>
+            <span><b>Beyond</b>{view.goalStack.beyond}</span>
+          </p>
+        </div>
+        <button
+          class="push"
+          class:opening-handoff={openingHandoff}
+          data-push
+          bind:this={pushButton}
+          class:held
+          aria-pressed={held}
+          aria-describedby="push-hint"
+          disabled={view.paused}
+          onpointerdown={(e) => {
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+            pushDown();
+          }}
+          onpointerup={pushUp}
+          onpointercancel={releaseInput}
+          onkeydown={(e) => e.key === 'Enter' && !e.repeat && pushDown()}
+          onkeyup={(e) => e.key === 'Enter' && pushUp()}
+        >
+          <img class="icon" src={iconUrl('ui_push')} alt="" />
+          <span>{view.automated ? 'Help push' : 'Push'}{options.toggleMode ? (held ? ' (on)' : ' (off)') : ''}</span>
+          <kbd aria-hidden="true">{keyLabel}</kbd>
+        </button>
+      </div>
     </div>
     <p id="push-hint" class="control-hint" class:quiet={view.prelude.attempts > 0 || !view.prelude.active}>{options.toggleMode ? `Tap or press ${keyLabel} again to stop` : 'Release to rest'}</p>
   </footer>
 
-  <aside id="drawer" class="drawer" class:open={drawerOpen} aria-label="Purchases" inert={!drawerOpen}>
-    <div class="drawer-heading" onpointerdown={sheetStart} onpointerup={sheetEnd} role="presentation"><span class="eyebrow">Make the next attempt count</span><button onclick={toggleDrawer} aria-label="Close improvements">✕</button></div>
-    <Drawer {game} {view} onprestige={openPrestige} />
-  </aside>
+  <Scroll {game} {view} open={drawerOpen} {narrow} {sheetHeight} ontoggle={toggleDrawer} onprestige={openPrestige} />
 
   {#if story}
     {@const id = story.storyId}
-    <div class="story" class:compact={!story.firstTime} role="status" aria-live="polite">
+    <div class="story" class:compact={!story.firstTime} role="status" aria-live="polite" in:fly={enter(0, -18, 420)} out:fly={leave(0, -12)}>
       <img class="portrait" src={storyPortrait(id!)} alt={storyPortraitName(id!)} />
       <div>
       <p class="god" class:small={!story.firstTime}>{story.god ?? t(`story.${id}.god`)}</p>
@@ -560,11 +723,11 @@
   {/if}
 
   {#if toast}
-    <div class="toast" role="status">{toast}</div>
+    <div class="toast" role="status" in:fly={enter(28, 0)} out:fly={leave(20, 0)}>{toast}</div>
   {/if}
 
   {#if stamp}
-    <div class="stamp-toast" role="status">
+    <div class="stamp-toast" role="status" in:fly={enter(36, 0, 460)} out:fly={leave(24, 0)}>
       <button onclick={() => ((archiveOpen = true), (stamp = null))}>
         <img src={iconUrl(`achievement_${stamp.id}`)} alt="" />
         <span>{stamp.text}</span>
@@ -580,6 +743,32 @@
   {/if}
   </div>
 
+  {#if startOpen}
+    <StartScreen
+      {hasProgress}
+      location={view.site.name}
+      progress={`${view.site.ownedCount} operation${view.site.ownedCount === 1 ? '' : 's'} · Level ${view.site.level} · ${view.obols} Obols`}
+      canViewCredits={view.charterSigned || game.state.discoveries.tutorialIds.includes('credits')}
+      oncontinue={enterGame}
+      onnew={beginNewGame}
+      onsettings={() => (settingsOpen = true)}
+      oncredits={openCredits}
+    />
+  {/if}
+
+  {#if view.paused && !startOpen}
+    <PauseScreen
+      location={view.site.name}
+      onresume={() => game.setPaused(false)}
+      onarchive={() => (archiveOpen = true)}
+      onsettings={() => (settingsOpen = true)}
+      ontitle={() => {
+        game.setPaused(false);
+        startOpen = true;
+      }}
+    />
+  {/if}
+
   {#if recap?.recap}
     {@const r = recap.recap}
     <Modal title="While you were away" onclose={() => (recap = null)}>
@@ -589,34 +778,78 @@
       {#each r.relicIds as id (id)}<p>Relic found: <strong>{t(`relic.${id}`)}</strong></p>{/each}
       {#each r.decreeSiteIds as id (id)}<p>Decree ready: <strong>{t(`site.${id}`)}</strong></p>{/each}
       {#if recap.sis}<p class="recap-quip">“{recap.sis}”</p>{/if}
-      <button onclick={() => (recap = null)}>Back to work</button>
-    </Modal>
-  {/if}
-
-  {#if prestige}
-    <Modal title="Begin Again" onclose={() => (prestige = null)}>
-      <img class="modal-art" src={artUrl('portrait_thanatos')} alt="Thanatos" />
-      <p>Renegotiate the sentence. Thanatos returns you to the foot of the First Hill.</p>
-      <ul>
-        <li>This run: {formatMoney(prestige.runGross)} Defiance (record {formatMoney(prestige.record)})</li>
-        <li>Insight to claim: <strong>{prestige.award}</strong></li>
-        <li>Permanent income: {formatMultiplier(prestige.factorBefore)} → <strong>{formatMultiplier(prestige.factorAfter)}</strong></li>
-      </ul>
-      <p><strong>Resets:</strong> Obols, operations, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
-      <p><strong>Stays:</strong> relics, Insight and permanent upgrades, discoveries, settings and records.</p>
       <div class="modal-actions">
-        <button onclick={() => (prestige = null)}>Not yet</button>
-        <button class="primary" disabled={prestige.award <= 0} onclick={confirmPrestige}>Begin Again</button>
+        <button onclick={() => (recap = null)}>Back to work</button>
+        {#if r.relicIds.length}<button onclick={recapArchive}>View Archive</button>{/if}
+        {#if r.decreeSiteIds.length}<button onclick={recapEmpire}>View Empire</button>{/if}
+        {#if availableUpgrades > 0}<button class="primary" onclick={recapImprove}>Review {availableUpgrades} affordable</button>{/if}
       </div>
     </Modal>
   {/if}
 
+  {#if prestige}
+    <Modal title="Begin Again" onclose={closePrestige}>
+      <img class="modal-art" src={artUrl('portrait_thanatos')} alt="Thanatos" />
+      <p>Renegotiate the sentence. Thanatos returns you to the foot of the First Hill.</p>
+      <ul>
+        <!-- Live figures: earnings while the dialog is open improve the award (spec §05). -->
+        <li>This run: {view.prestige.runGross} Defiance (record {view.prestige.record})</li>
+        <li>Insight to claim: <strong>{view.prestige.award}</strong></li>
+        <li>Permanent income: {view.prestige.factorBefore} → <strong>{view.prestige.factorAfter}</strong></li>
+      </ul>
+      <p><strong>Resets:</strong> Obols, operations, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
+      <p><strong>Stays:</strong> relics, Insight and permanent upgrades, discoveries, settings and records.</p>
+      <div class="modal-actions">
+        <button onclick={closePrestige}>Not yet</button>
+        <button class="primary" disabled={view.prestige.award <= 0} onclick={confirmPrestige}>Begin Again</button>
+      </div>
+    </Modal>
+  {/if}
+
+  {#if prestigeMemory && !scene}
+    <Modal title="What Sisyphus remembers" onclose={() => (prestigeMemory = null)}>
+      <img class="modal-art" src={artUrl('sisyphus_rest')} alt="Sisyphus" />
+      <p>The hill has reset. The lesson has not.</p>
+      <ul>
+        <li><strong>+{prestigeMemory.award} Insight</strong> claimed · permanent income now {prestigeMemory.factor}</li>
+        <li><strong>{prestigeMemory.relics}</strong> relic{prestigeMemory.relics === 1 ? '' : 's'} retained</li>
+        <li><strong>{prestigeMemory.upgrades.length}</strong> permanent upgrade{prestigeMemory.upgrades.length === 1 ? '' : 's'} retained</li>
+      </ul>
+      {#if prestigeMemory.conveniences.length}
+        <p><strong>This run begins faster:</strong></p>
+        <ul>{#each prestigeMemory.conveniences as item (item)}<li>{item}</li>{/each}</ul>
+      {:else}
+        <p>Your retained multiplier makes the familiar opening faster. Spend Insight on permanent upgrades from the Insight button at the top.</p>
+      {/if}
+      <div class="modal-actions">
+        <button onclick={() => ((prestigeMemory = null), (archiveOpen = true))}>Review what remains</button>
+        <button onclick={() => ((prestigeMemory = null), (insightOpen = true))}>Spend Insight</button>
+        <button class="primary" onclick={() => (prestigeMemory = null)}>Begin the next run</button>
+      </div>
+    </Modal>
+  {/if}
+
+  {#if insightOpen}
+    <Insight {game} {view} onclose={() => (insightOpen = false)} onprestige={() => ((insightOpen = false), openPrestige())} />
+  {/if}
+
   {#if archive}
-    <Archive {archive} onclose={() => (archiveOpen = false)} />
+    <Archive {archive} onclose={() => (archiveOpen = false)} onscene={(id) => ((archiveOpen = false), playScene(id))} />
   {/if}
 
   {#if settingsOpen}
     <Settings {game} bind:options bind:rebinding onclose={() => (settingsOpen = false)} oncredits={view.charterSigned || game.state.discoveries.tutorialIds.includes('credits') ? () => ((settingsOpen = false), openCredits()) : undefined} />
+  {/if}
+
+  {#if scene}
+    <Cutscene
+      {scene}
+      reducedMotion={options.reducedMotion}
+      flashFree={options.flashFree}
+      onfx={sceneFx}
+      onbeat={(index) => game.telemetry.record(game.state, 'scene_advance', { detail: `${scene!.id}:${index + 1}` })}
+      onclose={closeScene}
+    />
   {/if}
 
   {#if creditsOpen}
@@ -643,39 +876,61 @@
   .world { position: absolute; inset: 0; }
 
   /* ---------------------------------------------------------------- HUD */
+  /* A limestone beam across the top: lettering cut into it, buttons sunk into
+     it, and a terracotta band with a running key along its lower face. */
   .hud {
     position: absolute;
     top: 0;
     left: 0;
-    right: var(--drawer-width);
+    right: 0;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 1rem;
     min-height: 68px;
-    padding: max(0.55rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.5rem max(1rem, env(safe-area-inset-left));
-    background: linear-gradient(180deg, rgba(246,236,220,.98), rgba(235,220,192,.93));
-    border-bottom: 2px solid var(--ink);
-    box-shadow: 0 4px 0 rgba(165,123,59,.42);
+    padding: max(0.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) calc(var(--key-h) + 0.6rem) max(1rem, env(safe-area-inset-left));
+    color: #33261a;
+    background:
+      linear-gradient(180deg, rgba(255, 250, 238, 0.4), rgba(255, 250, 238, 0) 32%, rgba(90, 64, 36, 0) 64%, rgba(90, 64, 36, 0.18)),
+      var(--limestone) 0 0 / var(--stone-tile) var(--stone-tile),
+      #e0d2b8;
+    box-shadow: 0 7px 12px rgba(20, 10, 4, 0.42), 0 2px 2px rgba(20, 10, 4, 0.4);
     pointer-events: none;
-    transition: right 0.2s ease;
+  }
+  /* The band: black glaze on fired clay, under a lit arris. */
+  .fascia {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: content-box;
+    height: var(--key-h);
+    background: var(--key) 0 0 / var(--key-w) var(--key-h) repeat-x;
+    border-top: 1px solid #1d130c;
+    border-bottom: 1px solid #1d130c;
+    box-shadow: 0 -1px 0 rgba(255, 250, 236, 0.75), inset 0 -2px 3px rgba(40, 14, 4, 0.3);
   }
   .hud-left > *, .menu > *, .chapter { pointer-events: auto; }
   .hud-left { display: flex; gap: 0.6rem; align-items: stretch; min-width: 0; flex-wrap: wrap; }
+  /* Cut letters: shadowed along the top of the cut, lit along its foot. */
+  .obols,
+  .chapter h1 {
+    text-shadow: 0 1px 0 rgba(255, 250, 236, 0.8), 0 -1px 0 rgba(70, 48, 26, 0.3);
+  }
   .wallet, .decree {
     background: transparent;
     border: 0;
     border-radius: 0;
-    box-shadow: none;
   }
   .wallet {
     display: flex;
     align-items: center;
     gap: 0.55rem;
     padding: 0.15rem 1rem 0.15rem 0;
-    border-right: 1px solid var(--rule);
+    border-right: 1px solid rgba(80, 56, 30, 0.35);
+    box-shadow: 1px 0 0 rgba(255, 250, 236, 0.6);
   }
-  .coin { width: 2.3rem; height: 2.3rem; flex: none; }
+  .coin { width: 2.3rem; height: 2.3rem; flex: none; filter: drop-shadow(0 1px 1px rgba(40, 24, 8, 0.5)); }
   .wallet-text { display: flex; flex-direction: column; line-height: 1.1; }
   .obols {
     font-family: var(--display);
@@ -684,8 +939,8 @@
     font-variant-numeric: lining-nums tabular-nums;
     letter-spacing: 0.01em;
   }
-  .obols small { margin-left: 0.3em; font-family: var(--body); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .rate { font-size: 0.8rem; font-style: italic; color: var(--muted); }
+  .obols small { margin-left: 0.3em; font-family: var(--body); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: #5b4a38; }
+  .rate { font-size: 0.8rem; font-style: italic; color: #5b4a38; }
   .decree {
     display: grid;
     align-content: center;
@@ -695,17 +950,29 @@
     max-width: 16rem;
     font-size: 0.85rem;
   }
-  .decree-label { font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; }
+  .decree-label { font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: #5b4a38; display: flex; align-items: center; gap: 0.3rem; }
   .decree-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .mini-bar { height: 4px; background: rgba(33, 27, 23, 0.14); border-radius: 2px; overflow: hidden; margin-top: 2px; }
-  .mini-bar span { display: block; height: 100%; background: var(--bronze); }
+  /* Bronze inlaid in a groove. */
+  .mini-bar {
+    height: 5px;
+    margin-top: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: rgba(70, 48, 26, 0.16);
+    box-shadow: inset 0 1px 2px rgba(50, 32, 14, 0.55), 0 1px 0 rgba(255, 250, 236, 0.65);
+  }
+  .mini-bar span { display: block; height: 100%; background: linear-gradient(180deg, #f0d08e, #b88a45 45%, #7c5626); }
 
   .chapter {
     grid-column: 2;
     text-align: center;
-    padding: 0 1.4rem;
-    color: var(--ink);
-    text-shadow: none;
+    padding: 0 1rem;
+  }
+  .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
   }
   .chapter h1 {
     font-family: var(--display);
@@ -715,6 +982,12 @@
     text-transform: uppercase;
     margin: 0;
     line-height: 1.05;
+    color: #2e2218;
+  }
+  /* A new hill's name is inscribed: it gathers from wide spacing and settles. */
+  .chapter h1 { animation: inscribe 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  @keyframes inscribe {
+    from { opacity: 0; letter-spacing: 0.34em; filter: blur(2px); }
   }
   .chapter h1::before,
   .chapter h1::after {
@@ -724,13 +997,14 @@
     height: 1px;
     background: currentColor;
     opacity: 0.45;
+    box-shadow: 0 1px 0 rgba(255, 250, 236, 0.9);
     vertical-align: middle;
     margin: 0 0.6em;
   }
-  .chapter-detail { display: block; font-size: 0.8rem; font-style: italic; color: var(--muted); margin-top: 0.15rem; }
-  .record { display: inline-flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .chapter-detail { display: block; font-size: 0.8rem; font-style: italic; color: #5b4a38; margin-top: 0.15rem; }
+  .record { display: inline-flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #5b4a38; }
   .record strong { font-family: var(--display); font-size: 1.05rem; letter-spacing: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .record-track { width: 96px; height: 5px; background: rgba(33, 27, 23, 0.16); border-radius: 3px; overflow: hidden; }
+  .record-track { width: 96px; height: 5px; background: rgba(70, 48, 26, 0.16); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(50, 32, 14, 0.55), 0 1px 0 rgba(255, 250, 236, 0.65); }
   .record-track span { display: block; height: 100%; background: var(--clay); transition: width 0.4s ease; }
 
   .menu {
@@ -740,52 +1014,87 @@
     gap: 0.45rem;
     align-items: center;
   }
+  /* Buttons sunk into the stone: shaded under the top edge, lit along the lip. */
+  .round,
+  .empire-toggle,
+  .step {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    color: #33261a;
+    background: linear-gradient(180deg, rgba(70, 48, 26, 0.2), rgba(70, 48, 26, 0.05));
+    box-shadow: inset 0 2px 4px rgba(50, 32, 14, 0.5), inset 0 -1px 0 rgba(255, 250, 236, 0.35), 0 1px 0 rgba(255, 250, 236, 0.75);
+    transition: background-color 0.15s ease;
+  }
   .round {
     width: 44px;
     height: 44px;
-    padding: 0;
-    display: grid;
-    place-items: center;
     border-radius: 3px;
-    background: rgba(246,236,220,.3);
-    border: 1px solid var(--rule);
-    box-shadow: none;
   }
-  .round .icon { margin: 0; width: 22px; height: 22px; }
-  .insight {
+  .empire-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.4rem;
     height: 44px;
-    padding: 0 0.8rem;
-    background: transparent;
-    border: 1px solid var(--rule);
+    min-height: 44px;
+    padding: 0 0.85rem 0 0.7rem;
     border-radius: 3px;
     font-family: var(--display);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .step {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .step:disabled { opacity: 0.35; }
+  :is(.round, .empire-toggle, .step):hover:not(:disabled) { background-color: rgba(255, 250, 236, 0.4); }
+  .round[aria-pressed='true'],
+  .empire-toggle[aria-expanded='true'] {
+    background: linear-gradient(180deg, rgba(50, 32, 14, 0.42), rgba(50, 32, 14, 0.2));
+    box-shadow: inset 0 3px 6px rgba(30, 18, 6, 0.6), 0 1px 0 rgba(255, 250, 236, 0.75);
+  }
+  .round .icon, .step .icon, .empire-toggle .icon { margin: 0; }
+  .round .icon { width: 22px; height: 22px; }
+  /* Insight is a plaque of violet glaze set into the beam. */
+  .insight {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: 44px;
+    padding: 0 0.85rem;
+    border: 1px solid #2c1c3c;
+    border-radius: 3px;
+    font-family: var(--display);
+    font-weight: 700;
     font-size: 1.1rem;
+    color: #f3eafa;
+    background:
+      radial-gradient(ellipse at 30% 15%, rgba(236, 220, 255, 0.35), transparent 55%),
+      linear-gradient(180deg, #7f62a0 0%, #5d4380 55%, #3f2a5a 100%);
+    box-shadow: inset 0 1px rgba(240, 228, 255, 0.35), inset 0 -2px 3px rgba(20, 8, 34, 0.4), 0 2px 0 #24163a, 0 3px 6px rgba(30, 16, 40, 0.3);
+  }
+  .insight .icon { filter: invert(94%) sepia(8%) saturate(400%) hue-rotate(340deg); }
+  /* A bead of gold when an upgrade can be bought. */
+  .insight-ready {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff1c4, #d9a441 70%);
+    box-shadow: 0 0 0 1.5px #3f2a5a, 0 0 8px rgba(255, 214, 120, 0.9);
   }
   .icon { width: 1.5em; height: 1.5em; vertical-align: -0.35em; }
   .icon.small { width: 1.15em; height: 1.15em; vertical-align: -0.2em; }
 
-  .sites {
-    position: absolute;
-    top: calc(var(--hud-h) + 0.2rem);
-    left: calc((100% - var(--drawer-width)) / 2);
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--panel);
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    box-shadow: var(--shadow);
-    padding: 0.15rem;
-    font-family: var(--display);
-    font-weight: 600;
-  }
-  .sites button { border: 0; background: transparent; border-radius: 50%; padding: 0; }
-  .sites button .icon { margin: 0; }
   .caption {
     position: absolute;
     bottom: calc(var(--controls-h) + 0.75rem);
@@ -793,38 +1102,77 @@
     transform: translateX(-50%);
     max-width: min(90vw, 36rem);
     margin: 0;
+    font-family: var(--display);
     font-style: italic;
-    background: rgba(33, 27, 23, 0.72);
+    font-size: 1.02rem;
     color: var(--parchment);
-    padding: 0.35rem 0.9rem;
-    border-radius: 999px;
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.45), 0 6px 14px rgba(16, 8, 3, 0.4);
+    padding: 0.3rem 1.1rem;
+    border-radius: 2px;
     text-align: center;
-    font-size: 0.9rem;
   }
+  /* The chapter card: ink with a key border top and bottom, like a frieze band. */
+  .wipe {
+    position: absolute;
+    inset: 0 var(--drawer-width) 0 0;
+    z-index: 30;
+    display: grid;
+    place-content: center;
+    gap: 0.4rem;
+    text-align: center;
+    color: var(--parchment);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cpath d='M0 18H10V4H26V14H16V10H20' fill='none' stroke='%23a57b3b' stroke-width='2'/%3E%3Cpath d='M20 18H30V4H46' fill='none' stroke='%23a57b3b' stroke-width='2'/%3E%3C/svg%3E") repeat-x center calc(50% - 4.2rem) / auto 22px,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cpath d='M0 18H10V4H26V14H16V10H20' fill='none' stroke='%23a57b3b' stroke-width='2'/%3E%3Cpath d='M20 18H30V4H46' fill='none' stroke='%23a57b3b' stroke-width='2'/%3E%3C/svg%3E") repeat-x center calc(50% + 4.2rem) / auto 22px,
+      var(--ink);
+    pointer-events: none;
+  }
+  .wipe.in { animation: wipe-in 420ms cubic-bezier(0.7, 0, 0.3, 1) both; }
+  .wipe.out { animation: wipe-out 520ms cubic-bezier(0.7, 0, 0.3, 1) 80ms both; }
+  @keyframes wipe-in {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+  @keyframes wipe-out {
+    from { clip-path: inset(0 0 0 0); }
+    to { clip-path: inset(0 0 0 100%); }
+  }
+  .wipe-chapter { font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--pale-clay); }
+  .wipe-name { font-family: var(--display); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .wipe.in .wipe-name { animation: inscribe 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both; }
   .paused-banner {
     position: absolute;
     top: 45%;
     left: calc((100% - var(--drawer-width)) / 2);
     transform: translate(-50%, -50%);
-    background: var(--ink);
-    color: var(--ivory);
-    padding: 0.6rem 1.4rem;
-    border-radius: 999px;
-    border: 1px solid var(--bronze);
-    font-size: 1.1rem;
-    letter-spacing: 0.04em;
+    color: var(--parchment);
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.45), 0 10px 24px rgba(16, 8, 3, 0.5);
+    padding: 0.8rem 1.8rem;
+    border-radius: 2px;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .paused-banner::after,
+  .story::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.55);
+    box-shadow: 1px 1px 0 rgba(255, 236, 210, 0.1);
+    pointer-events: none;
   }
 
-  .sites .empire-toggle {
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0 0.8rem 0 0.6rem;
-    border-left: 1px solid var(--rule);
-  }
-  .sites .empire-toggle[aria-expanded='true'] { background: var(--ink); color: var(--ivory); }
-  .sites .empire-toggle[aria-expanded='true'] .icon { filter: invert(1); }
   .approved {
     width: 1.3em;
     height: 1.3em;
@@ -835,45 +1183,44 @@
   .suggest {
     position: absolute;
     top: calc(var(--hud-h) + 3.6rem);
-    right: calc(var(--drawer-width) + 0.75rem);
+    right: calc(var(--scroll-w) + 3rem);
     z-index: 6;
     display: flex;
     align-items: center;
     gap: 0.7rem;
     max-width: min(92vw, 26rem);
-    padding: 0.6rem 0.8rem;
-    background: var(--paper);
-    border: 1px solid var(--ink);
-    border-left: 4px solid #6b4f8a;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    padding: 0.75rem 0.9rem 0.75rem 1.4rem;
+    color: #22160d;
+    background:
+      linear-gradient(180deg, rgba(255, 250, 236, 0.35), rgba(120, 82, 36, 0.12)),
+      var(--slip) 0 0 / var(--tile) var(--tile);
+    border: 0;
+    border-radius: 1px;
+    box-shadow: inset 0 0 0 1px rgba(92, 60, 26, 0.28), inset 0 -10px 12px -10px rgba(80, 50, 18, 0.35), 0 8px 18px rgba(16, 8, 3, 0.4);
     font-size: 0.9rem;
     flex-wrap: wrap;
+  }
+  .suggest::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 1.35rem;
+    width: 0.55rem;
+    height: 2.5px;
+    border-radius: 2px;
+    background: #6b4f8a;
+    transform: rotate(-4deg);
   }
   .suggest img { width: 32px; height: 32px; flex: none; }
   .suggest p { margin: 0; flex: 1 1 12rem; line-height: 1.35; }
   .suggest-actions { display: flex; gap: 0.4rem; margin-left: auto; }
-  .suggest .primary { background: var(--clay); color: var(--ivory); }
-  .objective.pinned { color: var(--ivory); }
-  .objective.goal-ready { background: #fff4dc; color: var(--ink); box-shadow: inset 0 0 0 1px var(--bronze); }
-  .pin-mark { color: var(--clay); margin-right: 0.45em; font-size: 0.8em; }
-  .objective-bar {
-    display: block;
-    height: 4px;
-    margin: 0.3rem auto 0.05rem;
-    width: min(100%, 18rem);
-    background: rgba(33, 27, 23, 0.14);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .objective-bar span { display: block; height: 100%; background: var(--clay); transition: width 0.4s ease; }
   .narrow .suggest { top: auto; bottom: calc(var(--controls-h) + 0.6rem); right: 50%; transform: translateX(50%); }
 
   /* ----------------------------------------------------------- controls */
   .controls {
     position: absolute;
     left: calc((100% - var(--drawer-width)) / 2);
-    width: min(46rem, calc(100% - var(--drawer-width) - 1.5rem));
+    width: min(48rem, calc(100% - var(--drawer-width) - 1.5rem));
     bottom: max(0.75rem, env(safe-area-inset-bottom));
     transform: translateX(-50%);
     padding: 0;
@@ -887,25 +1234,128 @@
     transition: left 0.2s ease, width 0.2s ease, bottom 0.2s ease;
   }
   .controls > * { pointer-events: auto; }
+  /* A tabula ansata: a basalt tablet with dovetail handles, the goal cut into
+     it and the push set beside it in glazed clay. */
+  .tablet {
+    --ansa: 22px;
+    position: relative;
+    width: 100%;
+    padding: 0 var(--ansa);
+    filter: drop-shadow(0 6px 10px rgba(16, 8, 3, 0.45)) drop-shadow(0 1px 1px rgba(16, 8, 3, 0.5));
+  }
+  .tablet::before,
+  .tablet::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: calc(var(--ansa) + 2px);
+    background:
+      radial-gradient(circle at var(--peg) 50%, rgba(0, 0, 0, 0.65) 0 2.5px, rgba(255, 236, 210, 0.16) 3px 3.8px, transparent 4.2px),
+      linear-gradient(180deg, rgba(255, 236, 210, 0.05), rgba(0, 0, 0, 0.22)),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+  }
+  .tablet::before { left: 0; --peg: 42%; clip-path: polygon(100% 28%, 0 8%, 0 92%, 100% 72%); }
+  .tablet::after { right: 0; --peg: 58%; clip-path: polygon(0 28%, 100% 8%, 100% 92%, 0 72%); }
+  .slab {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.1rem;
+    border-radius: 2px;
+    color: var(--parchment);
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.22), inset 0 -2px 0 rgba(0, 0, 0, 0.45), inset 1px 0 0 rgba(255, 236, 210, 0.08), inset -1px 0 0 rgba(0, 0, 0, 0.3);
+  }
+  /* An incised border a little in from the edge; bronze when the goal is within reach. */
+  .slab::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.55);
+    border-radius: 1px;
+    box-shadow: 1px 1px 0 rgba(255, 236, 210, 0.1);
+    pointer-events: none;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .tablet.goal-ready .slab::after {
+    border-color: rgba(214, 170, 98, 0.75);
+    box-shadow: 0 0 10px rgba(214, 170, 98, 0.25), inset 0 0 8px rgba(214, 170, 98, 0.12);
+  }
+  .goal-stack {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 0.3rem;
+    text-align: left;
+  }
   .objective {
     margin: 0;
-    background: rgba(33, 27, 23, 0.88);
-    color: var(--parchment);
-    border: 1px solid rgba(217, 156, 108, 0.72);
-    border-radius: 999px;
-    padding: 0.32rem 1.15rem;
-    max-width: min(94vw, 44rem);
-    text-align: center;
-    font-size: 0.92rem;
-    line-height: 1.35;
-    box-shadow: 0 3px 12px rgba(33, 27, 23, 0.22);
-    backdrop-filter: blur(4px);
+    font-family: var(--display);
+    font-size: 1.14rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ivory);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
+  .tablet.goal-ready .objective { color: #ffe3ae; }
+  .horizon-label {
+    margin-right: 0.55rem;
+    font-family: var(--body);
+    color: var(--pale-clay);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    vertical-align: 0.14em;
+  }
+  .pin-mark { color: var(--pale-clay); margin-right: 0.45em; font-size: 0.75em; }
+  /* Progress is bronze inlaid in a groove. */
+  .objective-bar {
+    display: block;
+    height: 4px;
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 236, 210, 0.1);
+  }
+  .objective-bar span { display: block; height: 100%; background: linear-gradient(180deg, #f3d595, #c0924b 45%, #7c5626); transition: width 0.4s ease; }
+  .horizons {
+    display: flex;
+    gap: 0.9rem;
+    margin: 0;
+    min-width: 0;
+    font-size: 0.72rem;
+    color: rgba(235, 220, 192, 0.72);
+  }
+  .horizons span {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .horizons b { margin-right: 0.4rem; color: rgba(217, 156, 108, 0.85); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.6rem; }
   .control-hint {
     margin: -0.1rem 0 0;
     padding: 0.18rem 0.75rem;
-    border-radius: 999px;
-    background: rgba(33, 27, 23, 0.82);
+    border-radius: 2px;
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.45);
     color: var(--parchment);
     font-size: 0.72rem;
     letter-spacing: 0.04em;
@@ -920,117 +1370,70 @@
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  .purchase-count {
-    display: inline-grid;
-    place-items: center;
-    background: var(--clay);
-    color: var(--ivory);
-    border-radius: 999px;
-    min-width: 1.45em;
-    height: 1.45em;
-    padding: 0 0.3em;
-    font-size: 0.78rem;
-    font-weight: 700;
-    margin-left: 0.15rem;
-  }
-  .control-row {
-    display: flex;
-    gap: 0.45rem;
-    align-items: center;
-    padding: 0.38rem;
-    border: 1px solid rgba(217, 156, 108, 0.72);
-    border-radius: 7px;
-    background: rgba(33, 27, 23, 0.9);
-    box-shadow: 0 5px 16px rgba(33, 27, 23, 0.3);
-    backdrop-filter: blur(5px);
-  }
-  .push,
-  .drawer-toggle {
-    min-height: 52px;
-    border-radius: 4px;
+  /* The push: glazed clay, like the seals on the scroll. */
+  .push {
+    flex: none;
+    min-height: 54px;
+    min-width: 11.5rem;
+    padding: 0 1.1rem 0 0.95rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    border: 1px solid #2a1006;
+    border-radius: 3px;
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: 0.03em;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.72);
-  }
-  .push {
-    min-width: 12rem;
-    padding: 0 1.2rem 0 1rem;
-    background: var(--clay);
     color: var(--ivory);
-    border: 1.5px solid var(--pale-clay);
+    background:
+      radial-gradient(ellipse at 30% 15%, rgba(255, 214, 170, 0.3), transparent 60%),
+      linear-gradient(180deg, #a84f28 0%, #8e3c1b 55%, #6a2910 100%);
+    box-shadow: inset 0 1px rgba(255, 220, 180, 0.35), inset 0 -2px 3px rgba(40, 12, 2, 0.4), 0 2px 0 #1a0b04, 0 3px 6px rgba(0, 0, 0, 0.35);
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
   }
+  .push:active,
+  .push.held {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(30, 10, 2, 0.55), 0 1px 0 #1a0b04;
+  }
+  .push.held { background: linear-gradient(180deg, #5e2711, #3e1808); }
   .push .icon { margin: 0; filter: invert(94%) sepia(8%) saturate(400%) hue-rotate(340deg); }
+  /* The key's name, cut into the glaze. */
   .push kbd {
     font: inherit;
     font-size: 0.64rem;
     font-weight: 400;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0.1rem 0.4rem;
-    border: 1px solid rgba(246, 236, 220, 0.5);
-    border-radius: 4px;
-    opacity: 0.85;
+    padding: 0.12rem 0.4rem;
+    border: 0;
+    border-radius: 2px;
+    background: rgba(40, 12, 2, 0.32);
+    box-shadow: inset 0 1px 2px rgba(20, 6, 0, 0.6), 0 1px 0 rgba(255, 220, 180, 0.25);
+    opacity: 0.9;
   }
   @media (pointer: coarse) {
     .push kbd { display: none; }
   }
-  .push.held { background: var(--ink); }
+  .push.opening-handoff {
+    outline: 4px solid var(--ivory);
+    outline-offset: 4px;
+    animation: opening-call 900ms ease-in-out infinite alternate;
+  }
   .push.held .icon { animation: nudge 0.6s ease-in-out infinite alternate; }
   @keyframes nudge {
     to { transform: translateX(3px); }
   }
-  .drawer-toggle {
-    min-width: 8rem;
-    padding: 0 1.1rem 0 0.9rem;
-    background: var(--parchment);
-    border: 1.5px solid var(--bronze);
+  @keyframes opening-call {
+    to { transform: translateY(-3px); box-shadow: 0 5px 0 #1a0b04, 0 0 24px rgba(217, 156, 108, 0.8); }
   }
-  .drawer-toggle .icon { margin: 0; }
-
-  /* ------------------------------------------------------------- drawer */
-  .drawer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(420px, 30vw);
-    min-width: 300px;
-    background: var(--paper);
-    border-left: 3px solid var(--ink);
-    overflow-y: auto;
-    transform: translateX(100%);
-    transition: transform 0.2s ease;
-    z-index: 10;
-    box-shadow: -8px 0 0 rgba(165,123,59,.35);
-  }
-  .drawer-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.3rem 0.4rem 0.3rem 1rem; position: sticky; top: 0; z-index: 1; background: var(--ink); color: var(--parchment); }
-  .eyebrow { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
-  .drawer-heading button { border: 0; background: transparent; color: var(--parchment); }
-  .drawer.open { transform: none; }
+  :global(.reduced-motion) .push.opening-handoff { animation: none; }
 
   /* ------------------------------------------------------------- narrow */
-  .narrow .drawer {
-    top: auto;
-    left: 0;
-    width: 100%;
-    min-width: 0;
-    height: 45vh;
-    border-left: none;
-    border-top: 1px solid var(--rule);
-    border-radius: 16px 16px 0 0;
-    transform: translateY(100%);
-  }
-  .narrow .drawer.open { transform: none; }
-  .narrow:has(.drawer.open) .controls { bottom: 45vh; }
   .narrow .hud { grid-template-columns: 1fr auto; gap: 0.4rem; padding-left: 0.6rem; padding-right: 0.6rem; }
   .narrow .chapter { grid-column: 1 / -1; grid-row: 2; padding: 0; }
   .narrow .chapter h1 { font-size: 1.1rem; }
@@ -1042,12 +1445,38 @@
   .narrow .wallet { padding: 0.25rem 0.6rem 0.25rem 0.35rem; }
   .narrow .coin { width: 1.8rem; height: 1.8rem; }
   .narrow .obols { font-size: 1.25rem; }
-  .narrow .decree { min-width: 0; flex: 1; }
+  .narrow .hud-left { display: contents; }
+  .narrow .wallet { grid-column: 1; grid-row: 1; border-right: 0; box-shadow: none; padding-right: 0; }
+  .narrow .wallet { min-width: 0; }
+  .narrow .obols small { display: none; }
+  .narrow .insight { padding: 0 0.55rem; height: 40px; font-size: 1rem; }
+  .narrow .decree {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    font-size: 0.78rem;
+  }
+  .narrow .decree-label { flex: none; font-size: 0.6rem; }
+  .narrow .decree-name { flex: 1; min-width: 0; }
+  .narrow .decree .mini-bar { flex: 0 0 4.5rem; margin: 0; }
+  .narrow .toast,
+  .narrow .stamp-toast { top: auto; bottom: calc(var(--controls-h) + 0.75rem); left: 0.75rem; right: 0.75rem; }
+  .narrow .empire-toggle { height: 40px; min-height: 40px; padding: 0 0.6rem; }
+  .narrow .empire-label { display: none; }
+  .narrow .step { width: 32px; height: 32px; min-width: 32px; min-height: 32px; }
   .narrow .controls { width: calc(100% - 0.8rem); gap: 0.3rem; bottom: max(0.4rem, env(safe-area-inset-bottom)); }
-  .narrow .objective { font-size: 0.82rem; padding: 0.35rem 0.9rem; border-radius: 14px; }
-  .narrow .push { min-width: 9.5rem; }
+  .narrow .tablet { --ansa: 14px; }
+  .narrow .slab { flex-direction: column; align-items: stretch; gap: 0.5rem; padding: 0.55rem 0.6rem 0.6rem; }
+  .narrow .objective { font-size: 0.98rem; }
+  .narrow .horizons { gap: 0.6rem; font-size: 0.66rem; }
+  .narrow .horizons span { max-width: 50%; }
+  .narrow .push { min-width: 0; width: 100%; }
   .narrow .push kbd { display: none; }
-  .narrow .drawer-toggle { min-width: 0; }
   .narrow .story { top: calc(var(--hud-h) + 0.3rem); width: 92%; }
   .narrow .story .portrait { width: 48px; height: 48px; }
   .narrow .story .god { font-size: 0.95rem; }
@@ -1055,20 +1484,25 @@
     .chapter-detail,
     .record > span:first-child { display: none; }
     .hud { padding-top: 0.35rem; padding-bottom: 0.2rem; }
-    .controls { padding-top: 0.3rem; padding-bottom: 0.35rem; gap: 0.3rem; }
-    .objective { padding: 0.25rem 0.8rem; font-size: 0.8rem; }
-    .push,
-    .drawer-toggle { min-height: 46px; }
+    .hud { padding-bottom: calc(var(--key-h) + 0.3rem); }
+    .slab { padding-top: 0.4rem; padding-bottom: 0.4rem; }
+    .objective { font-size: 0.95rem; }
+    .horizons { display: none; }
+    .push { min-height: 46px; }
   }
   .story {
     position: absolute;
     top: calc(var(--hud-h) + 0.5rem);
     left: 50%;
     transform: translateX(-50%);
-    background: var(--ink);
     color: var(--ivory);
-    padding: 0.8rem 3rem 0.8rem 1.2rem;
-    border-radius: var(--radius);
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.45), 0 12px 26px rgba(16, 8, 3, 0.5);
+    padding: 0.9rem 3rem 0.9rem 1.1rem;
+    border-radius: 2px;
     max-width: min(92vw, 34rem);
     z-index: 20;
   }
@@ -1085,7 +1519,8 @@
     object-position: 50% 30%;
     border-radius: 50%;
     background: var(--parchment);
-    border: 2px solid var(--pale-clay);
+    border: 2px solid #1a120c;
+    box-shadow: 0 0 0 2.5px #c89c55, 0 0 0 4px #5c3e14, 0 2px 6px rgba(0, 0, 0, 0.5);
   }
   .story.compact .portrait {
     width: 48px;
@@ -1095,11 +1530,13 @@
     margin: 0.2rem 0;
   }
   .story .god {
-    font-size: 1.15rem;
+    font-family: var(--display);
+    font-size: 1.28rem;
+    line-height: 1.25;
     letter-spacing: 0.02em;
   }
   .story .god.small {
-    font-size: 0.95rem;
+    font-size: 1.08rem;
   }
   .story .sis {
     font-style: italic;
@@ -1114,28 +1551,33 @@
   }
   .story button {
     position: absolute;
-    top: 0.3rem;
-    right: 0.3rem;
+    top: 0.35rem;
+    right: 0.35rem;
+    z-index: 1;
     background: transparent;
-    color: var(--ivory);
+    color: var(--parchment);
     border: none;
+    box-shadow: none;
   }
   .toast {
     position: absolute;
-    top: calc(var(--hud-h) + 0.5rem);
-    right: 1rem;
-    background: var(--ink);
-    border: 1px solid var(--bronze);
-    color: var(--ivory);
+    top: calc(var(--hud-h) + 0.9rem);
+    right: calc(var(--scroll-w) + 3rem);
+    color: var(--parchment);
+    background:
+      radial-gradient(120% 140% at 30% 0%, rgba(255, 236, 210, 0.1), transparent 60%),
+      var(--basalt) 0 0 / var(--stone-tile) var(--stone-tile),
+      #2c2622;
+    box-shadow: inset 0 1px 0 rgba(255, 236, 210, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.45), 0 8px 18px rgba(16, 8, 3, 0.45);
     padding: 0.6rem 1rem;
-    border-radius: var(--radius);
+    border-radius: 2px;
     max-width: 22rem;
     z-index: 20;
   }
   .stamp-toast {
     position: absolute;
     top: calc(var(--hud-h) + 5rem);
-    right: 1rem;
+    right: calc(var(--scroll-w) + 3rem);
     z-index: 21;
   }
   .stamp-toast button {
@@ -1144,9 +1586,9 @@
     gap: 0.6rem;
     background: var(--ivory);
     color: var(--ink);
-    border: 2px solid var(--bronze);
+    border: 1px solid #5c3e14;
     padding: 0.4rem 0.9rem 0.4rem 0.4rem;
-    border-radius: var(--radius);
+    border-radius: 2px;
     max-width: 22rem;
     text-align: left;
   }
@@ -1154,6 +1596,13 @@
     width: 48px;
     height: 48px;
     flex: none;
+    animation: press 520ms 160ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+  }
+  .stamp-toast button { box-shadow: 0 2px 0 var(--ink), var(--shadow); }
+  /* The seal comes down on the page: large and light, then pressed in. */
+  @keyframes press {
+    from { transform: scale(1.8) rotate(-14deg); opacity: 0; }
+    60% { opacity: 1; }
   }
   .error {
     position: absolute;
@@ -1185,9 +1634,5 @@
     display: flex;
     gap: 0.6rem;
     justify-content: flex-end;
-  }
-  .primary {
-    background: var(--clay);
-    color: var(--ivory);
   }
 </style>

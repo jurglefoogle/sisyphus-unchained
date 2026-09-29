@@ -38,7 +38,7 @@ describe('dialogue', () => {
   });
 
   it('keeps programmer and gamer jargon rare, and out of story beats', () => {
-    const jargon = /while\(|\bgit\b|firmware|uptime|save file|respawn|speedrun|\bAFK\b|natural 1|patch notes|controller|level up|as a service|legacy code|bug report/i;
+    const jargon = /while\(|\bgit\b|firmware|uptime|save file|respawn|speedrun|\bAFK\b|natural 1|patch notes|controller|level up|as a service|legacy code|bug report|\bQA\b/i;
     const beats = Object.entries(en).filter(([k]) => k.startsWith('story.'));
     expect(beats.filter(([, v]) => jargon.test(v)).map(([k]) => k)).toEqual([]);
     const pools = [ambient, ambientWorks, arrivals, barks, again].flatMap((p) => Object.entries(p));

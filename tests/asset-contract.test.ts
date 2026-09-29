@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ASSET_MANIFEST, REQUIRED_ASSETS, getAssetState } from '../src/world/assets';
+import { ASSET_MANIFEST, REQUIRED_ASSETS, getAssetState, getAssetVariantState } from '../src/world/assets';
 import { sampleAssetState } from '../src/world/asset-animation';
 import deliveries from '../public/assets/pottery-v1/delivery.json';
 import library from '../public/assets/pottery-v1/manifest.json';
@@ -27,6 +27,15 @@ describe('asset contract', () => {
         if (state.audioUrl) expect(state.audioUrl).toMatch(/^\/assets\/pottery-v1\/audio\/.*\.wav$/);
         for (const layer of state.layers) {
           expect(library.assets.some((asset) => asset.url === layer.frame.url), layer.frame.url).toBe(true);
+          if (layer.frame.rect) {
+            const [x, y, w, h] = layer.frame.rect;
+            expect(x).toBeGreaterThanOrEqual(0);
+            expect(y).toBeGreaterThanOrEqual(0);
+            expect(w).toBeGreaterThan(0);
+            expect(h).toBeGreaterThan(0);
+            expect(x + w).toBeLessThanOrEqual(layer.frame.dimensions[0]);
+            expect(y + h).toBeLessThanOrEqual(layer.frame.dimensions[1]);
+          }
           expect(layer.frame.dimensions).toHaveLength(2);
           expect(layer.frame.pivot).toHaveLength(2);
           expect(layer.frame.pivot.every((n) => n >= 0 && n <= 1)).toBe(true);
@@ -41,6 +50,22 @@ describe('asset contract', () => {
         }
       }
     }
+  });
+
+  it('keeps one painted Sisyphus walk frame visible throughout each quarter stride', () => {
+    const walk = getAssetState('sisyphus', 'walk')!;
+    expect(walk.status).toBe('available');
+    expect(walk.layers).toHaveLength(4);
+    for (let frame = 0; frame < 4; frame++) {
+      const layers = sampleAssetState(walk, (frame + 0.5) / 4);
+      expect(layers.filter((layer) => layer.transform.alpha > 0.99).map((layer) => layer.id)).toEqual([`walk_${frame}`]);
+      expect(layers.every((layer) => layer.frame.assetId === 'sisyphus_walk_strip')).toBe(true);
+    }
+    const fall = getAssetState('sisyphus', 'slip_knockdown')!;
+    expect(fall.status).toBe('available');
+    expect(fall.loop).toBe(false);
+    expect(sampleAssetState(fall, 5).filter((layer) => layer.transform.alpha > 0.99).map((layer) => layer.id)).toEqual(['walk_3']);
+    expect(sampleAssetState(fall, 0.1, true).filter((layer) => layer.transform.alpha > 0.99).map((layer) => layer.id)).toEqual(['walk_3']);
   });
 
   it('keeps generated terrain aligned with authoritative route surfaces', () => {
@@ -66,7 +91,7 @@ describe('asset contract', () => {
     const end = sampleAssetState(state, 10);
     expect(end.every((layer) => layer.transform.alpha === 0)).toBe(true);
     expect(sampleAssetState(state, -1)).toEqual(sampleAssetState(state, 0));
-    expect(sampleAssetState(getAssetState('sisyphus', 'walk')!, 2)).toEqual([]);
+    expect(sampleAssetState(getAssetState('sisyphus', 'walk')!, 2)).toEqual(sampleAssetState(getAssetState('sisyphus', 'walk')!, 0));
     expect(sampleAssetState(getAssetState('flywheel', 'uninstalled')!, 2)).toEqual([]);
   });
 
@@ -88,6 +113,8 @@ describe('asset contract', () => {
     };
     expect(rows.some((row) => row.status === 'missing')).toBe(false);
     expect(report.complete).toBe(false);
-    expect(variants).toContainEqual({ id: 'sisyphus', variant: 'feet_wrapped', status: 'blocked-image-limit' });
+    expect(variants).toContainEqual({ id: 'sisyphus', variant: 'feet_wrapped', status: 'partial' });
+    expect(getAssetVariantState('sisyphus', 'feet_wrapped', 'walk')?.status).toBe('available');
+    expect(getAssetVariantState('sisyphus', 'feet_wrapped', 'rest')?.status).toBe('available');
   });
 });
