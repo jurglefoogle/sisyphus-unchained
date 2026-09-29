@@ -6,3 +6,4 @@ dist/
 __pycache__/
 *.pyc
 release/
+.codex-remote-attachments/
