@@ -6,6 +6,12 @@
 
   let { game, view, onprestige }: { game: Game; view: GameView; onprestige: (kind?: 'appeal') => void } = $props();
 
+  /** Rows whose explanation is open. Each row shows one line of effect; the rest waits behind "?". */
+  let explained = $state<Record<string, boolean>>({});
+  /** Longer than this, the effect is clipped to one line until explained. */
+  const ONE_LINE = 42;
+  const hasMore = (row: PurchaseRow) => row.effect.length > ONE_LINE || !!row.note || (!!row.wait && !row.disabled);
+
   /** Buy, and if it went through, stamp the row: warm light in the fibres and a press of the seal. */
   function buy(e: MouseEvent, row: PurchaseRow, count = 1) {
     const btn = e.currentTarget as HTMLElement;
@@ -66,6 +72,16 @@
           {#if row.icon}<img class="row-icon" class:art={row.icon.startsWith('work_')} src={imageUrl(row.icon)} alt="" />{/if}
           <strong>{row.title}</strong>
           {#if row.level}<span class="level">{row.level}</span>{/if}
+          {#if hasMore(row)}
+            <button
+              class="more"
+              aria-expanded={!!explained[row.key]}
+              aria-controls="more-{i}"
+              title={explained[row.key] ? 'Less' : 'What does this do?'}
+              aria-label="{explained[row.key] ? 'Hide details for' : 'Explain'} {row.title}"
+              onclick={() => (explained[row.key] = !explained[row.key])}
+            >?</button>
+          {/if}
           {#if row.pinKey}
             <button
               class="pin"
@@ -78,8 +94,13 @@
             </button>
           {/if}
         </div>
-        <p class="effect">{row.effect}</p>
-        {#if row.note}<p class="note">{row.note}</p>{/if}
+        <p class="effect" class:clipped={!explained[row.key]}>{row.effect}</p>
+        {#if explained[row.key]}
+          <div class="more-text" id="more-{i}">
+            {#if row.note}<p class="note">{row.note}</p>{/if}
+            {#if row.wait && !row.disabled}<p class="wait">{row.wait}</p>{/if}
+          </div>
+        {/if}
         {#if row.progress !== undefined}
           <div class="bar" role="progressbar" aria-label="{row.title} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(row.progress * 100)}>
             <span style:width="{row.progress * 100}%"></span>
@@ -101,7 +122,6 @@
               </button>
             {/if}
           </div>
-          {#if row.wait}<p class="wait">{row.wait}</p>{/if}
         {/if}
       </li>
     {/each}
@@ -158,11 +178,13 @@
     padding: 0;
     margin: 0.6rem 0 0;
     display: grid;
+    /* Rows may be narrower than their longest line: effects clip to one line. */
+    grid-template-columns: minmax(0, 1fr);
   }
   /* Entries written down the sheet, each marked in the margin with a paragraphos. */
   .row {
     position: relative;
-    padding: 0.85rem 0.3rem 0.9rem 0.2rem;
+    padding: 0.55rem 0.3rem 0.6rem 0.2rem;
     background-image: linear-gradient(90deg, transparent, rgba(92, 60, 26, 0.28) 8%, rgba(92, 60, 26, 0.22) 60%, transparent);
     background-size: 100% 1px;
     background-position: 0 100%;
@@ -174,7 +196,7 @@
     content: '';
     position: absolute;
     left: -1.05rem;
-    top: 1.25rem;
+    top: 0.95rem;
     width: 0.75rem;
     height: 2.5px;
     border-radius: 2px;
@@ -221,9 +243,11 @@
   }
   /* Pins are drops of wax: a faint ring until pressed, then sealed. */
   .pin {
-    width: 40px;
-    height: 40px;
-    margin: -6px -4px -6px 0;
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    min-width: 34px;
+    margin: -5px -4px -5px 0;
     padding: 0;
     display: grid;
     place-items: center;
@@ -268,8 +292,9 @@
   }
   .row-head strong {
     flex: 1;
+    min-width: 0;
     font-family: var(--display);
-    font-size: 1.18rem;
+    font-size: 1.08rem;
     font-weight: 700;
     line-height: 1.15;
     color: #1f140c;
@@ -282,10 +307,10 @@
     mix-blend-mode: multiply;
   }
   .row-icon.art {
-    width: 46px;
-    height: 46px;
+    width: 38px;
+    height: 38px;
     object-fit: contain;
-    margin: -6px 0;
+    margin: -5px 0;
     opacity: 1;
     mix-blend-mode: normal;
   }
@@ -314,10 +339,40 @@
   .effect,
   .note,
   .wait {
-    margin: 0.25rem 0;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    margin: 0.2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.35;
   }
+  .effect.clipped {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .more-text { margin: 0.1rem 0 0.2rem; padding-left: 0.55rem; border-left: 2px solid rgba(92, 60, 26, 0.28); }
+  /* A small ink ring: the question the row answers when pressed. Hit area is larger than the ring. */
+  .more {
+    width: 30px;
+    height: 30px;
+    min-height: 30px;
+    min-width: 30px;
+    margin: -4px -2px;
+    padding: 0;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(92, 60, 26, 0.35);
+    background: transparent;
+    box-shadow: none;
+    color: rgba(58, 38, 20, 0.75);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1;
+    position: relative;
+  }
+  .more::after { content: ''; position: absolute; inset: -6px; }
+  .more[aria-expanded='true'] { color: #f6dccb; border-color: #3a2614; background: #5a4029; }
   .note,
   .wait {
     color: rgba(58, 38, 20, 0.74);
@@ -329,8 +384,8 @@
   .buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.55rem;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
   }
   /* Offers out of reach are only scored into the sheet. */
   .buttons button {
@@ -338,9 +393,9 @@
     overflow: hidden;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    min-height: 40px;
-    padding: 0 0.85rem;
+    gap: 0.4rem;
+    min-height: 36px;
+    padding: 0 0.7rem;
     border-radius: 3px;
     font-weight: 700;
     color: rgba(42, 29, 18, 0.6);
