@@ -469,7 +469,11 @@ export class World {
     // Portrait phones cannot fit the whole loop at a readable size: frame a
     // narrower slice and pan gently after the stone instead.
     if (availW < availH * 1.1) {
-      const w = Math.min(region.w, Math.max(900, (availW / availH) * 1100));
+      // Width at which the loop's height fills most of the view, so a tall
+      // phone gets a closer hill rather than a band of empty sky; the rest
+      // stays sky for the Improve roll to hang in.
+      const fill = (availW * region.h) / (availH * 0.8);
+      const w = Math.min(region.w, Math.max(620, fill));
       const lo = region.x + w / 2;
       const hi = region.x + region.w - w / 2;
       const want = Math.min(hi, Math.max(lo, this.focusX));

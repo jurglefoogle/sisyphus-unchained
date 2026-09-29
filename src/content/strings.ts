@@ -165,7 +165,7 @@ export const en: Record<string, string> = {
   'target.coin_amphora': 'Coin amphora',
   'target.gilded_offering': 'Gilded offering',
 
-  'hint.push': 'Hold the boulder, Space, or the Push button to climb.',
+  'hint.push': 'Hold the boulder or the Push button to climb.',
   'hint.prelude_fall': 'The shades toss an obol at every fall.',
   'hint.prelude_summit': 'Nothing holds you back now. Push to the top and ruin Zeus’s afternoon.',
   'hint.flywheel_tease': 'Something about the falling stone nags at you. Something about joules.',
