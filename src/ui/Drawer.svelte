@@ -10,6 +10,8 @@
   let explained = $state<Record<string, boolean>>({});
   /** Longer than this, the effect is clipped to one line until explained. */
   const ONE_LINE = 42;
+  /** The relic whose story is showing; the rest are a row of icons. */
+  let relic = $state<string | null>(null);
   const hasMore = (row: PurchaseRow) => row.effect.length > ONE_LINE || !!row.note || (!!row.wait && !row.disabled);
 
   /** Buy, and if it went through, stamp the row: warm light in the fibres and a press of the seal. */
@@ -67,60 +69,54 @@
 
   <ul>
     {#each view.rows as row, i (row.key)}
-      <li style:--i={i} class="row" class:affordable={row.affordable && !row.disabled} class:pinned={row.pinned} data-accent={row.accent ?? 'plain'}>
-        <div class="row-head">
-          {#if row.icon}<img class="row-icon" class:art={row.icon.startsWith('work_')} src={imageUrl(row.icon)} alt="" />{/if}
-          <strong>{row.title}</strong>
-          {#if row.level}<span class="level">{row.level}</span>{/if}
-          {#if hasMore(row)}
-            <button
-              class="more"
-              aria-expanded={!!explained[row.key]}
-              aria-controls="more-{i}"
-              title={explained[row.key] ? 'Less' : 'What does this do?'}
-              aria-label="{explained[row.key] ? 'Hide details for' : 'Explain'} {row.title}"
-              onclick={() => (explained[row.key] = !explained[row.key])}
-            >?</button>
-          {/if}
-          {#if row.pinKey}
-            <button
-              class="pin"
-              aria-pressed={!!row.pinned}
-              title={row.pinned ? 'Unpin goal' : 'Pin as goal'}
-              aria-label={row.pinned ? `Unpin ${row.title}` : `Pin ${row.title} as your goal`}
-              onclick={() => game.pinGoal(row.pinned ? null : row.pinKey!)}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4z M12 13v8" /></svg>
-            </button>
-          {/if}
+      <li style:--i={i} class="row" class:affordable={row.affordable && !row.disabled} class:pinned={row.pinned} class:iconless={!row.icon} data-accent={row.accent ?? 'plain'}>
+        {#if row.icon}<img class="row-icon" class:art={row.icon.startsWith('work_')} src={imageUrl(row.icon)} alt="" />{/if}
+        <div class="row-text">
+          <div class="row-title">
+            <strong>{row.title}</strong>
+            {#if hasMore(row) || row.pinKey}
+              <button
+                class="more"
+                aria-expanded={!!explained[row.key]}
+                aria-controls="more-{i}"
+                title={explained[row.key] ? 'Less' : 'What does this do?'}
+                aria-label="{explained[row.key] ? 'Hide details for' : 'Explain'} {row.title}"
+                onclick={() => (explained[row.key] = !explained[row.key])}
+              >?</button>
+            {/if}
+          </div>
+          <p class="effect" class:clipped={!explained[row.key]}>{#if row.level}<span class="level">{row.level}</span>{' · '}{/if}{row.effect}</p>
         </div>
-        <p class="effect" class:clipped={!explained[row.key]}>{row.effect}</p>
+        {#if !row.disabled && !row.options}
+          <button class="act" disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
+            <span>{row.verb ?? (row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : row.action.kind === 'steward' ? 'Hire' : 'Buy')}</span>
+            {#if row.cost}{@const p = price(row.cost, row.currency)}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
+          </button>
+        {/if}
         {#if explained[row.key]}
-          <div class="more-text" id="more-{i}">
+          <div class="more-text wide" id="more-{i}">
             {#if row.note}<p class="note">{row.note}</p>{/if}
             {#if row.wait && !row.disabled}<p class="wait">{row.wait}</p>{/if}
+            {#if row.pinKey}
+              <button class="pin" aria-pressed={!!row.pinned} onclick={() => game.pinGoal(row.pinned ? null : row.pinKey!)}>
+                {row.pinned ? 'Unpin goal' : 'Pin as goal'}
+              </button>
+            {/if}
           </div>
         {/if}
         {#if row.progress !== undefined}
-          <div class="bar" role="progressbar" aria-label="{row.title} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(row.progress * 100)}>
+          <div class="bar wide" role="progressbar" aria-label="{row.title} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(row.progress * 100)}>
             <span style:width="{row.progress * 100}%"></span>
           </div>
         {/if}
-        {#if !row.disabled}
-          <div class="buttons">
-            {#if row.options}
-              {#each row.options as opt (opt.label)}
-                {@const p = price(opt.cost, row.currency)}
-                <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
-                  <span>{opt.label}</span>{#if opt.cost}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
-                </button>
-              {/each}
-            {:else}
-              <button disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
-                <span>{row.verb ?? (row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : row.action.kind === 'steward' ? 'Hire' : 'Buy')}</span>
-                {#if row.cost}{@const p = price(row.cost, row.currency)}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
+        {#if !row.disabled && row.options}
+          <div class="buttons wide">
+            {#each row.options as opt (opt.label)}
+              {@const p = price(opt.cost, row.currency)}
+              <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
+                <span>{opt.label}</span>{#if opt.cost}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
               </button>
-            {/if}
+            {/each}
           </div>
         {/if}
       </li>
@@ -137,8 +133,15 @@
   {#if view.relics.length}
     <section class="relics">
       <h3>Relics</h3>
-      {#each view.relics as r (r.id)}
-        <p class="relic"><img src={iconUrl(`relic_${r.id}`)} alt="" /><span><strong>{r.name}</strong> <span class="muted">— {r.joke}</span></span></p>
+      <div class="relic-row">
+        {#each view.relics as r (r.id)}
+          <button class="relic" aria-pressed={relic === r.id} title={r.name} aria-label={r.name} onclick={() => (relic = relic === r.id ? null : r.id)}>
+            <img src={iconUrl(`relic_${r.id}`)} alt="" />
+          </button>
+        {/each}
+      </div>
+      {#each view.relics.filter((r) => r.id === relic) as r (r.id)}
+        <p class="relic-story"><strong>{r.name}</strong> <span class="muted">— {r.joke}</span></p>
       {/each}
     </section>
   {/if}
@@ -146,6 +149,7 @@
 
 <style>
   .drawer-body {
+    container-type: inline-size;
     padding: 0.4rem 1.5rem 1.5rem 1.7rem;
     color: #2a1d12;
   }
@@ -153,7 +157,7 @@
     margin: 0;
     font-family: var(--display);
     font-weight: 600;
-    font-size: 1.55rem;
+    font-size: 1.25rem;
     letter-spacing: 0.02em;
     color: #231710;
   }
@@ -181,10 +185,20 @@
     /* Rows may be narrower than their longest line: effects clip to one line. */
     grid-template-columns: minmax(0, 1fr);
   }
+  /* Where the sheet is wide, entries run in two columns. */
+  @container (min-width: 540px) {
+    ul { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.6rem; }
+  }
   /* Entries written down the sheet, each marked in the margin with a paragraphos. */
+  /* Two lines each: icon, title and effect, the action to the right. */
   .row {
     position: relative;
-    padding: 0.55rem 0.3rem 0.6rem 0.2rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: 'icon text act';
+    column-gap: 0.55rem;
+    align-items: center;
+    padding: 0.4rem 0.2rem 0.45rem 0.2rem;
     background-image: linear-gradient(90deg, transparent, rgba(92, 60, 26, 0.28) 8%, rgba(92, 60, 26, 0.22) 60%, transparent);
     background-size: 100% 1px;
     background-position: 0 100%;
@@ -196,7 +210,7 @@
     content: '';
     position: absolute;
     left: -1.05rem;
-    top: 0.95rem;
+    top: 1.05rem;
     width: 0.75rem;
     height: 2.5px;
     border-radius: 2px;
@@ -236,45 +250,23 @@
   .row.pinned::after {
     content: '';
     position: absolute;
-    inset: 0.3rem -0.4rem 0.3rem -0.5rem;
+    inset: 0.15rem -0.4rem 0.15rem -0.5rem;
     border: 1px solid rgba(149, 68, 33, 0.55);
     border-radius: 2px;
     pointer-events: none;
   }
-  /* Pins are drops of wax: a faint ring until pressed, then sealed. */
   .pin {
-    width: 34px;
-    height: 34px;
-    min-height: 34px;
-    min-width: 34px;
-    margin: -5px -4px -5px 0;
-    padding: 0;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    border: 1px solid rgba(92, 60, 26, 0.35);
+    min-height: 30px;
+    margin: 0.25rem 0 0.1rem;
+    padding: 0 0.7rem;
+    font-size: 0.82rem;
+    border-radius: 3px;
+    border: 1px solid rgba(92, 60, 26, 0.4);
     background: transparent;
     box-shadow: none;
-    flex: none;
+    color: #3a2614;
   }
-  .pin svg {
-    width: 17px;
-    height: 17px;
-    fill: none;
-    stroke: rgba(58, 38, 20, 0.7);
-    stroke-width: 1.8;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-  .pin[aria-pressed='true'] {
-    border-color: #6e1f10;
-    background: radial-gradient(circle at 36% 30%, #e08466 0%, #b23e24 38%, #83240f 72%, #5a150a 100%);
-    box-shadow: inset 0 -2px 3px rgba(40, 8, 2, 0.45), 0 1px 2px rgba(40, 20, 8, 0.4);
-  }
-  .pin[aria-pressed='true'] svg {
-    stroke: #f6dccb;
-    fill: #f6dccb;
-  }
+  .pin[aria-pressed='true'] { color: #f6dccb; border-color: #6e1f10; background: #8c3b1b; }
   .stale-goal {
     margin-top: 0.8rem;
     display: flex;
@@ -285,20 +277,27 @@
     border: 1px dashed rgba(92, 60, 26, 0.45);
   }
   .stale-goal span { flex: 1; }
-  .row-head {
+  .row.iconless { grid-template-areas: 'text text act'; }
+  .row-icon { grid-area: icon; }
+  .row-text { grid-area: text; min-width: 0; }
+  .row-title {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-  }
-  .row-head strong {
-    flex: 1;
+    gap: 0.4rem;
     min-width: 0;
+  }
+  .row-title strong {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-family: var(--display);
-    font-size: 1.08rem;
+    font-size: 1rem;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.2;
     color: #1f140c;
   }
+  .wide { grid-column: 1 / -1; }
   .row-icon {
     width: 28px;
     height: 28px;
@@ -307,10 +306,10 @@
     mix-blend-mode: multiply;
   }
   .row-icon.art {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
-    margin: -5px 0;
+    margin: -4px 0;
     opacity: 1;
     mix-blend-mode: normal;
   }
@@ -319,17 +318,23 @@
     font-size: 0.85rem;
     font-variant-numeric: tabular-nums;
   }
+  .relic-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
   .relic {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin: 0.35rem 0;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
   }
-  .relic img {
-    width: 40px;
-    height: 40px;
-    flex: none;
-  }
+  .relic[aria-pressed='true'] { border-color: rgba(92, 60, 26, 0.45); background: rgba(165, 123, 59, 0.14); }
+  .relic img { width: 36px; height: 36px; }
+  .relic-story { margin: 0.35rem 0 0; font-size: 0.88rem; line-height: 1.35; }
+  .relic-story .muted { font-size: inherit; }
   .relic-hunt { margin-top: 1.1rem; border: 1px dashed rgba(92, 60, 26, 0.5); padding: 0.6rem 0.75rem; background: rgba(165, 123, 59, 0.08); }
   .relic-hunt h3 { margin-top: 0; }
   .relic-hunt p { display: flex; align-items: center; gap: 0.65rem; margin: 0; }
@@ -339,23 +344,23 @@
   .effect,
   .note,
   .wait {
-    margin: 0.2rem 0;
-    font-size: 0.88rem;
-    line-height: 1.35;
+    margin: 0.1rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.3;
   }
   .effect.clipped {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  .more-text { margin: 0.1rem 0 0.2rem; padding-left: 0.55rem; border-left: 2px solid rgba(92, 60, 26, 0.28); }
+  .more-text { margin: 0.3rem 0 0.1rem; padding-left: 0.55rem; border-left: 2px solid rgba(92, 60, 26, 0.28); }
   /* A small ink ring: the question the row answers when pressed. Hit area is larger than the ring. */
   .more {
-    width: 30px;
-    height: 30px;
-    min-height: 30px;
-    min-width: 30px;
-    margin: -4px -2px;
+    width: 22px;
+    height: 22px;
+    min-height: 22px;
+    min-width: 22px;
+    margin: -2px 0;
     padding: 0;
     flex: none;
     display: grid;
@@ -367,11 +372,11 @@
     color: rgba(58, 38, 20, 0.75);
     font-family: var(--display);
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     line-height: 1;
     position: relative;
   }
-  .more::after { content: ''; position: absolute; inset: -6px; }
+  .more::after { content: ''; position: absolute; inset: -10px; }
   .more[aria-expanded='true'] { color: #f6dccb; border-color: #3a2614; background: #5a4029; }
   .note,
   .wait {
@@ -384,18 +389,23 @@
   .buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.4rem;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
   }
+  /* Actions stack the verb over the price, so they stay narrow. */
+  .act { grid-area: act; }
+  .buttons button { flex: 1 1 0; }
   /* Offers out of reach are only scored into the sheet. */
-  .buttons button {
+  .buttons button,
+  .act {
     position: relative;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    min-height: 36px;
-    padding: 0 0.7rem;
+    gap: 0.35rem;
+    min-height: 32px;
+    padding: 0 0.6rem;
+    font-size: 0.88rem;
     border-radius: 3px;
     font-weight: 700;
     color: rgba(42, 29, 18, 0.6);
@@ -404,7 +414,18 @@
     box-shadow: none;
   }
   /* Within reach they are pressed clay seals: a lit lip, a shaded foot and an ink edge. */
-  .buttons button:not(:disabled) {
+  .buttons button,
+  .act {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    min-width: 64px;
+    min-height: 40px;
+    padding: 0.15rem 0.55rem;
+    line-height: 1.15;
+  }
+  .buttons button:not(:disabled),
+  .act:not(:disabled) {
     color: #f7e9d6;
     border-color: #3a170a;
     background:
@@ -413,12 +434,14 @@
     box-shadow: inset 0 1px rgba(255, 220, 180, 0.3), inset 0 -2px 3px rgba(40, 12, 2, 0.35), 0 2px 0 #2a150a, 0 3px 6px rgba(40, 20, 8, 0.25);
     transform: translateY(-1px);
   }
-  .buttons button:not(:disabled):active {
+  .buttons button:not(:disabled):active,
+  .act:not(:disabled):active {
     transform: translateY(1px);
     box-shadow: inset 0 1px 3px rgba(33, 12, 4, 0.5), 0 0 0 #2a150a;
   }
   /* When an offer comes within reach, light runs once across the glaze. */
-  .buttons button:not(:disabled)::after {
+  .buttons button:not(:disabled)::after,
+  .act:not(:disabled)::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -434,7 +457,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.2rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     opacity: 0.95;
@@ -454,10 +477,12 @@
     font-size: 0.7em;
     line-height: 1;
   }
-  .buttons button:disabled .cost img {
+  .buttons button:disabled .cost img,
+  .act:disabled .cost img {
     opacity: 0.6;
   }
-  .buttons button:not(:disabled) .cost img {
+  .buttons button:not(:disabled) .cost img,
+  .act:not(:disabled) .cost img {
     filter: invert(94%) sepia(8%) saturate(400%) hue-rotate(340deg);
   }
   .bar {
