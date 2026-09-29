@@ -164,6 +164,7 @@ export function buildArchive(s: GameState): ArchiveView {
       { label: 'Resolved impacts', value: String(s.counters.totalImpacts) },
       { label: 'Highest chapter', value: `${s.counters.highestSiteEver + 1} / ${catalog.sites.length}` },
       { label: 'Active labor', value: formatDuration(s.counters.totalActiveSeconds) },
+      ...timedRecords(s),
     ],
     achievements: ACHIEVEMENTS.map((a) => ({
       id: a.id,
@@ -191,4 +192,17 @@ export function buildArchive(s: GameState): ArchiveView {
     decrees,
     scenes,
   };
+}
+
+/** Clocks count play plus counted absence; unknown clocks (older saves) are left out, never guessed. */
+function timedRecords(s: GameState): { label: string; value: string }[] {
+  const r = s.records;
+  const out: { label: string; value: string }[] = [];
+  if (r.runSeconds !== null) out.push({ label: 'This run', value: formatDuration(r.runSeconds) });
+  if (r.firstCharterSeconds !== null) out.push({ label: 'First Charter', value: formatDuration(r.firstCharterSeconds) });
+  for (const key of Object.keys(r.charterSeconds).sort((a, b) => Number(a) - Number(b))) {
+    const n = Number(key);
+    out.push({ label: n === 0 ? 'Fastest Charter' : `Fastest Charter, Appeal ${n}`, value: formatDuration(r.charterSeconds[key]) });
+  }
+  return out;
 }

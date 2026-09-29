@@ -8,6 +8,7 @@ last column per candidate build; attach notes for anything not green.
 | Gate | Evidence | Command |
 |------|----------|---------|
 | Campaign reachable on a clean save | `tests/campaign.test.ts`: four-reset policy and no-reset policy both sign the Charter | `npm test` |
+| Campaign length (plan §9) | `tests/length.test.ts`: the daily bot signs the Charter between day 25 and 40, no absence moves more than one decree, the binge bot is nowhere near it at 40 h | `npm test` |
 | …on a no-bonus save | same file: all coin bonuses removed; finishes within 1.2× the normal time | `npm test` |
 | …on a migrated save | same file: a schema-v1 save converted on load, then finished | `npm test` |
 | Stable achievement IDs, economy invariants, request/offline idempotence, frame-rate agreement | `tests/achievements`, `economy`, `simulation`, `offline-and-save` | `npm test` |
@@ -16,11 +17,13 @@ last column per candidate build; attach notes for anything not green.
 | Attribution for code, fonts, art and audio | `THIRD_PARTY_NOTICES.md` (regenerate after dependency changes); shipped inside `dist/` | `npm run notices` |
 | Type and build health | | `npm run check`, `npm run build` |
 
-Reference timings from the campaign bot (automated play, a purchase glance
-every 10 seconds, never pushing after the Foreman), recorded 2026-09-28:
-four resets 3.1 h, no coin bonuses 3.3 h, migrated 3.0 h, no reset 18.6 h.
-The spec §08 model (continuous buying with manual assist) gives 1.85 h and 9.6 h.
-Print the current timings with `CAMPAIGN=1 npx vitest run tests/campaign.test.ts`.
+Reference timings from the daily bot (three sessions a day, away overnight),
+recorded 2026-09-29: Tartarus Rim day 1.3, Leaking Heights 3.9, Bronze Pass
+6.9, Skyward Escarpment 14.3, Olympian Approach 16.3, the Charter day 30.9. No
+coin bonuses: day 39.3. The binge bot has not signed it after 40 hours. Appeals
+1 to 3, each started fresh after the last Charter: 16.3, 25.3 and 53.3 days.
+Print the current timings with
+`CAMPAIGN=1 npx vitest run tests/length.test.ts tests/campaign.test.ts --silent=false`.
 
 ## Manual (per supported desktop build)
 
@@ -36,7 +39,7 @@ Print the current timings with `CAMPAIGN=1 npx vitest run tests/campaign.test.ts
 - [ ] **24-hour soak:** leave the game running automated for 24 hours. Memory (Task Manager, working set) must level off, not keep rising.
 - [ ] **Reference devices:** profile frame time and memory on the minimum-spec machine; publish the requirements from those numbers.
 - [ ] **Steam (when configured):** set `SISYPHUS_STEAM_APP_ID` or ship `steam_appid.txt`, install `steamworks.js`, and confirm that one earned achievement appears in the overlay. Achievement API names are `ACH_<ID>` in upper case (for example `ACH_FIRST_SUMMIT`).
-- [ ] **Store text:** matches the implementation (24-hour offline cap, 72 hours with Eternal Shift; six operations; the Charter ending; play continues after it).
+- [ ] **Store text:** matches the implementation (12-hour offline cap, 18 hours with Eternal Shift; six hills, each with its own currency and machine; a campaign of weeks to the Charter; ten Appeals after it).
 - [ ] **Balance patches:** a patch must not silently devalue permanent rewards or remove content from existing saves. Add a migration and a fixture for any schema change.
 
 ## Support

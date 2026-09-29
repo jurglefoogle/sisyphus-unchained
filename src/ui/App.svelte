@@ -4,7 +4,7 @@
   import { fly } from 'svelte/transition';
   import { backOut as overshoot, cubicOut } from 'svelte/easing';
   import type { Game, Notice } from '../app/game';
-  import type { GameView } from '../app/view';
+  import { recapMachineLines, type GameView } from '../app/view';
   import type { PrestigePreview } from '../core/commands';
   import { insightFactor } from '../core/formulas';
   import { formatDuration, formatMoney, formatMultiplier } from '../core/format';
@@ -826,6 +826,9 @@
       <p>Time counted: <strong>{formatDuration(r.countedSeconds)}</strong>{#if r.requestedSeconds > r.countedSeconds} (limit reached; {formatDuration(r.requestedSeconds)} away){/if}</p>
       {#each r.earnedBySite.filter((e) => !e.amount.isZero()) as e (e.siteId)}
         <p>{t(`site.${e.siteId}`)}: <strong>{priced(e.amount, e.siteId)}</strong> — already in its purse.</p>
+      {/each}
+      {#each recapMachineLines(r.machines) as m (m.siteId)}
+        <p class="recap-machine">{t(`site.${m.siteId}`)}: {m.text}{#if m.waiting} · <strong>the next blueprint waits for your pick</strong>{/if}</p>
       {/each}
       {#each r.relicIds as id (id)}<p>Relic found: <strong>{t(`relic.${id}`)}</strong></p>{/each}
       {#each r.decreeSiteIds as id (id)}<p>Decree ready: <strong>{t(`site.${id}`)}</strong></p>{/each}
@@ -1765,5 +1768,10 @@
   .gauge-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   @media (prefers-reduced-motion: reduce) {
     .gauge-bar .fill { transition: none; }
+  }
+  .recap-machine {
+    margin: 0.15rem 0;
+    font-size: 0.85rem;
+    color: var(--muted);
   }
 </style>

@@ -3,7 +3,8 @@ import { OUT_OF_SIGHT_SECONDS } from '../content/devices';
 import { modifiers, nthSum } from './effects';
 import { noteAbsence } from './seals';
 import { clearEdict, recordDueProcess } from './bureau';
-import { trialCycles } from './trials';
+import { trialCycles, trialNeeded } from './trials';
+import { passTime } from './commands';
 import { cycleSeconds, isAutomated, offlineCapSeconds, cyclePayout } from './formulas';
 import { Money } from './money';
 import {
@@ -28,6 +29,50 @@ export interface OfflineSummary {
   earnedBySite: { siteId: string; amount: Money }[];
   relicIds: string[];
   decreeSiteIds: string[];
+  /** What each hill's machine did while you were away (only hills where something happened). */
+  machines: MachineRecap[];
+}
+
+export interface MachineRecap {
+  siteId: string;
+  eruptions: number;
+  cast: number;
+  approved: number;
+  /** Trial progress before and after, while the trial was still open. */
+  trial: { before: number; after: number; needed: number } | null;
+  /** The foundry stopped after a blueprint and waits for the next pick. */
+  castWaiting: boolean;
+}
+
+interface MachineMark {
+  eruptions: number;
+  cast: number;
+  approved: number;
+  trial: number;
+}
+
+function markMachine(site: SiteState): MachineMark {
+  return {
+    eruptions: site.furnace?.eruptions ?? 0,
+    cast: site.foundry?.finished ?? 0,
+    approved: site.bureau?.approved ?? 0,
+    trial: site.trial,
+  };
+}
+
+function machineRecap(site: SiteState, before: MachineMark | undefined): MachineRecap | null {
+  if (!before) return null;
+  const now = markMachine(site);
+  const needed = trialNeeded(site.id);
+  const r: MachineRecap = {
+    siteId: site.id,
+    eruptions: now.eruptions - before.eruptions,
+    cast: now.cast - before.cast,
+    approved: Math.floor(now.approved) - Math.floor(before.approved),
+    trial: needed > 0 && before.trial < needed && now.trial > before.trial ? { before: before.trial, after: Math.min(now.trial, needed), needed } : null,
+    castWaiting: !!site.foundry?.paused && now.cast > before.cast,
+  };
+  return r.eruptions > 0 || r.cast > 0 || r.approved > 0 || r.trial ? r : null;
 }
 
 function isSteady(site: SiteState): boolean {
@@ -106,6 +151,7 @@ export function settleOffline(state: GameState, seconds: number, events: GameEve
   const counted = Math.min(requested, offlineCapSeconds(state));
   const grossBefore = state.wallet.runGross;
   const siteGrossBefore = new Map(state.empire.sites.map((s) => [s.id, s.gross]));
+  const machinesBefore = new Map(state.empire.sites.map((s) => [s.id, markMachine(s)]));
   const localEvents: GameEvent[] = [];
   const ctx: StepContext = { manualHeld: false, offline: true, events: localEvents };
   // The gods don't work weekends either: an absence ends any Edict.
@@ -135,6 +181,7 @@ export function settleOffline(state: GameState, seconds: number, events: GameEve
     }
   }
 
+  passTime(state, counted);
   events.push(...localEvents);
   return {
     requestedSeconds: requested,
@@ -145,5 +192,6 @@ export function settleOffline(state: GameState, seconds: number, events: GameEve
       .filter((e) => e.amount.gt(0)),
     relicIds: localEvents.flatMap((e) => (e.type === 'RelicGranted' ? [e.relicId] : [])),
     decreeSiteIds: localEvents.flatMap((e) => (e.type === 'DecreeAvailable' ? [e.siteId] : [])),
+    machines: state.empire.sites.flatMap((s) => machineRecap(s, machinesBefore.get(s.id)) ?? []),
   };
 }

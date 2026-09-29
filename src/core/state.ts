@@ -1,6 +1,6 @@
 import { Money } from './money';
 
-export const SCHEMA_VERSION = 11;
+export const SCHEMA_VERSION = 12;
 
 /** `slipping`: during the prelude the stone rolls back from where grip gave out. */
 export type Phase = 'ascending' | 'descending' | 'returning' | 'slipping';
@@ -208,6 +208,19 @@ export interface GameState {
     /** Highest point reached before a slip, 0..1. */
     bestHeight: number;
     attempts: number;
+  };
+
+  /**
+   * Timed records, in game time (play plus counted absence). A clock is null
+   * when it began before the save kept time, so no record is ever guessed.
+   */
+  records: {
+    runSeconds: number | null;
+    campaignSeconds: number | null;
+    /** Campaign time when the Charter was first signed. */
+    firstCharterSeconds: number | null;
+    /** Fastest run to the Charter, per Appeal ("0" is the original sentence). */
+    charterSeconds: Record<string, number>;
   };
 
   /** Thanatos's Appeals: the one being fought (0: the original sentence) and laurels won. */

@@ -21,8 +21,9 @@ in item 18.
 The existing purchase, milestone, flywheel, foreman, target, and story systems
 already supply the core feedback described below; this pass connects them to
 the goal, return, completion, and measurement layers. Items 14 and 17 remain
-partly dependent on the authored mountain and character asset queue, and the
-fastest-Charter record needs a run timer before it can be shown honestly. Item
+partly dependent on the authored mountain and character asset queue. The
+fastest-Charter record now has a run clock (schema 12) and shows in the
+Archive, per Appeal; saves from before it show no time rather than a guess. Item
 19 requires observed sessions with people and should happen before changing
 prices or pacing.
 

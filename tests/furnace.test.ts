@@ -6,6 +6,7 @@ import { modifiers } from '../src/core/effects';
 import { afterImpact, eruptionClimbs, eruptionPower, newFurnace, steadyPattern } from '../src/core/furnace';
 import { bestVent, bulkCost, flywheelOffered, furnaceIncome, trackOpen } from '../src/core/formulas';
 import { settleOffline } from '../src/core/offline';
+import { recapMachineLines } from '../src/app/view';
 import { checksum, deserializeSave, serializeSave } from '../src/core/save';
 import { grantIncome, stepSites } from '../src/core/sim';
 import type { GameEvent, GameState, SiteState } from '../src/core/state';
@@ -127,6 +128,18 @@ describe("Ixion's Wheel", () => {
     expect(wheelOf(a).furnace).toEqual(wheelOf(b).furnace);
     expect(a.counters.totalClimbs).toBe(b.counters.totalClimbs);
     expectClose(wheelOf(a).gross, wheelOf(b).gross, 1e-9);
+  });
+
+  it('the return recap reports eruptions and the trial they advanced', () => {
+    const s = rim();
+    wheelOf(s).steward = { reinvest: false, paidWith: 'local' };
+    const before = wheelOf(s).furnace!.eruptions;
+    const r = settleOffline(s, 3 * 3600, []);
+    const m = r.machines.find((x) => x.siteId === 'tartarus_rim')!;
+    expect(m.eruptions).toBe(wheelOf(s).furnace!.eruptions - before);
+    expect(m.eruptions).toBeGreaterThan(0);
+    expect(m.trial?.after).toBeGreaterThan(m.trial!.before);
+    expect(recapMachineLines([m])[0].text).toMatch(/eruptions/);
   });
 });
 

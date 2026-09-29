@@ -59,6 +59,7 @@ export function stateToJson(state: GameState): Json {
       bestHeight: state.prelude.bestHeight,
       attempts: state.prelude.attempts,
     },
+    records: { ...state.records, charterSeconds: { ...state.records.charterSeconds } },
     appeal: { ...state.appeal },
     prestige: {
       lifetimeInsightAwarded: state.prestige.lifetimeInsightAwarded,
@@ -334,6 +335,23 @@ function parseSite(v: unknown, path: string): SiteState {
   };
 }
 
+function recordsFrom(v: unknown): GameState['records'] {
+  const o = obj(v, 'records');
+  const clock = (x: unknown, path: string) => (x === null ? null : num(x, path, 0));
+  const best = obj(o.charterSeconds, 'records.charterSeconds');
+  const charterSeconds: Record<string, number> = {};
+  for (const [k, x] of Object.entries(best)) {
+    req(/^\d+$/.test(k), 'records.charterSeconds keys must be Appeal numbers');
+    charterSeconds[k] = num(x, `records.charterSeconds.${k}`, 0);
+  }
+  return {
+    runSeconds: clock(o.runSeconds, 'records.runSeconds'),
+    campaignSeconds: clock(o.campaignSeconds, 'records.campaignSeconds'),
+    firstCharterSeconds: clock(o.firstCharterSeconds, 'records.firstCharterSeconds'),
+    charterSeconds,
+  };
+}
+
 function appealFrom(v: unknown): GameState['appeal'] {
   const o = obj(v, 'appeal');
   const laurels = int(o.laurels, 'appeal.laurels', 0, 10000);
@@ -411,6 +429,7 @@ export function stateFromJson(data: unknown): GameState {
       bestHeight: num(prelude.bestHeight, 'prelude.bestHeight', 0, 1),
       attempts: int(prelude.attempts, 'prelude.attempts', 0, Number.MAX_SAFE_INTEGER),
     },
+    records: recordsFrom(d.records),
     appeal: appealFrom(d.appeal),
     prestige: { lifetimeInsightAwarded: lifetime, giftedInsight: gifted, insightSpent: spent, permanentUpgradeIds: upgrades, ...memoryFrom(prestige) },
     empire: {
@@ -646,6 +665,8 @@ const MIGRATIONS: Record<number, (data: Record<string, unknown>) => Record<strin
   },
   /** v11 files Appeals after the Charter. */
   10: (data) => ({ ...data, schemaVersion: 11, appeal: { number: 0, laurels: 0 } }),
+  /** v12 keeps time for records; clocks already running are unknown, never guessed. */
+  11: (data) => ({ ...data, schemaVersion: 12, records: { runSeconds: null, campaignSeconds: null, firstCharterSeconds: null, charterSeconds: {} } }),
 };
 
 export function deserializeSave(text: string): LoadResult {

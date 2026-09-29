@@ -134,6 +134,7 @@ export function newGame(now: number, seeds?: { coin: number; relic: number; deal
     pinnedGoal: null,
     wallet: { runGross: Money.ZERO, bestRunGross: Money.ZERO },
     prelude: { complete: false, upgradeIds: [], bestHeight: 0, attempts: 0 },
+    records: { runSeconds: 0, campaignSeconds: 0, firstCharterSeconds: null, charterSeconds: {} },
     appeal: { number: 0, laurels: 0 },
     prestige: { lifetimeInsightAwarded: 0, giftedInsight: 0, insightSpent: 0, permanentUpgradeIds: [], remembrances: {}, fileSlots: [], filed: {} },
     empire: {
@@ -288,6 +289,7 @@ export function installWork(state: GameState, workId: string, free: boolean, eve
   }
   if (def.effect === 'incomeMultiplierAndEnding') {
     events.push({ type: 'CharterSigned' });
+    recordCharter(state);
     // Signing under an Appeal wins it: a laurel, kept for good.
     if (state.appeal.number > state.appeal.laurels) {
       state.appeal.laurels = state.appeal.number;
@@ -711,6 +713,24 @@ export function summonVisitor(state: GameState, siteId: string, events: GameEven
   return commit(state);
 }
 
+// ------------------------------------------------------------------ records
+
+/** Game time passes: play, or an absence as counted. */
+export function passTime(state: GameState, seconds: number): void {
+  const r = state.records;
+  if (r.runSeconds !== null) r.runSeconds += seconds;
+  if (r.campaignSeconds !== null) r.campaignSeconds += seconds;
+}
+
+function recordCharter(state: GameState): void {
+  const r = state.records;
+  if (r.firstCharterSeconds === null && r.campaignSeconds !== null) r.firstCharterSeconds = r.campaignSeconds;
+  if (r.runSeconds === null) return;
+  const key = String(state.appeal.number);
+  const best = r.charterSeconds[key];
+  if (best === undefined || r.runSeconds < best) r.charterSeconds[key] = r.runSeconds;
+}
+
 // ------------------------------------------------------------------ appeals
 
 /** The Charter is signed in this run. */
@@ -786,6 +806,7 @@ export function closeRun(state: GameState, events: GameEvent[]): number {
   state.random.eligibleSiteId = null;
   state.random.relicCountdown = null;
   state.counters.totalRuns += 1;
+  state.records.runSeconds = 0;
 
   const first = createSite(state, catalog.sites[0], events);
   first.productionLevel = Math.max(first.productionLevel, rebirth.get(first.id) ?? 0);

@@ -35,6 +35,7 @@ import {
   remember,
   keepOnFile,
   fileAppeal,
+  passTime,
   unseal,
   summonVisitor,
   type CommandResult,
@@ -364,6 +365,7 @@ export class Game {
         this.stewards(events);
       }
       s.counters.totalActiveSeconds += dt;
+      passTime(s, dt);
       s.lastSettledUtc = Math.max(s.lastSettledUtc, utc);
       this.emit(events);
       this.react(events, utc);

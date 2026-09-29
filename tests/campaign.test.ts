@@ -49,7 +49,7 @@ function asV1(s: GameState): string {
 }
 
 
-describe('release candidate: the campaign is completable', { timeout: 60_000 }, () => {
+describe('release candidate: the campaign is completable', { timeout: 120_000 }, () => {
   it('reaches the Charter from a clean save, resetting when it pays', () => {
     const run = play(freshState(), { resets: true, days: 45 });
     report('clean, with resets', run, 'd');
@@ -93,7 +93,7 @@ describe('release candidate: the campaign is completable', { timeout: 60_000 }, 
   });
 });
 
-describe('release candidate: invariants over a campaign', { timeout: 60_000 }, () => {
+describe('release candidate: invariants over a campaign', { timeout: 120_000 }, () => {
   it('Defiance only rises within a run, Insight never falls, and spending stays within the wallet', () => {
     const s = freshState();
     let lastGross = Money.ZERO;

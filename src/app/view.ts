@@ -1,4 +1,5 @@
 import { catalog, siteDef, type WorkDef } from '../content/catalog';
+import type { MachineRecap } from '../core/offline';
 import { currencyOf, priced } from '../content/currency';
 import { appealDef, deviceDef, remembranceFor, tabletPool, visitorFor } from '../content/devices';
 import { charterSigned } from '../core/commands';
@@ -1010,6 +1011,19 @@ function machineGauge(state: GameState, site: SiteState): MachineGauge | null {
     };
   }
   return null;
+}
+
+/** One line per hill for the offline recap: what its machine did while you were away. */
+export function recapMachineLines(machines: MachineRecap[]): { siteId: string; text: string; waiting: boolean }[] {
+  const n = (k: number, one: string, many: string) => `${k.toLocaleString('en-US')} ${k === 1 ? one : many}`;
+  return machines.map((m) => {
+    const parts: string[] = [];
+    if (m.eruptions > 0) parts.push(n(m.eruptions, 'eruption', 'eruptions'));
+    if (m.cast > 0) parts.push(`${n(m.cast, 'blueprint', 'blueprints')} cast`);
+    if (m.approved > 0) parts.push(`${n(m.approved, 'form', 'forms')} approved`);
+    if (m.trial) parts.push(m.trial.after >= m.trial.needed ? 'trial met' : `trial ${m.trial.before} → ${m.trial.after} of ${m.trial.needed}`);
+    return { siteId: m.siteId, text: parts.join(' · '), waiting: m.castWaiting };
+  });
 }
 
 function appealOffer(state: GameState): AppealOffer | null {
