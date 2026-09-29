@@ -52,14 +52,14 @@ describe('asset contract', () => {
     }
   });
 
-  it('keeps one painted Sisyphus walk frame visible throughout each quarter stride', () => {
-    const walk = getAssetState('sisyphus', 'walk')!;
+  it('keeps one bandaged Sisyphus frame visible throughout all eight gait phases', () => {
+    const walk = getAssetVariantState('sisyphus', 'feet_wrapped', 'walk')!;
     expect(walk.status).toBe('available');
-    expect(walk.layers).toHaveLength(4);
-    for (let frame = 0; frame < 4; frame++) {
-      const layers = sampleAssetState(walk, (frame + 0.5) / 4);
+    expect(walk.layers).toHaveLength(8);
+    for (let frame = 0; frame < 8; frame++) {
+      const layers = sampleAssetState(walk, (frame + 0.5) / 8);
       expect(layers.filter((layer) => layer.transform.alpha > 0.99).map((layer) => layer.id)).toEqual([`walk_${frame}`]);
-      expect(layers.every((layer) => layer.frame.assetId === 'sisyphus_walk_strip')).toBe(true);
+      expect(layers.every((layer) => layer.frame.assetId === 'sisyphus_walk_strip_feet_wrapped')).toBe(true);
     }
     const fall = getAssetState('sisyphus', 'slip_knockdown')!;
     expect(fall.status).toBe('available');

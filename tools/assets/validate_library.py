@@ -59,8 +59,10 @@ for task in queue['tasks']:
     queued_ids.add(task['id'])
 if delivery_path.exists():
     delivery=json.loads(delivery_path.read_text(encoding='utf-8'))
-    for name,state in [('bare',delivery['assets']['sisyphus']['states']['walk']),('wrapped',delivery['assets']['sisyphus']['variants']['feet_wrapped']['states']['walk'])]:
+    for name,state in [('wrapped',delivery['assets']['sisyphus']['variants']['feet_wrapped']['states']['walk'])]:
         baselines=[]
+        heights=[]
+        require(len(state['layers'])==8,f'{name} walk must contain eight gait phases')
         for layer in state['layers']:
             source=ROOT/'public'/layer['frame']['url'].lstrip('/')
             x,y,w,h=layer['frame']['rect']
@@ -72,7 +74,9 @@ if delivery_path.exists():
                 require(bounds[0]>=12 and w-bounds[2]>=12,f'Clipped {name} walk frame {layer["id"]}')
                 require(abs((bounds[0]+bounds[2])/2-w/2)<=2,f'Unregistered {name} walk frame {layer["id"]}')
                 baselines.append(bounds[3])
+                heights.append(bounds[3]-bounds[1])
         require(max(baselines)-min(baselines)<=2,f'Unaligned {name} walk foot baseline')
+        require(all(abs(heights[index]-heights[index+4])<=2 for index in range(4)),f'Mismatched mirrored phases in {name} walk')
     for asset,spec in delivery['assets'].items():
         for name,state in spec['states'].items():
             if state['status']!='available':

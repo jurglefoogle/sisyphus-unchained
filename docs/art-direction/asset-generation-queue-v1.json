@@ -21,7 +21,7 @@
     },
     {
       "id": "sisyphus_rest",
-      "reference": "sisyphus_push",
+      "reference": "sisyphus_rest",
       "output": "public/assets/pottery-v1/art/sisyphus_rest.png",
       "status": "delivered",
       "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nStanding upright relaxed, hands resting on hips, calm and slightly amused, both feet on one horizontal baseline."
@@ -73,7 +73,7 @@
       "reference": "sisyphus_push",
       "output": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
       "status": "delivered",
-      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game character pose. Preserve the EXACT character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the reference. Change only the pose. Full body, profile facing RIGHT. Genuinely transparent alpha background; no ground, shadow, text, frame, rock, scenery or extra character. Center inside square canvas with at least 10% clear margin. Bare feet stay fully visible.\nWALK ANIMATION SPRITE STRIP: instead of one square pose, create ONE very wide transparent image containing exactly FOUR equally spaced full-body poses in a SINGLE HORIZONTAL ROW of four EQUAL WIDTH cells. No labels, no dividing lines. Same character and same pixel scale in all four cells, same head height and foot baseline. Facing RIGHT in every cell. Cell 1 left: walk contact, near leg forward, far leg back, opposite arm swing. Cell 2: passing pose, far knee moving forward, near leg straight on ground. Cell 3: opposite contact, far leg forward, near leg back, opposite arm swing. Cell 4: opposite passing pose, near knee moving forward, far leg straight on ground. Each figure centered within its own cell with 15% empty left/right margins, no body part crosses a cell boundary. No ghosts, no motion trails, no floor. Four poses exactly, readable as flipbook animation. Prioritize frame registration and matching proportions."
+      "prompt": "Use case: identity-preserve. Asset type: transparent 2D game animation sprite sheet. Preserve the exact character identity, hairstyle, face, short tunic design, palette, incised line style and adult proportions from the rest-pose reference. Full body, strict profile facing right, with identical scale, head, torso, costume and hand design in every frame. Create exactly eight poses for one complete walk: right contact, recoil, left passing, high point, left contact, recoil, right passing, high point. Use natural opposing arm swing and keep every sole on one registered baseline. Deliver as eight equal-width horizontal cells with transparent gutters, no labels, dividers, shadow, ground, props, scenery, ghosts, extra limbs or watermark."
     },
     {
       "id": "shade_walk_strip",
@@ -186,7 +186,7 @@
       "output": "public/assets/pottery-v1/art/scene_tartarus_rim_mountain.png",
       "status": "pending",
       "category": "scene-layer",
-      "prompt": "Production-quality transparent Tartarus Rim mountain layer for the existing 1600×900 stage. Preserve the exact ascent, summit, descent and basin geometry from src/world/geometry.ts and compose it against the approved scene_tartarus_rim painting. Volcanic basalt and ember-veined fired clay, massive irregular black-figure cliff planes, sparse smoke-cut fissures and an unmistakable playable route. No sky, ground band, UI, characters, stone, machinery, text, gradients, soft 3D rendering or flat vector/SVG-like geometry. Real alpha everywhere outside the mountain silhouette; top-left registration and full-canvas dimensions must match the scene plate."
+      "prompt": "Production-quality transparent Tartarus Rim mountain layer for the existing 1600\u00d7900 stage. Preserve the exact ascent, summit, descent and basin geometry from src/world/geometry.ts and compose it against the approved scene_tartarus_rim painting. Volcanic basalt and ember-veined fired clay, massive irregular black-figure cliff planes, sparse smoke-cut fissures and an unmistakable playable route. No sky, ground band, UI, characters, stone, machinery, text, gradients, soft 3D rendering or flat vector/SVG-like geometry. Real alpha everywhere outside the mountain silhouette; top-left registration and full-canvas dimensions must match the scene plate."
     },
     {
       "id": "scene_leaking_heights_mountain",
@@ -194,7 +194,7 @@
       "output": "public/assets/pottery-v1/art/scene_leaking_heights_mountain.png",
       "status": "pending",
       "category": "scene-layer",
-      "prompt": "Production-quality transparent Leaking Heights mountain layer for the existing 1600×900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_leaking_heights. Pale wet marble terraces with dark incised cracks, narrow rivulets, worn channels and restrained water motifs; keep the ascent readable under characters and machinery. No sky, river background, foreground band, UI, figures, boulder, text, gradients, glossy 3D surfaces or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
+      "prompt": "Production-quality transparent Leaking Heights mountain layer for the existing 1600\u00d7900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_leaking_heights. Pale wet marble terraces with dark incised cracks, narrow rivulets, worn channels and restrained water motifs; keep the ascent readable under characters and machinery. No sky, river background, foreground band, UI, figures, boulder, text, gradients, glossy 3D surfaces or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
     },
     {
       "id": "scene_bronze_pass_mountain",
@@ -202,7 +202,7 @@
       "output": "public/assets/pottery-v1/art/scene_bronze_pass_mountain.png",
       "status": "pending",
       "category": "scene-layer",
-      "prompt": "Production-quality transparent Bronze Pass mountain layer for the existing 1600×900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_bronze_pass. Terracotta scree reinforced by oxidized bronze ribs, hammered plates and monumental black-figure rock masses, with a clean high-contrast route and summit. No sky, ground band, UI, characters, stone, machinery, labels, gradients, photoreal metal or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
+      "prompt": "Production-quality transparent Bronze Pass mountain layer for the existing 1600\u00d7900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_bronze_pass. Terracotta scree reinforced by oxidized bronze ribs, hammered plates and monumental black-figure rock masses, with a clean high-contrast route and summit. No sky, ground band, UI, characters, stone, machinery, labels, gradients, photoreal metal or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
     },
     {
       "id": "scene_skyward_escarpment_mountain",
@@ -210,7 +210,7 @@
       "output": "public/assets/pottery-v1/art/scene_skyward_escarpment_mountain.png",
       "status": "pending",
       "category": "scene-layer",
-      "prompt": "Production-quality transparent Skyward Escarpment mountain layer for the existing 1600×900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_skyward_escarpment. A severe starlit escarpment of ivory and dark clay, wind-cut ledges, sparse celestial incisions and a summit that appears to meet the heavens; keep the playable route visually clear. No sky, clouds outside the silhouette, foreground band, UI, figures, boulder, text, gradients, airbrushed glow or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
+      "prompt": "Production-quality transparent Skyward Escarpment mountain layer for the existing 1600\u00d7900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_skyward_escarpment. A severe starlit escarpment of ivory and dark clay, wind-cut ledges, sparse celestial incisions and a summit that appears to meet the heavens; keep the playable route visually clear. No sky, clouds outside the silhouette, foreground band, UI, figures, boulder, text, gradients, airbrushed glow or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
     },
     {
       "id": "scene_olympian_approach_mountain",
@@ -218,7 +218,55 @@
       "output": "public/assets/pottery-v1/art/scene_olympian_approach_mountain.png",
       "status": "pending",
       "category": "scene-layer",
-      "prompt": "Production-quality transparent Olympian Approach mountain layer for the existing 1600×900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_olympian_approach. Ascending gilded marble steps integrated into a heroic clay mountain, restrained meander carvings, broken column fragments and a formal summit threshold; the route must remain readable during play. No sky, temple background, foreground band, UI, characters, boulder, text, gradients, polished 3D rendering or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
+      "prompt": "Production-quality transparent Olympian Approach mountain layer for the existing 1600\u00d7900 stage. Preserve the exact route geometry from src/world/geometry.ts and compose it against scene_olympian_approach. Ascending gilded marble steps integrated into a heroic clay mountain, restrained meander carvings, broken column fragments and a formal summit threshold; the route must remain readable during play. No sky, temple background, foreground band, UI, characters, boulder, text, gradients, polished 3D rendering or flat vector/SVG-like geometry. Real alpha outside the mountain; top-left registration and full-canvas dimensions must match the scene plate."
+    },
+    {
+      "id": "machine_counterweight",
+      "output": "public/assets/pottery-v1/art/machine_counterweight.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "First Hill adjustable counterweight: ancient Greek timber-and-bronze A-frame, summit pulley, rope, open stone basket with limestone weights, trim lever and notched rail. Transparent isolated game cutout, pottery-inspired painterly finish, no text or modern parts.",
+      "reference": "flywheel_rotor"
+    },
+    {
+      "id": "machine_furnace_wheel",
+      "output": "public/assets/pottery-v1/art/machine_furnace_wheel.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "Ixion's furnace wheel: monumental black iron and bronze punishment wheel mounted in a low volcanic furnace cradle with glowing coals, vent lever and bellows connection. Transparent isolated game cutout; main wheel readable as the moving part; no text or modern parts.",
+      "reference": "work_ixion"
+    },
+    {
+      "id": "machine_leaking_jar",
+      "output": "public/assets/pottery-v1/art/machine_leaking_jar.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "Danaids' leaking jar machine: monumental terracotta pithos in a bronze-and-timber measuring frame, patched and open holes, water streams, collection wheel, trough and unlabelled level gauge. Transparent isolated game cutout; no text or modern pipes.",
+      "reference": "work_danaids"
+    },
+    {
+      "id": "machine_foundry",
+      "output": "public/assets/pottery-v1/art/machine_foundry.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "Hephaestus bronze foundry: ancient Greek tilting crucible with glowing bronze, split-gate lever, ingot tray and automaton blueprint mould. Transparent isolated game cutout; crucible and lever readable for animation; no text or electrical machinery.",
+      "reference": "work_talos"
+    },
+    {
+      "id": "machine_orrery",
+      "output": "public/assets/pottery-v1/art/machine_orrery.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "Atlas's Sky Clock: bronze armillary orrery with twelve empty house sockets, crossing rings, central dark star sphere, hand crank and monumental base. A mechanical map of the heavens, never Earth. Transparent isolated game cutout; no labels or modern parts.",
+      "reference": "work_atlas"
+    },
+    {
+      "id": "machine_bureau",
+      "output": "public/assets/pottery-v1/art/machine_bureau.png",
+      "status": "generated-first-pass",
+      "category": "machine",
+      "prompt": "Olympian Bureau apparatus: marble-and-bronze filing shrine with blank wax tablets, mechanical queue track, approval stamp and turning seal drums. Transparent isolated game cutout; no readable text, paper, or modern office objects.",
+      "reference": "scene_olympian_approach"
     }
   ]
 }

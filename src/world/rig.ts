@@ -17,7 +17,7 @@ type P = { x: number; y: number };
 type Profile = readonly (readonly [number, number, number])[];
 
 const { THIGH, SHIN, UPPER_ARM, FOREARM } = BONE_LENGTH;
-const WRAP = 0x9c7a4e;
+const WRAP = 0xd3b58b;
 
 const THIGH_PROFILE: Profile = [
   [-0.08, 7, 8.6],
@@ -160,28 +160,31 @@ function handPiece(look: Look): Graphics {
 }
 
 /** A bare foot on its sole; origin at the ankle, +x toward the toes, y down. */
-function footPiece(look: Look): { foot: Graphics; wrap: Graphics } {
-  const foot = new Graphics();
+function footPiece(look: Look): { foot: Container; wrap: Graphics } {
+  const foot = new Container();
+  const shape = new Graphics();
   smooth(
-    foot,
+    shape,
     pts([[-3, -3.8], [2.6, -3.1], [8, -0.2], [14, 2.4], [19.2, 3.5], [20.8, 4.6], [19.6, 5.6], [13, 5.5], [7, 4.9], [0, 5.6], [-3.8, 5.6], [-5.8, 4.3], [-5.6, 0.2]]),
   )
     .fill(look.ink)
     .stroke(contour(look));
-  incise(foot, pts([[0.6, -1.2], [1.8, 0.6], [0.2, 1.6]]), look.incise, 0.9, 0.75);
-  incise(foot, pts([[16.4, 2.8], [16.2, 5.2]]), look.incise, 0.8, 0.7);
-  incise(foot, pts([[18.6, 3.4], [18.5, 5.3]]), look.incise, 0.8, 0.7);
+  incise(shape, pts([[0.6, -1.2], [1.8, 0.6], [0.2, 1.6]]), look.incise, 0.9, 0.75);
+  incise(shape, pts([[16.4, 2.8], [16.2, 5.2]]), look.incise, 0.8, 0.7);
+  incise(shape, pts([[18.6, 3.4], [18.5, 5.3]]), look.incise, 0.8, 0.7);
   // Rag wrappings, bought with the first grip upgrade.
   const wrap = new Graphics();
+  smooth(wrap, pts([[-4, -6], [3, -5], [4, -1], [13, 2.5], [14, 5], [1, 5.5], [-5, 4], [-5, 0]]))
+    .fill(WRAP).stroke({ width: 0.7, color: look.ink });
   // Two turns round the ankle and one across the instep.
   for (const [x0, y0, x1, y1] of [
     [-5.4, -2.6, 3.6, -1.6],
     [-6, 0.8, 5, 1.4],
     [7.4, 0, 10, 5.4],
   ] as const) {
-    wrap.moveTo(x0, y0).lineTo(x1, y1).stroke({ width: 2.4, color: WRAP, cap: 'round' });
+    wrap.moveTo(x0, y0).lineTo(x1, y1).stroke({ width: 0.8, color: look.ink, alpha: 0.8, cap: 'round' });
   }
-  foot.addChild(wrap);
+  foot.addChild(shape, wrap);
   // The painted feet are short and high-arched; the outline above is drawn long.
   foot.scale.set(0.8, 1);
   return { foot, wrap };
@@ -405,10 +408,10 @@ const ANKLE_MIN = 1.02;
 const ANKLE_MAX = 2.2;
 
 export class FigureRig extends Container {
-  private readonly farArm: Graphics[];
-  private readonly nearArm: Graphics[];
-  private readonly farLeg: Graphics[];
-  private readonly nearLeg: Graphics[];
+  private readonly farArm: Container[];
+  private readonly nearArm: Container[];
+  private readonly farLeg: Container[];
+  private readonly nearLeg: Container[];
   private readonly wraps: Graphics[] = [];
   private readonly hands: { open: Graphics; relaxed: Graphics }[] = [];
   private readonly torso = new Container();
@@ -420,7 +423,7 @@ export class FigureRig extends Container {
   private reversed = false;
   private readonly eye: { open: Graphics; shut: Graphics };
   private readonly skirt = new Graphics();
-  private readonly head: Graphics;
+  private readonly head = new Container();
   private readonly look: Look;
   private skirtKey = '';
 
@@ -430,7 +433,7 @@ export class FigureRig extends Container {
     const arm = () => {
       const open = handPiece(look);
       const relaxed = relaxedHandPiece(look);
-      const hand = new Graphics();
+      const hand = new Container();
       hand.addChild(open, relaxed);
       this.hands.push({ open, relaxed });
       return [upperArmPiece(look), forearmPiece(look), hand];
@@ -452,13 +455,12 @@ export class FigureRig extends Container {
     this.torso.addChild(torsoPiece(look), this.chiton, this.reverseChiton);
     this.belt = beltPiece(look);
     this.tie = tiePiece(look);
-    this.head = headPiece(look);
     this.eye = eyePieces(look);
-    this.head.addChild(this.eye.open, this.eye.shut);
+    this.head.addChild(headPiece(look), this.eye.open, this.eye.shut);
     this.head.scale.set(HEAD_K);
     // Back to front: far arm, far leg, near leg, trunk, skirt, belt, near arm, head.
     // Within a limb the root overlaps its child: foot < shin < thigh, hand < forearm < upper arm.
-    const limbOrder = (parts: Graphics[]) => [parts[2], parts[1], parts[0]];
+    const limbOrder = (parts: Container[]) => [parts[2], parts[1], parts[0]];
     this.addChild(...limbOrder(this.farArm), ...limbOrder(this.farLeg), ...limbOrder(this.nearLeg));
     this.addChild(this.torso, this.skirt, this.belt, this.tie, ...limbOrder(this.nearArm), this.shoulderCap, this.head);
     for (const g of [...this.farArm, ...this.farLeg]) g.tint = 0xd8d8d8;
@@ -475,7 +477,7 @@ export class FigureRig extends Container {
     const bones = new Map<FigureBoneId, { start: P; end: P }>();
     for (const b of solveSkeleton(pose)) bones.set(b.id, b);
     const bone = (id: FigureBoneId) => bones.get(id)!;
-    const place = (g: Graphics, id: FigureBoneId) => {
+    const place = (g: Container, id: FigureBoneId) => {
       const { start, end } = bone(id);
       g.position.set(start.x, start.y);
       g.rotation = Math.atan2(end.y - start.y, end.x - start.x);

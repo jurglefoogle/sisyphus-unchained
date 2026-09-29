@@ -5,7 +5,7 @@ import { formatMoney } from '../core/format';
 import { ascentLimit, ascentRate, slipSeconds } from '../core/formulas';
 import { findSite } from '../core/sim';
 import type { GameEvent, SiteState } from '../core/state';
-import { getAssetState, getAssetVariantState } from './assets';
+import { getAssetState } from './assets';
 import type { AssetFrame, AssetState } from './asset-types';
 import { Clip } from './clip';
 import {
@@ -128,6 +128,17 @@ const DRUM_K = 0.35;
 const SHADE_RIG_K = 0.92;
 const WORK_K = 0.45;
 const MARKER_K = 0.42;
+/** The hill's signature workshop stands on the far shoulder behind the route. */
+const MACHINE_X = 1285;
+const MACHINE_HEIGHT = 285;
+const MACHINE_ASSET: Record<string, string> = {
+  first_hill: 'machine_counterweight',
+  tartarus_rim: 'machine_furnace_wheel',
+  leaking_heights: 'machine_leaking_jar',
+  bronze_pass: 'machine_foundry',
+  skyward_escarpment: 'machine_orrery',
+  olympian_approach: 'machine_bureau',
+};
 /** Feet sit this far behind the stone's contact point, along the route, so his hands meet its back. */
 const PUSH_REACH = 166;
 /** Works stand on the descent face beside the summit post, then down the route face. */
@@ -166,6 +177,8 @@ export class World {
   private installTier = -1;
   private installClock = 0;
   private works = new Container();
+  private machine = this.clip();
+  private machineScale = 1;
   private terrain = new Sprite();
   private terrainKey = '';
   private frieze = new TilingSprite();
@@ -195,7 +208,6 @@ export class World {
   private shadeRig = new FigureRig(SHADE_LOOK);
   private shadePose: Pose = pullPose(0);
   private sis = new Container();
-  private sisArt = this.clip();
   private sisRig = new FigureRig();
   private pose: Pose = standPose();
   private pushClock = 0;
@@ -241,7 +253,6 @@ export class World {
   private facing = 1;
   /** The figure's drawn width, signed by the side shown: it narrows through a turn instead of flipping. */
   private turnScale = 1;
-  private stride = 0;
   private time = 0;
   private stonePulse = 0;
   private shake = 0;
@@ -280,7 +291,7 @@ export class World {
     this.app.canvas.setAttribute('aria-hidden', 'true');
 
     this.shade.addChild(this.shadeRig);
-    this.sis.addChild(this.sisRig, this.sisArt);
+    this.sis.addChild(this.sisRig);
     this.stoneSpin.addChild(this.knobs, this.stoneStandIn, this.stoneClip);
     this.stoneLight.anchor.set(0.5);
     this.stone.addChild(this.stoneSpin, this.stoneLight);
@@ -291,6 +302,7 @@ export class World {
       this.bg,
       this.ambient,
       this.works,
+      this.machine,
       this.terrain,
       this.litter,
       this.chisel.plaque,
@@ -429,12 +441,7 @@ export class World {
       getAssetState(def.sceneId, 'background'),
       getAssetState(`${def.sceneId}_mountain`, 'texture'),
       getAssetState(def.stoneAssetId, 'texture'),
-      getAssetState('sisyphus', 'rest'),
-      getAssetState('sisyphus', 'push_loop'),
-      getAssetState('sisyphus', 'walk'),
-      getAssetState('sisyphus', 'slip_knockdown'),
-      getAssetVariantState('sisyphus', 'feet_wrapped', 'walk'),
-      getAssetVariantState('sisyphus', 'feet_wrapped', 'slip_knockdown'),
+      getAssetState(MACHINE_ASSET[site.id], 'idle'),
     ];
     const frames = states.flatMap((state) => state?.layers.map((layer) => layer.frame) ?? []);
     await Promise.all(frames.map((frame) => this.requestTexture(frame)));
@@ -773,6 +780,20 @@ export class World {
       if (entrance && since < entrance.duration) clip.show(entrance, since, this.reduced);
       else clip.show(getAssetState(`work_${id}`, 'idle'), 0);
     }
+
+    // Every later hill opens around its defining machine. The First Hill's
+    // counterweight is the exception: it is a crew-25 purchase, so the empty
+    // shoulder remains visible until the player actually installs it.
+    const machineId = MACHINE_ASSET[site.id];
+    const machineState = machineId ? getAssetState(machineId, 'idle') : undefined;
+    const installed = site.id !== catalog.sites[0].id || site.counterweight !== null;
+    if (installed && machineState) {
+      const sourceHeight = machineState.layers[0]?.size[1] ?? MACHINE_HEIGHT;
+      this.machineScale = MACHINE_HEIGHT / sourceHeight;
+      this.machine.position.set(MACHINE_X, surfaceY(MACHINE_X) + 8);
+      this.machine.scale.set(this.machineScale);
+      this.machine.show(machineState, this.time, this.reduced);
+    } else this.machine.visible = false;
   }
 
   private get reduced(): boolean {
@@ -973,6 +994,7 @@ export class World {
         this.stone.filters = rim;
         this.shade.filters = rim;
         this.wheel.filters = rim;
+        this.machine.filters = rim;
         this.kiln.resolution = this.app.renderer.resolution;
       }
       if (rich) {
@@ -1089,7 +1111,7 @@ export class World {
     this.wheel.show(turning, this.wheelClock, this.reduced);
   }
 
-  /** Authored cutouts carry the hero poses; the bone rig fills undelivered transitions. */
+  /** One articulated figure drives every action so proportions and landmarks stay continuous. */
   private updateSisyphus(site: SiteState, pos: Vec, dt: number, held: boolean, automated: boolean, strain: number): void {
     const c = catalog.cycle;
     const sisPushing = !automated || held;
@@ -1114,7 +1136,11 @@ export class World {
     const dx = target.x - this.sisPos.x;
     const dy = target.y - this.sisPos.y;
     const dist = Math.hypot(dx, dy);
-    const speed = (dist > 420 ? 720 : 400) * dt;
+    // The downhill route covers about 920 px in 3.2 moving seconds. Keep a
+    // little headroom over that pace, and accelerate only for large catch-ups
+    // (initial entry, automation changes, or a new attempt after a short slip).
+    const travelRate = dist > 420 ? 420 : 320;
+    const speed = travelRate * dt;
     const glued = site.phase === 'ascending' && sisPushing && dist <= Math.max(30, speed);
     const moving = !glued && dist > 1;
     const step = glued || dist <= speed ? dist : speed;
@@ -1123,15 +1149,12 @@ export class World {
     else this.sisPos = { x: this.sisPos.x + (dx / dist) * speed, y: this.sisPos.y + (dy / dist) * speed };
     if (!slipping) this.slipAt = null;
     if (moving && Math.abs(dx) > 4) this.facing = dx < 0 ? -1 : 1;
-    else if (!moving) this.facing = 1;
-    // One stride per ≈ 32 px, so the feet do not skate.
-    if (moving) this.stride += step * 0.098;
-
+    else if (glued) this.facing = 1;
     // The push cycle runs only while the stone is actually driven; otherwise
     // Sisyphus holds the planted contact pose and breathes.
     const driving = held || (automated && site.phase === 'ascending');
     if (driving) this.pushClock += dt;
-    const wrapped = site.id === catalog.sites[0].id && this.grip('wrap_feet');
+    const wrapped = site.id !== catalog.sites[0].id || this.grip('wrap_feet');
     const reduced = this.reduced;
     const breath = reduced ? 0 : this.time * 1.7;
     const weary = !automated && (site.phase === 'descending' || site.phase === 'returning' || this.time - this.fallenAt < 6) ? 0.6 : 0;
@@ -1154,14 +1177,19 @@ export class World {
       // Stepping gait with the feet planted on the real ground: pushing takes
       // long, low strides; walking short upright ones.
       const push = glued;
-      const step = push ? 30 : 26;
+      const travelled = Math.abs(this.sisPos.x - before.x);
+      const horizontalSpeed = dt > 0 ? travelled / dt : 0;
+      // Catch-up motion reads as a purposeful run instead of a sped-up walk:
+      // the stride grows with speed while the same skeleton remains on model.
+      const step = push ? 30 : 26 + 10 * Math.min(1, Math.max(0, (horizontalSpeed - 180) / 240));
       const stance = push ? 0.66 : 0.6;
+      // During stance the foot moves back 2*step locally. Match that to root
+      // travel along x (not slope distance) so the planted foot stays still.
       const cycle = (2 * step) / stance;
-      const travelled = Math.hypot(this.sisPos.x - before.x, this.sisPos.y - before.y);
       if (!reduced) this.gaitPhase += travelled / cycle;
       const feet = gait(this.gaitPhase, stance);
       const centre = push ? -22 : 2;
-      const lift = push ? 7 : 9;
+      const lift = push ? 7 : 9 + (step - 26) * 0.45;
       const ankles = feet.map((f, i) => {
         const lx = centre + step * f.x + (i === 0 ? -3 : 3);
         return { x: lx, y: groundAt(lx) - ANKLE_H - lift * f.lift };
@@ -1228,22 +1256,6 @@ export class World {
     else this.turnScale = shown * Math.min(1, width + turnRate);
     this.sis.scale.set(this.turnScale, 1);
     this.sisRig.update(this.pose, wrapped, this.time, this.turnScale < 0);
-    const poseName = slipping ? 'slip_knockdown' : glued ? 'push_loop' : moving ? 'walk' : 'rest';
-    const authoredState = (wrapped && getAssetVariantState('sisyphus', 'feet_wrapped', poseName)) || getAssetState('sisyphus', poseName);
-    const slipTime = slipping ? Math.min(1, Math.max(0, (this.time - this.fallenAt) / slipSeconds(site.snapshot.slipHeight || .5))) : 0;
-    // gaitPhase is measured from ground covered so the procedural fallback can
-    // keep its feet planted.  At the return speed it advances much faster than
-    // a hand-drawn four-pose loop should: playing the painted strip directly
-    // from it made Sisyphus flicker through more than four strides per second.
-    // The artwork gets a calmer, readable cadence while his world movement and
-    // the fallback rig retain their distance-based timing.
-    const paintedWalkPhase = this.gaitPhase * 0.45;
-    const authored = this.sisArt.show(authoredState, slipping ? slipTime : glued ? this.pushClock : moving ? paintedWalkPhase : 0, reduced);
-    // The delivery state is a 256 px art board; scale its painted figure to the
-    // rig's stage height. Push art shifts forward so its palms meet the stone.
-    this.sisArt.scale.set(0.76);
-    this.sisArt.position.set(glued ? 24 : 0, 0);
-    this.sisRig.visible = !authored;
   }
 
   /** The shade works the rope drum: hands on the rotor rim, leaning back on each pull. */
@@ -1457,6 +1469,10 @@ export class World {
       case 'impact':
         ring(TARGET.x, surfaceY(TARGET.x) - 40, 70);
         bump(this.target, 1);
+        break;
+      case 'counterweight':
+        ring(MACHINE_X, surfaceY(MACHINE_X) - MACHINE_HEIGHT * 0.45, 110);
+        bump(this.machine, this.machineScale);
         break;
       case 'strength':
         ring(this.sisPos.x, this.sisPos.y - 70, 70);

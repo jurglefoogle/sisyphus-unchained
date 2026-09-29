@@ -3102,27 +3102,27 @@
       "category": "character",
       "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
       "exportFile": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
-      "sha256": "777a62ad46bad0b060a4d2fde65150c977e6150deec48de00867ebb39bb4374a",
+      "sha256": "bff656fcb25e4051502f710de373c0e700b18e4ca13f7d00da7a93c37550c4ab",
       "dimensions": [
-        2172,
-        724
+        3072,
+        512
       ],
       "pivot": [
-        0.5085174953959485,
-        0.9447513812154696
+        0.498046875,
+        0.98046875
       ],
       "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
       "alphaBounds": [
-        25,
-        23,
-        2168,
-        692
+        36,
+        26,
+        3024,
+        502
       ],
       "visibleAlphaBounds": [
-        104,
-        46,
-        2105,
-        684
+        36,
+        26,
+        3024,
+        502
       ],
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/sisyphus_walk_strip.png",
@@ -3432,27 +3432,27 @@
       "category": "character",
       "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
       "exportFile": "public/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
-      "sha256": "1c5ae0994519df6760d6697dd91ae8abdb7d2e16772aacdcfb4586617353b453",
+      "sha256": "1db62ddad3f2e75b606a713eb0aee9b96423e9827ca2a81112319dc53881455a",
       "dimensions": [
-        2172,
-        724
+        3072,
+        512
       ],
       "pivot": [
-        0.5,
-        0.8895027624309392
+        0.4972330729166667,
+        0.98046875
       ],
       "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
       "alphaBounds": [
-        217,
-        80,
-        1955,
-        644
+        29,
+        26,
+        3026,
+        502
       ],
       "visibleAlphaBounds": [
-        217,
-        80,
-        1955,
-        644
+        29,
+        26,
+        3026,
+        502
       ],
       "hasTransparency": true,
       "sourceFile": "public/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
@@ -3558,6 +3558,204 @@
       "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
       "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
       "status": "single pose / flattened source; rigging required"
+    },
+    {
+      "id": "machine_counterweight",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_counterweight.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_counterweight.png",
+      "sha256": "07dd5cf66c7e03eeb73d8c3498cb7e17c431bd3b1571e3d6d42e5fd2bf1cc7de",
+      "dimensions": [
+        1444,
+        1331
+      ],
+      "pivot": [
+        0.5058864265927978,
+        0.9383921863260706
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        66,
+        66,
+        1362,
+        1265
+      ],
+      "visibleAlphaBounds": [
+        115,
+        71,
+        1346,
+        1249
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_counterweight.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "machine_furnace_wheel",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_furnace_wheel.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_furnace_wheel.png",
+      "sha256": "c7aaa7853caf3a4f9d35b95d7b4f14a5622a83daa8a29ed12b9e8eb071bc9761",
+      "dimensions": [
+        1542,
+        1262
+      ],
+      "pivot": [
+        0.5055123216601816,
+        0.919175911251981
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        70,
+        104,
+        1455,
+        1163
+      ],
+      "visibleAlphaBounds": [
+        112,
+        108,
+        1447,
+        1160
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_furnace_wheel.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "machine_leaking_jar",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_leaking_jar.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_leaking_jar.png",
+      "sha256": "13e6db9e226cd40712b75829d1c2c3d1569dde86f74270cc57d06214e1e0f56f",
+      "dimensions": [
+        1512,
+        1283
+      ],
+      "pivot": [
+        0.49933862433862436,
+        0.93141075604053
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        69,
+        69,
+        1415,
+        1200
+      ],
+      "visibleAlphaBounds": [
+        118,
+        70,
+        1392,
+        1195
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_leaking_jar.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "machine_foundry",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_foundry.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_foundry.png",
+      "sha256": "4babc73914e70560cb41a89ca15ad46713d87946e53260d7c85982f002af8d26",
+      "dimensions": [
+        1592,
+        1230
+      ],
+      "pivot": [
+        0.5040829145728644,
+        0.932520325203252
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        72,
+        72,
+        1520,
+        1158
+      ],
+      "visibleAlphaBounds": [
+        96,
+        74,
+        1509,
+        1147
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_foundry.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "machine_orrery",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_orrery.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_orrery.png",
+      "sha256": "7b8d4bed3c7ef3e3468efce6ede8676c575ab2e8540cf142fda40d58f13a846c",
+      "dimensions": [
+        1424,
+        1346
+      ],
+      "pivot": [
+        0.5249297752808989,
+        0.9420505200594353
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        65,
+        70,
+        1359,
+        1281
+      ],
+      "visibleAlphaBounds": [
+        140,
+        76,
+        1355,
+        1268
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_orrery.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
+    },
+    {
+      "id": "machine_bureau",
+      "category": "machine",
+      "url": "/assets/pottery-v1/art/machine_bureau.png",
+      "exportFile": "public/assets/pottery-v1/art/machine_bureau.png",
+      "sha256": "2db4164f9d880e55b752e64492bc5023dad10c7d6fb151dfb48f779131149903",
+      "dimensions": [
+        1542,
+        1262
+      ],
+      "pivot": [
+        0.5155642023346303,
+        0.9270998415213946
+      ],
+      "pivotStatus": "suggested from alpha >= 128 bounds; calibrate during scene integration",
+      "alphaBounds": [
+        70,
+        89,
+        1468,
+        1192
+      ],
+      "visibleAlphaBounds": [
+        143,
+        97,
+        1447,
+        1170
+      ],
+      "hasTransparency": true,
+      "sourceFile": "public/assets/pottery-v1/art/machine_bureau.png",
+      "promptSource": "docs/art-direction/asset-generation-queue-v1.json",
+      "provenance": "Generated with OpenAI built-in image generation for this project; project-local alpha extraction applied when required; no external reference images.",
+      "status": "first-pass raster; visual approval pending"
     },
     {
       "id": "scene_first_hill_hill",
@@ -4049,7 +4247,7 @@
     "environment": 6,
     "stone": 6,
     "character": 23,
-    "machine": 2,
+    "machine": 8,
     "installation": 7,
     "portrait": 8,
     "scene-layer": 14,
@@ -4085,6 +4283,7 @@
     "Tight edge padding: shade_walk_strip",
     "Tight edge padding: sisyphus_step_aside",
     "Tight edge padding: sisyphus_slip_strip",
-    "Tight edge padding: sisyphus_get_up_strip"
+    "Tight edge padding: sisyphus_get_up_strip",
+    "Tight edge padding: sisyphus_walk_strip_feet_wrapped"
   ]
 }

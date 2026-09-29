@@ -654,22 +654,22 @@
                 "assetId": "sisyphus_walk_strip",
                 "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
                 "dimensions": [
-                  2172,
-                  724
+                  3072,
+                  512
                 ],
                 "pivot": [
                   0.5,
-                  0.9447513812154696
+                  0.98046875
                 ],
                 "rect": [
-                  48,
                   0,
-                  500,
-                  724
+                  0,
+                  384,
+                  512
                 ]
               },
               "size": [
-                160,
+                173,
                 231
               ],
               "keyframes": [
@@ -683,7 +683,7 @@
                   "alpha": 1
                 },
                 {
-                  "time": 0.2499,
+                  "time": 0.1249,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -692,7 +692,43 @@
                   "alpha": 1
                 },
                 {
+                  "time": 0.125,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
                   "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -719,6 +755,24 @@
                   "alpha": 0
                 },
                 {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
                   "time": 0.7499,
                   "x": 0,
                   "y": 0,
@@ -729,6 +783,24 @@
                 },
                 {
                   "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -762,22 +834,22 @@
                 "assetId": "sisyphus_walk_strip",
                 "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
                 "dimensions": [
-                  2172,
-                  724
+                  3072,
+                  512
                 ],
                 "pivot": [
                   0.5,
-                  0.9447513812154696
+                  0.98046875
                 ],
                 "rect": [
-                  571,
+                  384,
                   0,
-                  500,
-                  724
+                  384,
+                  512
                 ]
               },
               "size": [
-                160,
+                173,
                 231
               ],
               "keyframes": [
@@ -791,7 +863,7 @@
                   "alpha": 0
                 },
                 {
-                  "time": 0.2499,
+                  "time": 0.1249,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -800,13 +872,49 @@
                   "alpha": 0
                 },
                 {
-                  "time": 0.25,
+                  "time": 0.125,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
                   "scaleY": 1,
                   "rotation": 0,
                   "alpha": 1
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
                 },
                 {
                   "time": 0.4999,
@@ -815,10 +923,28 @@
                   "scaleX": 1,
                   "scaleY": 1,
                   "rotation": 0,
-                  "alpha": 1
+                  "alpha": 0
                 },
                 {
                   "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -837,6 +963,24 @@
                 },
                 {
                   "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -870,27 +1014,45 @@
                 "assetId": "sisyphus_walk_strip",
                 "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
                 "dimensions": [
-                  2172,
-                  724
+                  3072,
+                  512
                 ],
                 "pivot": [
                   0.5,
-                  0.9447513812154696
+                  0.98046875
                 ],
                 "rect": [
-                  1127,
+                  768,
                   0,
-                  500,
-                  724
+                  384,
+                  512
                 ]
               },
               "size": [
-                160,
+                173,
                 231
               ],
               "keyframes": [
                 {
                   "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -914,6 +1076,24 @@
                   "scaleX": 1,
                   "scaleY": 1,
                   "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
                   "alpha": 0
                 },
                 {
@@ -932,7 +1112,25 @@
                   "scaleX": 1,
                   "scaleY": 1,
                   "rotation": 0,
-                  "alpha": 1
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
                 },
                 {
                   "time": 0.7499,
@@ -941,10 +1139,28 @@
                   "scaleX": 1,
                   "scaleY": 1,
                   "rotation": 0,
-                  "alpha": 1
+                  "alpha": 0
                 },
                 {
                   "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -978,27 +1194,45 @@
                 "assetId": "sisyphus_walk_strip",
                 "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
                 "dimensions": [
-                  2172,
-                  724
+                  3072,
+                  512
                 ],
                 "pivot": [
                   0.5,
-                  0.9447513812154696
+                  0.98046875
                 ],
                 "rect": [
-                  1662,
+                  1152,
                   0,
-                  500,
-                  724
+                  384,
+                  512
                 ]
               },
               "size": [
-                160,
+                173,
                 231
               ],
               "keyframes": [
                 {
                   "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -1025,7 +1259,7 @@
                   "alpha": 0
                 },
                 {
-                  "time": 0.4999,
+                  "time": 0.3749,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -1034,7 +1268,43 @@
                   "alpha": 0
                 },
                 {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
                   "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -1053,6 +1323,744 @@
                 },
                 {
                   "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_4",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  3072,
+                  512
+                ],
+                "pivot": [
+                  0.5,
+                  0.98046875
+                ],
+                "rect": [
+                  1536,
+                  0,
+                  384,
+                  512
+                ]
+              },
+              "size": [
+                173,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_5",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  3072,
+                  512
+                ],
+                "pivot": [
+                  0.5,
+                  0.98046875
+                ],
+                "rect": [
+                  1920,
+                  0,
+                  384,
+                  512
+                ]
+              },
+              "size": [
+                173,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_6",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  3072,
+                  512
+                ],
+                "pivot": [
+                  0.5,
+                  0.98046875
+                ],
+                "rect": [
+                  2304,
+                  0,
+                  384,
+                  512
+                ]
+              },
+              "size": [
+                173,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                },
+                {
+                  "time": 0.875,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.9999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 1.0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                }
+              ]
+            },
+            {
+              "id": "walk_7",
+              "frame": {
+                "assetId": "sisyphus_walk_strip",
+                "url": "/assets/pottery-v1/art/sisyphus_walk_strip.png",
+                "dimensions": [
+                  3072,
+                  512
+                ],
+                "pivot": [
+                  0.5,
+                  0.98046875
+                ],
+                "rect": [
+                  2688,
+                  0,
+                  384,
+                  512
+                ]
+              },
+              "size": [
+                173,
+                231
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.1249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.125,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.2499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.25,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.3749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.375,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.4999,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.5,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.6249,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.625,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.7499,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.75,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.8749,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 0
+                },
+                {
+                  "time": 0.875,
                   "x": 0,
                   "y": 0,
                   "scaleX": 1,
@@ -1081,7 +2089,7 @@
               ]
             }
           ],
-          "notes": "Four registered crops of the same painted character; one frame per quarter stride."
+          "notes": "8 registered crops of the same painted character; a complete contact, recoil, passing and high-point walk cycle."
         },
         "slip_knockdown": {
           "status": "available",
@@ -1522,7 +2530,7 @@
               ]
             }
           ],
-          "notes": "Four registered crops of the same painted character; four poses from the slip to the landing."
+          "notes": "4 registered crops of the same painted character; four poses from the slip to the landing."
         },
         "strain_accent": {
           "status": "blocked-image-limit",
@@ -1907,23 +2915,23 @@
                     "assetId": "sisyphus_walk_strip_feet_wrapped",
                     "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
                     "dimensions": [
-                      2172,
-                      724
+                      3072,
+                      512
                     ],
                     "pivot": [
                       0.5,
-                      0.8895027624309392
+                      0.98046875
                     ],
                     "rect": [
-                      140,
                       0,
-                      500,
-                      724
+                      0,
+                      384,
+                      512
                     ]
                   },
                   "size": [
-                    181,
-                    262
+                    173,
+                    231
                   ],
                   "keyframes": [
                     {
@@ -1936,7 +2944,7 @@
                       "alpha": 1
                     },
                     {
-                      "time": 0.2499,
+                      "time": 0.1249,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -1945,7 +2953,43 @@
                       "alpha": 1
                     },
                     {
+                      "time": 0.125,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
                       "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -1972,6 +3016,24 @@
                       "alpha": 0
                     },
                     {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
                       "time": 0.7499,
                       "x": 0,
                       "y": 0,
@@ -1982,6 +3044,24 @@
                     },
                     {
                       "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2015,23 +3095,23 @@
                     "assetId": "sisyphus_walk_strip_feet_wrapped",
                     "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
                     "dimensions": [
-                      2172,
-                      724
+                      3072,
+                      512
                     ],
                     "pivot": [
                       0.5,
-                      0.8895027624309392
+                      0.98046875
                     ],
                     "rect": [
-                      600,
+                      384,
                       0,
-                      500,
-                      724
+                      384,
+                      512
                     ]
                   },
                   "size": [
-                    181,
-                    262
+                    173,
+                    231
                   ],
                   "keyframes": [
                     {
@@ -2044,7 +3124,7 @@
                       "alpha": 0
                     },
                     {
-                      "time": 0.2499,
+                      "time": 0.1249,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2053,13 +3133,49 @@
                       "alpha": 0
                     },
                     {
-                      "time": 0.25,
+                      "time": 0.125,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
                       "scaleY": 1,
                       "rotation": 0,
                       "alpha": 1
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
                     },
                     {
                       "time": 0.4999,
@@ -2068,10 +3184,28 @@
                       "scaleX": 1,
                       "scaleY": 1,
                       "rotation": 0,
-                      "alpha": 1
+                      "alpha": 0
                     },
                     {
                       "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2090,6 +3224,24 @@
                     },
                     {
                       "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2123,27 +3275,45 @@
                     "assetId": "sisyphus_walk_strip_feet_wrapped",
                     "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
                     "dimensions": [
-                      2172,
-                      724
+                      3072,
+                      512
                     ],
                     "pivot": [
                       0.5,
-                      0.8895027624309392
+                      0.98046875
                     ],
                     "rect": [
-                      1088,
+                      768,
                       0,
-                      500,
-                      724
+                      384,
+                      512
                     ]
                   },
                   "size": [
-                    181,
-                    262
+                    173,
+                    231
                   ],
                   "keyframes": [
                     {
                       "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2167,6 +3337,24 @@
                       "scaleX": 1,
                       "scaleY": 1,
                       "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
                       "alpha": 0
                     },
                     {
@@ -2185,7 +3373,25 @@
                       "scaleX": 1,
                       "scaleY": 1,
                       "rotation": 0,
-                      "alpha": 1
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
                     },
                     {
                       "time": 0.7499,
@@ -2194,10 +3400,28 @@
                       "scaleX": 1,
                       "scaleY": 1,
                       "rotation": 0,
-                      "alpha": 1
+                      "alpha": 0
                     },
                     {
                       "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2231,27 +3455,45 @@
                     "assetId": "sisyphus_walk_strip_feet_wrapped",
                     "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
                     "dimensions": [
-                      2172,
-                      724
+                      3072,
+                      512
                     ],
                     "pivot": [
                       0.5,
-                      0.8895027624309392
+                      0.98046875
                     ],
                     "rect": [
-                      1532,
+                      1152,
                       0,
-                      500,
-                      724
+                      384,
+                      512
                     ]
                   },
                   "size": [
-                    181,
-                    262
+                    173,
+                    231
                   ],
                   "keyframes": [
                     {
                       "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2278,7 +3520,7 @@
                       "alpha": 0
                     },
                     {
-                      "time": 0.4999,
+                      "time": 0.3749,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2287,7 +3529,43 @@
                       "alpha": 0
                     },
                     {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
                       "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2306,6 +3584,744 @@
                     },
                     {
                       "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_4",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      3072,
+                      512
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.98046875
+                    ],
+                    "rect": [
+                      1536,
+                      0,
+                      384,
+                      512
+                    ]
+                  },
+                  "size": [
+                    173,
+                    231
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_5",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      3072,
+                      512
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.98046875
+                    ],
+                    "rect": [
+                      1920,
+                      0,
+                      384,
+                      512
+                    ]
+                  },
+                  "size": [
+                    173,
+                    231
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_6",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      3072,
+                      512
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.98046875
+                    ],
+                    "rect": [
+                      2304,
+                      0,
+                      384,
+                      512
+                    ]
+                  },
+                  "size": [
+                    173,
+                    231
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 1
+                    },
+                    {
+                      "time": 0.875,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.9999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 1.0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "walk_7",
+                  "frame": {
+                    "assetId": "sisyphus_walk_strip_feet_wrapped",
+                    "url": "/assets/pottery-v1/art/sisyphus_walk_strip_feet_wrapped.png",
+                    "dimensions": [
+                      3072,
+                      512
+                    ],
+                    "pivot": [
+                      0.5,
+                      0.98046875
+                    ],
+                    "rect": [
+                      2688,
+                      0,
+                      384,
+                      512
+                    ]
+                  },
+                  "size": [
+                    173,
+                    231
+                  ],
+                  "keyframes": [
+                    {
+                      "time": 0,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.1249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.125,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.2499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.25,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.3749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.375,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.4999,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.5,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.6249,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.625,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.7499,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.75,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.8749,
+                      "x": 0,
+                      "y": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "rotation": 0,
+                      "alpha": 0
+                    },
+                    {
+                      "time": 0.875,
                       "x": 0,
                       "y": 0,
                       "scaleX": 1,
@@ -2334,7 +4350,7 @@
                   ]
                 }
               ],
-              "notes": "Four registered crops of the same painted character; one frame per quarter stride."
+              "notes": "8 registered crops of the same painted character; a complete contact, recoil, passing and high-point walk cycle."
             },
             "slip_knockdown": {
               "status": "available",
@@ -2775,7 +4791,7 @@
                   ]
                 }
               ],
-              "notes": "Four registered crops of the same painted character; four poses from the slip to the landing."
+              "notes": "4 registered crops of the same painted character; four poses from the slip to the landing."
             }
           },
           "notes": "Wrapped feet delivered for rest, push, assist and walk; other transitions still use a rig fallback."
@@ -3452,6 +5468,270 @@
             }
           ],
           "notes": "Separate end-on drum rotor and fixed support frame."
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_counterweight": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_counterweight",
+              "frame": {
+                "assetId": "machine_counterweight",
+                "url": "/assets/pottery-v1/art/machine_counterweight.png",
+                "dimensions": [
+                  1444,
+                  1331
+                ],
+                "pivot": [
+                  0.5058864265927978,
+                  0.9383921863260706
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_furnace_wheel": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_furnace_wheel",
+              "frame": {
+                "assetId": "machine_furnace_wheel",
+                "url": "/assets/pottery-v1/art/machine_furnace_wheel.png",
+                "dimensions": [
+                  1542,
+                  1262
+                ],
+                "pivot": [
+                  0.5055123216601816,
+                  0.919175911251981
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_leaking_jar": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_leaking_jar",
+              "frame": {
+                "assetId": "machine_leaking_jar",
+                "url": "/assets/pottery-v1/art/machine_leaking_jar.png",
+                "dimensions": [
+                  1512,
+                  1283
+                ],
+                "pivot": [
+                  0.49933862433862436,
+                  0.93141075604053
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_foundry": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_foundry",
+              "frame": {
+                "assetId": "machine_foundry",
+                "url": "/assets/pottery-v1/art/machine_foundry.png",
+                "dimensions": [
+                  1592,
+                  1230
+                ],
+                "pivot": [
+                  0.5040829145728644,
+                  0.932520325203252
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_orrery": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_orrery",
+              "frame": {
+                "assetId": "machine_orrery",
+                "url": "/assets/pottery-v1/art/machine_orrery.png",
+                "dimensions": [
+                  1424,
+                  1346
+                ],
+                "pivot": [
+                  0.5249297752808989,
+                  0.9420505200594353
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      },
+      "notes": "In-game acceptance pending."
+    },
+    "machine_bureau": {
+      "states": {
+        "idle": {
+          "status": "available",
+          "duration": 1,
+          "loop": false,
+          "reducedMotionTime": 0,
+          "layers": [
+            {
+              "id": "machine_bureau",
+              "frame": {
+                "assetId": "machine_bureau",
+                "url": "/assets/pottery-v1/art/machine_bureau.png",
+                "dimensions": [
+                  1542,
+                  1262
+                ],
+                "pivot": [
+                  0.5155642023346303,
+                  0.9270998415213946
+                ]
+              },
+              "size": [
+                256,
+                256
+              ],
+              "keyframes": [
+                {
+                  "time": 0,
+                  "x": 0,
+                  "y": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "rotation": 0,
+                  "alpha": 1
+                }
+              ]
+            }
+          ],
+          "notes": ""
         }
       },
       "notes": "In-game acceptance pending."

@@ -1,8 +1,8 @@
 {
-  "requiredAssets": 43,
-  "registeredAssets": 197,
-  "requiredStates": 85,
-  "availableStates": 71,
+  "requiredAssets": 49,
+  "registeredAssets": 203,
+  "requiredStates": 91,
+  "availableStates": 77,
   "blockedStates": [
     {
       "id": "sisyphus",
@@ -217,6 +217,36 @@
     {
       "id": "rope_drum",
       "state": "turning",
+      "status": "available"
+    },
+    {
+      "id": "machine_counterweight",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "machine_furnace_wheel",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "machine_leaking_jar",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "machine_foundry",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "machine_orrery",
+      "state": "idle",
+      "status": "available"
+    },
+    {
+      "id": "machine_bureau",
+      "state": "idle",
       "status": "available"
     },
     {

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sisyphus — motion workshop</title>
+<style>body{margin:0;background:#ebdcc0;color:#211b17;font:16px system-ui}header{padding:20px 28px}h1{font:32px Georgia;margin:0 0 12px}label{margin-right:20px}button,select,input{font:inherit}canvas{display:block;max-width:100%}p{max-width:900px}a{color:#633214}</style>
+<header><h1>Sisyphus — motion workshop</h1><p>One articulated figure throughout. Watch planted feet against the moving ground, or pause and scrub a full stride.</p>
+<label>Action <select id="action"><option value="walk">Walk</option><option value="rest">Rest</option><option value="push">Push</option><option value="fall">Fall</option></select></label>
+<label>Slope <select id="slope"><option value="0">Flat</option><option value="-0.35">Uphill</option><option value="0.35">Downhill</option></select></label>
+<button id="play">Pause</button> <button id="face">Turn</button>
+<label>Stride <input id="phase" type="range" min="0" max="1" step="0.001" value="0"></label>
+<p><a href="/">Return to game</a> · Enlarged view using the game's figure and gait code.</p></header>
+<script type="module" src="/src/world/animation-review.ts"></script></html>
