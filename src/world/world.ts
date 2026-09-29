@@ -268,6 +268,8 @@ export class World {
   private milestoneShot: { x: number; y: number; at: number } | null = null;
   /** Portrait camera: the stage x it centres on, easing toward the action. */
   private focusX = 400;
+  /** The stone's x this frame, which the portrait camera keeps in frame. */
+  private stoneX = 400;
   private camX = -1;
   /** The first frame snaps to its final camera; later inset changes ease. */
   private cameraReady = false;
@@ -466,8 +468,9 @@ export class World {
     // The whole loop, from the shade's post to the target, with sky enough for
     // the summit flourish; the foreground band may run under the controls.
     const region = { x: -10, y: 190, w: 1640, h: 680 };
+    let cut = false;
     // Portrait phones cannot fit the whole loop at a readable size: frame a
-    // narrower slice and pan gently after the stone instead.
+    // narrower slice and follow the stone instead.
     if (availW < availH * 1.1) {
       // Width at which the loop's height fills most of the view, so a tall
       // phone gets a closer hill rather than a band of empty sky; the rest
@@ -476,8 +479,21 @@ export class World {
       const w = Math.min(region.w, Math.max(620, fill));
       const lo = region.x + w / 2;
       const hi = region.x + region.w - w / 2;
-      const want = Math.min(hi, Math.max(lo, this.focusX));
-      this.camX = this.camX < lo || this.camX > hi ? want : this.camX + (want - this.camX) * 0.04;
+      const bound = (x: number) => Math.min(hi, Math.max(lo, x));
+      const want = bound(this.focusX);
+      // Cut rather than pan when the stone is out of frame (a new climb
+      // starting at the foot); otherwise ease after it, but never let it
+      // leave the middle half of the view.
+      const lost = Math.abs(this.stoneX - this.camX) > w / 2;
+      if (this.camX < lo || this.camX > hi || lost) {
+        cut = this.cameraReady;
+        // focusX is last frame's; on a reset the stone alone is current.
+        this.camX = lost ? bound(this.stoneX) : want;
+      } else {
+        const eased = this.camX + (want - this.camX) * 0.08;
+        const keep = w / 4;
+        this.camX = bound(Math.min(this.stoneX + keep, Math.max(this.stoneX - keep, eased)));
+      }
       region.x = this.camX - w / 2;
       region.w = w;
     }
@@ -500,7 +516,7 @@ export class World {
       y: this.insets.top + (availH - region.h * scale) - region.y * scale,
     };
     // Ease toward the framing so drawer changes are gentle, not jumpy.
-    const k = !this.cameraReady || this.game.state.options.reducedMotion ? 1 : 0.15;
+    const k = !this.cameraReady || cut || this.game.state.options.reducedMotion ? 1 : 0.15;
     const cam = this.cam;
     cam.s = cam.s + (scale - cam.s) * k || scale;
     cam.x += (target.x - cam.x) * k;
@@ -829,6 +845,8 @@ export class World {
     const site = findSite(s, s.empire.selectedSiteId);
     if (!site) return;
     this.time += dt;
+    // This frame's stone, so the portrait camera cuts on the frame it resets.
+    this.stoneX = this.stonePosition(site).x;
     this.layout();
     const area = this.insets;
     this.chisel.update(dt, {
