@@ -1,6 +1,7 @@
 import { ARCHIVE_SUBJECTS, type ArchiveSubject } from '../content/archive';
 import { catalog, siteDef } from '../content/catalog';
 import { DEVICES, WHISPERS } from '../content/devices';
+import { MACHINE_CARDS, machineFlag } from '../content/machines';
 import { SCENE_FOR_STORY, SCENES, sceneSeenId } from '../content/scenes';
 import { en, t } from '../content/strings';
 import { ACHIEVEMENTS } from '../core/achievements';
@@ -47,8 +48,12 @@ const TARGET_NAMES: Record<string, string> = {
   gilded_offering: 'Gilded offering',
 };
 
-/** The instructions the game gives in passing, in the order they appear. `after` is the tutorial flag that reveals them. */
-const GUIDE: { id: string; title: string; after: string | null; text: string }[] = [
+/**
+ * The instructions the game gives in passing, in the order they appear. `after`
+ * is the tutorial flag that reveals them; `when` reveals them from the save
+ * instead, for systems that arrive without a prompt.
+ */
+const GUIDE: { id: string; title: string; after: string | null; when?: (s: GameState) => boolean; text: string }[] = [
   { id: 'push', title: 'Pushing', after: null, text: 'Hold the boulder, Space or the Push button to climb (a toggle is available in Settings). Releasing only pauses the climb; it never loses distance.' },
   { id: 'grip', title: 'Grip and falls', after: 'first_slip', text: 'At first your grip gives out and the stone slips back down. Every fall pays a small obol, and each grip upgrade lets you reach higher. Full grip reaches the summit.' },
   { id: 'summit', title: 'Summit and impact', after: 'first_summit', text: 'The summit pays 70% of a climb and the impact below pays the other 30%, plus any Impact upgrades. A climb’s payout is fixed when it begins, so new purchases raise the next climb. Speed changes apply at once.' },
@@ -59,8 +64,31 @@ const GUIDE: { id: string; title: string; after: string | null; text: string }[]
   { id: 'works', title: 'Mythic works', after: 'foreman', text: 'Each operation has named works, unlocked by its production level. They are bought once per run and multiply all income.' },
   { id: 'relics', title: 'Relics', after: 'first_expansion', text: 'Each operation hides one relic, found on a descent (1 in 80, guaranteed within 60). Opening the next operation delivers a missing one. Relics add ×1.1 income each and survive Begin Again.' },
   { id: 'prestige', title: 'Begin Again', after: 'prestige_prompt', text: 'Begin Again resets the run for Existential Insight, a permanent income bonus paid on new records. Relics, Insight upgrades, discoveries and settings stay.' },
+  { id: 'purses', title: 'Each hill’s own money', after: 'first_expansion', text: 'Every hill earns its own currency, which lands in that hill’s purse and is spent only there. Defiance adds up every hill’s earnings at its appraisal, so spending never lowers it. Decrees and openings are priced in the newest hill’s money.' },
+  { id: 'trials', title: 'Decree trials', after: 'counterweight', when: (s) => s.empire.sites.length > 1, text: 'Each decree also sets a trial on the hill before it, such as 100 climbs with the counterweight hung. The next hill’s bar fills half from earnings and half from the trial; both must be met.' },
+  { id: 'stewards', title: 'Stewards and standing orders', after: null, when: (s) => s.empire.sites.length > 1, text: 'Each hill has a steward who runs its machine for you once hired. The standing order decides the purse: reinvest spends it on the hill’s own improvements, hold keeps it. A steward can be hired early with Insight.' },
+  { id: 'seals', title: 'Sealed tablets and the Codex', after: null, when: (s) => s.empire.sites.some((x) => x.hand.length > 0), text: 'Each hill deals a hand of sealed tablets when it opens. Breaking a seal reveals a device that changes that hill for the run. Every device you reveal stays in the Codex. Whispers are hidden devices, earned by playing a certain way; rumours hint at them.' },
+  { id: 'visitors', title: 'Visitors and bargains', after: null, when: (s) => s.empire.sites.some((x) => x.devices.some((d) => BARGAINS.has(d))), text: 'A visitor comes to each hill as its crew grows, with two bargains. Take one; it holds for the run, and the other waits for a later run. With Insight you can send for a visitor early.' },
+  { id: 'first_hill', title: 'The Counterweight', after: machineFlag('first_hill'), when: (s) => hasMachine(s, 'first_hill'), text: machineText('first_hill') },
+  { id: 'tartarus_rim', title: 'Ixion’s Wheel', after: machineFlag('tartarus_rim'), when: (s) => hasMachine(s, 'tartarus_rim'), text: machineText('tartarus_rim') },
+  { id: 'leaking_heights', title: 'The Danaids’ Jar', after: machineFlag('leaking_heights'), when: (s) => hasMachine(s, 'leaking_heights'), text: machineText('leaking_heights') },
+  { id: 'bronze_pass', title: 'The Foundry', after: machineFlag('bronze_pass'), when: (s) => hasMachine(s, 'bronze_pass'), text: machineText('bronze_pass') },
+  { id: 'skyward_escarpment', title: 'The Orrery', after: machineFlag('skyward_escarpment'), when: (s) => hasMachine(s, 'skyward_escarpment'), text: machineText('skyward_escarpment') },
+  { id: 'olympian_approach', title: 'The Paperwork Mill', after: machineFlag('olympian_approach'), when: (s) => hasMachine(s, 'olympian_approach'), text: machineText('olympian_approach') },
+  { id: 'memory', title: 'Spending Insight', after: null, when: (s) => s.counters.totalRuns > 0, text: 'Besides the eight permanent upgrades, Insight buys Remembrances (five ranks per hill, deepening its machine in every run), Keep on File (a revealed tablet always dealt there), Unseal in Advance and Send for a Visitor.' },
+  { id: 'appeals', title: 'Appeals and laurels', after: null, when: (s) => s.appeal.number > 0 || s.records.firstCharterSeconds !== null || s.discoveries.seenStoryIds.includes('charter_purchase'), text: 'After the Charter, File an Appeal begins a harder campaign: prices rise and every hill gets a rule twist with a compensation. Signing the Charter again wins a laurel, and every crew earns 10% more per laurel, for good.' },
   { id: 'goals', title: 'Goals and the empire', after: 'first_level', text: 'Pin any purchase as your goal: the objective line tracks it and never reserves money. The Empire view shows every operation; choosing one only moves your attention.' },
 ];
+
+const BARGAINS = new Set(DEVICES.filter((d) => d.source === 'bargain').map((d) => d.id));
+function hasMachine(s: GameState, siteId: string): boolean {
+  const x = s.empire.sites.find((site) => site.id === siteId);
+  return !!x && (x.counterweight !== null || !!x.furnace || !!x.jar || !!x.foundry || !!x.sky || !!x.bureau);
+}
+function machineText(siteId: string): string {
+  const c = MACHINE_CARDS.find((m) => m.siteId === siteId)!;
+  return `${c.decision} ${c.text}`;
+}
 
 const percent = (p: number) => `${+(p * 100).toFixed(2)}%`;
 
@@ -118,8 +146,9 @@ export function buildArchive(s: GameState): ArchiveView {
     title: g.title,
     text: g.text,
     seen:
-      g.after === null ||
-      s.discoveries.tutorialIds.includes(g.after) ||
+      (g.after === null && !g.when) ||
+      (g.after !== null && s.discoveries.tutorialIds.includes(g.after)) ||
+      !!g.when?.(s) ||
       (g.id === 'prestige' && s.counters.totalRuns > 0) ||
       (g.id === 'grip' && s.prelude.complete),
   }));

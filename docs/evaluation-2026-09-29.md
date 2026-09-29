@@ -89,6 +89,11 @@ The only explanation is the text on each scroll row. Each machine needs a
 Guide entry and a short first‑visit card that names its one decision (when to
 vent, how full to hold the jar, and so on).
 
+**Done (29 September):** each machine now has a first‑visit card that names
+its one decision, with Show me (opens the scroll) and Got it. The Guide gained
+entries for the six machines, each hill's money, trials, stewards, seals and
+the Codex, visitors, spending Insight, and Appeals.
+
 ### 4. Scope against the original constraint
 
 The specification's first user constraint is "simple empire idle play", with

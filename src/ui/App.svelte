@@ -10,6 +10,7 @@
   import { formatDuration, formatMoney, formatMultiplier } from '../core/format';
   import { t } from '../content/strings';
   import { priced } from '../content/currency';
+  import { machineCard, machineFlag } from '../content/machines';
   import { World } from '../world/world';
   import { CoinFlight } from './coinFlight';
   import { artUrl, iconUrl, storyPortrait, storyPortraitName } from '../world/library';
@@ -141,6 +142,20 @@
     startOpen = false;
   }
   const seen = (id: string) => game.state.discoveries.tutorialIds.includes(id);
+
+  /** The first time a hill's machine is in front of the player, a card names its one decision. */
+  const machine = $derived.by(() => {
+    const site = game.state.empire.sites.find((x) => x.id === view.site.id);
+    const card = site && machineCard(site.id);
+    if (!site || !card || seen(machineFlag(site.id))) return null;
+    const present = site.counterweight !== null || !!site.furnace || !!site.jar || !!site.foundry || !!site.sky || !!site.bureau;
+    return present ? card : null;
+  });
+  function closeMachine(show = false) {
+    if (!machine) return;
+    game.markSeen(machineFlag(machine.siteId));
+    if (show && !drawerOpen) toggleDrawer();
+  }
 
   /** Play a cutscene over the running game, then run `then` (e.g. the credits). */
   function playScene(id: string, then?: () => void) {
@@ -767,6 +782,21 @@
 
   {#if toast}
     <div class="toast" role="status" in:fly={enter(28, 0)} out:fly={leave(20, 0)}>{toast}</div>
+  {/if}
+
+  {#if machine && !reveal && !story && !modalOpen}
+    <div class="machine-card" role="dialog" aria-labelledby="machine-card-title" in:fly={enter(0, -18, 420)} out:fly={leave(0, -12)}>
+      <small>New on this hill</small>
+      <strong id="machine-card-title">{machine.machine}</strong>
+      <p class="decision">{machine.decision}</p>
+      <p>{machine.text}</p>
+      <em>{machine.quip}</em>
+      <div class="machine-actions">
+        <button class="primary" onclick={() => closeMachine(true)}>Show me</button>
+        <button onclick={() => closeMachine()}>Got it</button>
+      </div>
+      <p class="machine-foot">The Guide in the Archive keeps this.</p>
+    </div>
   {/if}
 
   {#if reveal}
@@ -1700,6 +1730,31 @@
     text-align: left;
     box-shadow: 0 2px 0 var(--ink), var(--shadow);
   }
+  .machine-card {
+    position: absolute;
+    top: calc(var(--hud-h) + 0.9rem);
+    left: 50%;
+    translate: -50% 0;
+    z-index: 23;
+    display: grid;
+    gap: 0.3rem;
+    width: min(28rem, calc(100vw - 2rem));
+    padding: 0.8rem 1.1rem 0.7rem;
+    background: var(--ivory);
+    color: var(--ink);
+    border: 1px solid var(--bronze);
+    border-top: 4px solid var(--bronze);
+    border-radius: 2px;
+    box-shadow: 0 2px 0 var(--ink), var(--shadow);
+  }
+  .machine-card small { color: #7c5626; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.72rem; }
+  .machine-card strong { font-family: var(--display); font-size: 1.2rem; }
+  .machine-card p { margin: 0; font-size: 0.9rem; line-height: 1.4; }
+  .machine-card .decision { font-weight: 700; }
+  .machine-card em { color: #6a5641; font-size: 0.88rem; }
+  .machine-actions { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
+  .machine-actions button { flex: 1; min-height: 40px; }
+  .machine-card .machine-foot { color: #6a5641; font-size: 0.78rem; text-align: center; }
   .reveal small { color: #8e2a1c; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.72rem; }
   .reveal strong { font-size: 1.1rem; }
   .reveal em { color: #6a5641; }

@@ -268,6 +268,7 @@ export class World {
   private milestoneShot: { x: number; y: number; at: number } | null = null;
   /** Portrait camera: the stage x it centres on, easing toward the action. */
   private focusX = 400;
+  private offEvents: (() => void) | null = null;
   /** The stone's x this frame, which the portrait camera keeps in frame. */
   private stoneX = 400;
   private camX = -1;
@@ -384,7 +385,7 @@ export class World {
       looks.map((m) => ({ kind: m.kind ?? 'stone', fill: m.fill, accent: m.accent })),
     );
 
-    this.game.onEvents((events) => this.onEvents(events));
+    this.offEvents = this.game.onEvents((events) => this.onEvents(events));
     this.app.ticker.add((ticker) => {
       this.game.frame(performance.now());
       this.update(Math.min(0.1, ticker.deltaMS / 1000));
@@ -1637,6 +1638,9 @@ export class World {
   }
 
   destroy(): void {
+    // A torn-down world must stop hearing the game, or its next event reads a destroyed renderer.
+    this.offEvents?.();
+    this.offEvents = null;
     this.app.destroy(true);
   }
 }
