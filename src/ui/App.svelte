@@ -95,10 +95,10 @@
   const keyLabel = $derived(options.pushKey.replace(/^Key/, '').replace(/^Digit/, ''));
   /** Improve is an overlay, so opening it never recenters the hill or moves the player's target. */
   const scrollWidth = $derived(Math.round(Math.max(320, Math.min(400, width * 0.29))));
-  /** Short landscape screens hang the open sheet to the floor: the dock and captions step left of it (its width, margin and rod). */
-  const drawerWidth = $derived(drawerOpen && compact && !narrow ? scrollWidth + 48 : 0);
   /** Phones (narrow, or short in landscape) give the sheet everything below the header, over the dock. */
   const compact = $derived(narrow || height < 560);
+  /** Short landscape screens hang the open sheet to the floor: the dock and captions step left of it (its width, margin and rod). */
+  const drawerWidth = $derived(drawerOpen && compact && !narrow ? scrollWidth + 48 : 0);
   const sheetHeight = $derived(
     compact
       ? Math.max(200, Math.round(height - hudHeight - 28))
