@@ -212,10 +212,13 @@
 <style>
   /* Sections are headed like the scroll's: small capitals over a hairline. */
   fieldset {
+    /* A fieldset never shrinks below its content by default; on phones it must. */
+    min-width: 0;
     border: 0;
     padding: 0;
     margin: 1.2rem 0 0;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.5rem;
   }
   legend {
@@ -241,6 +244,7 @@
     flex-shrink: 0;
   }
   input:not([type]) { min-width: 0; width: 100%; }
+  select { flex: 1; min-width: 0; max-width: 100%; text-overflow: ellipsis; }
   label:has(input[type='range']) { display: grid; grid-template-columns: 5rem 1fr 2.5rem; }
   label:has(input:not([type])) { flex-wrap: wrap; }
   textarea {

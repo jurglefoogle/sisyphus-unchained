@@ -37,15 +37,22 @@ void main(void)
 }
 `;
 
+// Hashes without sin(): the usual sin(dot(p, ...)) * 43758 overflows 16-bit
+// floats on phone GPUs once p is a few hundred pixels, and NaN paints black.
+// These take fract() first, so every intermediate stays small.
 const NOISE = /* glsl */ `
 float hash(vec2 p)
 {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+    vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
 vec2 hash2(vec2 p)
 {
-    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
+    vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.xx + p3.yz) * p3.zy);
 }
 
 float noise(vec2 p)
@@ -154,7 +161,7 @@ void main(void)
 export class DistortFilter extends Filter {
   constructor() {
     super({
-      glProgram: GlProgram.from({ vertex: VERTEX, fragment: DISTORT, name: 'kiln-distort' }),
+      glProgram: GlProgram.from({ preferredFragmentPrecision: 'highp', vertex: VERTEX, fragment: DISTORT, name: 'kiln-distort' }),
       resources: {
         distort: new UniformGroup({
           uScreen: { value: new Float32Array([1, 1]), type: 'vec2<f32>' },
@@ -332,7 +339,7 @@ export class KilnFilter extends Filter {
 
   constructor() {
     super({
-      glProgram: GlProgram.from({ vertex: VERTEX, fragment: FINISH, name: 'kiln-finish' }),
+      glProgram: GlProgram.from({ preferredFragmentPrecision: 'highp', vertex: VERTEX, fragment: FINISH, name: 'kiln-finish' }),
       resources: {
         finish: new UniformGroup({
           uScreen: { value: new Float32Array([1, 1]), type: 'vec2<f32>' },
@@ -352,7 +359,7 @@ export class KilnFilter extends Filter {
       antialias: 'inherit',
     });
     this.extract = new Filter({
-      glProgram: GlProgram.from({ vertex: VERTEX, fragment: EXTRACT, name: 'kiln-light' }),
+      glProgram: GlProgram.from({ preferredFragmentPrecision: 'highp', vertex: VERTEX, fragment: EXTRACT, name: 'kiln-light' }),
       resources: {
         light: new UniformGroup({
           uScreen: { value: new Float32Array([1, 1]), type: 'vec2<f32>' },
@@ -434,7 +441,7 @@ void main(void)
 export class RimFilter extends Filter {
   constructor() {
     super({
-      glProgram: GlProgram.from({ vertex: VERTEX, fragment: RIM, name: 'kiln-rim' }),
+      glProgram: GlProgram.from({ preferredFragmentPrecision: 'highp', vertex: VERTEX, fragment: RIM, name: 'kiln-rim' }),
       resources: {
         rim: new UniformGroup({
           uDir: { value: new Float32Array([-0.7, -0.7]), type: 'vec2<f32>' },

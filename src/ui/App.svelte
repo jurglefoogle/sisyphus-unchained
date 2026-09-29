@@ -96,8 +96,12 @@
   /** Improve is an overlay, so opening it never recenters the hill or moves the player's target. */
   const scrollWidth = $derived(Math.round(Math.max(320, Math.min(400, width * 0.29))));
   const drawerWidth = 0;
+  /** Phones (narrow, or short in landscape) give the sheet everything below the header, over the dock. */
+  const compact = $derived(narrow || height < 560);
   const sheetHeight = $derived(
-    Math.max(260, Math.round(Math.min(narrow ? height * 0.56 : height * 0.72, height - hudHeight - controlsHeight - 28))),
+    compact
+      ? Math.max(200, Math.round(height - hudHeight - 28))
+      : Math.max(260, Math.round(Math.min(height * 0.72, height - hudHeight - controlsHeight - 28))),
   );
   const availableUpgrades = $derived(view.rows.filter((row) => row.affordable && !row.disabled).length);
   const storyQueue: Notice[] = [];
@@ -1731,9 +1735,11 @@
   }
   .modal-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
     justify-content: flex-end;
   }
+  .narrow .modal-actions > :global(button) { flex: 1 1 auto; }
   .appeal-line {
     margin: 0.2rem 0 0;
     font-size: 0.8rem;

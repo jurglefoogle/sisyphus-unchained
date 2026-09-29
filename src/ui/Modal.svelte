@@ -93,6 +93,8 @@
     background: radial-gradient(ellipse at 50% 45%, rgba(33, 27, 23, 0.45), rgba(20, 14, 10, 0.72));
     backdrop-filter: blur(3px);
     display: grid;
+    /* One column that may shrink below its content, so a long line never widens the dialog past the screen. */
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     z-index: 50;
     padding: 16px;
@@ -103,6 +105,7 @@
     display: flex;
     flex-direction: column;
     width: min(520px, 100%);
+    min-width: 0;
     max-height: 90dvh;
     filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
     /* Inner panels become washes over the papyrus rather than cream boxes. */
