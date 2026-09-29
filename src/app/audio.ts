@@ -144,7 +144,8 @@ export class Sound {
     return p;
   }
 
-  play(id: string, bus: Bus = 'effects', gain = 1, delay = 0): void {
+  /** `rate` pitches a delivered effect (and shortens it) so one file can serve several events. */
+  play(id: string, bus: Bus = 'effects', gain = 1, delay = 0, rate = 1): void {
     const ctx = this.ctx;
     if (!ctx || ctx.state !== 'running' || this.volumes[bus] <= 0) return;
     const now = ctx.currentTime;
@@ -154,6 +155,7 @@ export class Sound {
       if (!buffer || !this.ctx) return;
       const src = this.ctx.createBufferSource();
       src.buffer = buffer;
+      src.playbackRate.value = rate;
       const g = this.ctx.createGain();
       g.gain.value = gain;
       src.connect(g).connect(this.buses[bus]!);
@@ -348,6 +350,40 @@ export class Sound {
         case 'AchievementUnlocked':
           // The stamp: one thud per batch (the minimum gap swallows repeats).
           this.play('sfx_decree', 'interface', 0.6, 0.2);
+          break;
+        // The later machines and systems reuse the delivered set, pitched.
+        case 'Eruption':
+          // A low bronze boom, then the summit swell; a full-heat eruption rings out.
+          this.duck(1.5);
+          this.play('sfx_impact_bronze', 'effects', 1, 0, 0.7);
+          this.play('sfx_summit', 'effects', 0.7, 0.15, 0.8);
+          if (e.heat >= 0.999) this.play('sfx_milestone', 'effects', 0.8, 0.35);
+          break;
+        case 'DeviceRevealed':
+          // The seal cracks: a light, high stamp; a first find also chimes.
+          this.play('sfx_decree', 'effects', 0.7, 0, 1.35);
+          if (e.firstTime) this.play('sfx_relic', 'effects', 0.45, 0.25, 1.2);
+          break;
+        case 'VisitorArrived':
+          this.play('sfx_site_unlock', 'effects', 0.7, 0, 1.15);
+          break;
+        case 'StewardHired':
+          this.play('sfx_foreman', 'effects', 0.85, 0, 1.1);
+          break;
+        case 'Rumour':
+          this.play('sfx_coin', 'interface', 0.4, 0, 0.75);
+          break;
+        case 'Edict':
+          // Zeus speaks to the whole empire.
+          this.duck(2.5);
+          this.play('sfx_decree', 'effects', 1, 0, 0.8);
+          break;
+        case 'AppealFiled':
+          this.duck(4);
+          this.play('sfx_prestige', 'effects', 1, 0, 0.9);
+          break;
+        case 'LaurelWon':
+          this.play('sfx_relic', 'effects', 0.9, 1.2, 1.1);
           break;
       }
     }

@@ -9,6 +9,12 @@ import type { GameEvent, GameState } from '../core/state';
 const KEY = 'sisyphus-unchained-telemetry';
 const MAX_ENTRIES = 5000;
 
+/** The choices each hill's machine and the later systems ask for; purchases are logged separately. */
+const DECISIONS = new Set([
+  'SetStewardOrder', 'SetTrim', 'TakeBargain', 'Vent', 'SetVentAt', 'Drill', 'Patch', 'SetJarTarget', 'SetSplit',
+  'PourNext', 'TurnSky', 'Mount', 'HireClerk', 'SetOnDuty', 'FileAppeal', 'Remember', 'KeepOnFile', 'Unseal', 'Summon',
+]);
+
 export interface TelemetryEntry {
   /** Milliseconds since the Unix epoch. */
   t: number;
@@ -69,6 +75,16 @@ export class Telemetry {
     this.record(state, 'first_push');
   }
 
+  /** An applied command that is a machine or system decision, with its arguments (e.g. `SetTrim trim=3`). */
+  decision(state: GameState, command: { type: string }): void {
+    if (!this.enabled() || !DECISIONS.has(command.type)) return;
+    const args = Object.entries(command)
+      .filter(([k]) => k !== 'type')
+      .map(([k, v]) => `${k}=${v}`)
+      .join(' ');
+    this.record(state, 'decision', { detail: args ? `${command.type} ${args}` : command.type });
+  }
+
   onEvents(state: GameState, events: GameEvent[]): void {
     if (!this.enabled()) return;
     for (const e of events) {
@@ -114,6 +130,30 @@ export class Telemetry {
           break;
         case 'CharterSigned':
           this.record(state, 'charter_signed');
+          break;
+        case 'Eruption':
+          this.record(state, 'eruption', { site: e.siteId, detail: `heat=${e.heat.toFixed(2)} power=${e.power.toFixed(2)}` });
+          break;
+        case 'DeviceRevealed':
+          this.record(state, 'device_reveal', { site: e.siteId, detail: e.deviceId + (e.firstTime ? ' (new)' : '') });
+          break;
+        case 'VisitorArrived':
+          this.record(state, 'visitor_arrive', { site: e.siteId, detail: e.visitorId });
+          break;
+        case 'StewardHired':
+          this.record(state, 'steward_hire', { site: e.siteId, detail: e.paidWith });
+          break;
+        case 'Rumour':
+          this.record(state, 'rumour', { detail: e.whisperId });
+          break;
+        case 'Edict':
+          this.record(state, 'edict', { detail: e.edictId });
+          break;
+        case 'AppealFiled':
+          this.record(state, 'appeal_filed', { detail: `${e.number}:${e.award}` });
+          break;
+        case 'LaurelWon':
+          this.record(state, 'laurel', { detail: e.number });
           break;
       }
     }

@@ -23,6 +23,25 @@ describe('local playtest telemetry', () => {
     expect(JSON.stringify(exported)).not.toContain('device');
   });
 
+  it('records the machine decisions and later-system events', () => {
+    const state = makeState();
+    const telemetry = new Telemetry(() => true);
+    telemetry.decision(state, { type: 'SetTrim', trim: 3 } as { type: string });
+    telemetry.decision(state, { type: 'Vent' });
+    telemetry.decision(state, { type: 'BuyLevels' });
+    telemetry.onEvents(state, [
+      { type: 'Eruption', siteId: 'tartarus_rim', power: 2.5, heat: 0.8 },
+      { type: 'VisitorArrived', siteId: 'first_hill', visitorId: 'hermes' },
+      { type: 'Edict', edictId: 'e1' },
+      { type: 'LaurelWon', number: 1 },
+    ]);
+    const entries = (JSON.parse(telemetry.export()) as { entries: { event: string; detail?: string | number }[] }).entries;
+    expect(entries.map((e) => e.event)).toEqual(['decision', 'decision', 'eruption', 'visitor_arrive', 'edict', 'laurel']);
+    expect(entries[0].detail).toBe('SetTrim trim=3');
+    expect(entries[1].detail).toBe('Vent');
+    expect(entries[2].detail).toBe('heat=0.80 power=2.50');
+  });
+
   it('records nothing before opt-in', () => {
     const telemetry = new Telemetry(() => false);
     telemetry.record(makeState(), 'session_start');

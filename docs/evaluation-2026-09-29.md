@@ -108,12 +108,20 @@ The audio layer handles the original events only. Eruptions, device reveals,
 visitor arrivals, Edicts, stewards hired, Appeals filed and laurels won are
 silent. The existing 20 effects could cover most of them.
 
+**Done (29 September):** eruptions, seals breaking, visitors, stewards,
+rumours, Edicts, Appeals and laurels now play pitched variants of the
+delivered effects.
+
 ### 6. Playtest telemetry cannot see the machines
 
 The consent‑based local log records the original funnel: milestones, sites,
 works, relics, Begin Again and the Charter. It records none of the new
 decisions (vents, drilling, pours, sky turns, clerks, seals broken, bargains,
 stewards, trials, Appeals). A playtest could not tell whether anyone uses them.
+
+**Done (29 September):** every machine and system choice is logged as a
+`decision` with its arguments (for example `SetTrim trim=3`), alongside
+eruptions, reveals, visitors, stewards, rumours, Edicts, Appeals and laurels.
 
 ### 7. Smaller interface issues
 

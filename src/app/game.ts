@@ -445,6 +445,7 @@ export class Game {
     const result = this.apply(req.command);
     // Only applied requests are remembered, so a refused one can be retried later.
     if (result.ok) {
+      this.telemetry.decision(this.state, req.command);
       this.seenRequests.push(req.requestId);
       if (this.seenRequests.length > REQUEST_MEMORY) this.seenRequests.shift();
     }
