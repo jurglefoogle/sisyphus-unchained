@@ -941,7 +941,7 @@ function tabletRows(state: GameState, site: SiteState): PurchaseRow[] {
   return rows;
 }
 
-function machineGauge(state: GameState, site: SiteState): MachineGauge | null {
+export function machineGauge(state: GameState, site: SiteState): MachineGauge | null {
   const m = modifiers(state, site.id);
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   const clamp = (x: number) => Math.max(0, Math.min(1, x));

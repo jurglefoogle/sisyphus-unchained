@@ -59,6 +59,8 @@ import { pebbleTextures, sherdTextures } from './painted';
 import { rng } from './paint';
 import { PotteryFx, SITE_MATERIAL, TARGET_MATERIAL } from './vfx';
 import { ChiselStamp } from './chisel';
+import { MachineFx, type MachineReading } from './machine-fx';
+import { machineGauge } from '../app/view';
 import {
   DEFAULT_GROUND,
   DEFAULT_SKY,
@@ -181,6 +183,10 @@ export class World {
   private works = new Container();
   private machine = this.clip();
   private machineScale = 1;
+  private machineFx = new MachineFx();
+  private machineReading: MachineReading | null = null;
+  private machineReadAt = -1;
+  private machineReadSite = '';
   private terrain = new Sprite();
   private terrainKey = '';
   private frieze = new TilingSprite();
@@ -320,6 +326,7 @@ export class World {
       this.ambient,
       this.works,
       this.machine,
+      this.machineFx,
       this.terrain,
       this.litter,
       this.chisel.plaque,
@@ -828,7 +835,23 @@ export class World {
       this.machine.position.set(MACHINE_X, surfaceY(MACHINE_X) + 8);
       this.machine.scale.set(this.machineScale);
       this.machine.show(machineState, this.time, this.reduced);
-    } else this.machine.visible = false;
+      // The machine reads its state: heat, water, bronze, the house overhead, the backlog.
+      if (this.time - this.machineReadAt > 0.1 || this.time < this.machineReadAt || this.machineReadSite !== site.id) {
+        this.machineReadAt = this.time;
+        this.machineReadSite = site.id;
+        this.machineReading = machineGauge(this.game.state, site);
+      }
+      const layer = machineState.layers[0];
+      this.machineFx.visible = this.machine.visible && !!layer;
+      if (layer) {
+        this.machineFx.position.copyFrom(this.machine.position);
+        this.machineFx.scale.copyFrom(this.machine.scale);
+        this.machineFx.update(site, this.machineReading, this.time, this.reduced, layer.frame.pivot, layer.size);
+      }
+    } else {
+      this.machine.visible = false;
+      this.machineFx.visible = false;
+    }
   }
 
   private get reduced(): boolean {
