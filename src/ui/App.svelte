@@ -64,6 +64,7 @@
   let reveal = $state<{ name: string; rule: string; quip: string; firstTime: boolean } | null>(null);
   let revealTimer: ReturnType<typeof setTimeout> | undefined;
   let caption = $state<string | null>(null);
+  let captionSpeaker = $state<string | null>(null);
   let error = $state<string | null>(null);
   let held = $state(false);
   let width = $state(1200);
@@ -92,10 +93,12 @@
       game.state.discoveries.tutorialIds.length > 0,
   );
   const keyLabel = $derived(options.pushKey.replace(/^Key/, '').replace(/^Digit/, ''));
-  /** The Improve scroll's column, and the room the world gives it while unrolled. */
-  const scrollWidth = $derived(Math.round(Math.max(300, Math.min(420, width * 0.3))));
-  const drawerWidth = $derived(drawerOpen && !narrow ? scrollWidth + 40 : 0);
-  const sheetHeight = $derived(Math.max(220, Math.round(narrow ? height * 0.5 : height - hudHeight - 40)));
+  /** Improve is an overlay, so opening it never recenters the hill or moves the player's target. */
+  const scrollWidth = $derived(Math.round(Math.max(320, Math.min(400, width * 0.29))));
+  const drawerWidth = 0;
+  const sheetHeight = $derived(
+    Math.max(260, Math.round(Math.min(narrow ? height * 0.56 : height * 0.72, height - hudHeight - controlsHeight - 28))),
+  );
   const availableUpgrades = $derived(view.rows.filter((row) => row.affordable && !row.disabled).length);
   const storyQueue: Notice[] = [];
   let storyTimer: ReturnType<typeof setTimeout> | undefined;
@@ -190,7 +193,7 @@
     empireOpen = false;
     drawerOpen = !drawerOpen;
     // Focus returns to the roll, which is what opens the scroll again.
-    if (!drawerOpen) document.querySelector<HTMLElement>('button[aria-controls="drawer"]')?.focus();
+    if (!drawerOpen) requestAnimationFrame(() => document.querySelector<HTMLElement>('button[aria-controls="drawer"]')?.focus());
     sound.play(drawerOpen ? 'sfx_ui_open' : 'sfx_ui_close', 'interface');
   }
 
@@ -259,6 +262,7 @@
     } else if (n.kind === 'info' && n.text) {
       if (n.storyId === 'ambient' && (story || scene || drawerOpen && narrow)) return;
       caption = n.text;
+      captionSpeaker = n.speaker ?? null;
       clearTimeout(captionTimer);
       clearTimeout(stampTimer);
       captionTimer = setTimeout(() => (caption = null), 8000);
@@ -483,9 +487,7 @@
   }
 
   $effect(() => {
-    // On phones the scroll unrolls over the top half; the world frames what is left below it.
-    const top = hudHeight + 12 + (narrow && drawerOpen ? sheetHeight + 20 : 0);
-    world?.setInsets({ top, right: drawerWidth, bottom: controlsHeight + 18, left: 0 });
+    world?.setInsets({ top: hudHeight + 12, right: 0, bottom: controlsHeight + 18, left: 0 });
   });
 
   $effect(() => {
@@ -675,7 +677,7 @@
   {/if}
 
   {#if caption && options.ambientCaptions}
-    <p class="caption" aria-live="polite" in:fly={enter(0, 10, 260)} out:fly={leave(0, 6)}>“{caption}”</p>
+    <p class="caption" aria-live="polite" in:fly={enter(0, 10, 260)} out:fly={leave(0, 6)}>{#if captionSpeaker}<b class="speaker">{captionSpeaker}</b>{/if}“{caption}”</p>
   {/if}
 
   {#if wipe}
@@ -699,10 +701,7 @@
           {#if view.objectiveProgress !== null}
             <span class="objective-bar" role="progressbar" aria-label="Goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.objectiveProgress * 100)}><span style:width="{view.objectiveProgress * 100}%"></span></span>
           {/if}
-          <p class="horizons" aria-label="Upcoming goals">
-            <span><b>Next</b>{view.goalStack.next}</span>
-            <span><b>Beyond</b>{view.goalStack.beyond}</span>
-          </p>
+          <p class="horizons" aria-label="Next goal"><span><b>Next</b>{view.goalStack.next}</span></p>
           {#if view.gauge}
             <div class="gauge" class:hot={view.gauge.hot} aria-label="{view.gauge.label}: {view.gauge.text}">
               <b>{view.gauge.label}</b>
@@ -1417,6 +1416,7 @@
     color: rgba(235, 220, 192, 0.72);
   }
   .horizons span {
+    flex: 1;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -1550,7 +1550,7 @@
   .narrow .slab { flex-direction: column; align-items: stretch; gap: 0.5rem; padding: 0.55rem 0.6rem 0.6rem; }
   .narrow .objective { font-size: 0.98rem; }
   .narrow .horizons { gap: 0.6rem; font-size: 0.66rem; }
-  .narrow .horizons span { max-width: 50%; }
+  .narrow .horizons span { max-width: 100%; }
   .narrow .push { min-width: 0; width: 100%; }
   .narrow .push kbd { display: none; }
   .narrow .story { top: calc(var(--hud-h) + 0.3rem); width: 92%; }
@@ -1773,5 +1773,15 @@
     margin: 0.15rem 0;
     font-size: 0.85rem;
     color: var(--muted);
+  }
+  .caption .speaker {
+    display: block;
+    margin-bottom: 0.15rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pale-clay, #d99c6c);
   }
 </style>

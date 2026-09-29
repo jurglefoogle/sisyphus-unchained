@@ -1268,9 +1268,10 @@ export function buildView(state: GameState): GameView {
   }
   if (has(state, 'first_level')) {
     const str = levelRow(state, site, 'strength');
-    const imp = levelRow(state, site, 'impact');
+    // The rim has no impact track (Ixion's Wheel replaces it): never price it.
+    const imp = trackOpen(site, 'impact') ? levelRow(state, site, 'impact') : null;
     if (str) rows.push(str);
-    if (imp && trackOpen(site, 'impact')) rows.push(imp);
+    if (imp) rows.push(imp);
   }
   if (!site.wheelOwned && flywheelOffered(state, site)) {
     const cost = flywheelCost(site);

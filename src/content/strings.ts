@@ -195,6 +195,18 @@ export const ambient: Record<string, string[]> = {
     'Gravity has a perfect win record. I’m playing the long game.',
     'Autolycus stole my cattle, so I engraved their hooves. Gravity is harder.',
     'Same hill. Better margins.',
+    'Step one: push. Step two: push. Step three: see step one.',
+    'I used to be a king. Now I’m in logistics.',
+    'Zeus sentenced me to futility. I appealed to compound interest.',
+    'I founded Corinth. Walls, a harbour, a market. Now I have a hill.',
+    'I told my wife to skip my funeral. Best scheme I ever ran.',
+    'Hades let me go home to scold my wife. I stayed for decades. Oops.',
+    'The view from the top is lovely. I’ve seen about a second of it, total.',
+    'Nobody tells you eternity has no weekends.',
+    'Some men are born to greatness. I was sentenced to an incline.',
+    'Uphill both ways. I’m not exaggerating; it’s in the sentence.',
+    'This rock and I have been through a lot. Mostly the same hill.',
+    'They gave Heracles twelve labours. I got one. Quality over quantity.',
   ],
   tartarus_rim: [
     'Daedalus swears the spare gear is decorative. Engineers lie about spares.',
@@ -304,6 +316,12 @@ export const barks: Record<string, string[]> = {
     'Temporary success achieved. Return trip scheduled.',
     'And there it goes. See you downstairs.',
     'Peak performance. Literally. For about a second.',
+    'Summit reached. Please hold your applause for a very short time.',
+    'On top of the world. The world is a hill in Hades, but still.',
+    'The top! Quick, someone paint this on a vase.',
+    'I’d plant a flag, but the rock would flatten it.',
+    'Made it. Zeus owes me a medal. Zeus owes me a lot of things.',
+    'Up! The shades are clapping. Through their own hands, but it counts.',
   ],
   flywheel: [
     'Gravity works for me now. Zeus hates that.',
@@ -327,6 +345,10 @@ export const barks: Record<string, string[]> = {
     'Every obol reinvested. The Fates hate a planner.',
     'Same rock, bigger numbers. Pythagoras would weep, once he’s born.',
     'Stronger stone, stronger shoulders. Heracles, watch your back.',
+    'New shoulders. Same rock. Progress.',
+    'Money well spent. Well, spent.',
+    'Capital expenditure in Hades. My accountant is literally dead.',
+    'An investment in the future. I have a lot of future.',
   ],
   pause: [
     'Time stops. Chronos would be so jealous.',
@@ -342,8 +364,263 @@ export const barks: Record<string, string[]> = {
     'Standing still is technically not rolling backwards.',
     'If nobody pushes, is it still a punishment? Asking for Zeus.',
     'I could leave. I won’t. But I could. Probably not.',
+    'The shades think I’ve finished. Nobody tell them.',
+    'Even the dead are watching me stand here. The dead.',
   ],
 };
+
+/**
+ * Sisyphus on his colleagues, the dead: joins every hill's ambient pool.
+ * Homer calls them the witless heads of the dead (Odyssey 10–11); only
+ * Tiresias kept his wits, and a shade needs a drink of blood to think.
+ */
+export const shades: string[] = [
+  'Homer calls the dead “witless heads”. Homer was being polite.',
+  'A shade asked me which way is down. We are in the underworld.',
+  'The dead need a drink of blood before they can think. Payday is chaos.',
+  'Tiresias is the only shade who kept his wits. He won’t shut up about it.',
+  'A shade asked if the rock was alive. I said no. He apologised to it anyway.',
+  'I asked a shade his name. He said “Previously”.',
+  'Staff meeting. Twelve shades came. Eleven thought it was a funeral.',
+  'A shade tried to push the rock and walked through it. Twice. Then again.',
+  'The dead can’t hold a pen. Or a thought. They sign with a cold draught.',
+  'The shades squeak like bats. Homer’s words. The bats took it personally.',
+  'Asphodel Meadows: an eternity of beige. It explains a lot about the staff.',
+  'One shade has queued for Charon for a century. It’s the wrong river.',
+  'My physio says lift with your legs. My physio is a shade. No legs.',
+  'The dead are excellent listeners. Nothing goes in, but they nod.',
+  'Achilles said he’d rather be a farmhand alive than king here. Fair.',
+  'Explaining the job to a shade: tell him, he sips Lethe, tell him again.',
+];
+
+/**
+ * Boredom, and how the immortals get through forever: joins every hill's
+ * ambient pool. Atlas holds the sky; he is never shown with a globe.
+ */
+export const eternity: string[] = [
+  // Boredom
+  'I’ve counted every pebble on this hill. Twice. There are four fewer now.',
+  'The first thousand years of eternity are the hardest. I assume.',
+  'I’ve been bored so long I came out the other side. It’s also boring.',
+  'I named the rock. Then renamed it. It’s on its three hundredth name.',
+  'Today I pushed with my left shoulder. Big day. Don’t tell Zeus.',
+  'Hobbies I’ve tried: whistling, counting, despair. Despair has range.',
+  'I’ve thought every thought there is. Now I’m on reruns.',
+  'Time flies when you’re having fun. So I couldn’t tell you.',
+  'I tried meditation. Emptied my mind. Found the rock in there.',
+  'Nothing to do but wait. I’m excellent at waiting now. World class.',
+  // How the immortals cope
+  'Zeus handles eternity with affairs. I handle it with inclines.',
+  'Hera spends eternity holding grudges. Full-time job. She’s very good.',
+  'Hestia hasn’t left the hearth in an age. She calls it self-care.',
+  'Tithonus got immortality but not youth. Now he’s a cricket. Read the terms.',
+  'The Graeae share one eye among three. Eternity is long; that queue is longer.',
+  'Persephone spends half the year down here. She calls it a sabbatical.',
+  'Hades is so bored he’s sorting the dead by height. Again.',
+  'The gods invented family feuds because eternity has no plot.',
+  'Kronos ate his children. Prophecy, he says. Boredom, I say.',
+  'Hermes never sits still. Not work ethic. He’s terrified of free time.',
+  'Atlas says the trick to holding the sky forever is never looking at a clock.',
+  'Olympus is where the immortals go to be bored in marble.',
+  'Eternity for a god: nectar, feud, repeat. For me: rock, repeat.',
+  'Dionysus spends eternity at a party. I spend it on a slope. Same headache.',
+];
+
+export type Speaker = 'Sisyphus' | 'A shade' | 'Another shade' | 'The foreman';
+
+/**
+ * Short exchanges, shown a line at a time in the ambient caption. Early ones
+ * are shades heckling from the sidelines; `crew` ones need the Foreman, when
+ * the dead are on the payroll.
+ */
+export interface Exchange {
+  id: string;
+  crew?: boolean;
+  lines: [Speaker, string][];
+}
+
+export const exchanges: Exchange[] = [
+  {
+    id: 'still_rock',
+    lines: [
+      ['A shade', 'Is he still doing the rock?'],
+      ['Another shade', 'He finished once. Then it rolled back.'],
+      ['A shade', 'So he did finish?'],
+      ['Sisyphus', 'Please stop helping.'],
+    ],
+  },
+  {
+    id: 'leave_it',
+    lines: [
+      ['A shade', 'Why doesn’t he just leave it at the top?'],
+      ['Another shade', 'Maybe he likes it.'],
+      ['Sisyphus', 'I can hear you. You’re see-through, not soundproof.'],
+    ],
+  },
+  {
+    id: 'building',
+    lines: [
+      ['A shade', 'What’s he building?'],
+      ['Another shade', 'A hill, I think. He keeps using the same one.'],
+    ],
+  },
+  {
+    id: 'questions',
+    lines: [
+      ['Sisyphus', 'Any questions before I start?'],
+      ['A shade', 'Where am I?'],
+      ['Sisyphus', 'Dead. Next question.'],
+      ['A shade', 'Where am I?'],
+    ],
+  },
+  {
+    id: 'lethe',
+    lines: [
+      ['A shade', 'I drank from the Lethe. I feel great. Who are you?'],
+      ['Sisyphus', 'We met ten minutes ago.'],
+      ['A shade', 'Did we? I feel great.'],
+    ],
+  },
+  {
+    id: 'button',
+    lines: [
+      ['A shade', 'I paid Charon a whole obol.'],
+      ['Another shade', 'I paid him with a button.'],
+      ['A shade', 'And he took you across?'],
+      ['Another shade', 'He didn’t look. Nobody down here looks.'],
+    ],
+  },
+  {
+    id: 'bet',
+    lines: [
+      ['A shade', 'A drachma says it stays up this time.'],
+      ['Another shade', 'You don’t have a drachma.'],
+      ['A shade', 'I don’t have a body either. Let me dream.'],
+    ],
+  },
+  {
+    id: 'prophecy',
+    lines: [
+      ['A shade', 'Tiresias says the rock will roll back down.'],
+      ['Another shade', 'He’s a prophet!'],
+      ['Sisyphus', 'It’s a slope. I could have told you that.'],
+    ],
+  },
+  {
+    id: 'how_long',
+    lines: [
+      ['A shade', 'How long have you been doing this?'],
+      ['Sisyphus', 'Define “long”.'],
+      ['A shade', 'Sorry, I forgot what I asked.'],
+      ['Sisyphus', 'Lucky you.'],
+    ],
+  },
+  {
+    id: 'after_bored',
+    lines: [
+      ['Another shade', 'Are you bored?'],
+      ['Sisyphus', 'I got past bored a thousand years ago.'],
+      ['Another shade', 'What comes after bored?'],
+      ['Sisyphus', 'Hobbies. Then bored again, but with hobbies.'],
+    ],
+  },
+  {
+    id: 'gods_all_day',
+    lines: [
+      ['A shade', 'What do the gods do all day?'],
+      ['Sisyphus', 'Feast, feud, turn someone into a tree.'],
+      ['A shade', 'And then?'],
+      ['Sisyphus', 'Then it’s tomorrow. Forever. That’s why they do it.'],
+    ],
+  },
+  {
+    id: 'clock',
+    crew: true,
+    lines: [
+      ['The foreman', 'We’ve put up a clock for the crew.'],
+      ['Sisyphus', 'What for? It’s eternity.'],
+      ['The foreman', 'They like watching the hands finish a lap. Gives them hope.'],
+    ],
+  },
+  {
+    id: 'weekend',
+    crew: true,
+    lines: [
+      ['A shade', 'A new arrival says the living get two days off a week.'],
+      ['The foreman', 'Two days of doing nothing?'],
+      ['A shade', 'Can we have that?'],
+      ['The foreman', 'You have it already. It’s called forever.'],
+    ],
+  },
+  {
+    id: 'break',
+    crew: true,
+    lines: [
+      ['The foreman', 'The crew are asking for a break.'],
+      ['Sisyphus', 'You’re shades. You don’t get tired.'],
+      ['The foreman', 'They don’t know that.'],
+      ['Sisyphus', 'Then nobody tell them.'],
+    ],
+  },
+  {
+    id: 'which_up',
+    crew: true,
+    lines: [
+      ['Sisyphus', 'Push the rock up. Not down. Up.'],
+      ['A shade', 'Which one’s up?'],
+      ['Sisyphus', 'The one with the hill on it.'],
+    ],
+  },
+  {
+    id: 'wages',
+    crew: true,
+    lines: [
+      ['A shade', 'Do we get paid?'],
+      ['The foreman', 'You got an obol when you died.'],
+      ['A shade', 'We’re already dead.'],
+      ['The foreman', 'Then you’ve been paid. Back to work.'],
+    ],
+  },
+  {
+    id: 'safety',
+    crew: true,
+    lines: [
+      ['The foreman', 'Safety briefing. Don’t stand under the rock.'],
+      ['A shade', 'What happens if we do?'],
+      ['The foreman', 'Nothing. It goes straight through you. It just looks bad.'],
+    ],
+  },
+  {
+    id: 'new_hire',
+    crew: true,
+    lines: [
+      ['Sisyphus', 'How’s the new shade?'],
+      ['The foreman', 'Keen. He asked what the rock is for.'],
+      ['Sisyphus', 'And?'],
+      ['The foreman', 'I said nobody knows. He took notes. On mist.'],
+    ],
+  },
+  {
+    id: 'demands',
+    crew: true,
+    lines: [
+      ['A shade', 'We demand better conditions!'],
+      ['Sisyphus', 'Such as?'],
+      ['A shade', '…'],
+      ['Another shade', 'He forgot. We all forgot. Carry on.'],
+    ],
+  },
+  {
+    id: 'shift',
+    crew: true,
+    lines: [
+      ['The foreman', 'Shift change!'],
+      ['A shade', 'Who’s on next?'],
+      ['The foreman', 'You are. You were also on before.'],
+      ['A shade', 'Feels fresh.'],
+    ],
+  },
+];
 
 /** On arriving at a hill (sometimes). */
 export const arrivals: Record<string, string[]> = {

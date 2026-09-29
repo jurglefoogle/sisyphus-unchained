@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { again, ambient, ambientWorks, arrivals, barks, en, recapLines, thanatos } from '../src/content/strings';
+import { again, ambient, ambientWorks, arrivals, barks, en, eternity, exchanges, recapLines, shades, thanatos } from '../src/content/strings';
 import { catalog } from '../src/content/catalog';
 
 const storyIds = Object.keys(en)
@@ -11,6 +11,8 @@ describe('dialogue', () => {
     const pools = [ambient, ambientWorks, arrivals, barks];
     const long = pools.flatMap((p) => Object.values(p).flat()).filter((l) => l.length > 80);
     expect(long).toEqual([]);
+    expect([...shades, ...eternity].filter((l) => l.length > 80)).toEqual([]);
+    expect(exchanges.flatMap((x) => x.lines.map(([, l]) => l)).filter((l) => l.length > 80)).toEqual([]);
   });
 
   it('gives every hill its ambient pool and arrival lines', () => {
@@ -42,11 +44,21 @@ describe('dialogue', () => {
     const beats = Object.entries(en).filter(([k]) => k.startsWith('story.'));
     expect(beats.filter(([, v]) => jargon.test(v)).map(([k]) => k)).toEqual([]);
     const pools = [ambient, ambientWorks, arrivals, barks, again].flatMap((p) => Object.entries(p));
+    pools.push(['shades', shades], ['eternity', eternity], ['exchanges', exchanges.flatMap((x) => x.lines.map(([, l]) => l))]);
     for (const [id, lines] of pools) expect(lines.filter((l) => jargon.test(l)).length, id).toBeLessThanOrEqual(1);
   });
 
   it('never repeats a line within a pool', () => {
     const pools = [ambient, ambientWorks, arrivals, barks, again].flatMap((p) => Object.values(p));
-    for (const lines of [...pools, thanatos, recapLines]) expect(new Set(lines).size).toBe(lines.length);
+    for (const lines of [...pools, shades, eternity, thanatos, recapLines]) expect(new Set(lines).size).toBe(lines.length);
+  });
+
+  it('gives the dead exchanges: unique, two lines or more, some before the Foreman', () => {
+    expect(new Set(exchanges.map((x) => x.id)).size).toBe(exchanges.length);
+    for (const x of exchanges) expect(x.lines.length, x.id).toBeGreaterThanOrEqual(2);
+    expect(exchanges.filter((x) => !x.crew).length).toBeGreaterThanOrEqual(6);
+    expect(exchanges.filter((x) => x.crew).length).toBeGreaterThanOrEqual(6);
+    // Only the Foreman's crew includes the foreman.
+    for (const x of exchanges.filter((e) => !e.crew)) expect(x.lines.some(([who]) => who === 'The foreman'), x.id).toBe(false);
   });
 });

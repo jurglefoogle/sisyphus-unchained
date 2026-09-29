@@ -1,6 +1,6 @@
 import { catalog } from '../content/catalog';
 import { deviceDef, visitorFor } from '../content/devices';
-import { again, ambient, ambientWorks, arrivals, barks, recapLines, t, thanatos } from '../content/strings';
+import { again, ambient, ambientWorks, arrivals, barks, eternity, exchanges, recapLines, shades, t, thanatos, type Speaker } from '../content/strings';
 import { formatMoney } from '../core/format';
 import {
   breakSeal,
@@ -61,6 +61,13 @@ const LARGE_GAP_SECONDS = 5;
 const RECAP_MIN_SECONDS = 60;
 const BACKUP_INTERVAL_MS = 5 * 60_000;
 const AMBIENT_INTERVAL_MS = 90_000;
+/** Before the Foreman the player is watching every climb: more to hear. */
+const AMBIENT_EARLY_MS = 45_000;
+/** An ambient turn becomes an exchange this often, at most once per gap. */
+const EXCHANGE_CHANCE = 0.3;
+const EXCHANGE_GAP_MS = 4 * 60_000;
+/** Time each line of an exchange holds the caption before the reply. */
+const EXCHANGE_LINE_MS = 4_500;
 const AMBIENT_REPEAT_WINDOW_MS = 10 * 60_000;
 /** Standing idle this long by hand (before the foreman) earns a remark. */
 const IDLE_BARK_MS = 60_000;
@@ -77,6 +84,8 @@ export interface Notice {
   relicId?: string;
   text?: string;
   recap?: OfflineSummary;
+  /** Who says an ambient line, when it is not Sisyphus alone. */
+  speaker?: Speaker;
   /** Story and recap text, chosen when the notice is raised. */
   god?: string;
   sis?: string;
@@ -165,6 +174,9 @@ export class Game {
   private idleRemarked = false;
   private seenRequests: string[] = [];
   private ambientShown = new Map<string, number>();
+  /** An exchange being played out a line at a time. */
+  private exchange: { lines: [Speaker, string][]; next: number } | null = null;
+  private lastExchange = -Infinity;
   loadProblem: { error: string; raw: string; restored: boolean } | null = null;
   readonly telemetry = new Telemetry(() => !!this.state?.options.telemetry);
 
@@ -818,18 +830,48 @@ export class Game {
   // ----------------------------------------------------------------- ambient
 
   private tickAmbient(now: number): void {
-    if (!this.state.options.ambientCaptions) return;
-    if (!this.state.discoveries.tutorialIds.includes('first_level')) return;
-    if (now - this.lastAmbient < AMBIENT_INTERVAL_MS) return;
-    this.lastAmbient = now;
+    if (!this.state.options.ambientCaptions) {
+      this.exchange = null;
+      return;
+    }
+    if (this.exchange) {
+      if (now < this.exchange.next) return;
+      const [speaker, text] = this.exchange.lines.shift()!;
+      this.notify({ kind: 'info', text, speaker, storyId: 'ambient' });
+      this.exchange.next = now + EXCHANGE_LINE_MS;
+      this.lastAmbient = now;
+      if (!this.exchange.lines.length) this.exchange = null;
+      return;
+    }
+    // Banter begins with the first summit, once the prelude is behind him.
+    if (!this.state.prelude.complete) return;
     const e = this.state.empire;
+    if (now - this.lastAmbient < (e.foremanOwned ? AMBIENT_INTERVAL_MS : AMBIENT_EARLY_MS)) return;
+    this.lastAmbient = now;
+    if (now - this.lastExchange >= EXCHANGE_GAP_MS && Math.random() < EXCHANGE_CHANCE && this.startExchange(now)) return;
     const pool = [
       ...(ambient[e.selectedSiteId] ?? []),
+      ...shades,
+      ...eternity,
       ...(e.foremanOwned ? ambientWorks.foreman : []),
       ...e.purchasedWorkIds.flatMap((id) => ambientWorks[id] ?? []),
     ];
     const line = this.pickLine(pool, now);
     if (line) this.notify({ kind: 'info', text: line, storyId: 'ambient' });
+  }
+
+  /** The dead talk among themselves (and back to Sisyphus): unheard exchanges first. */
+  private startExchange(now: number): boolean {
+    const crew = this.state.empire.foremanOwned;
+    const ready = exchanges.filter((x) => !x.crew || crew);
+    const key = (id: string) => `exchange:${id}`;
+    const pick = this.pickLine(ready.map((x) => key(x.id)), now);
+    const chosen = ready.find((x) => key(x.id) === pick);
+    if (!chosen) return false;
+    this.lastExchange = now;
+    this.exchange = { lines: chosen.lines.map(([who, text]) => [who, text]), next: now };
+    this.tickAmbient(now);
+    return true;
   }
 
   /**
@@ -866,14 +908,16 @@ export class Game {
    */
   private react(events: GameEvent[], now: number): void {
     const selected = this.state.empire.selectedSiteId;
+    // Before the Foreman every climb is watched: Sisyphus talks more.
+    const early = !this.state.empire.foremanOwned;
     for (const e of events) {
       if (e.type === 'StoneSlipped') this.bark(e.record ? barks.slip_record : barks.slip, now, e.record ? 1 : 0.6, 10_000);
-      else if (e.type === 'SummitReached' && e.siteId === selected) this.bark(barks.summit, now, 0.2, 45_000);
+      else if (e.type === 'SummitReached' && e.siteId === selected) this.bark(barks.summit, now, early ? 0.35 : 0.2, early ? 30_000 : 45_000);
       else if (e.type === 'FlywheelCharged' && e.siteId === selected) this.bark(barks.flywheel, now, 0.25, 45_000);
       else if (e.type === 'ImpactResolved' && e.siteId === selected && e.targetId !== 'debris') {
         this.bark(barks.impact, now, 0.25, 45_000);
       } else if (e.type === 'PurchaseCompleted' && (e.kind === 'production' || e.kind === 'strength' || e.kind === 'impact')) {
-        this.bark(barks.levels, now, 0.12, 60_000);
+        this.bark(barks.levels, now, early ? 0.25 : 0.12, early ? 30_000 : 60_000);
       }
     }
   }
@@ -895,7 +939,8 @@ export class Game {
 
   private bark(lines: string[], now: number, chance: number, gap: number): void {
     if (!this.state.options.ambientCaptions) return;
-    if (now - this.lastBark < gap || Math.random() >= chance) return;
+    // Never talk over an exchange in progress.
+    if (this.exchange || now - this.lastBark < gap || Math.random() >= chance) return;
     const line = this.pickLine(lines, now);
     if (!line) return;
     this.lastBark = now;
