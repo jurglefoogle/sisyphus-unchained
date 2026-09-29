@@ -150,6 +150,11 @@ text says "hill" throughout (the Improve Operation track keeps its name).
 - The manual release checklist is entirely unticked (offline start, forced
   termination, 24‑hour soak, input methods, reference devices, Steam overlay).
 - A single 1 MB script bundle, with no code splitting.
+
+  **Done (29 September):** an app icon (the stone on a black‑figure slope) in
+  `desktop/resources`, also used as the web favicon; the renderer and vendor
+  code now ship as their own cached files. Store art and the manual checks
+  remain.
 - A console error after importing a save and switching hills: a destroyed
   texture used by a plaque (PixiJS `alphaMode` of null). This is in the world
   layer, which another agent is editing.

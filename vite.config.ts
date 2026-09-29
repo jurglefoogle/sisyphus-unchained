@@ -18,6 +18,17 @@ const { version } = JSON.parse(readFileSync('package.json', 'utf8')) as { versio
 export default defineConfig({
   plugins: [svelte(), notices()],
   define: { __APP_VERSION__: JSON.stringify(version) },
+  build: {
+    rollupOptions: {
+      output: {
+        // The renderer is most of the weight and changes least: its own file caches across releases.
+        manualChunks(id: string) {
+          if (id.includes('node_modules/pixi.js') || id.includes('node_modules/@pixi')) return 'pixi';
+          if (id.includes('node_modules')) return 'vendor';
+        },
+      },
+    },
+  },
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
