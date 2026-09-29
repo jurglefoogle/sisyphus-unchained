@@ -156,7 +156,7 @@ describe('archive odds and stones', () => {
   it('teases the eligible relic with honest odds and its guarantee', () => {
     const v = buildView(makeState());
     expect(v.relicHunt).toMatchObject({ site: 'The First Hill', chance: '1.25% per descent' });
-    expect(v.relicHunt?.guarantee).toMatch(/next operation/);
+    expect(v.relicHunt?.guarantee).toMatch(/next hill/);
   });
 
   it('summarizes collection completion and durable records', () => {

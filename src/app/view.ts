@@ -344,6 +344,8 @@ export interface EmpireSite {
   glyph: string;
   currency: string;
   steward: string | null;
+  /** The steward's standing order: reinvest the purse or hold it. */
+  order: 'reinvest' | 'hold' | null;
   rate: string;
   automated: boolean;
   wheel: boolean;
@@ -534,6 +536,7 @@ function empireView(state: GameState): EmpireSite[] {
       glyph: cur.glyph,
       currency: cur.id,
       steward: site?.steward ? capitalize(HILLS[def.id].steward) : null,
+      order: site?.steward ? (site.steward.reinvest ? 'reinvest' : 'hold') : null,
       rate: site ? (automated ? `${formatRate(steadyIncomePerSecond(state, site))} ${cur.name}` : 'manual') : '',
       automated: !!site && automated,
       wheel: !!site?.wheelOwned,
@@ -1201,15 +1204,23 @@ function objective(state: GameState, site: SiteState): string {
     return `Reach level ${hermes.requiredLevel} to commission ${t(hermes.displayNameKey)}.`;
   }
   const next = nextUnownedSite(state);
-  if (!next) return 'Every operation is yours. The Charter awaits.';
+  if (!next) return 'Every hill is yours. The Charter awaits.';
   const payer = catalog.sites[next.index - 1];
   const from = t(payer.displayNameKey);
   if (state.empire.offeredSiteIds.includes(next.id)) {
     return `Decree issued: open ${t(next.displayNameKey)} for ${priced(unlockCostOf(state, next), payer.id)} from ${from}.`;
   }
   const held = findSite(state, payer.id);
-  const trial = held && trialNeeded(payer.id) > 0 && !trialMet(held) ? ` and shown ${trialText(held)}` : '';
-  return `Next decree when ${from} has earned ${priced(gateOf(state, next), payer.id)}${trial}: ${t(next.displayNameKey)}.`;
+  const gate = gateOf(state, next);
+  const earn = `earn ${priced(gate, payer.id)} on ${from}`;
+  const to = t(next.displayNameKey);
+  // The trial is the new information, so it leads; the line never ends on it half-said.
+  if (held && trialNeeded(payer.id) > 0 && !trialMet(held)) {
+    const need = trialNeeded(payer.id);
+    const trial = `${trialText(held)} (${Math.min(trialProgress(held), need)}/${need})`;
+    return held.gross.gte(gate) ? `Trial for ${to}: ${trial}.` : `Trial for ${to}: ${trial}, and ${earn}.`;
+  }
+  return `Next decree when ${from} has earned ${priced(gate, payer.id)}: ${to}.`;
 }
 
 function goalHorizons(state: GameState, site: SiteState, now: string): GameView['goalStack'] {
@@ -1223,9 +1234,9 @@ function goalHorizons(state: GameState, site: SiteState, now: string): GameView[
   }
 
   const milestone = nextMilestone(site.productionLevel);
-  let next = milestone === null ? `${t(siteDef(site.id).displayNameKey)} is fully improved.` : `Level ${milestone}: double this operation's output.`;
+  let next = milestone === null ? `${t(siteDef(site.id).displayNameKey)} is fully improved.` : `Level ${milestone}: double this hill's output.`;
   if (!site.wheelOwned && flywheelOffered(state, site)) next = 'Install and charge the flywheel.';
-  else if (!isAutomated(state) && foremanUnlocked(state)) next = 'Hire the Foreman and automate every operation.';
+  else if (!isAutomated(state) && foremanUnlocked(state)) next = 'Hire the Foreman and automate every hill.';
 
   const nextSite = nextUnownedSite(state);
   let beyond = 'Complete the Eternal Labor Charter.';
@@ -1379,7 +1390,7 @@ export function buildView(state: GameState): GameView {
         key: `site-${next.id}`,
         title: `Open ${t(next.displayNameKey)}`,
         effect: `A new hill with its own money (${currencyOf(next.id).name}). This hill keeps working.`,
-        note: automated ? undefined : 'Without the Foreman only the selected site moves. Completing automation first is recommended.',
+        note: automated ? undefined : 'Without the Foreman only the hill in view moves. Completing automation first is recommended.',
         cost: formatMoney(unlockCostOf(state, next)),
         currency: def.currency,
         affordable: site.purse.gte(unlockCostOf(state, next)),
@@ -1557,7 +1568,7 @@ export function buildView(state: GameState): GameView {
       ? {
           site: t(def.displayNameKey),
           chance: `${+(catalog.relics.chancePerDescent * 100).toFixed(2)}% per descent`,
-          guarantee: pendingRelic.guaranteedBy.startsWith('open:') ? 'guaranteed when the next operation opens' : 'guaranteed by the Charter',
+          guarantee: pendingRelic.guaranteedBy.startsWith('open:') ? 'guaranteed when the next hill opens' : 'guaranteed by the Charter',
         }
       : null,
   };

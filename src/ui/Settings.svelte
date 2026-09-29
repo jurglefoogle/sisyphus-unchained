@@ -135,7 +135,7 @@
       <button onclick={startRebind} disabled={rebinding}>{rebinding ? 'Press a key… (Esc cancels)' : 'Change'}</button>
       {#if options.pushKey !== 'Space'}<button onclick={() => set('pushKey', 'Space')}>Reset</button>{/if}
     </div>
-    <p class="hint">Controller: A pushes or confirms · B backs out · Y purchases · X empire · LB/RB switch sites · D-pad moves between rows · Start pauses.</p>
+    <p class="hint">Controller: A pushes or confirms · B backs out · Y purchases · X empire · LB/RB switch hills · D-pad moves between rows · Start pauses.</p>
   </fieldset>
 
   <fieldset>
@@ -174,7 +174,7 @@
     {#if importPreview}
       {@const s = importPreview.state}
       <div class="preview">
-        <p>Run: {formatMoney(s.wallet.runGross)} Defiance, {formatMoney(s.empire.sites[0]?.purse ?? s.wallet.runGross)} Obols on the First Hill, {s.empire.sites.length} operation(s)</p>
+        <p>Run: {formatMoney(s.wallet.runGross)} Defiance, {formatMoney(s.empire.sites[0]?.purse ?? s.wallet.runGross)} Obols on the First Hill, {s.empire.sites.length} hill(s)</p>
         <p>Record: {formatMoney(s.wallet.bestRunGross)} · Insight {s.prestige.lifetimeInsightAwarded} · Relics {s.discoveries.relicIds.length}</p>
         <p>Saved {new Date(s.lastSettledUtc).toLocaleString()}</p>
         <button class="danger" disabled={busy} onclick={applyImport}>{busy ? 'Saving…' : 'Replace current progress'}</button>
@@ -185,7 +185,7 @@
   <fieldset>
     <legend>Playtest log</legend>
     <label><input type="checkbox" checked={options.telemetry} onchange={(e) => set('telemetry', e.currentTarget.checked)} /> Record a local playtest log</label>
-    <p class="hint">Stays in this browser and is never sent anywhere. It lists milestones such as purchases and sites opened, with times and balances, and nothing personal. {logCount} entries.</p>
+    <p class="hint">Stays in this browser and is never sent anywhere. It lists milestones such as purchases and hills opened, with times and balances, and nothing personal. {logCount} entries.</p>
     <div class="keyrow">
       <button onclick={exportLog} disabled={!logCount}>Export log</button>
       <button onclick={() => (game.telemetry.clear(), (logCount = 0))} disabled={!logCount}>Clear log</button>

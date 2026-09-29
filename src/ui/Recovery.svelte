@@ -60,7 +60,7 @@
         <li>
           <div>
             <strong>{o.label}</strong>
-            <small>Saved {new Date(o.savedAt).toLocaleString()} · {o.sites} operation(s) · {o.runGross} Defiance · record {o.record} · {o.insight} Insight</small>
+            <small>Saved {new Date(o.savedAt).toLocaleString()} · {o.sites} hill(s) · {o.runGross} Defiance · record {o.record} · {o.insight} Insight</small>
           </div>
           <button disabled={busy} onclick={() => restore(o.key)}>Restore</button>
         </li>

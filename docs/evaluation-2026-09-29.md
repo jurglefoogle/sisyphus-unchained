@@ -137,6 +137,10 @@ eruptions, reveals, visitors, stewards, rumours, Edicts, Appeals and laurels.
   interface box at a glance.
 - **Header height** changes between hills when the purse text wraps.
 
+**Done (29 September):** the "Now" line leads with the trial and its count;
+Empire cards show the purse and the steward's standing order; player‑facing
+text says "hill" throughout (the Improve Operation track keeps its name).
+
 ### 8. Shipping gaps
 
 - No app icon: `desktop/resources`, which electron‑builder points at, does not

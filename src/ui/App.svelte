@@ -831,7 +831,7 @@
     <StartScreen
       {hasProgress}
       location={view.site.name}
-      progress={`${view.site.ownedCount} operation${view.site.ownedCount === 1 ? '' : 's'} · Level ${view.site.level} · ${view.purse.amount} ${view.purse.name}`}
+      progress={`${view.site.ownedCount} hill${view.site.ownedCount === 1 ? '' : 's'} · Level ${view.site.level} · ${view.purse.amount} ${view.purse.name}`}
       canViewCredits={view.charterSigned || game.state.discoveries.tutorialIds.includes('credits')}
       oncontinue={enterGame}
       onnew={beginNewGame}
@@ -886,7 +886,7 @@
         <li>Insight to claim: <strong>{view.prestige.award}</strong></li>
         <li>Permanent income: {view.prestige.factorBefore} → <strong>{view.prestige.factorAfter}</strong></li>
       </ul>
-      <p><strong>Resets:</strong> every hill's purse, operations, stewards, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
+      <p><strong>Resets:</strong> every hill's purse, the hills opened after the first, stewards, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
       <p><strong>Stays:</strong> relics, Insight and permanent upgrades, discoveries, settings and records.</p>
       <div class="modal-actions">
         <button onclick={closePrestige}>Not yet</button>

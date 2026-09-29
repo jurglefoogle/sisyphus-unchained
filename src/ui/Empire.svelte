@@ -118,7 +118,7 @@
 <section class="empire" aria-label="Empire" {onkeydown}>
   <header>
     <h2>The Enterprise</h2>
-    <p class="hint">Drag, scroll or use the arrows. Choosing a site only moves your attention; production never changes.</p>
+    <p class="hint">Drag, scroll or use the arrows. Choosing a hill only moves your attention; production never changes.</p>
     <button class="close" onclick={onclose} aria-label="Close empire view">✕</button>
   </header>
   <div
@@ -144,12 +144,12 @@
           aria-disabled={!site.owned && !site.offered}
           onclick={() => choose(site)}
           aria-label={site.owned
-            ? `${site.name}, chapter ${site.chapter}, level ${site.level}${site.automated ? `, ${site.rate}` : ', manual'}${site.selected ? ', selected' : ''}`
+            ? `${site.name}, hill ${site.chapter}, level ${site.level}${site.automated ? `, ${site.rate}` : ', manual'}, ${site.purse} in the purse${site.steward ? `, run by ${site.steward}` : ''}${site.selected ? ', selected' : ''}`
             : site.offered
               ? `${site.name}: decree issued, open it from the purchases`
               : site.teased
-                ? `${site.name}: next decree at ${site.gate} Defiance`
-                : `Chapter ${site.chapter}: undiscovered`}
+                ? `${site.name}: next decree once the hill before earns ${site.gate}`
+                : `Hill ${site.chapter}: undiscovered`}
         >
           <span class="scene" style:background-image="url({artUrl(`scene_${site.id}`)})"></span>
           {#if site.owned}
@@ -178,10 +178,12 @@
             </span>
           {/if}
           <span class="label">
-            <span class="chapter">Chapter {site.chapter}</span>
+            <span class="chapter">Hill {site.chapter}</span>
             <strong>{site.owned || site.teased || site.offered ? site.name : '· · ·'}</strong>
             {#if site.owned}
               <span class="stats">Lv {site.level} · {site.automated ? site.rate : 'manual'}</span>
+              <span class="stats purse">{site.purse} in the purse</span>
+              {#if site.steward}<span class="stats steward">{site.steward} · {site.order === 'reinvest' ? 'reinvesting' : 'holding the purse'}</span>{/if}
               {#if near && site.works.length}
                 <span class="works">
                   {#each site.works as w (w)}<img src={artUrl(`work_${w}`)} alt={w} title={w} />{/each}
@@ -190,7 +192,7 @@
             {:else if site.offered}
               <span class="stats ready">Decree issued · open it</span>
             {:else if site.teased}
-              <span class="stats">Decree at {site.gate} Defiance</span>
+              <span class="stats">Decree once the hill before earns {site.gate}</span>
             {/if}
           </span>
         </button>
@@ -361,6 +363,8 @@
   strong { font-family: var(--display); font-size: 1.25rem; font-weight: 600; line-height: 1.1; }
   .stats { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .locked .stats { color: rgba(246, 236, 220, 0.7); }
+  .stats.purse { color: var(--ivory); }
+  .stats.steward { font-style: italic; }
   .stats.ready { color: var(--pale-clay); font-weight: 600; }
   .works { display: flex; gap: 4px; margin-top: 4px; }
   .works img { height: 30px; width: 30px; object-fit: contain; background: var(--ivory); border: 1px solid var(--rule); border-radius: 2px; }

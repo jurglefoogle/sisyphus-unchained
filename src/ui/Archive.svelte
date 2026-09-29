@@ -118,13 +118,13 @@
       {/each}
     </ul>
   {:else if tab === 'stones'}
-    <p class="muted">Each operation keeps its assigned stone. Earlier stones are kept here for admiring.</p>
+    <p class="muted">Each hill keeps its assigned stone. Earlier stones are kept here for admiring.</p>
     <ul class="stones">
       {#each archive.stones as st (st.siteId)}
         <li class:locked={!st.found}>
           <img src={st.found ? artUrl(st.stone) : iconUrl('ui_lock')} alt="" />
           <strong>{st.found ? st.material : 'Undiscovered'}</strong>
-          <small>{st.found ? st.site : 'A later chapter'}</small>
+          <small>{st.found ? st.site : 'A later hill'}</small>
         </li>
       {/each}
     </ul>
@@ -140,7 +140,7 @@
     </table>
     <p class="muted">Expected bonus per descent: {archive.odds.expectedBonus} base reward. Offline time pays exactly this expectation.</p>
     <h3>Relics</h3>
-    <p>While a relic can be found, each descent at its site has a {archive.odds.relicChance} chance to turn it up, and it is guaranteed within {archive.odds.relicPity} descents. Opening the next operation (or signing the Charter, for the last one) delivers any relic still missing.</p>
+    <p>While a relic can be found, each descent on its hill has a {archive.odds.relicChance} chance to turn it up, and it is guaranteed within {archive.odds.relicPity} descents. Opening the next hill (or signing the Charter, for the last one) delivers any relic still missing.</p>
   {:else if tab === 'scenes'}
     <ul class="entries">
       {#each archive.scenes as sc (sc.id)}
