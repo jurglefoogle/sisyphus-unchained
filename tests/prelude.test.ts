@@ -40,7 +40,7 @@ describe('prelude: the stone slips', () => {
 
     const landed = runFrames(s, 1.08 + 0.001, 60, false); // the fall needs no input
     expect(ofType(landed, 'FallResolved')).toHaveLength(1);
-    expect(s.wallet.obols.toNumber()).toBe(3);
+    expect(s.empire.sites[0].purse.toNumber()).toBe(3);
     expect(s.wallet.runGross.toNumber()).toBe(3);
     expect(site.phase).toBe('ascending');
     expect(site.phaseProgress).toBe(0);
@@ -69,7 +69,7 @@ describe('prelude: the stone slips', () => {
     const results = [15, 60, 144].map((fps) => {
       const s = freshState();
       runFrames(s, 120, fps, true);
-      return { obols: s.wallet.obols.toNumber(), attempts: s.prelude.attempts };
+      return { obols: s.empire.sites[0].purse.toNumber(), attempts: s.prelude.attempts };
     });
     for (const r of results) expect(r).toEqual(results[0]);
   });
@@ -93,14 +93,14 @@ describe('prelude: grip upgrades', () => {
     expect(buyPreludeUpgrade(s, first.id, []).ok).toBe(true);
     expect(buyPreludeUpgrade(s, first.id, []).ok).toBe(false);
     expectClose(preludeReach(s), 0.5, 1e-9);
-    expect(s.wallet.obols.toNumber()).toBe(1000 - first.cost.toNumber());
+    expect(s.empire.sites[0].purse.toNumber()).toBe(1000 - first.cost.toNumber());
   });
 
   it('refuses a purchase the wallet cannot cover', () => {
     const s = freshState();
     give(s, 4);
     expect(buyPreludeUpgrade(s, catalog.prelude.upgrades[0].id, []).ok).toBe(false);
-    expect(s.wallet.obols.toNumber()).toBe(4);
+    expect(s.empire.sites[0].purse.toNumber()).toBe(4);
   });
 
   it('a mid-climb purchase lets the same attempt go higher', () => {
@@ -123,7 +123,7 @@ describe('prelude: grip upgrades', () => {
     expect(s.prelude.complete).toBe(true);
     expect(s.discoveries.tutorialIds).toContain('first_summit');
     // Summit share (7) plus the offering.
-    expectClose(s.wallet.obols, 7 + catalog.prelude.summitOffering.toNumber());
+    expectClose(s.empire.sites[0].purse, 7 + catalog.prelude.summitOffering.toNumber());
 
     const later = runFrames(s, 60, 60, true);
     expect(ofType(later, 'PreludeCompleted')).toHaveLength(0);
@@ -135,7 +135,7 @@ describe('prelude: grip upgrades', () => {
     buyAllGrip(s);
     runFrames(s, 12.001, 60, true);
     s.empire.foremanOwned = true;
-    grantIncome(s, Money.of('1e6'), []);
+    grantIncome(s, s.empire.sites[0], catalog.prestige.minimumRecord, []);
     expect(confirmPrestige(s, []).ok).toBe(true);
     expect(s.prelude.complete).toBe(true);
     expect(ascentLimit(s, s.empire.sites[0])).toBe(1);
@@ -173,7 +173,7 @@ describe('automation gates (first run)', () => {
     expect(ofType(events, 'FeatureUnlocked').map((e) => e.feature)).toEqual(['foreman']);
     expect(hireForeman(s, []).ok).toBe(true);
 
-    grantIncome(s, Money.of('1e6'), []);
+    grantIncome(s, s.empire.sites[0], catalog.prestige.minimumRecord, []);
     confirmPrestige(s, []);
     give(s, 1e4);
     expect(buyFlywheel(s, 'first_hill', []).ok).toBe(true);
@@ -203,7 +203,14 @@ describe('prelude saves', () => {
   function asV1(s: GameState): string {
     const env = JSON.parse(serializeSave(s));
     delete env.data.prelude;
-    for (const site of env.data.empire.sites) delete site.snapshot.slipHeight;
+    // v1 and v2 kept one shared purse in the wallet.
+    env.data.wallet.obols = env.data.empire.sites[0].purse;
+    for (const site of env.data.empire.sites) {
+      delete site.snapshot.slipHeight;
+      delete site.purse;
+      delete site.gross;
+      delete site.steward;
+    }
     env.data.schemaVersion = 1;
     env.checksum = checksum(JSON.stringify(env.data));
     return JSON.stringify(env);

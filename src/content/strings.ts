@@ -106,7 +106,7 @@ export const en: Record<string, string> = {
   'upgrade.signed_in_advance': 'Signed in Advance',
   'upgrade.signed_in_advance.desc': 'Works bought in earlier runs return free when their level is met.',
   'upgrade.eternal_shift': 'Eternal Shift',
-  'upgrade.eternal_shift.desc': 'Offline earnings limit rises from 24 to 72 hours.',
+  'upgrade.eternal_shift.desc': 'Offline earnings limit rises from 12 to 18 hours.',
   'upgrade.deep_reservoir': 'Deep Reservoir',
   'upgrade.deep_reservoir.desc': 'Charged flywheels speed ascents by 50% instead of 25%.',
   'upgrade.unbroken_memory': 'Unbroken Memory',

@@ -16,6 +16,7 @@
     game,
     view,
     open,
+    hidden = false,
     narrow,
     sheetHeight,
     ontoggle,
@@ -24,11 +25,13 @@
     game: Game;
     view: GameView;
     open: boolean;
+    /** Put away while another panel has the column. */
+    hidden?: boolean;
     narrow: boolean;
     /** The unrolled sheet, in CSS pixels. */
     sheetHeight: number;
     ontoggle: () => void;
-    onprestige: () => void;
+    onprestige: (kind?: 'appeal') => void;
   } = $props();
 
   const paper = papyrus();
@@ -62,6 +65,8 @@
   <div
     class="frame"
     class:open
+    class:away={hidden}
+    inert={hidden}
     class:narrow
     style:--sheet-h="{sheetHeight}px"
     style:--paper="url({paper.sheet})"
@@ -87,16 +92,16 @@
 
     <div class="tags" inert={open}>
       {#each offers as o, i (o.row.key)}
-        {@const p = price(o.cost)}
+        {@const p = price(o.cost, o.currency)}
         <div class="hang" style:--cord="{CORDS[i % CORDS.length]}px" style:--delay="{-i * 1.7}s">
           <span class="cord" aria-hidden="true"></span>
-          <button class="tag" onclick={(e) => buy(e, i)} aria-label="{o.row.title}: buy{o.count > 1 ? ` ${o.count}` : ''} for {p.amount} {p.icon === 'ui_insight' ? 'Insight' : 'Obols'}">
+          <button class="tag" onclick={(e) => buy(e, i)} aria-label="{o.row.title}: buy{o.count > 1 ? ` ${o.count}` : ''} for {p.amount} {p.name}">
             <span class="eyelet" aria-hidden="true"></span>
             <span class="title">
               {#if o.row.icon}<img class="icon" class:art={o.row.icon.startsWith('work_')} src={imageUrl(o.row.icon)} alt="" />{/if}
               <span>{o.row.title}</span>
             </span>
-            {#if o.cost}<span class="cost"><img src={iconUrl(p.icon)} alt="" />{p.amount}</span>{/if}
+            {#if o.cost}<span class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</span>{/if}
           </button>
         </div>
       {/each}
@@ -117,6 +122,14 @@
     z-index: 10;
     pointer-events: none;
     filter: drop-shadow(0 10px 12px rgba(24, 14, 6, 0.36)) drop-shadow(0 2px 2px rgba(24, 14, 6, 0.3));
+  }
+  .frame.away {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0s 0.2s;
+  }
+  .frame {
+    transition: opacity 0.2s ease;
   }
   .frame.narrow {
     left: 22px;
@@ -444,6 +457,17 @@
   .cost img {
     width: 1em;
     height: 1em;
+  }
+  .cost .glyph {
+    display: inline-grid;
+    place-items: center;
+    width: 1.05em;
+    height: 1.05em;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e9c98a, #a8773a 70%);
+    color: #3c2a16;
+    font-size: 0.7em;
+    line-height: 1;
   }
 
   /* Reduced motion: the scroll is simply open or closed. */

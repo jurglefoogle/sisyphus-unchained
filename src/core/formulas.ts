@@ -1,4 +1,10 @@
-import { catalog, siteDef, workDef, type InsightEffect, type PreludeUpgradeDef, type SiteDef } from '../content/catalog';
+import { catalog, siteDef, workDef, type InsightEffect, type PreludeUpgradeDef, type SiteDef, type WorkDef } from '../content/catalog';
+import { modifiers, nthAverage } from './effects';
+import { furnaceImpactFactor, furnaceSite, steadyPattern } from './furnace';
+import { jarImpactFactor, steadyJarFactor } from './jar';
+import { climbsPerHouse, skyPattern } from './sky';
+import { bureauImpactFactor, steadyBureauFactor } from './bureau';
+import { trialNeeded, trialProgress } from './trials';
 import { Money } from './money';
 import type { GameState, SiteState } from './state';
 
@@ -12,7 +18,7 @@ export function hasUpgrade(state: GameState, effect: InsightEffect): boolean {
 }
 
 export function spendableInsight(state: GameState): number {
-  return state.prestige.lifetimeInsightAwarded - state.prestige.insightSpent;
+  return state.prestige.lifetimeInsightAwarded + state.prestige.giftedInsight - state.prestige.insightSpent;
 }
 
 // ----------------------------------------------------------------- income
@@ -28,6 +34,26 @@ export function nextMilestone(level: number): number | null {
 export function insightFactor(lifetimeInsight: number): number {
   const p = catalog.prestige;
   return 1 + p.insightFactorScale * Math.sqrt(lifetimeInsight / p.insightFactorDivisor);
+}
+
+// ---------------------------------------------------------------- appeals
+
+/** Gates and openings cost this many times as much under the current Appeal. */
+export function appealScale(state: GameState): number {
+  return catalog.appeals.gateGrowth ** state.appeal.number;
+}
+
+export function gateOf(state: GameState, def: SiteDef): Money {
+  return def.defianceGate.mul(appealScale(state));
+}
+
+export function unlockCostOf(state: GameState, def: SiteDef): Money {
+  return def.unlockCost.mul(appealScale(state));
+}
+
+/** Works (the Charter among them) rise more gently than gates: the last hill has no successor to feed it. */
+export function workCostOf(state: GameState, def: WorkDef): Money {
+  return def.cost.mul(catalog.appeals.workGrowth ** state.appeal.number);
 }
 
 export function relicFactor(state: GameState): number {
@@ -61,8 +87,29 @@ export function oldSiteFactor(state: GameState, site: SiteState): number {
 export function baseReward(state: GameState, site: SiteState): Money {
   const def = siteDef(site.id);
   const milestone = catalog.levels.milestoneFactor ** milestoneCount(site.productionLevel);
-  const factor = milestone * globalFactor(state) * oldSiteFactor(state, site);
+  const factor = milestone * globalFactor(state) * oldSiteFactor(state, site) * modifiers(state, site.id).crew;
   return def.baseYield.mul(site.productionLevel).mul(factor);
+}
+
+/** Bonus-target odds on a hill, after devices that make amphorae commoner. */
+export function bonusTable(state: GameState, siteId: string): { id: string; probability: number; baseMultiplier: number }[] {
+  const f = modifiers(state, siteId).amphorae;
+  const targets = catalog.bonusTargets;
+  if (f === 1) return targets;
+  const others = targets.filter((t) => t.id !== 'debris' && t.id !== 'coin_amphora').reduce((a, t) => a + t.probability, 0);
+  return targets.map((t) => {
+    if (t.id === 'coin_amphora') return { ...t, probability: Math.min(1 - others, t.probability * f) };
+    if (t.id === 'debris') {
+      const amphora = targets.find((x) => x.id === 'coin_amphora')?.probability ?? 0;
+      return { ...t, probability: Math.max(0, 1 - others - Math.min(1 - others, amphora * f)) };
+    }
+    return t;
+  });
+}
+
+export function expectedBonusMultiplier(state: GameState, siteId: string): number {
+  if (modifiers(state, siteId).amphorae === 1) return catalog.expectedBonusMultiplier;
+  return bonusTable(state, siteId).reduce((a, t) => a + t.probability * t.baseMultiplier, 0);
 }
 
 export interface Payout {
@@ -77,8 +124,9 @@ export function cyclePayout(state: GameState, site: SiteState): Payout {
   const c = catalog.cycle;
   const base = baseReward(state, site);
   const summit = base.mul(c.summitShare);
-  const impact = base.mul(c.impactShare * (1 + c.impactBonusPerLevel * site.impactLevel));
-  const expectedBonus = base.mul(catalog.expectedBonusMultiplier);
+  const impactFactor = modifiers(state, site.id).impact;
+  const impact = base.mul(c.impactShare * (1 + c.impactBonusPerLevel * site.impactLevel) * impactFactor * furnaceImpactFactor(site) * jarImpactFactor(site) * bureauImpactFactor(site));
+  const expectedBonus = base.mul(expectedBonusMultiplier(state, site.id));
   return { base, summit, impact, expectedBonus, expectedTotal: summit.add(impact).add(expectedBonus) };
 }
 
@@ -90,28 +138,78 @@ export function flywheelFactor(state: GameState): number {
     : catalog.speed.flywheelFactor;
 }
 
-export function speedMultiplier(
-  state: GameState,
-  site: Pick<SiteState, 'strengthLevel' | 'wheelCharged'>,
-  assisted: boolean,
-): number {
-  let speed = 1 + catalog.speed.strengthPerLevel * site.strengthLevel;
-  if (site.wheelCharged) speed *= flywheelFactor(state);
+/** What the climb's speed depends on; a copy with other values answers "what if". */
+export type SpeedSite = Pick<SiteState, 'id' | 'strengthLevel' | 'wheelCharged' | 'counterweight' | 'furnace'>;
+
+export function speedMultiplier(state: GameState, site: SpeedSite, assisted: boolean): number {
+  const m = modifiers(state, site.id);
+  let speed = (1 + catalog.speed.strengthPerLevel * site.strengthLevel) * m.ascent;
+  speed *= 1 + catalog.counterweight.climbPerTrim * (site.counterweight ?? 0);
+  if (site.wheelCharged) speed *= 1 + (flywheelFactor(state) - 1) * m.flywheel;
+  if (site.furnace) speed *= 1 + m.furnaceWhip * site.furnace.heat;
   if (assisted) speed *= catalog.speed.manualAssistFactor;
   return speed;
 }
 
-export function ascentSeconds(
-  state: GameState,
-  site: Pick<SiteState, 'id' | 'strengthLevel' | 'wheelCharged'>,
-  assisted: boolean,
-): number {
+export function ascentSeconds(state: GameState, site: SpeedSite, assisted: boolean): number {
   const base = siteDef(site.id).ascentSeconds;
   return Math.max(catalog.cycle.minAscentSeconds, base / speedMultiplier(state, site, assisted));
 }
 
-export function fixedPhaseSeconds(): number {
-  return catalog.cycle.descentSeconds + catalog.cycle.returnSeconds;
+/** The counterweight brakes the fall; devices may hurry it. */
+export function descentSeconds(state: GameState, site: Pick<SiteState, 'id' | 'counterweight'>): number {
+  const brake = 1 + catalog.counterweight.brakePerTrim * (site.counterweight ?? 0);
+  return catalog.cycle.descentSeconds * brake * modifiers(state, site.id).descent;
+}
+
+export function returnSeconds(state: GameState, site: Pick<SiteState, 'id' | 'furnace'>): number {
+  const m = modifiers(state, site.id);
+  if (m.noReturn || (m.furnaceNoReturn && (site.furnace?.erupting ?? 0) > 0)) return 0;
+  return catalog.cycle.returnSeconds;
+}
+
+/** Descent plus return: the part of a cycle that doesn't depend on the climb. */
+export function fixedPhaseSeconds(state: GameState, site: Pick<SiteState, 'id' | 'counterweight' | 'furnace'>): number {
+  return descentSeconds(state, site) + returnSeconds(state, site);
+}
+
+export function cycleSeconds(state: GameState, site: SpeedSite, assisted: boolean): number {
+  return ascentSeconds(state, site, assisted) + fixedPhaseSeconds(state, site);
+}
+
+// ----------------------------------------------------------- counterweight
+
+export function counterweightUnlocked(site: SiteState): boolean {
+  return siteDef(site.id).index === 0 && site.productionLevel >= catalog.counterweight.unlockLevel;
+}
+
+export function counterweightCost(site: SiteState): Money {
+  return siteDef(site.id).baseLevelCost.mul(catalog.counterweight.costMultiplier).ceil();
+}
+
+/** The trim with the shortest cycle (the wheel counted as charged when owned). */
+export function bestTrim(state: GameState, site: SiteState, assisted = false): number {
+  const charged = site.wheelOwned || site.wheelCharged;
+  let best = 0;
+  let bestSeconds = Infinity;
+  for (let w = 0; w <= catalog.counterweight.maxTrim; w++) {
+    const secs = cycleSeconds(state, { ...site, wheelCharged: charged, counterweight: w }, assisted);
+    if (secs < bestSeconds - 1e-9) {
+      bestSeconds = secs;
+      best = w;
+    }
+  }
+  return best;
+}
+
+// ----------------------------------------------------------------- tablets
+
+export function tabletLevel(index: number): number {
+  return catalog.devices.tabletLevels[index];
+}
+
+export function tabletCost(site: SiteState, index: number): Money {
+  return siteDef(site.id).baseLevelCost.mul(catalog.devices.tabletCosts[index]).ceil();
 }
 
 export function isAutomated(state: GameState): boolean {
@@ -137,14 +235,115 @@ export function ascentRate(state: GameState, site: SiteState, input: MotionInput
  * is treated as charged when owned (it charges on the first descent).
  */
 export function steadyIncomePerSecond(state: GameState, site: SiteState): Money {
+  if (site.furnace) return furnaceIncome(state, site, !!site.steward, site.furnace.ventAt);
+  if (site.jar) return jarIncome(state, site, !!site.steward);
+  if (site.sky) return skyIncome(state, site, !!site.steward);
+  if (site.bureau) return bureauIncome(state, site, !!site.steward);
   const steady = { ...site, wheelCharged: site.wheelOwned || site.wheelCharged };
-  const cycle = ascentSeconds(state, steady, false) + fixedPhaseSeconds();
-  return cyclePayout(state, site).expectedTotal.div(cycle);
+  const cycle = cycleSeconds(state, steady, false);
+  return cyclePayout(state, site).expectedTotal.mul(nthAverage(modifiers(state, site.id))).div(cycle);
 }
 
+/**
+ * Income on the Tartarus Rim over one steady turn of the wheel: left alone it
+ * erupts at full heat; with a steward on duty it vents at `ventAt`.
+ */
+export function furnaceIncome(state: GameState, site: SiteState, vents: boolean, ventAt: number): Money {
+  const m = modifiers(state, site.id);
+  const pattern = steadyPattern(m, site.furnace!, vents, ventAt);
+  const steady = { ...site, wheelCharged: site.wheelOwned || site.wheelCharged };
+  let pay = Money.ZERO;
+  let seconds = 0;
+  for (const f of pattern) {
+    const s = { ...steady, furnace: f };
+    pay = pay.add(cyclePayout(state, s).expectedTotal);
+    seconds += cycleSeconds(state, s, false);
+  }
+  // Charon's Fare: one wage per eruption, and each period holds one eruption.
+  if (m.furnaceLump > 0) pay = pay.add(baseReward(state, site).mul(m.furnaceLump));
+  return pay.mul(nthAverage(m)).div(seconds);
+}
+
+/** Income on the Leaking Heights with the jar as it is (or as the steward holds it). */
+export function jarIncome(state: GameState, site: SiteState, vents: boolean, target?: number, holes?: number): Money {
+  const m = modifiers(state, site.id);
+  const factor = steadyJarFactor(m, site.jar!, site.productionLevel, vents, target, holes);
+  const steady = { ...site, jar: { ...site.jar!, factor }, wheelCharged: site.wheelOwned || site.wheelCharged };
+  return cyclePayout(state, steady).expectedTotal.mul(nthAverage(m)).div(cycleSeconds(state, steady, false));
+}
+
+/**
+ * Income on the Skyward Escarpment over a few turns of the sky: each house
+ * overhead weighted by the cycles it holds (constellations work only then).
+ */
+export function skyIncome(state: GameState, site: SiteState, vents: boolean): Money {
+  const real = state.empire.sites.find((x) => x.id === site.id)?.sky;
+  if (!real || !site.sky) return Money.ZERO;
+  const m = modifiers(state, site.id);
+  const cycles = 3 * real.houses.length * climbsPerHouse(m);
+  const counts = new Map<number, number>();
+  for (const p of skyPattern(m, site.sky, vents, cycles)) counts.set(p, (counts.get(p) ?? 0) + 1);
+  const kept = real.position;
+  let pay = Money.ZERO;
+  let seconds = 0;
+  try {
+    for (const [p, n] of counts) {
+      real.position = p;
+      const steady = { ...site, sky: { ...site.sky, position: p }, wheelCharged: site.wheelOwned || site.wheelCharged };
+      const mp = modifiers(state, site.id);
+      pay = pay.add(cyclePayout(state, steady).expectedTotal.mul(nthAverage(mp) * n));
+      seconds += cycleSeconds(state, steady, false) * n;
+    }
+  } finally {
+    real.position = kept;
+  }
+  return pay.div(seconds);
+}
+
+/** Income on the Olympian Approach with the Mill as it stands (or as the Moirai run it). */
+export function bureauIncome(state: GameState, site: SiteState, vents: boolean, onDuty?: number): Money {
+  const m = modifiers(state, site.id);
+  const factor = steadyBureauFactor(m, site.bureau!, site.productionLevel, vents, onDuty);
+  const steady = { ...site, bureau: { ...site.bureau!, factor }, wheelCharged: site.wheelOwned || site.wheelCharged };
+  return cyclePayout(state, steady).expectedTotal.mul(nthAverage(m)).div(cycleSeconds(state, steady, false));
+}
+
+/** Drilling one more hole in the jar: half a crew level's price. */
+export function drillCost(state: GameState, site: SiteState): Money {
+  const m = modifiers(state, site.id);
+  return levelCost(siteDef(site.id), 'production', Math.max(1, site.productionLevel))
+    .mul(catalog.jar.drillShare * m.jarDrillCost)
+    .ceil();
+}
+
+/** The steward's best vent heat, to the nearest 5 percent. */
+export function bestVent(state: GameState, site: SiteState): number {
+  let best = 1;
+  let bestIncome = Money.ZERO;
+  for (let v = 20; v <= 100; v += 5) {
+    const income = furnaceIncome(state, site, true, v / 100);
+    if (income.gt(bestIncome.mul(1 + 1e-9))) {
+      bestIncome = income;
+      best = v / 100;
+    }
+  }
+  return best;
+}
+
+/** The flywheel is the First Hill's machine; hills with their own machine have no use for it. */
+export function flywheelOffered(state: GameState, site: Pick<SiteState, 'id'>): boolean {
+  return flywheelUnlocked(state) && !furnaceSite(site.id);
+}
+
+/** The impact track, until a hill's machine replaces it (plan §6). */
+export function trackOpen(site: Pick<SiteState, 'id'>, track: LevelTrack): boolean {
+  return !(track === 'impact' && furnaceSite(site.id));
+}
+
+/** Defiance per second: every hill's steady income at its appraisal, in Obols. */
 export function empireIncomePerSecond(state: GameState): Money {
   if (!isAutomated(state)) return Money.ZERO;
-  return Money.sum(state.empire.sites.map((s) => steadyIncomePerSecond(state, s)));
+  return Money.sum(state.empire.sites.map((s) => steadyIncomePerSecond(state, s).mul(siteDef(s.id).appraisal)));
 }
 
 // ----------------------------------------------------------------- prelude
@@ -231,7 +430,7 @@ export function levelCost(def: SiteDef, track: LevelTrack, level: number): Money
 export function bulkCost(site: SiteState, track: LevelTrack, count: number): Money | null {
   const def = siteDef(site.id);
   const from = currentLevel(site, track);
-  if (count <= 0 || from + count > levelCap(track)) return null;
+  if (count <= 0 || from + count > levelCap(track) || !trackOpen(site, track)) return null;
   let total = Money.ZERO;
   for (let i = 0; i < count; i++) total = total.add(levelCost(def, track, from + i));
   return total;
@@ -244,8 +443,10 @@ export function flywheelCost(site: SiteState): Money {
 /** Whether buying strength level `level + 1` would shorten the unassisted ascent. */
 export function strengthLevelEffective(state: GameState, site: SiteState, level: number): boolean {
   const charged = site.wheelOwned || site.wheelCharged;
-  const before = ascentSeconds(state, { id: site.id, strengthLevel: level, wheelCharged: charged }, false);
-  const after = ascentSeconds(state, { id: site.id, strengthLevel: level + 1, wheelCharged: charged }, false);
+  const at = (strengthLevel: number) =>
+    ascentSeconds(state, { id: site.id, strengthLevel, wheelCharged: charged, counterweight: site.counterweight, furnace: site.furnace }, false);
+  const before = at(level);
+  const after = at(level + 1);
   return after < before;
 }
 
@@ -260,7 +461,7 @@ export function maxAffordable(state: GameState, site: SiteState, track: LevelTra
     const lvl = from + count;
     if (track === 'strength' && !strengthLevelEffective(state, site, lvl)) break;
     const next = total.add(levelCost(def, track, lvl));
-    if (next.gt(state.wallet.obols)) break;
+    if (next.gt(site.purse)) break;
     total = next;
     count++;
   }
@@ -279,15 +480,39 @@ export function nextUnownedSite(state: GameState): SiteDef | null {
   return catalog.sites.find((s) => !owned.has(s.id)) ?? null;
 }
 
-/** Impertinence: progress from the previous gate to the next, 0..1. */
+/** The owned hill that pays for the next opening: the highest one owned. */
+export function frontierSite(state: GameState): SiteState {
+  return state.empire.sites.reduce((best, s) => (siteDef(s.id).index > siteDef(best.id).index ? s : best));
+}
+
+/** Impertinence: the frontier hill's gross toward the next decree, 0..1. */
 export function decreeProgress(state: GameState): number {
   const next = nextUnownedSite(state);
   if (!next) return 1;
-  const prev = catalog.sites[next.index - 1].defianceGate;
-  const span = next.defianceGate.sub(prev);
-  const done = state.wallet.runGross.sub(prev);
-  const ratio = done.div(span).toNumber();
-  return Math.min(1, Math.max(0, ratio));
+  const prev = state.empire.sites.find((s) => s.id === catalog.sites[next.index - 1].id);
+  if (!prev) return 0;
+  const ratio = Math.min(1, prev.gross.div(gateOf(state, next)).toNumber());
+  const need = trialNeeded(prev.id);
+  // The gross and the trial each fill half of the bar when there is a trial.
+  if (need === 0) return Math.max(0, ratio);
+  return Math.max(0, (ratio + Math.min(1, trialProgress(prev) / need)) / 2);
+}
+
+// ---------------------------------------------------------------- stewards
+
+/** A hill's steward is offered once the hill behind it has a successor (or the Charter is signed). */
+export function stewardOffered(state: GameState, site: SiteState): boolean {
+  const index = siteDef(site.id).index;
+  if (index === catalog.sites.length - 1) return state.empire.purchasedWorkIds.includes('charter');
+  return state.empire.sites.some((s) => siteDef(s.id).index > index);
+}
+
+export function stewardCost(site: SiteState): Money {
+  return siteDef(site.id).baseLevelCost.mul(catalog.stewards.localCostMultiplier).ceil();
+}
+
+export function stewardInsightCost(site: SiteState): number {
+  return catalog.stewards.insightCosts[siteDef(site.id).index];
 }
 
 // --------------------------------------------------------------- prestige
@@ -316,6 +541,6 @@ export function nextRecordTarget(state: GameState): Money {
 }
 
 export function offlineCapSeconds(state: GameState): number {
-  const hours = hasUpgrade(state, 'offlineCap72') ? catalog.offline.extendedCapHours : catalog.offline.baseCapHours;
+  const hours = hasUpgrade(state, 'offlineCapExtended') ? catalog.offline.extendedCapHours : catalog.offline.baseCapHours;
   return hours * 3600;
 }

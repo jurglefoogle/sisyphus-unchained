@@ -129,12 +129,12 @@ describe('prices', () => {
 
 describe('prestige formulas', () => {
   it('matches the documented entitlement table', () => {
-    expect(prestigeEntitlement(Money.of('999999'))).toBe(0);
-    expect(prestigeEntitlement(Money.of('1e6'))).toBe(10);
-    expect(prestigeEntitlement(Money.of('1e7'))).toBe(40);
-    expect(prestigeEntitlement(Money.of('1e8'))).toBe(90);
-    expect(prestigeEntitlement(Money.of('1e9'))).toBe(160);
-    expect(prestigeEntitlement(Money.of('1e12'))).toBe(490);
+    expect(prestigeEntitlement(Money.of('99999999'))).toBe(0);
+    expect(prestigeEntitlement(Money.of('1e8'))).toBe(10);
+    expect(prestigeEntitlement(Money.of('1e9'))).toBe(40);
+    expect(prestigeEntitlement(Money.of('1e10'))).toBe(90);
+    expect(prestigeEntitlement(Money.of('1e11'))).toBe(160);
+    expect(prestigeEntitlement(Money.of('1e14'))).toBe(490);
   });
 
   it('has diminishing returns: 10 → ×1.75, 160 → ×4', () => {

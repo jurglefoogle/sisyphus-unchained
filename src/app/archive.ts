@@ -1,5 +1,6 @@
 import { ARCHIVE_SUBJECTS, type ArchiveSubject } from '../content/archive';
-import { catalog } from '../content/catalog';
+import { catalog, siteDef } from '../content/catalog';
+import { DEVICES, WHISPERS } from '../content/devices';
 import { SCENE_FOR_STORY, SCENES, sceneSeenId } from '../content/scenes';
 import { en, t } from '../content/strings';
 import { ACHIEVEMENTS } from '../core/achievements';
@@ -13,6 +14,8 @@ export interface ArchiveView {
   earned: number;
   subjects: (ArchiveSubject & { unlocked: boolean })[];
   relics: { id: string; name: string; joke: string; found: boolean }[];
+  /** Every device ever revealed; the rest show only their seal (or their rumour, once heard). */
+  codex: { id: string; hill: string; source: string; name: string; rule: string; quip: string; hint: string; found: boolean }[];
   decrees: { id: string; god: string; sis: string }[];
   /** Cutscenes, rewatchable once seen. */
   scenes: { id: string; title: string; when: string; seen: boolean }[];
@@ -51,7 +54,7 @@ const GUIDE: { id: string; title: string; after: string | null; text: string }[]
   { id: 'summit', title: 'Summit and impact', after: 'first_summit', text: 'The summit pays 70% of a climb and the impact below pays the other 30%, plus any Impact upgrades. A climb’s payout is fixed when it begins, so new purchases raise the next climb. Speed changes apply at once.' },
   { id: 'improve', title: 'Improving an operation', after: 'first_level', text: 'Improve Operation raises the payout; levels 10, 25, 50, 100, 150 and 200 each double it. Strength shortens the ascent down to a two-second floor. Impact raises the impact share. Buy 10 and To Milestone save clicks.' },
   { id: 'flywheel', title: 'The flywheel', after: 'first_wheel', text: 'A flywheel catches the falling stone. It helps after the next descent: once charged, ascents run 25% faster. It never pays for the climb it was bought during.' },
-  { id: 'foreman', title: 'The Foreman', after: 'foreman', text: 'The Foreman contract automates every operation you own now or later, and it works while you are away (up to 24 hours). Holding Push still speeds the selected site by up to 50%. Buy Max appears once you have automation.' },
+  { id: 'foreman', title: 'The Foreman', after: 'foreman', text: 'The Foreman contract automates every operation you own now or later, and it works while you are away (up to 12 hours). Holding Push still speeds the selected site by up to 50%. Buy Max appears once you have automation.' },
   { id: 'decrees', title: 'Defiance and decrees', after: 'foreman', text: 'Defiance is everything earned this run; spending never lowers it. Each decree gate opens the next operation for a price. Older operations keep earning.' },
   { id: 'works', title: 'Mythic works', after: 'foreman', text: 'Each operation has named works, unlocked by its production level. They are bought once per run and multiply all income.' },
   { id: 'relics', title: 'Relics', after: 'first_expansion', text: 'Each operation hides one relic, found on a descent (1 in 80, guaranteed within 60). Opening the next operation delivers a missing one. Relics add ×1.1 income each and survive Begin Again.' },
@@ -96,6 +99,20 @@ export function buildArchive(s: GameState): ArchiveView {
     joke: t(`relic.${r.id}.joke`),
     found: s.discoveries.relicIds.includes(r.id),
   }));
+  const heardRumours = new Set(s.discoveries.rumourIds);
+  const codex = [...DEVICES, ...WHISPERS].map((d) => {
+    const whisper = WHISPERS.find((w) => w.id === d.id);
+    return {
+      id: d.id,
+      hill: t(siteDef(d.siteId).displayNameKey),
+      source: d.source,
+      name: d.name,
+      rule: d.rule,
+      quip: d.quip,
+      hint: whisper ? (heardRumours.has(d.id) ? whisper.rumour : 'Nobody has mentioned it.') : d.hint,
+      found: s.discoveries.codexIds.includes(d.id),
+    };
+  });
   const guide = GUIDE.map((g) => ({
     id: g.id,
     title: g.title,
@@ -136,6 +153,7 @@ export function buildArchive(s: GameState): ArchiveView {
       { id: 'stamps', label: 'Stamps', found: ACHIEVEMENTS.filter((a) => owned.includes(a.id)).length, total: ACHIEVEMENTS.length },
       { id: 'myths', label: 'Mythology', found: subjects.filter((x) => x.unlocked).length, total: subjects.length },
       { id: 'relics', label: 'Relics', found: relics.filter((x) => x.found).length, total: relics.length },
+      { id: 'codex', label: 'Codex', found: codex.filter((x) => x.found).length, total: codex.length },
       { id: 'scenes', label: 'Scenes', found: scenes.filter((x) => x.seen).length, total: scenes.length },
       { id: 'stones', label: 'Stones', found: stones.filter((x) => x.found).length, total: stones.length },
     ],
@@ -156,6 +174,7 @@ export function buildArchive(s: GameState): ArchiveView {
     earned: ACHIEVEMENTS.filter((a) => owned.includes(a.id)).length,
     subjects,
     relics,
+    codex,
     guide,
     stones,
     odds: {

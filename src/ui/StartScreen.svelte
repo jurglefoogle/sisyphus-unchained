@@ -1,6 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { artUrl, iconUrl } from '../world/library';
+  import { EDGE, papyrus, TILE } from './papyrus';
+  import { KEY_H, KEY_W, stone } from './stone';
+
+  const paper = papyrus();
+  const key = stone().key;
 
   let {
     hasProgress,
@@ -34,10 +39,22 @@
   <img class="hero" src={artUrl('sisyphus_rest')} alt="" />
   <img class="stone" src={artUrl('stone_limestone')} alt="" />
 
+  <div
+    class="volume"
+    style:--paper-tex="url({paper.sheet})"
+    style:--edge-l="url({paper.edgeLeft})"
+    style:--edge-r="url({paper.edgeRight})"
+    style:--tile="{TILE}px"
+    style:--edge="{EDGE}px"
+    style:--key="url({key})"
+    style:--key-w="{KEY_W}px"
+    style:--key-h="{KEY_H}px"
+  >
+  <span class="rod turned-rod" aria-hidden="true"></span>
   <div class="title-card">
     <p class="eyebrow">A myth of labor, leverage and divine paperwork</p>
     <h1 id="game-title"><span>Sisyphus</span><small>Unchained</small></h1>
-    <div class="meander" aria-hidden="true"><span></span><i>◆</i><span></span></div>
+    <div class="meander" aria-hidden="true"></div>
 
     {#if confirming}
       <div class="confirm" role="alertdialog" aria-labelledby="new-game-title" aria-describedby="new-game-warning">
@@ -71,6 +88,8 @@
 
       <p class="autosave"><img src={iconUrl('ui_save')} alt="" /> Progress saves automatically</p>
     {/if}
+  </div>
+  <span class="rod turned-rod" aria-hidden="true"></span>
   </div>
 
   <p class="version">SISYPHUS: UNCHAINED · EARLY BUILD</p>
@@ -124,17 +143,35 @@
     opacity: .72;
     filter: sepia(.15) drop-shadow(0 1rem 2rem rgba(16, 10, 7, .38));
   }
-  .title-card {
-    width: min(31rem, calc(100vw - 2rem));
+  /* The title is written on a papyrus held open between two rods. */
+  .volume {
+    display: flex;
+    flex-direction: column;
+    width: min(31rem, calc(100vw - 3rem));
     margin-left: min(42vw, 35rem);
-    padding: clamp(1.5rem, 4vw, 3rem);
-    text-align: center;
-    background: linear-gradient(145deg, rgba(246, 236, 220, .97), rgba(235, 220, 192, .94));
-    border: 1px solid rgba(165, 123, 59, .85);
-    outline: 1px solid rgba(33, 27, 23, .45);
-    outline-offset: -.55rem;
-    box-shadow: 0 2rem 5rem rgba(12, 8, 6, .45);
+    filter: drop-shadow(0 2rem 3rem rgba(12, 8, 6, .5)) drop-shadow(0 2px 3px rgba(12, 8, 6, .4));
   }
+  .rod { z-index: 1; margin: 0 -16px; }
+  .title-card {
+    margin: -8px 0;
+    padding: calc(clamp(1.5rem, 4vw, 3rem) + 8px) clamp(1.5rem, 4vw, 3rem);
+    text-align: center;
+    color: #231710;
+    background:
+      linear-gradient(90deg, rgba(96, 60, 22, .28), rgba(96, 60, 22, 0) 8%, rgba(96, 60, 22, 0) 92%, rgba(96, 60, 22, .3)),
+      radial-gradient(120% 70% at 50% 0%, rgba(255, 248, 228, .35), transparent 70%),
+      var(--paper-tex) 0 0 / var(--tile) var(--tile);
+    box-shadow: inset 0 14px 12px -12px rgba(52, 30, 8, .5), inset 0 -14px 12px -12px rgba(52, 30, 8, .5);
+    -webkit-mask:
+      var(--edge-l) left top / var(--edge) var(--tile) repeat-y,
+      linear-gradient(#000, #000) center / calc(100% - 2 * var(--edge) + 2px) 100% no-repeat,
+      var(--edge-r) right top / var(--edge) var(--tile) repeat-y;
+    mask:
+      var(--edge-l) left top / var(--edge) var(--tile) repeat-y,
+      linear-gradient(#000, #000) center / calc(100% - 2 * var(--edge) + 2px) 100% no-repeat,
+      var(--edge-r) right top / var(--edge) var(--tile) repeat-y;
+  }
+  :global(.high-contrast) .title-card { background: #fffaf0; }
   .eyebrow {
     margin: 0 0 .7rem;
     color: #744329;
@@ -151,9 +188,14 @@
   }
   h1 span { display: block; font-size: clamp(3.3rem, 7vw, 5.8rem); letter-spacing: -.045em; }
   h1 small { display: block; margin-top: .5rem; color: #9b4d2c; font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: .22em; }
-  .meander { display: flex; align-items: center; gap: .7rem; margin: 1.25rem 0; color: #a57b3b; }
-  .meander span { height: 1px; flex: 1; background: currentColor; }
-  .meander i { font-style: normal; font-size: .7rem; }
+  /* The running key in black glaze, as on the beam over the world. */
+  .meander {
+    height: var(--key-h);
+    margin: 1.25rem 0;
+    background: var(--key) 0 0 / var(--key-w) var(--key-h) repeat-x;
+    border-block: 1px solid #1d130c;
+    box-sizing: content-box;
+  }
   .premise { max-width: 24rem; margin: 0 auto 1.25rem; font-size: 1.08rem; font-style: italic; }
   .save-summary { margin: 0 auto 1.25rem; padding: .75rem 1rem; border-block: 1px solid rgba(165, 123, 59, .45); }
   .save-summary span, .save-summary small { display: block; color: #6b5140; }
@@ -162,26 +204,32 @@
   .actions { display: grid; gap: .55rem; }
   .actions button {
     min-height: 2.9rem;
-    border: 1px solid rgba(91, 63, 43, .55);
-    background: rgba(246, 236, 220, .58);
+    border: 1px solid rgba(91, 63, 43, .5);
+    background: rgba(255, 250, 236, .38);
+    box-shadow: 0 1px 0 rgba(91, 63, 43, .25);
     color: var(--ink);
     font: 600 1rem var(--body);
     cursor: pointer;
   }
-  .actions button:hover { background: rgba(217, 156, 108, .34); }
+  .actions button:not(.primary, .danger):hover { background: rgba(217, 156, 108, .34); }
   .actions .primary {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: .65rem;
     min-height: 3.6rem;
-    color: #f6ecdc;
-    background: #5b2e20;
-    border-color: #a57b3b;
     font-family: var(--display);
-    font-size: 1.3rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    /* Glazed clay, as for every panel's main action. */
+    color: #f7e9d6;
+    border-color: #3a170a;
+    background:
+      radial-gradient(ellipse at 30% 15%, rgba(255, 214, 170, .28), transparent 60%),
+      linear-gradient(180deg, #a44d27 0%, #8c3b1b 55%, #6c2a11 100%);
+    box-shadow: inset 0 1px rgba(255, 220, 180, .3), inset 0 -2px 3px rgba(40, 12, 2, .35), 0 2px 0 #2a150a;
   }
-  .actions .primary:hover { background: #753a27; }
+  .actions .primary:hover { filter: brightness(1.08); }
   .actions img { width: 1.35rem; height: 1.35rem; filter: brightness(0) invert(1) sepia(.25); }
   .actions.split { grid-template-columns: 1fr 1fr; }
   .actions .danger { color: #fff5e8; background: #7a2922; }
@@ -195,12 +243,13 @@
     .sky { background-position: 64% center; }
     .hero { left: -38vw; bottom: -3vh; height: 68vh; opacity: .42; }
     .stone { left: auto; right: -22vw; bottom: -2vh; width: 70vw; opacity: .28; }
-    .title-card { margin: 0; width: min(29rem, calc(100vw - 1.25rem)); padding: 1.6rem 1.35rem; }
+    .volume { margin: 0; width: min(29rem, calc(100vw - 2.5rem)); }
+    .title-card { padding: calc(1.6rem + 8px) 1.35rem; }
     h1 span { font-size: clamp(3rem, 16vw, 4.6rem); }
     h1 small { font-size: clamp(1.25rem, 7vw, 2rem); }
   }
   @media (max-height: 620px) and (min-width: 700px) {
-    .title-card { padding: 1.2rem 2rem; }
+    .title-card { padding: calc(1.2rem + 8px) 2rem; }
     .eyebrow, .autosave { display: none; }
     .meander { margin: .7rem 0; }
     h1 span { font-size: 3.5rem; }

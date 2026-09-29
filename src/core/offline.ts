@@ -1,6 +1,13 @@
-import { ascentSeconds, fixedPhaseSeconds, isAutomated, offlineCapSeconds, cyclePayout } from './formulas';
+import { catalog } from '../content/catalog';
+import { OUT_OF_SIGHT_SECONDS } from '../content/devices';
+import { modifiers, nthSum } from './effects';
+import { noteAbsence } from './seals';
+import { clearEdict, recordDueProcess } from './bureau';
+import { trialCycles } from './trials';
+import { cycleSeconds, isAutomated, offlineCapSeconds, cyclePayout } from './formulas';
 import { Money } from './money';
 import {
+  eruptNow,
   findSite,
   grantIncome,
   startCycle,
@@ -15,7 +22,10 @@ import type { GameEvent, GameState, SiteState } from './state';
 export interface OfflineSummary {
   requestedSeconds: number;
   countedSeconds: number;
+  /** Defiance gained, appraised in Obols. */
   earned: Money;
+  /** Each hill's income in its own currency (only hills that earned). */
+  earnedBySite: { siteId: string; amount: Money }[];
   relicIds: string[];
   decreeSiteIds: string[];
 }
@@ -34,7 +44,8 @@ function relicPendingOn(state: GameState, site: SiteState): boolean {
  * stepped exactly with their saved snapshot.
  */
 function advanceSiteBatched(state: GameState, site: SiteState, window: number, ctx: StepContext): void {
-  if (relicPendingOn(state, site)) {
+  // Ixion's Wheel changes every cycle: step it boundary by boundary, exactly as live.
+  if (relicPendingOn(state, site) || site.furnace || site.jar || site.foundry || site.sky || site.bureau) {
     // At most `pityDescents` cycles before the relic; step them exactly.
     stepSites(state, window, ctx, [site]);
     return;
@@ -57,12 +68,15 @@ function advanceSiteBatched(state: GameState, site: SiteState, window: number, c
   if (!firstSnapshot || rem <= TIME_EPS) return;
 
   // 2. Skip complete steady cycles. The first keeps its own snapshot.
-  const cycle = ascentSeconds(state, site, false) + fixedPhaseSeconds();
+  const cycle = cycleSeconds(state, site, false);
   const k = Math.floor((rem + TIME_EPS) / cycle);
   if (k > 0) {
     const first = firstSnapshot.summit.add(firstSnapshot.impact).add(firstSnapshot.bonus);
-    const rest = cyclePayout(state, site).expectedTotal.mul(k - 1);
-    grantIncome(state, first.add(rest), ctx.events);
+    // Every-Nth cycles are counted exactly over the skipped indices.
+    const weight = nthSum(modifiers(state, site.id), site.cycleIndex + 1, site.cycleIndex + k - 1);
+    const rest = cyclePayout(state, site).expectedTotal.mul(weight);
+    trialCycles(site, k);
+    grantIncome(state, site, first.add(rest), ctx.events);
     site.cycleIndex += k;
     state.counters.totalClimbs += k;
     state.counters.totalImpacts += k;
@@ -91,8 +105,11 @@ export function settleOffline(state: GameState, seconds: number, events: GameEve
   const requested = Math.max(0, seconds);
   const counted = Math.min(requested, offlineCapSeconds(state));
   const grossBefore = state.wallet.runGross;
+  const siteGrossBefore = new Map(state.empire.sites.map((s) => [s.id, s.gross]));
   const localEvents: GameEvent[] = [];
   const ctx: StepContext = { manualHeld: false, offline: true, events: localEvents };
+  // The gods don't work weekends either: an absence ends any Edict.
+  clearEdict(state);
 
   if (isAutomated(state) && !state.paused) {
     let remaining = counted;
@@ -108,11 +125,24 @@ export function settleOffline(state: GameState, seconds: number, events: GameEve
     }
   }
 
+  // Out of Sight: an hour away is noticed on the rim, and (once heard) greeted with a full eruption.
+  if (isAutomated(state) && !state.paused) {
+    noteAbsence(state, requested, localEvents);
+    const rim = state.empire.sites.find((s) => s.furnace);
+    if (rim?.furnace && requested >= OUT_OF_SIGHT_SECONDS && modifiers(state, rim.id).furnaceWelcome && rim.furnace.erupting === 0) {
+      rim.furnace.heat = 1;
+      eruptNow(state, rim, ctx, catalog.furnace.welcomePower);
+    }
+  }
+
   events.push(...localEvents);
   return {
     requestedSeconds: requested,
     countedSeconds: isAutomated(state) && !state.paused ? counted : 0,
     earned: state.wallet.runGross.sub(grossBefore),
+    earnedBySite: state.empire.sites
+      .map((s) => ({ siteId: s.id, amount: s.gross.sub(siteGrossBefore.get(s.id) ?? Money.ZERO) }))
+      .filter((e) => e.amount.gt(0)),
     relicIds: localEvents.flatMap((e) => (e.type === 'RelicGranted' ? [e.relicId] : [])),
     decreeSiteIds: localEvents.flatMap((e) => (e.type === 'DecreeAvailable' ? [e.siteId] : [])),
   };

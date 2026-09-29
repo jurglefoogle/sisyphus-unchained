@@ -1,7 +1,9 @@
 import { catalog } from '../content/catalog';
+import { deviceDef, visitorFor } from '../content/devices';
 import { again, ambient, ambientWorks, arrivals, barks, recapLines, t, thanatos } from '../content/strings';
 import { formatMoney } from '../core/format';
 import {
+  breakSeal,
   buyFlywheel,
   buyInsightUpgrade,
   buyLevels,
@@ -9,24 +11,50 @@ import {
   buyWork,
   confirmPrestige,
   hireForeman,
+  hireSteward,
+  installCounterweight,
   newGame,
   openSite,
   previewPrestige,
   selectSite,
+  setPausedAt,
+  setStewardOrder,
+  setTrim,
+  setVentAt,
+  takeBargain,
+  vent,
+  drill,
+  patch,
+  setJarTarget,
+  setSplit,
+  pourNext,
+  mount,
+  turnSky,
+  hireClerk,
+  setOnDuty,
+  remember,
+  keepOnFile,
+  fileAppeal,
+  unseal,
+  summonVisitor,
   type CommandResult,
   type PrestigePreview,
 } from '../core/commands';
+import { EDICTS } from '../content/devices';
+import { isConstellation } from '../core/sky';
 import type { LevelTrack } from '../core/formulas';
 import { reconcileAchievements } from '../core/achievements';
 import { settleOffline, type OfflineSummary } from '../core/offline';
 import { deserializeSave, serializeSave } from '../core/save';
 import { markTutorial, stepSites } from '../core/sim';
+import { runStewards } from '../core/stewards';
 import type { GameEvent, GameState, Options } from '../core/state';
 import { detectPlatform, type Platform } from '../platform/platform';
 import { CURRENT, PRE_RESET, backupKey, type SaveStore } from '../platform/storage';
 import { Telemetry } from './telemetry';
 import { buildView, resolveGoal, type GameView } from './view';
 
+const STEWARD_INTERVAL_MS = 1000;
 /** Foreground gaps longer than this (hidden tab, sleep) settle as an absence. */
 const LARGE_GAP_SECONDS = 5;
 const RECAP_MIN_SECONDS = 60;
@@ -39,7 +67,9 @@ const IDLE_BARK_MS = 60_000;
 const PERMANENT = new Set<GameEvent['type']>(['RelicGranted', 'AchievementUnlocked', 'DecreeAvailable', 'PreludeCompleted', 'FeatureUnlocked']);
 
 export interface Notice {
-  kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast' | 'achievement';
+  kind: 'recap' | 'story' | 'relic' | 'info' | 'error' | 'toast' | 'achievement' | 'reveal';
+  /** A device, whisper or bargain just revealed. */
+  deviceId?: string;
   storyId?: string;
   achievementIds?: string[];
   firstTime?: boolean;
@@ -61,7 +91,29 @@ export type Command =
   | { type: 'HireForeman' }
   | { type: 'BuyWork'; workId: string }
   | { type: 'OpenSite'; siteId: string }
-  | { type: 'BuyInsightUpgrade'; upgradeId: string };
+  | { type: 'BuyInsightUpgrade'; upgradeId: string }
+  | { type: 'HireSteward'; paidWith: 'local' | 'insight' }
+  | { type: 'SetStewardOrder'; reinvest: boolean }
+  | { type: 'InstallCounterweight' }
+  | { type: 'SetTrim'; trim: number }
+  | { type: 'BreakSeal'; index: number }
+  | { type: 'TakeBargain'; bargainId: string }
+  | { type: 'Vent' }
+  | { type: 'SetVentAt'; heat: number }
+  | { type: 'Drill' }
+  | { type: 'Patch' }
+  | { type: 'SetJarTarget'; level: number }
+  | { type: 'SetSplit'; split: number }
+  | { type: 'PourNext'; deviceId: string }
+  | { type: 'TurnSky' }
+  | { type: 'Mount'; deviceId: string; house: number | null }
+  | { type: 'HireClerk' }
+  | { type: 'SetOnDuty'; clerks: number }
+  | { type: 'Remember'; siteId: string }
+  | { type: 'KeepOnFile'; siteId: string; deviceId: string | null }
+  | { type: 'Unseal'; index: number }
+  | { type: 'Summon' }
+  | { type: 'FileAppeal' };
 
 export interface CommandRequest {
   requestId: string;
@@ -91,6 +143,8 @@ export class Game {
   manualHeld = false;
 
   private lastFrame = 0;
+  /** Stewards act about once a second, not every frame. */
+  private lastStewards = 0;
   private dirty = false;
   private lastSave = 0;
   private lastBackup = 0;
@@ -130,6 +184,12 @@ export class Game {
         this.state = loaded.state;
         if (loaded.migratedFrom !== undefined) {
           await this.store.put({ [`pre-migration-v${loaded.migratedFrom}`]: raw }).catch(() => {});
+        }
+        if (loaded.renegotiated !== undefined) {
+          this.notify({
+            kind: 'info',
+            text: `Every hill keeps its own purse now. Your shared purse could not be split fairly, so Thanatos closed the run and paid ${loaded.renegotiated} Insight in full.`,
+          });
         }
       } else {
         // Never silently replace a corrupt save: preserve it and try backups.
@@ -240,6 +300,18 @@ export class Game {
         this.notify({ kind: 'toast', text: `The fall paid +${formatMoney(e.amount)} Obol${e.amount.eq(1) ? '' : 's'}. Improve your grip and the next attempt reaches higher.` });
       }
       if (e.type === 'FeatureUnlocked') this.notify({ kind: 'toast', text: t(`unlock.${e.feature}`) });
+      if (e.type === 'DeviceRevealed') this.notify({ kind: 'reveal', deviceId: e.deviceId, firstTime: e.firstTime });
+      if (e.type === 'Rumour') this.notify({ kind: 'info', text: `Rumour: ${e.text}` });
+      if (e.type === 'LaurelWon') this.notify({ kind: 'toast', text: `Appeal ${e.number} won. A laurel: every crew earns more, for good.` });
+      if (e.type === 'AppealFiled') this.notify({ kind: 'toast', text: `Thanatos files Appeal ${e.number}. The sentence begins again, stiffer.` });
+      if (e.type === 'Edict') {
+        const edict = EDICTS.find((x) => x.id === e.edictId);
+        if (edict) this.notify({ kind: 'toast', text: `Zeus decrees: ${edict.name}. ${edict.rule}` });
+      }
+      if (e.type === 'VisitorArrived') {
+        const v = visitorFor(e.siteId);
+        if (v) this.notify({ kind: 'toast', text: `${v.greeting} (see the Improve list)` });
+      }
     }
     for (const fn of this.listeners) fn(events);
   }
@@ -262,6 +334,8 @@ export class Game {
     const events: GameEvent[] = [];
     const summary = settleOffline(s, elapsed, events);
     s.lastSettledUtc = nowUtc;
+    // Stewards settle their accounts once on return (docs/hill-workshops-plan.md §2).
+    this.stewards(events);
     this.emit(events);
     if (showRecap && elapsed >= RECAP_MIN_SECONDS && !summary.earned.isZero()) {
       this.notify({ kind: 'recap', recap: summary, sis: this.pickLine(recapLines, nowUtc) ?? undefined });
@@ -285,6 +359,10 @@ export class Game {
     } else if (dt > 0) {
       const events: GameEvent[] = [];
       stepSites(s, dt, { manualHeld: this.manualHeld, offline: false, events });
+      if (utc - this.lastStewards >= STEWARD_INTERVAL_MS) {
+        this.lastStewards = utc;
+        this.stewards(events);
+      }
       s.counters.totalActiveSeconds += dt;
       s.lastSettledUtc = Math.max(s.lastSettledUtc, utc);
       this.emit(events);
@@ -296,6 +374,18 @@ export class Game {
 
     this.tickAmbient(utc);
     if (this.dirty && utc - this.lastSave > catalog.save.autosaveSeconds * 1000) void this.save();
+  }
+
+  /**
+   * Let stewards spend. Their purchases are bookkeeping, not the player's
+   * clicks: no purchase chimes, but milestones and unlocks still count.
+   */
+  private stewards(events: GameEvent[]): void {
+    if (!this.state.empire.sites.some((site) => site.steward)) return;
+    const own: GameEvent[] = [];
+    if (runStewards(this.state, own).size === 0) return;
+    this.dirty = true;
+    for (const e of own) if (e.type !== 'PurchaseCompleted') events.push(e);
   }
 
   private settleNow(): void {
@@ -367,6 +457,50 @@ export class Game {
       }
       case 'BuyInsightUpgrade':
         return this.run((e) => buyInsightUpgrade(s(), c.upgradeId, e));
+      case 'HireSteward':
+        return this.run((e) => hireSteward(s(), s().empire.selectedSiteId, c.paidWith, e));
+      case 'SetStewardOrder':
+        return this.run(() => setStewardOrder(s(), s().empire.selectedSiteId, c.reinvest));
+      case 'InstallCounterweight':
+        return this.run((e) => installCounterweight(s(), s().empire.selectedSiteId, e));
+      case 'SetTrim':
+        return this.run(() => setTrim(s(), s().empire.selectedSiteId, c.trim));
+      case 'BreakSeal':
+        return this.run((e) => breakSeal(s(), s().empire.selectedSiteId, c.index, e));
+      case 'TakeBargain':
+        return this.run((e) => takeBargain(s(), s().empire.selectedSiteId, c.bargainId, e));
+      case 'Vent':
+        return this.run((e) => vent(s(), s().empire.selectedSiteId, e));
+      case 'SetVentAt':
+        return this.run(() => setVentAt(s(), s().empire.selectedSiteId, c.heat));
+      case 'Drill':
+        return this.run(() => drill(s(), s().empire.selectedSiteId));
+      case 'Patch':
+        return this.run((e) => patch(s(), s().empire.selectedSiteId, e));
+      case 'SetJarTarget':
+        return this.run(() => setJarTarget(s(), s().empire.selectedSiteId, c.level));
+      case 'SetSplit':
+        return this.run(() => setSplit(s(), s().empire.selectedSiteId, c.split));
+      case 'PourNext':
+        return this.run(() => pourNext(s(), s().empire.selectedSiteId, c.deviceId));
+      case 'TurnSky':
+        return this.run((e) => turnSky(s(), s().empire.selectedSiteId, e));
+      case 'Mount':
+        return this.run(() => mount(s(), s().empire.selectedSiteId, c.deviceId, c.house));
+      case 'FileAppeal':
+        return this.run((e) => fileAppeal(s(), e));
+      case 'Remember':
+        return this.run((e) => remember(s(), c.siteId, e));
+      case 'KeepOnFile':
+        return this.run(() => keepOnFile(s(), c.siteId, c.deviceId));
+      case 'Unseal':
+        return this.run(() => unseal(s(), s().empire.selectedSiteId, c.index));
+      case 'Summon':
+        return this.run((e) => summonVisitor(s(), s().empire.selectedSiteId, e));
+      case 'HireClerk':
+        return this.run(() => hireClerk(s(), s().empire.selectedSiteId));
+      case 'SetOnDuty':
+        return this.run(() => setOnDuty(s(), s().empire.selectedSiteId, c.clerks));
     }
   }
 
@@ -374,6 +508,99 @@ export class Game {
     return this.dispatch({ requestId, at: Date.now(), command });
   }
 
+  hireSteward(paidWith: 'local' | 'insight', requestId?: string) {
+    return this.send({ type: 'HireSteward', paidWith }, requestId);
+  }
+  /** Flip the viewed hill's standing order between reinvest and hold. */
+  setStewardOrder(requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'SetStewardOrder', reinvest: !site?.steward?.reinvest }, requestId);
+  }
+  installCounterweight(requestId?: string) {
+    return this.send({ type: 'InstallCounterweight' }, requestId);
+  }
+  /** Add or take out stones (`delta`) on the viewed hill's counterweight. */
+  trimCounterweight(delta: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'SetTrim', trim: (site?.counterweight ?? 0) + delta }, requestId);
+  }
+  vent(requestId?: string) {
+    return this.send({ type: 'Vent' }, requestId);
+  }
+  /** Move the steward's vent point by `steps` of 5 percent. */
+  nudgeVentAt(steps: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'SetVentAt', heat: (site?.furnace?.ventAt ?? 0) + steps * 0.05 }, requestId);
+  }
+  fileAppeal(requestId?: string) {
+    return this.send({ type: 'FileAppeal' }, requestId);
+  }
+  remember(siteId: string, requestId?: string) {
+    return this.send({ type: 'Remember', siteId }, requestId);
+  }
+  keepOnFile(siteId: string, deviceId: string | null, requestId?: string) {
+    return this.send({ type: 'KeepOnFile', siteId, deviceId }, requestId);
+  }
+  unseal(index: number, requestId?: string) {
+    return this.send({ type: 'Unseal', index }, requestId);
+  }
+  summonVisitor(requestId?: string) {
+    return this.send({ type: 'Summon' }, requestId);
+  }
+  hireClerk(requestId?: string) {
+    return this.send({ type: 'HireClerk' }, requestId);
+  }
+  /** Move `steps` clerks to (or from) their desks on the Mill. */
+  nudgeOnDuty(steps: number, requestId?: string) {
+    const b = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId)?.bureau;
+    return this.send({ type: 'SetOnDuty', clerks: b ? b.onDuty + steps : -1 }, requestId);
+  }
+  turnSky(requestId?: string) {
+    return this.send({ type: 'TurnSky' }, requestId);
+  }
+  /**
+   * Move the `index`th revealed constellation `delta` houses (swapping with
+   * whatever hangs there); 0 mounts it in the first dark house, or takes it down.
+   */
+  moveConstellation(index: number, delta: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    const sky = site?.sky;
+    const id = site?.devices.filter(isConstellation)[index];
+    if (!sky || !id) return this.send({ type: 'Mount', deviceId: '', house: null }, requestId);
+    const n = sky.houses.length;
+    const at = sky.houses.indexOf(id);
+    const house = delta === 0 ? (at >= 0 ? null : sky.houses.indexOf(null)) : (((at + delta) % n) + n) % n;
+    return this.send({ type: 'Mount', deviceId: id, house }, requestId);
+  }
+  /** Move the Foundry split by `steps` tenths. */
+  nudgeSplit(steps: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'SetSplit', split: (site?.foundry?.split ?? 0) + steps * 0.1 }, requestId);
+  }
+  /** Pour the blueprint at `index` in the queue next. */
+  pourNext(index: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'PourNext', deviceId: site?.foundry?.queue[index] ?? '' }, requestId);
+  }
+  /** +1 drills a hole, -1 patches one. */
+  tendJar(delta: number, requestId?: string) {
+    return this.send({ type: delta > 0 ? 'Drill' : 'Patch' }, requestId);
+  }
+  /** Move the jar level the steward holds by `steps` of 5 percent. */
+  nudgeJarTarget(steps: number, requestId?: string) {
+    const site = this.state.empire.sites.find((x) => x.id === this.state.empire.selectedSiteId);
+    return this.send({ type: 'SetJarTarget', level: (site?.jar?.target ?? 0) + steps * 0.05 }, requestId);
+  }
+  breakSeal(index: number, requestId?: string) {
+    return this.send({ type: 'BreakSeal', index }, requestId);
+  }
+  /** Take the visitor's bargain at `index` (0 or 1). */
+  takeBargain(index: number, requestId?: string) {
+    const v = visitorFor(this.state.empire.selectedSiteId);
+    const id = v?.bargains[index];
+    if (!id) return { ok: false as const, reason: 'no-visitor' };
+    return this.send({ type: 'TakeBargain', bargainId: id }, requestId);
+  }
   buyLevels(track: LevelTrack, count: number, requestId?: string) {
     return this.send({ type: 'BuyLevels', track, count }, requestId);
   }
@@ -449,6 +676,8 @@ export class Game {
 
   setPaused(paused: boolean): void {
     this.settleNow();
+    const events: GameEvent[] = [];
+    setPausedAt(this.state, paused, Date.now(), events);
     this.state.paused = paused;
     this.manualHeld = false;
     this.state.lastSettledUtc = Math.max(this.state.lastSettledUtc, Date.now());
@@ -458,6 +687,7 @@ export class Game {
     void this.save();
     // Pausing always gets a remark (spec §03).
     if (paused) this.bark(barks.pause, Date.now(), 1, 0);
+    this.emit(events);
   }
 
   setOption<K extends keyof Options>(key: K, value: Options[K]): void {

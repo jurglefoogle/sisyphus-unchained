@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { deviceDef, isDevice } from '../content/devices';
   import { onMount, untrack } from 'svelte';
   import { fly } from 'svelte/transition';
   import { backOut as overshoot, cubicOut } from 'svelte/easing';
@@ -8,6 +9,7 @@
   import { insightFactor } from '../core/formulas';
   import { formatDuration, formatMoney, formatMultiplier } from '../core/format';
   import { t } from '../content/strings';
+  import { priced } from '../content/currency';
   import { World } from '../world/world';
   import { CoinFlight } from './coinFlight';
   import { artUrl, iconUrl, storyPortrait, storyPortraitName } from '../world/library';
@@ -53,10 +55,14 @@
   let stamp = $state<{ id: string; text: string } | null>(null);
   let stampTimer: ReturnType<typeof setTimeout> | undefined;
   let prestige = $state<PrestigePreview | null>(null);
+  let appealOpen = $state(false);
   let prestigeMemory = $state<{ award: number; factor: string; relics: number; upgrades: string[]; conveniences: string[] } | null>(null);
   let story = $state<Notice | null>(null);
   let recap = $state<Notice | null>(null);
   let toast = $state<string | null>(null);
+  /** A tablet just opened: what it is, what it does, and what it thinks of you. */
+  let reveal = $state<{ name: string; rule: string; quip: string; firstTime: boolean } | null>(null);
+  let revealTimer: ReturnType<typeof setTimeout> | undefined;
   let caption = $state<string | null>(null);
   let error = $state<string | null>(null);
   let held = $state(false);
@@ -67,7 +73,7 @@
   let worldReady = $state(false);
   let startOpen = $state(true);
   let openingHandoff = $state(false);
-  let purseCoin: HTMLImageElement | undefined = $state();
+  let purseCoin: HTMLElement | undefined = $state();
   let purseCount: HTMLSpanElement | undefined = $state();
   /** Panels slide in and out; reduced motion places them at once. */
   const enter = (x: number, y: number, duration = 320) => ({ x, y, duration: options.reducedMotion ? 0 : duration, easing: overshoot, opacity: 0 });
@@ -76,7 +82,7 @@
   const sound = new Sound();
 
   const narrow = $derived(width < 760);
-  const modalOpen = $derived(startOpen || settingsOpen || archiveOpen || insightOpen || !!prestige || !!prestigeMemory || !!recap || creditsOpen || recoveryOpen || !!scene);
+  const modalOpen = $derived(startOpen || settingsOpen || archiveOpen || insightOpen || !!prestige || appealOpen || !!prestigeMemory || !!recap || creditsOpen || recoveryOpen || !!scene);
   const hasProgress = $derived(
     game.state.prelude.attempts > 0 ||
       game.state.prelude.complete ||
@@ -104,6 +110,7 @@
 
   function toggleEmpire() {
     empireOpen = !empireOpen;
+    if (empireOpen) drawerOpen = false;
     sound.play(empireOpen ? 'sfx_ui_open' : 'sfx_ui_close', 'interface');
   }
 
@@ -114,6 +121,7 @@
 
   function enterGame() {
     startOpen = false;
+    if (recap) sound.play('sfx_offline_return', 'interface');
     requestAnimationFrame(() => {
       if (!introDue()) pushButton?.focus();
     });
@@ -175,7 +183,7 @@
   /** Screen readers: a summarized status on request rather than every coin. */
   function announceStatus() {
     const goal = view.objective;
-    announcement = `${view.obols} Obols, ${view.automated ? view.rate : 'manual labor'}. ${view.site.name}, level ${view.site.level}. ${goal}`;
+    announcement = `${view.purse.amount} ${view.purse.name}, ${view.automated ? view.rate : 'manual labor'}. ${view.site.name}, level ${view.site.level}. ${goal}`;
   }
 
   function toggleDrawer() {
@@ -223,11 +231,17 @@
       if (creditsDue) setTimeout(openCredits, n.firstTime ? 7200 : 2600);
     } else if (n.kind === 'recap') {
       recap = n;
-      sound.play('sfx_offline_return', 'interface');
+      // Held until the player is past the title; the chime comes with it.
+      if (!startOpen) sound.play('sfx_offline_return', 'interface');
     } else if (n.kind === 'relic' && n.relicId) {
       toast = `Relic found: ${t(`relic.${n.relicId}`)} — ${t(`relic.${n.relicId}.joke`)} (income ×1.1)`;
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => (toast = null), 6000);
+    } else if (n.kind === 'reveal' && n.deviceId && isDevice(n.deviceId)) {
+      const d = deviceDef(n.deviceId);
+      reveal = { name: d.name, rule: d.rule, quip: d.quip, firstTime: !!n.firstTime };
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(() => (reveal = null), 9000);
     } else if (n.kind === 'toast' && n.text) {
       toast = n.text;
       clearTimeout(toastTimer);
@@ -251,7 +265,11 @@
     }
   }
 
-  function openPrestige() {
+  function openPrestige(kind?: 'appeal') {
+    if (kind === 'appeal') {
+      appealOpen = true;
+      return;
+    }
     prestige = game.previewPrestige();
   }
   function closePrestige() {
@@ -380,6 +398,7 @@
     else if (creditsOpen) closeCredits();
     else if (recoveryOpen) recoveryOpen = false;
     else if (prestige) prestige = null;
+    else if (appealOpen) appealOpen = false;
     else if (recap) recap = null;
     else if (settingsOpen) settingsOpen = false;
     else if (archiveOpen) archiveOpen = false;
@@ -569,9 +588,13 @@
   <header class="hud" bind:clientHeight={hudHeight}>
     <div class="hud-left">
       <div class="wallet" aria-live="off">
-        <img class="coin" src={iconUrl('ui_obols')} alt="" bind:this={purseCoin} />
+        {#if view.purse.currency === 'obols'}
+          <img class="coin" src={iconUrl('ui_obols')} alt="" bind:this={purseCoin} />
+        {:else}
+          <span class="coin glyph-coin" aria-hidden="true" title={view.purse.name} bind:this={purseCoin}>{view.purse.glyph}</span>
+        {/if}
         <div class="wallet-text">
-          <span class="obols" bind:this={purseCount}><span class="visually-hidden">Obols: </span>{view.obols}<small> Obols</small></span>
+          <span class="obols" bind:this={purseCount}><span class="visually-hidden">{view.purse.name}: </span>{view.purse.amount}<small> {view.purse.name}</small></span>
           <span class="rate">{view.automated ? view.rate : 'Manual labor'}</span>
         </div>
       </div>
@@ -646,7 +669,7 @@
       <p><strong>Begin Again is worthwhile.</strong> Claim {view.prestige.award} Insight: income {view.prestige.factorBefore} → {view.prestige.factorAfter}.</p>
       <div class="suggest-actions">
         <button onclick={() => game.markSeen('prestige_prompt')}>Not now</button>
-        <button class="primary" onclick={openPrestige}>Review</button>
+        <button class="primary" onclick={() => openPrestige()}>Review</button>
       </div>
     </div>
   {/if}
@@ -680,6 +703,22 @@
             <span><b>Next</b>{view.goalStack.next}</span>
             <span><b>Beyond</b>{view.goalStack.beyond}</span>
           </p>
+          {#if view.gauge}
+            <div class="gauge" class:hot={view.gauge.hot} aria-label="{view.gauge.label}: {view.gauge.text}">
+              <b>{view.gauge.label}</b>
+              <span class="gauge-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(view.gauge.value * 100)}>
+                <span class="fill" style:width="{view.gauge.value * 100}%"></span>
+                {#if view.gauge.mark !== null}<span class="mark" style:left="{view.gauge.mark * 100}%"></span>{/if}
+              </span>
+              <span class="gauge-text">{view.gauge.text}</span>
+            </div>
+          {/if}
+          {#if view.appeal}
+            <p class="appeal-line">
+              {#if view.appeal.number > 0}<b>Appeal {view.appeal.number}</b> {view.appeal.name}: {view.appeal.rule}{/if}
+              {#if view.appeal.laurels > 0}<span class="laurels">{'❦'.repeat(Math.min(view.appeal.laurels, 10))} {view.appeal.laurels} laurel{view.appeal.laurels === 1 ? '' : 's'}</span>{/if}
+            </p>
+          {/if}
         </div>
         <button
           class="push"
@@ -708,7 +747,7 @@
     <p id="push-hint" class="control-hint" class:quiet={view.prelude.attempts > 0 || !view.prelude.active}>{options.toggleMode ? `Tap or press ${keyLabel} again to stop` : 'Release to rest'}</p>
   </footer>
 
-  <Scroll {game} {view} open={drawerOpen} {narrow} {sheetHeight} ontoggle={toggleDrawer} onprestige={openPrestige} />
+  <Scroll {game} {view} open={drawerOpen} hidden={empireOpen} {narrow} {sheetHeight} ontoggle={toggleDrawer} onprestige={openPrestige} />
 
   {#if story}
     {@const id = story.storyId}
@@ -724,6 +763,17 @@
 
   {#if toast}
     <div class="toast" role="status" in:fly={enter(28, 0)} out:fly={leave(20, 0)}>{toast}</div>
+  {/if}
+
+  {#if reveal}
+    <div class="reveal" role="status" in:fly={enter(36, 0, 460)} out:fly={leave(24, 0)}>
+      <button onclick={() => (reveal = null)} aria-label="Dismiss">
+        <small>{reveal.firstTime ? 'The seal breaks · new to the Codex' : 'The seal breaks'}</small>
+        <strong>{reveal.name}</strong>
+        <span>{reveal.rule}</span>
+        <em>{reveal.quip}</em>
+      </button>
+    </div>
   {/if}
 
   {#if stamp}
@@ -747,7 +797,7 @@
     <StartScreen
       {hasProgress}
       location={view.site.name}
-      progress={`${view.site.ownedCount} operation${view.site.ownedCount === 1 ? '' : 's'} · Level ${view.site.level} · ${view.obols} Obols`}
+      progress={`${view.site.ownedCount} operation${view.site.ownedCount === 1 ? '' : 's'} · Level ${view.site.level} · ${view.purse.amount} ${view.purse.name}`}
       canViewCredits={view.charterSigned || game.state.discoveries.tutorialIds.includes('credits')}
       oncontinue={enterGame}
       onnew={beginNewGame}
@@ -769,12 +819,14 @@
     />
   {/if}
 
-  {#if recap?.recap}
+  {#if recap?.recap && !startOpen}
     {@const r = recap.recap}
     <Modal title="While you were away" onclose={() => (recap = null)}>
       <img class="modal-art icon-art" src={iconUrl('ui_offline')} alt="" />
       <p>Time counted: <strong>{formatDuration(r.countedSeconds)}</strong>{#if r.requestedSeconds > r.countedSeconds} (limit reached; {formatDuration(r.requestedSeconds)} away){/if}</p>
-      <p>Earned: <strong>{formatMoney(r.earned)} Obols</strong> — already in your purse.</p>
+      {#each r.earnedBySite.filter((e) => !e.amount.isZero()) as e (e.siteId)}
+        <p>{t(`site.${e.siteId}`)}: <strong>{priced(e.amount, e.siteId)}</strong> — already in its purse.</p>
+      {/each}
       {#each r.relicIds as id (id)}<p>Relic found: <strong>{t(`relic.${id}`)}</strong></p>{/each}
       {#each r.decreeSiteIds as id (id)}<p>Decree ready: <strong>{t(`site.${id}`)}</strong></p>{/each}
       {#if recap.sis}<p class="recap-quip">“{recap.sis}”</p>{/if}
@@ -797,11 +849,31 @@
         <li>Insight to claim: <strong>{view.prestige.award}</strong></li>
         <li>Permanent income: {view.prestige.factorBefore} → <strong>{view.prestige.factorAfter}</strong></li>
       </ul>
-      <p><strong>Resets:</strong> Obols, operations, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
+      <p><strong>Resets:</strong> every hill's purse, operations, stewards, levels, works, the foreman and the current climb (unfinished climbs pay nothing).</p>
       <p><strong>Stays:</strong> relics, Insight and permanent upgrades, discoveries, settings and records.</p>
       <div class="modal-actions">
         <button onclick={closePrestige}>Not yet</button>
         <button class="primary" disabled={view.prestige.award <= 0} onclick={confirmPrestige}>Begin Again</button>
+      </div>
+    </Modal>
+  {/if}
+
+  {#if appealOpen && view.appealOffer}
+    {@const a = view.appealOffer}
+    <Modal title="Appeal {a.number}: {a.name}" onclose={() => (appealOpen = false)}>
+      <img class="modal-art" src={artUrl('portrait_thanatos')} alt="Thanatos" />
+      <p>Thanatos files an appeal against the sentence. The same hills, a stiffer hearing.</p>
+      <ul>
+        <li><strong>The twist:</strong> {a.rule}</li>
+        <li>Gates and openings ×{a.gates}; works, the Charter among them, ×{a.works}.</li>
+        <li>New tablets join the hills' pools.</li>
+        <li>Sign the Charter again to win a laurel: every crew earns {a.laurelPercent}% more, for good.</li>
+        {#if a.award > 0}<li>This run's Insight is paid on filing: <strong>{a.award}</strong>.</li>{/if}
+      </ul>
+      <p><strong>Resets:</strong> this run, as Begin Again does. <strong>Stays:</strong> the Charter's ending, laurels, relics, Insight, Remembrances and discoveries.</p>
+      <div class="modal-actions">
+        <button onclick={() => (appealOpen = false)}>Not yet</button>
+        <button class="primary" onclick={() => ((appealOpen = false), game.fileAppeal(`${view.revision}:appeal`))}>File the Appeal</button>
       </div>
     </Modal>
   {/if}
@@ -931,6 +1003,7 @@
     box-shadow: 1px 0 0 rgba(255, 250, 236, 0.6);
   }
   .coin { width: 2.3rem; height: 2.3rem; flex: none; filter: drop-shadow(0 1px 1px rgba(40, 24, 8, 0.5)); }
+  .glyph-coin { display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #efd395, #a8773a 68%, #6d4a22); color: #3c2a16; font-size: 1.2rem; line-height: 1; box-shadow: inset 0 0 0 2px rgba(60, 40, 18, 0.35); }
   .wallet-text { display: flex; flex-direction: column; line-height: 1.1; }
   .obols {
     font-family: var(--display);
@@ -1599,6 +1672,29 @@
     animation: press 520ms 160ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
   }
   .stamp-toast button { box-shadow: 0 2px 0 var(--ink), var(--shadow); }
+  .reveal {
+    position: absolute;
+    top: calc(var(--hud-h) + 0.9rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 22;
+  }
+  .reveal button {
+    display: grid;
+    gap: 0.25rem;
+    background: var(--ivory);
+    color: var(--ink);
+    border: 1px solid #8e2a1c;
+    border-top: 4px solid #8e2a1c;
+    padding: 0.7rem 1.1rem;
+    border-radius: 2px;
+    width: min(26rem, calc(100vw - 2rem));
+    text-align: left;
+    box-shadow: 0 2px 0 var(--ink), var(--shadow);
+  }
+  .reveal small { color: #8e2a1c; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.72rem; }
+  .reveal strong { font-size: 1.1rem; }
+  .reveal em { color: #6a5641; }
   /* The seal comes down on the page: large and light, then pressed in. */
   @keyframes press {
     from { transform: scale(1.8) rotate(-14deg); opacity: 0; }
@@ -1634,5 +1730,40 @@
     display: flex;
     gap: 0.6rem;
     justify-content: flex-end;
+  }
+  .appeal-line {
+    margin: 0.2rem 0 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .appeal-line .laurels {
+    margin-left: 0.5rem;
+    color: #6b4f8a;
+  }
+  .gauge {
+    display: grid;
+    grid-template-columns: auto minmax(60px, 140px) 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    color: rgba(235, 220, 192, 0.8);
+    min-width: 0;
+  }
+  .gauge b { color: rgba(217, 156, 108, 0.85); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.6rem; }
+  .gauge-bar {
+    position: relative;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+  }
+  .gauge-bar .fill { display: block; height: 100%; background: linear-gradient(180deg, #d9c6a0, #9c7c4c); transition: width 0.4s ease; }
+  .gauge.hot .gauge-bar .fill { background: linear-gradient(180deg, #ffcf7a, #e0782c 55%, #9b3b12); }
+  .gauge-bar .mark { position: absolute; top: -1px; bottom: -1px; width: 2px; margin-left: -1px; background: #f6ecd8; box-shadow: 0 0 2px rgba(0, 0, 0, 0.8); }
+  .gauge-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .gauge-bar .fill { transition: none; }
   }
 </style>

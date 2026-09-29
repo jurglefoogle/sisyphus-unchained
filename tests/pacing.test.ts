@@ -30,7 +30,7 @@ function buyWhatMakesSense(s: GameState, log: (label: string) => void): void {
   for (let guard = 0; guard < 100; guard++) {
     const grip = nextPreludeUpgrade(s);
     if (grip) {
-      if (s.wallet.obols.lt(grip.cost) || !buyPreludeUpgrade(s, grip.id, []).ok) return;
+      if (s.empire.sites[0].purse.lt(grip.cost) || !buyPreludeUpgrade(s, grip.id, []).ok) return;
       log(`grip: ${grip.id}`);
       continue;
     }
@@ -42,7 +42,7 @@ function buyWhatMakesSense(s: GameState, log: (label: string) => void): void {
       return; // saving for it
     }
     if (flywheelUnlocked(s) && !site.wheelOwned) {
-      if (s.wallet.obols.gte(flywheelCost(site)) && buyFlywheel(s, site.id, []).ok) {
+      if (s.empire.sites[0].purse.gte(flywheelCost(site)) && buyFlywheel(s, site.id, []).ok) {
         log('flywheel bought');
         continue;
       }
@@ -59,7 +59,7 @@ function buyWhatMakesSense(s: GameState, log: (label: string) => void): void {
     const options = tracks
       .filter((t) => t !== 'strength' || strengthLevelEffective(s, site, site.strengthLevel))
       .map((t) => ({ t, cost: bulkCost(site, t, 1) }))
-      .filter((o) => o.cost && s.wallet.obols.gte(o.cost))
+      .filter((o) => o.cost && s.empire.sites[0].purse.gte(o.cost))
       .sort((a, b) => a.cost!.cmp(b.cost!));
     if (!options.length) return;
     buyLevels(s, site.id, options[0].t, 1, []);

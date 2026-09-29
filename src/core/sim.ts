@@ -1,15 +1,28 @@
 import { catalog, siteDef } from '../content/catalog';
+import { modifiers, nthMultiplier } from './effects';
 import {
   ascentLimit,
   ascentRate,
+  baseReward,
+  bonusTable,
   cyclePayout,
+  descentSeconds,
   fallPayout,
   isAutomated,
+  returnSeconds,
   slipSeconds,
   type MotionInput,
 } from './formulas';
 import { Money } from './money';
 import { nextRandom, sampleCappedGeometric } from './rng';
+import { afterImpact, copyFurnace, ignite } from './furnace';
+import { copyJar, pour } from './jar';
+import { copyFoundry, foundryClimb, pourIncome } from './foundry';
+import { advanceSky, copySky } from './sky';
+import { copyBureau, fileForms, issueEdict, tickEdict } from './bureau';
+import { trialClimb, trialMet } from './trials';
+import { gateOf } from './formulas';
+import { noteFullEruption, noteIdle, noteJarPour, noteManualSummit, noteWish } from './seals';
 import type { GameEvent, GameState, SiteState } from './state';
 
 export interface StepContext extends MotionInput {
@@ -26,7 +39,18 @@ export function findSite(state: GameState, id: string): SiteState | undefined {
 }
 
 export function cloneSite(site: SiteState): SiteState {
-  return { ...site, snapshot: { ...site.snapshot } };
+  return {
+    ...site,
+    furnace: copyFurnace(site.furnace),
+    jar: copyJar(site.jar),
+    foundry: copyFoundry(site.foundry),
+    sky: copySky(site.sky),
+    bureau: copyBureau(site.bureau),
+    hand: [...site.hand],
+    peeked: [...site.peeked],
+    devices: [...site.devices],
+    snapshot: { ...site.snapshot },
+  };
 }
 
 function addUnique(list: string[], id: string): boolean {
@@ -47,22 +71,25 @@ export function markTutorial(state: GameState, id: string): void {
 // ----------------------------------------------------------------- grants
 
 /**
- * Every income grant counts toward Defiance exactly once. Non-income credits
- * (gifts, imports, debug) must not use this function.
+ * Income lands in the earning hill's purse, in its currency, and counts toward
+ * Defiance once at that hill's appraisal. Non-income credits (gifts, imports,
+ * debug) must not use this function.
  */
-export function grantIncome(state: GameState, amount: Money, events: GameEvent[]): void {
+export function grantIncome(state: GameState, site: SiteState, amount: Money, events: GameEvent[]): void {
   if (amount.lte(0)) return;
-  state.wallet.obols = state.wallet.obols.add(amount);
-  state.wallet.runGross = state.wallet.runGross.add(amount);
+  // On the Bronze Pass part of the pay may go to the pour; it is earned all the same.
+  site.purse = site.purse.add(site.foundry ? pourIncome(state, site, amount, events) : amount);
+  site.gross = site.gross.add(amount);
+  state.wallet.runGross = state.wallet.runGross.add(amount.mul(siteDef(site.id).appraisal));
   checkDecrees(state, events);
 }
 
-/** Issue decrees for every gate crossed, in chapter order. */
+/** Issue the next decree once the frontier hill's own gross crosses its gate. */
 export function checkDecrees(state: GameState, events: GameEvent[]): void {
-  const owned = new Set(state.empire.sites.map((s) => s.id));
   for (const def of catalog.sites) {
-    if (def.index === 0 || owned.has(def.id) || state.empire.offeredSiteIds.includes(def.id)) continue;
-    if (state.wallet.runGross.lt(def.defianceGate)) break;
+    if (def.index === 0 || findSite(state, def.id) || state.empire.offeredSiteIds.includes(def.id)) continue;
+    const prev = findSite(state, catalog.sites[def.index - 1].id);
+    if (!prev || prev.gross.lt(gateOf(state, def)) || !trialMet(prev)) break;
     state.empire.offeredSiteIds.push(def.id);
     events.push({ type: 'DecreeAvailable', siteId: def.id });
     if (def.offerStoryId) triggerStory(state, def.offerStoryId, events);
@@ -129,7 +156,7 @@ export function startCycle(state: GameState, site: SiteState, ctx: StepContext):
     const roll = nextRandom(state.random.coinRngState);
     state.random.coinRngState = roll.state;
     let acc = 0;
-    const targets = catalog.bonusTargets;
+    const targets = bonusTable(state, site.id);
     let chosen = targets[targets.length - 1];
     for (const t of targets) {
       acc += t.probability;
@@ -141,12 +168,14 @@ export function startCycle(state: GameState, site: SiteState, ctx: StepContext):
     bonus = payout.base.mul(chosen.baseMultiplier);
     bonusTargetId = chosen.id;
   }
+  // Every-Nth devices (Autolycus's Brand, the Isthmian Games) scale the whole cycle.
+  const nth = nthMultiplier(modifiers(state, site.id), site.cycleIndex);
   site.phase = 'ascending';
   site.phaseProgress = 0;
   site.snapshot = {
-    summit: payout.summit,
-    impact: payout.impact,
-    bonus,
+    summit: payout.summit.mul(nth),
+    impact: payout.impact.mul(nth),
+    bonus: bonus.mul(nth),
     bonusTargetId,
     summitGranted: false,
     impactGranted: false,
@@ -161,7 +190,6 @@ function phaseFrozen(state: GameState, input: MotionInput): boolean {
 }
 
 export function timeToBoundary(state: GameState, site: SiteState, input: MotionInput): number {
-  const c = catalog.cycle;
   switch (site.phase) {
     case 'ascending': {
       const limit = ascentLimit(state, site);
@@ -172,9 +200,9 @@ export function timeToBoundary(state: GameState, site: SiteState, input: MotionI
     case 'slipping':
       return phaseFrozen(state, input) ? Infinity : Math.max(0, slipSeconds(site.snapshot.slipHeight) - site.phaseProgress);
     case 'descending':
-      return phaseFrozen(state, input) ? Infinity : Math.max(0, c.descentSeconds - site.phaseProgress);
+      return phaseFrozen(state, input) ? Infinity : Math.max(0, descentSeconds(state, site) - site.phaseProgress);
     case 'returning':
-      return phaseFrozen(state, input) ? Infinity : Math.max(0, c.returnSeconds - site.phaseProgress);
+      return phaseFrozen(state, input) ? Infinity : Math.max(0, returnSeconds(state, site) - site.phaseProgress);
   }
 }
 
@@ -184,16 +212,16 @@ function advancePartial(state: GameState, site: SiteState, dt: number, input: Mo
     const limit = ascentLimit(state, site);
     site.phaseProgress = Math.min(limit, site.phaseProgress + ascentRate(state, site, input) * dt);
   } else if (!phaseFrozen(state, input)) {
-    site.phaseProgress = Math.min(phaseSeconds(site), site.phaseProgress + dt);
+    site.phaseProgress = Math.min(phaseSeconds(state, site), site.phaseProgress + dt);
   }
 }
 
-function phaseSeconds(site: SiteState): number {
+function phaseSeconds(state: GameState, site: SiteState): number {
   switch (site.phase) {
     case 'descending':
-      return catalog.cycle.descentSeconds;
+      return descentSeconds(state, site);
     case 'returning':
-      return catalog.cycle.returnSeconds;
+      return returnSeconds(state, site);
     case 'slipping':
       return slipSeconds(site.snapshot.slipHeight);
     case 'ascending':
@@ -223,7 +251,7 @@ function completePrelude(state: GameState, events: GameEvent[]): void {
   state.prelude.complete = true;
   state.prelude.bestHeight = 1;
   const offering = catalog.prelude.summitOffering;
-  grantIncome(state, offering, events);
+  grantIncome(state, state.empire.sites[0], offering, events);
   events.push({ type: 'PreludeCompleted', offering });
 }
 
@@ -236,10 +264,16 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
       }
       if (!site.snapshot.summitGranted) {
         site.snapshot.summitGranted = true;
-        grantIncome(state, site.snapshot.summit, ctx.events);
+        grantIncome(state, site, site.snapshot.summit, ctx.events);
       }
       state.counters.totalClimbs += 1;
       ctx.events.push({ type: 'SummitReached', siteId: site.id, amount: site.snapshot.summit });
+      if (!ctx.offline && ctx.manualHeld && state.empire.selectedSiteId === site.id) {
+        noteManualSummit(state, ctx.events);
+        // Acrocorinth Tours: spectators pay to watch someone actually push.
+        const fee = modifiers(state, site.id).spectator;
+        if (fee > 0 && state.prelude.complete) grantIncome(state, site, baseReward(state, site).mul(fee), ctx.events);
+      }
       if (!state.discoveries.tutorialIds.includes('first_summit')) {
         markTutorial(state, 'first_summit');
         triggerStory(state, 'first_summit', ctx.events);
@@ -254,7 +288,7 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
       const bonus = site.snapshot.bonus;
       if (!site.snapshot.impactGranted) {
         site.snapshot.impactGranted = true;
-        grantIncome(state, amount.add(bonus), ctx.events);
+        grantIncome(state, site, amount.add(bonus), ctx.events);
       }
       state.counters.totalImpacts += 1;
       ctx.events.push({
@@ -270,6 +304,36 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
         markTutorial(state, 'first_charge');
         ctx.events.push({ type: 'FlywheelCharged', siteId: site.id });
       }
+      if (site.furnace) {
+        const m = modifiers(state, site.id);
+        const out = afterImpact(m, site.furnace, heldHere(state, site, ctx), !!site.steward);
+        if (out === 'erupted' || out === 'erupted-full') erupted(state, site, out === 'erupted-full', ctx);
+      }
+      if (site.jar) {
+        pour(modifiers(state, site.id), site.jar, site.productionLevel, site.cycleIndex, ctx.offline, !!site.steward);
+        noteJarPour(state, site.jar, ctx.events);
+      }
+      if (site.foundry) foundryClimb(state, site, ctx.events);
+      let entered = false;
+      if (site.sky) {
+        const step = advanceSky(modifiers(state, site.id), site.sky, heldHere(state, site, ctx), ctx.offline, !!site.steward);
+        if (step.entered) noteWish(state, site.sky.streak, ctx.events);
+        entered = step.entered;
+      }
+      if (site.bureau) {
+        const m = modifiers(state, site.id);
+        const step = fileForms(m, site.bureau, site.productionLevel, !!site.steward);
+        noteIdle(state, site.bureau.idle, ctx.events);
+        // Zeus works office hours: Edicts are issued only while someone is watching.
+        if (step.edicts > 0 && !ctx.offline) {
+          const edict = issueEdict(site.bureau, m);
+          ctx.events.push({ type: 'Edict', edictId: edict.id });
+        }
+      }
+      const wasMet = trialMet(site);
+      trialClimb(site, entered);
+      // A trial finished after the gross was already met issues the decree now.
+      if (!wasMet && trialMet(site)) checkDecrees(state, ctx.events);
       relicTick(state, site, ctx.events);
       site.phase = 'returning';
       site.phaseProgress = 0;
@@ -277,7 +341,7 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
     }
     case 'slipping': {
       const amount = fallPayout(site.snapshot.slipHeight);
-      grantIncome(state, amount, ctx.events);
+      grantIncome(state, site, amount, ctx.events);
       ctx.events.push({ type: 'FallResolved', siteId: site.id, amount });
       site.cycleIndex += 1;
       startCycle(state, site, ctx);
@@ -297,8 +361,9 @@ function processBoundary(state: GameState, site: SiteState, ctx: StepContext): v
  */
 export function stepSites(state: GameState, dt: number, ctx: StepContext, only?: SiteState[]): void {
   const sites = only ?? state.empire.sites;
+  if (!only && !ctx.offline) tickEdict(state, dt);
   let remaining = dt;
-  while (remaining > 0) {
+  for (;;) {
     let best = Infinity;
     let bestSite: SiteState | null = null;
     for (const s of sites) {
@@ -308,6 +373,8 @@ export function stepSites(state: GameState, dt: number, ctx: StepContext, only?:
         bestSite = s;
       }
     }
+    // Out of time, unless a boundary is due right now (a zero-length phase, e.g. no return walk).
+    if (remaining <= 0 && best > 0) return;
     if (!bestSite || best > remaining + TIME_EPS) {
       for (const s of sites) advancePartial(state, s, remaining, ctx);
       return;
@@ -317,6 +384,34 @@ export function stepSites(state: GameState, dt: number, ctx: StepContext, only?:
     processBoundary(state, bestSite, ctx);
     remaining -= step;
   }
+}
+
+/** The player is pushing this hill by hand right now (never offline). */
+function heldHere(state: GameState, site: SiteState, input: MotionInput): boolean {
+  return !input.offline && input.manualHeld && state.empire.selectedSiteId === site.id;
+}
+
+/** Book-keeping for an eruption that has just started. */
+function erupted(state: GameState, site: SiteState, full: boolean, ctx: StepContext): void {
+  const m = modifiers(state, site.id);
+  if (!ctx.offline) ctx.events.push({ type: 'Eruption', siteId: site.id, power: site.furnace!.power, heat: site.furnace!.heat });
+  if (full) noteFullEruption(state, ctx.events);
+  // Charon's Fare: a wage on the spot.
+  if (m.furnaceLump > 0) grantIncome(state, site, baseReward(state, site).mul(m.furnaceLump), ctx.events);
+}
+
+/**
+ * Erupt now, outside an impact: a vent by hand or the welcome after an
+ * absence. If this cycle's impact has not paid yet, it is the first boosted one.
+ */
+export function eruptNow(state: GameState, site: SiteState, ctx: StepContext, extra = 1): void {
+  const f = site.furnace;
+  if (!f || f.erupting > 0) return;
+  const full = ignite(modifiers(state, site.id), f, extra);
+  if (!site.snapshot.impactGranted && (site.phase === 'ascending' || site.phase === 'descending')) {
+    site.snapshot.impact = site.snapshot.impact.mul(f.power);
+  }
+  erupted(state, site, full, ctx);
 }
 
 /** Advance a copy of a site's phases without grants; used to predict relic timing. */
@@ -339,6 +434,7 @@ export function timeUntilImpacts(state: GameState, site: SiteState, impacts: num
       clone.phase = 'ascending';
     } else if (clone.phase === 'descending') {
       if (clone.wheelOwned) clone.wheelCharged = true;
+      if (clone.furnace) afterImpact(modifiers(state, clone.id), clone.furnace, heldHere(state, clone, input), !!clone.steward);
       left -= 1;
       if (left <= 0) return t;
       clone.phase = 'returning';

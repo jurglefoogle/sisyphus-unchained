@@ -1,5 +1,5 @@
 {
-  "contentVersion": "0.1.0",
+  "contentVersion": "0.3.0",
   "cycle": {
     "descentSeconds": 4,
     "returnSeconds": 1,
@@ -46,21 +46,21 @@
     "foremanUnlockLevel": 35
   },
   "sites": [
-    { "id": "first_hill", "displayNameKey": "site.first_hill", "unlockCost": "0", "defianceGate": "0", "baseYield": "10", "baseLevelCost": "8", "ascentSeconds": 12, "stoneAssetId": "stone_limestone", "sceneId": "scene_first_hill", "patronId": "hermes" },
-    { "id": "tartarus_rim", "displayNameKey": "site.tartarus_rim", "unlockCost": "45000", "defianceGate": "60000", "baseYield": "250", "baseLevelCost": "960", "ascentSeconds": 15, "stoneAssetId": "stone_basalt", "sceneId": "scene_tartarus_rim", "patronId": "daedalus" },
-    { "id": "leaking_heights", "displayNameKey": "site.leaking_heights", "unlockCost": "20000000", "defianceGate": "25000000", "baseYield": "10000", "baseLevelCost": "160000", "ascentSeconds": 18, "stoneAssetId": "stone_marble", "sceneId": "scene_leaking_heights", "patronId": "danaids" },
-    { "id": "bronze_pass", "displayNameKey": "site.bronze_pass", "unlockCost": "9e9", "defianceGate": "1.2e10", "baseYield": "750000", "baseLevelCost": "4.8e7", "ascentSeconds": 21, "stoneAssetId": "stone_bronze", "sceneId": "scene_bronze_pass", "patronId": "talos" },
-    { "id": "skyward_escarpment", "displayNameKey": "site.skyward_escarpment", "unlockCost": "4.8e12", "defianceGate": "6.4e12", "baseYield": "1e8", "baseLevelCost": "2.56e10", "ascentSeconds": 24, "stoneAssetId": "stone_star", "sceneId": "scene_skyward_escarpment", "patronId": "atlas" },
-    { "id": "olympian_approach", "displayNameKey": "site.olympian_approach", "unlockCost": "2e15", "defianceGate": "2.8e15", "baseYield": "3e10", "baseLevelCost": "2.56e13", "ascentSeconds": 27, "stoneAssetId": "stone_decree", "sceneId": "scene_olympian_approach", "patronId": "zeus" }
+    { "id": "first_hill", "displayNameKey": "site.first_hill", "currency": "obols", "appraisal": 1, "unlockCost": "0", "defianceGate": "0", "baseYield": "10", "baseLevelCost": "8", "ascentSeconds": 12, "stoneAssetId": "stone_limestone", "sceneId": "scene_first_hill", "patronId": "hermes" },
+    { "id": "tartarus_rim", "displayNameKey": "site.tartarus_rim", "currency": "cinders", "appraisal": 25, "unlockCost": "4.5e7", "defianceGate": "6e7", "baseYield": "10", "baseLevelCost": "40", "ascentSeconds": 15, "stoneAssetId": "stone_basalt", "sceneId": "scene_tartarus_rim", "patronId": "daedalus" },
+    { "id": "leaking_heights", "displayNameKey": "site.leaking_heights", "currency": "drams", "appraisal": 1000, "unlockCost": "1.6e9", "defianceGate": "2e9", "baseYield": "10", "baseLevelCost": "160", "ascentSeconds": 18, "stoneAssetId": "stone_marble", "sceneId": "scene_leaking_heights", "patronId": "danaids" },
+    { "id": "bronze_pass", "displayNameKey": "site.bronze_pass", "currency": "ingots", "appraisal": 75000, "unlockCost": "2.7e10", "defianceGate": "3.6e10", "baseYield": "10", "baseLevelCost": "640", "ascentSeconds": 21, "stoneAssetId": "stone_bronze", "sceneId": "scene_bronze_pass", "patronId": "talos" },
+    { "id": "skyward_escarpment", "displayNameKey": "site.skyward_escarpment", "currency": "starlight", "appraisal": 10000000, "unlockCost": "1.6e11", "defianceGate": "2.125e11", "baseYield": "10", "baseLevelCost": "2560", "ascentSeconds": 24, "stoneAssetId": "stone_star", "sceneId": "scene_skyward_escarpment", "patronId": "atlas" },
+    { "id": "olympian_approach", "displayNameKey": "site.olympian_approach", "currency": "ambrosia", "appraisal": 3000000000, "unlockCost": "1.6e11", "defianceGate": "2.24e11", "baseYield": "10", "baseLevelCost": "8500", "ascentSeconds": 27, "stoneAssetId": "stone_decree", "sceneId": "scene_olympian_approach", "patronId": "zeus" }
   ],
   "works": [
     { "id": "hermes", "displayNameKey": "work.hermes", "siteId": "first_hill", "requiredLevel": 10, "cost": "600", "effect": "incomeMultiplier", "value": 1.25, "storyId": null },
-    { "id": "daedalus", "displayNameKey": "work.daedalus", "siteId": "tartarus_rim", "requiredLevel": 10, "cost": "150000", "effect": "incomeMultiplier", "value": 2, "storyId": "daedalus_purchase" },
-    { "id": "ixion", "displayNameKey": "work.ixion", "siteId": "tartarus_rim", "requiredLevel": 25, "cost": "1200000", "effect": "incomeMultiplier", "value": 2, "storyId": "ixion_purchase" },
-    { "id": "danaids", "displayNameKey": "work.danaids", "siteId": "leaking_heights", "requiredLevel": 10, "cost": "80000000", "effect": "incomeMultiplier", "value": 2, "storyId": null },
-    { "id": "talos", "displayNameKey": "work.talos", "siteId": "bronze_pass", "requiredLevel": 10, "cost": "3.6e10", "effect": "incomeMultiplier", "value": 2, "storyId": "talos_purchase" },
-    { "id": "atlas", "displayNameKey": "work.atlas", "siteId": "skyward_escarpment", "requiredLevel": 10, "cost": "1.92e13", "effect": "incomeMultiplier", "value": 2, "storyId": null },
-    { "id": "charter", "displayNameKey": "work.charter", "siteId": "olympian_approach", "requiredLevel": 25, "cost": "2e16", "effect": "incomeMultiplierAndEnding", "value": 2, "storyId": "charter_purchase" }
+    { "id": "daedalus", "displayNameKey": "work.daedalus", "siteId": "tartarus_rim", "requiredLevel": 10, "cost": "6000", "effect": "incomeMultiplier", "value": 2, "storyId": "daedalus_purchase" },
+    { "id": "ixion", "displayNameKey": "work.ixion", "siteId": "tartarus_rim", "requiredLevel": 25, "cost": "48000", "effect": "incomeMultiplier", "value": 2, "storyId": "ixion_purchase" },
+    { "id": "danaids", "displayNameKey": "work.danaids", "siteId": "leaking_heights", "requiredLevel": 10, "cost": "80000", "effect": "incomeMultiplier", "value": 2, "storyId": null },
+    { "id": "talos", "displayNameKey": "work.talos", "siteId": "bronze_pass", "requiredLevel": 10, "cost": "480000", "effect": "incomeMultiplier", "value": 2, "storyId": "talos_purchase" },
+    { "id": "atlas", "displayNameKey": "work.atlas", "siteId": "skyward_escarpment", "requiredLevel": 10, "cost": "1.92e6", "effect": "incomeMultiplier", "value": 2, "storyId": null },
+    { "id": "charter", "displayNameKey": "work.charter", "siteId": "olympian_approach", "requiredLevel": 25, "cost": "2.5e11", "effect": "incomeMultiplierAndEnding", "value": 2, "storyId": "charter_purchase" }
   ],
   "bonusTargets": [
     { "id": "debris", "probability": 0.8, "baseMultiplier": 0 },
@@ -81,7 +81,7 @@
     ]
   },
   "prestige": {
-    "minimumRecord": "1000000",
+    "minimumRecord": "1e8",
     "entitlementScale": 10,
     "insightFactorScale": 0.75,
     "insightFactorDivisor": 10,
@@ -93,13 +93,27 @@
     { "id": "standing_orders", "order": 3, "cost": 5, "effect": "openAtLevelFive" },
     { "id": "familiar_ground", "order": 4, "cost": 10, "effect": "olderSitesDouble" },
     { "id": "signed_in_advance", "order": 5, "cost": 20, "effect": "freeWorkRestoration" },
-    { "id": "eternal_shift", "order": 6, "cost": 40, "effect": "offlineCap72" },
+    { "id": "eternal_shift", "order": 6, "cost": 40, "effect": "offlineCapExtended" },
     { "id": "deep_reservoir", "order": 7, "cost": 80, "effect": "flywheelFactor150" },
     { "id": "unbroken_memory", "order": 8, "cost": 160, "effect": "doubleIncome" }
   ],
+  "counterweight": { "unlockLevel": 25, "costMultiplier": 150, "maxTrim": 10, "climbPerTrim": 0.15, "brakePerTrim": 0.1 },
+  "furnace": { "siteId": "tartarus_rim", "gain": 0.2, "slowdown": 0.93, "power": 2, "exponent": 1.3, "climbs": 6, "minVent": 0.2, "defaultVentAt": 0.8, "welcomePower": 1.5, "maxGrowth": 2 },
+  "jar": { "siteId": "leaking_heights", "inflow": 0.1, "inflowStep": 0.25, "inflowEvery": 25, "leakPerHole": 0.01, "startHoles": 6, "maxHoles": 80, "power": 2, "drillShare": 0.5, "defaultTarget": 0.9, "minTarget": 0.5, "almostFullAt": 0.9, "tidePeriod": 24, "settleClimbs": 300 },
+  "foundry": { "siteId": "bronze_pass", "defaultSplit": 0.3 },
+  "sky": { "siteId": "skyward_escarpment", "houses": 12, "climbsPerHouse": 4, "cooldown": 12 },
+  "bureau": { "siteId": "olympian_approach", "startClerks": 2, "clerkRate": 0.25, "clerkCost": 10, "clerkGrowth": 1.5, "filingStep": 0.5, "filingEvery": 25, "lateFee": 0.02, "statute": 50, "power": 0.8, "dueStep": 0.01, "edictSeconds": 300, "settleClimbs": 400 },
+  "trials": { "needed": { "first_hill": 100, "tartarus_rim": 25, "leaking_heights": 300, "bronze_pass": 3, "skyward_escarpment": 12 }, "jarHigh": 0.8, "skyMounted": 3 },
+  "appeals": { "gateGrowth": 2, "workGrowth": 1.25, "laurelCrew": 0.1 },
+  "memory": { "remembranceCosts": [3, 6, 12, 24, 48], "keepOnFile": 8, "unseal": 2, "summon": 3 },
+  "devices": { "dealt": 6, "tabletLevels": [5, 10, 25, 50, 100, 150], "tabletCosts": [40, 120, 1500, 60000, 150000000, 400000000000] },
+  "stewards": {
+    "localCostMultiplier": 1000,
+    "insightCosts": [5, 10, 20, 40, 80, 160]
+  },
   "offline": {
-    "baseCapHours": 24,
-    "extendedCapHours": 72
+    "baseCapHours": 12,
+    "extendedCapHours": 18
   },
   "save": {
     "autosaveSeconds": 15,

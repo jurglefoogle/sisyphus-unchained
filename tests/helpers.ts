@@ -35,8 +35,11 @@ export function runFrames(state: GameState, seconds: number, fps: number, manual
   return events;
 }
 
-export function give(state: GameState, amount: number | string): void {
-  state.wallet.obols = state.wallet.obols.add(Money.of(amount));
+/** Put money in a hill's purse (the First Hill unless named). */
+export function give(state: GameState, amount: number | string, siteId?: string): void {
+  const site = siteId ? state.empire.sites.find((x) => x.id === siteId) : state.empire.sites[0];
+  if (!site) throw new Error(`no site ${siteId}`);
+  site.purse = site.purse.add(Money.of(amount));
 }
 
 export function expectClose(a: Money | number, b: Money | number, rel = 1e-9): void {

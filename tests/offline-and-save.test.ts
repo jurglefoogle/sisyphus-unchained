@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { catalog } from '../src/content/catalog';
 import { buyFlywheel, openSite } from '../src/core/commands';
 import { Money } from '../src/core/money';
 import { settleOffline } from '../src/core/offline';
@@ -38,12 +39,12 @@ describe('offline settlement', () => {
     expectClose(a.empire.sites[0].phaseProgress, b.empire.sites[0].phaseProgress, 1e-6);
   });
 
-  it('caps absences at 24 hours', () => {
+  it('caps absences at 12 hours', () => {
     const a = automated();
     const b = automated();
     const ra = settleOffline(a, 30 * 3600, []);
-    const rb = settleOffline(b, 24 * 3600, []);
-    expect(ra.countedSeconds).toBe(24 * 3600);
+    const rb = settleOffline(b, 12 * 3600, []);
+    expect(ra.countedSeconds).toBe(12 * 3600);
     expectClose(ra.earned, rb.earned);
   });
 
@@ -61,8 +62,9 @@ describe('offline settlement', () => {
   it('splits rates at a mid-absence relic', () => {
     const make = () => {
       const s = automated();
-      grantIncome(s, Money.of('60000'), []);
-      give(s, 45_000);
+      s.empire.sites[0].trial = 1e6; // decree trials: tests/trials.test.ts
+      grantIncome(s, s.empire.sites[0], catalog.sites[1].defianceGate, []);
+      give(s, catalog.sites[1].unlockCost.toString());
       openSite(s, 'tartarus_rim', []);
       s.random.relicCountdown = 20;
       return s;
@@ -97,13 +99,13 @@ describe('saves', () => {
   it('round-trips state exactly', () => {
     const s = automated();
     stepSites(s, 123.4, ctx());
-    s.wallet.obols = Money.of('1.2345e40');
+    s.empire.sites[0].purse = Money.of('1.2345e40');
     const text = serializeSave(s);
     const loaded = deserializeSave(text);
     expect(loaded.ok).toBe(true);
     if (!loaded.ok) return;
     expect(serializeSave(loaded.state)).toBe(text);
-    expect(loaded.state.wallet.obols.eq(s.wallet.obols)).toBe(true);
+    expect(loaded.state.empire.sites[0].purse.eq(s.empire.sites[0].purse)).toBe(true);
   });
 
   it('rejects truncated and tampered saves', () => {

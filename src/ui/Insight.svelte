@@ -23,6 +23,11 @@
   }
 
   const owned = $derived(view.insightShop.filter((u) => u.state === 'owned').length);
+
+  function file(siteId: string, e: Event) {
+    const v = (e.currentTarget as HTMLSelectElement).value;
+    game.keepOnFile(siteId, v === '' ? null : v, `${view.revision}:file:${siteId}:${v}`);
+  }
 </script>
 
 <Modal title="Insight" {onclose} wide>
@@ -63,13 +68,58 @@
     {/each}
   </ol>
 
+  {#if view.memory.length > 0}
+    <h3>Remembrances and files</h3>
+    <p class="muted">Each hill remembers its machine a little better, in every run. A device kept on file is always dealt there.</p>
+    <ol>
+      {#each view.memory as h (h.siteId)}
+        <li class="upgrade" class:owned={h.cost === null} class:affordable={h.affordable}>
+          <div class="head">
+            <strong>{h.name}</strong>
+            <span class="tag">{h.rank} / {h.maxRank}</span>
+          </div>
+          <p class="note">{h.hill}</p>
+          <p class="effect">Each rank: {h.rule}</p>
+          {#if h.cost !== null}
+            <button
+              class="buy"
+              disabled={!h.affordable}
+              onclick={() => game.remember(h.siteId, `${view.revision}:remember:${h.siteId}`)}
+              aria-label="{h.name} rank {h.rank + 1} for {h.cost} Insight"
+            >
+              <span>Remember</span><small class="cost"><img src={iconUrl('ui_insight')} alt="" />{h.cost}</small>
+            </button>
+          {/if}
+          {#if h.fileOpen}
+            <label class="file">
+              <span>On file</span>
+              <select onchange={(e) => file(h.siteId, e)} value={h.choices.find((c) => c.name === h.filed)?.id ?? ''}>
+                <option value="">Nothing</option>
+                {#each h.choices as c (c.id)}<option value={c.id}>{c.name}</option>{/each}
+              </select>
+            </label>
+          {:else if h.choices.length > 0}
+            <button
+              class="buy"
+              disabled={!h.fileAffordable}
+              onclick={() => game.keepOnFile(h.siteId, h.choices[0].id, `${view.revision}:file:${h.siteId}`)}
+              aria-label="Open a file on {h.hill} for {h.fileCost} Insight"
+            >
+              <span>Open a file</span><small class="cost"><img src={iconUrl('ui_insight')} alt="" />{h.fileCost}</small>
+            </button>
+          {/if}
+        </li>
+      {/each}
+    </ol>
+  {/if}
+
   {#if view.prestige.available}
     <div class="again">
       <p>Begin Again now to claim <strong>{view.prestige.award} Insight</strong> (income {view.prestige.factorBefore} → {view.prestige.factorAfter}).</p>
       <button onclick={onprestige}>Review Begin Again</button>
     </div>
   {:else}
-    <p class="muted foot">More Insight comes from Begin Again once this run beats its record of {view.prestige.record} Obols.</p>
+    <p class="muted foot">More Insight comes from Begin Again once this run beats its record of {view.prestige.record} Defiance.</p>
   {/if}
 </Modal>
 
@@ -238,6 +288,21 @@
     flex: 1;
     margin: 0;
     min-width: 200px;
+  }
+  h3 {
+    margin: 1.2rem 0 0.2rem;
+    font-family: var(--display);
+  }
+  .file {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+  }
+  .file select {
+    flex: 1;
+    min-height: 32px;
   }
   .foot {
     margin-top: 1rem;

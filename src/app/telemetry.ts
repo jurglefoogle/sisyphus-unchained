@@ -56,7 +56,7 @@ export class Telemetry {
       event,
       site: site?.id,
       level: site?.productionLevel,
-      balance: state.wallet.obols.serialize(),
+      balance: site?.purse.serialize(),
       ...extra,
     });
     if (this.entries.length > MAX_ENTRIES) this.entries.splice(0, this.entries.length - MAX_ENTRIES);

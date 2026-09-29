@@ -5,7 +5,7 @@
 
   let { archive, onclose, onscene }: { archive: ArchiveView; onclose: () => void; onscene: (id: string) => void } = $props();
 
-  type Tab = 'overview' | 'guide' | 'stamps' | 'myths' | 'relics' | 'decrees' | 'scenes' | 'stones' | 'odds';
+  type Tab = 'overview' | 'guide' | 'stamps' | 'myths' | 'relics' | 'codex' | 'decrees' | 'scenes' | 'stones' | 'odds';
   let tab = $state<Tab>('overview');
   const tabs: [Tab, string][] = [
     ['overview', 'Overview'],
@@ -13,6 +13,7 @@
     ['stamps', 'Stamps'],
     ['myths', 'Mythology'],
     ['relics', 'Relics'],
+    ['codex', 'Codex'],
     ['decrees', 'Decrees'],
     ['scenes', 'Scenes'],
     ['stones', 'Stones'],
@@ -96,6 +97,22 @@
           <p class="entry-head">
             <img class="relic" src={iconUrl(r.found ? `relic_${r.id}` : 'ui_lock')} alt="" />
             {#if r.found}<span><strong>{r.name}</strong> <span class="muted">— {r.joke}</span></span>{:else}<span class="muted">Still in the debris somewhere</span>{/if}
+          </p>
+        </li>
+      {/each}
+    </ul>
+  {:else if tab === 'codex'}
+    <p class="muted">Tablets, bargains and whispers. A seal once broken stays broken here, whatever Begin Again takes back.</p>
+    <ul class="entries">
+      {#each archive.codex as d (d.id)}
+        <li class:locked={!d.found}>
+          <p class="entry-head">
+            <img class="relic" src={iconUrl(d.found ? 'ui_decree' : 'ui_lock')} alt="" />
+            {#if d.found}
+              <span><strong>{d.name}</strong> <span class="muted">· {d.hill}</span><br />{d.rule} <em class="muted">{d.quip}</em></span>
+            {:else}
+              <span class="muted">{d.source === 'whisper' ? d.hint : `“${d.hint}” · ${d.hill}`}</span>
+            {/if}
           </p>
         </li>
       {/each}
@@ -184,7 +201,7 @@
     gap: 0.2rem;
     padding: 0.6rem;
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: 2px;
   }
   .stones img { width: 84px; height: 84px; object-fit: contain; }
   .stones li.locked img { width: 40px; height: 40px; margin: 22px 0; opacity: 0.5; }
@@ -199,9 +216,21 @@
     gap: 0.4rem;
     margin: 0.6rem 0 0.8rem;
   }
+  /* Tabs are words on the sheet; the open one is underscored in clay. */
+  .tabs button {
+    min-height: 40px;
+    padding: 0 0.7rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: rgba(42, 29, 18, 0.72);
+  }
   .tabs button.active {
-    background: var(--ink);
-    color: var(--ivory);
+    color: #1f140c;
+    font-weight: 700;
+    border-bottom-color: var(--clay);
   }
   .muted {
     color: var(--muted);
@@ -239,8 +268,8 @@
     text-align: center;
     gap: 0.2rem;
     padding: 0.6rem 0.4rem;
-    border: 2px dashed rgba(33, 27, 23, 0.3);
-    border-radius: 8px;
+    border: 1px dashed rgba(92, 60, 26, 0.4);
+    border-radius: 2px;
   }
   .stamps li.earned {
     border-style: solid;

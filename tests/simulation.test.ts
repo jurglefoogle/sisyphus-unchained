@@ -9,6 +9,7 @@ import {
   previewPrestige,
 } from '../src/core/commands';
 import { insightFactor } from '../src/core/formulas';
+import { catalog } from '../src/content/catalog';
 import { Money } from '../src/core/money';
 import { checkDecrees, grantIncome, stepSites } from '../src/core/sim';
 import type { GameEvent } from '../src/core/state';
@@ -21,7 +22,7 @@ describe('manual cycle', () => {
     const s = makeState();
     runFrames(s, 60, 30, false);
     expect(s.empire.sites[0].phaseProgress).toBe(0);
-    expect(s.wallet.obols.isZero()).toBe(true);
+    expect(s.empire.sites[0].purse.isZero()).toBe(true);
   });
 
   it('pauses without rollback and grants summit and impact once', () => {
@@ -32,19 +33,19 @@ describe('manual cycle', () => {
     expectClose(s.empire.sites[0].phaseProgress, 0.5, 1e-6);
     const events = runFrames(s, 6.001, 60, true);
     expect(count(events, 'SummitReached')).toBe(1);
-    expectClose(s.wallet.obols, 7);
+    expectClose(s.empire.sites[0].purse, 7);
     // The descent and return finish without holding push.
     const after = runFrames(s, 5, 60, false);
     expect(count(after, 'ImpactResolved')).toBe(1);
     expect(s.empire.sites[0].phase).toBe('ascending');
-    expect(s.wallet.obols.gte(10)).toBe(true);
+    expect(s.empire.sites[0].purse.gte(10)).toBe(true);
   });
 
   it('is economically identical at 15, 30, 60 and 144 fps', () => {
     const results = [15, 30, 60, 144].map((fps) => {
       const s = makeState();
       runFrames(s, 200, fps, true);
-      return { obols: s.wallet.obols.toNumber(), climbs: s.counters.totalClimbs };
+      return { obols: s.empire.sites[0].purse.toNumber(), climbs: s.counters.totalClimbs };
     });
     for (const r of results) {
       expect(r.climbs).toBe(results[0].climbs);
@@ -59,7 +60,7 @@ describe('manual cycle', () => {
     stepSites(a, 1000, ctx());
     for (let i = 0; i < 1000; i++) stepSites(b, 1, ctx());
     expect(a.counters.totalClimbs).toBe(b.counters.totalClimbs);
-    expectClose(a.wallet.obols, b.wallet.obols);
+    expectClose(a.empire.sites[0].purse, b.empire.sites[0].purse);
   });
 });
 
@@ -89,8 +90,9 @@ describe('flywheel and foreman', () => {
     expect(s.counters.totalClimbs).toBeGreaterThan(0);
 
     // Open the second site: it runs immediately with no second bill.
-    grantIncome(s, Money.of('60000'), []);
-    give(s, 45_000);
+    s.empire.sites[0].trial = 1e6; // decree trials: tests/trials.test.ts
+    grantIncome(s, s.empire.sites[0], catalog.sites[1].defianceGate, []);
+    give(s, catalog.sites[1].unlockCost.toString());
     expect(openSite(s, 'tartarus_rim', []).ok).toBe(true);
     const climbsBefore = s.counters.totalClimbs;
     s.empire.selectedSiteId = 'first_hill';
@@ -133,7 +135,7 @@ describe('purchases', () => {
     give(s, 8);
     expect(buyLevels(s, 'first_hill', 'production', 1, []).ok).toBe(true);
     expect(buyLevels(s, 'first_hill', 'production', 1, []).ok).toBe(false);
-    expect(s.wallet.obols.isZero()).toBe(true);
+    expect(s.empire.sites[0].purse.isZero()).toBe(true);
   });
 
   it('Buy 10 equals ten individual purchases', () => {
@@ -144,35 +146,48 @@ describe('purchases', () => {
     buyLevels(a, 'first_hill', 'production', 10, []);
     for (let i = 0; i < 10; i++) buyLevels(b, 'first_hill', 'production', 1, []);
     expect(a.empire.sites[0].productionLevel).toBe(b.empire.sites[0].productionLevel);
-    expect(a.wallet.obols.eq(b.wallet.obols)).toBe(true);
+    expect(a.empire.sites[0].purse.eq(b.empire.sites[0].purse)).toBe(true);
   });
 
   it('spending never reduces Defiance', () => {
     const s = makeState();
-    grantIncome(s, Money.of(500), []);
+    grantIncome(s, s.empire.sites[0], Money.of(500), []);
     buyLevels(s, 'first_hill', 'production', 5, []);
     expect(s.wallet.runGross.eq(500)).toBe(true);
   });
 });
 
 describe('decrees', () => {
-  it('queues every crossed gate in chapter order without skipping ownership', () => {
+  it('each decree reads the previous hill gross, and is opened with its money', () => {
     const s = makeState();
     const events: GameEvent[] = [];
-    grantIncome(s, Money.of('3e7'), events);
-    const offers = events.flatMap((e) => (e.type === 'DecreeAvailable' ? [e.siteId] : []));
-    expect(offers).toEqual(['tartarus_rim', 'leaking_heights']);
-    give(s, '1e9');
+    s.empire.sites[0].trial = 1e6; // decree trials: tests/trials.test.ts
+    grantIncome(s, s.empire.sites[0], catalog.sites[2].defianceGate.mul(10), events);
+    const offers = () => events.flatMap((e) => (e.type === 'DecreeAvailable' ? [e.siteId] : []));
+    // First Hill Obols only ever issue the Tartarus decree.
+    expect(offers()).toEqual(['tartarus_rim']);
     expect(openSite(s, 'leaking_heights', []).ok).toBe(false);
     expect(openSite(s, 'tartarus_rim', []).ok).toBe(true);
+    const rim = s.empire.sites[1];
+    expect(rim.purse.isZero()).toBe(true);
+    rim.trial = 1e6; // decree trials: tests/trials.test.ts
+    grantIncome(s, rim, catalog.sites[2].defianceGate, events);
+    expect(offers()).toEqual(['tartarus_rim', 'leaking_heights']);
+    // A fortune in Obols cannot pay for a hill priced in Cinders.
+    give(s, '1e30');
+    rim.purse = Money.ZERO;
+    expect(openSite(s, 'leaking_heights', []).ok).toBe(false);
+    give(s, catalog.sites[2].unlockCost.toString(), 'tartarus_rim');
     expect(openSite(s, 'leaking_heights', []).ok).toBe(true);
+    expect(rim.purse.isZero()).toBe(true);
     checkDecrees(s, events);
   });
 
   it('opening the next chapter guarantees the previous relic', () => {
     const s = makeState();
-    grantIncome(s, Money.of('60000'), []);
-    give(s, 45_000);
+    s.empire.sites[0].trial = 1e6; // decree trials: tests/trials.test.ts
+    grantIncome(s, s.empire.sites[0], catalog.sites[1].defianceGate, []);
+    give(s, catalog.sites[1].unlockCost.toString());
     const events: GameEvent[] = [];
     openSite(s, 'tartarus_rim', events);
     expect(s.discoveries.relicIds).toContain('hermes_seal');
@@ -199,14 +214,14 @@ describe('prestige', () => {
   it('awards only new records and resets precisely', () => {
     const s = makeState();
     s.empire.foremanOwned = true;
-    grantIncome(s, Money.of('1e6'), []);
+    grantIncome(s, s.empire.sites[0], catalog.prestige.minimumRecord, []);
     s.discoveries.relicIds.push('hermes_seal');
     s.discoveries.seenStoryIds.push('first_summit');
     expect(previewPrestige(s).award).toBe(10);
     expect(confirmPrestige(s, []).ok).toBe(true);
 
     expect(s.prestige.lifetimeInsightAwarded).toBe(10);
-    expect(s.wallet.obols.isZero()).toBe(true);
+    expect(s.empire.sites[0].purse.isZero()).toBe(true);
     expect(s.wallet.runGross.isZero()).toBe(true);
     expect(s.empire.sites.map((x) => x.id)).toEqual(['first_hill']);
     expect(s.empire.foremanOwned).toBe(false);
@@ -214,12 +229,12 @@ describe('prestige', () => {
     expect(s.discoveries.seenStoryIds).toContain('first_summit');
 
     // Same record again: nothing to claim.
-    grantIncome(s, Money.of('1e6'), []);
+    grantIncome(s, s.empire.sites[0], catalog.prestige.minimumRecord, []);
     expect(previewPrestige(s).award).toBe(0);
     expect(confirmPrestige(s, []).ok).toBe(false);
 
     // A better record pays the difference.
-    grantIncome(s, Money.of('9e6'), []);
+    grantIncome(s, s.empire.sites[0], catalog.prestige.minimumRecord.mul(9), []);
     expect(previewPrestige(s).award).toBe(30);
   });
 

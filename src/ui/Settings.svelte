@@ -174,7 +174,7 @@
     {#if importPreview}
       {@const s = importPreview.state}
       <div class="preview">
-        <p>Run: {formatMoney(s.wallet.runGross)} Defiance, {formatMoney(s.wallet.obols)} Obols, {s.empire.sites.length} operation(s)</p>
+        <p>Run: {formatMoney(s.wallet.runGross)} Defiance, {formatMoney(s.empire.sites[0]?.purse ?? s.wallet.runGross)} Obols on the First Hill, {s.empire.sites.length} operation(s)</p>
         <p>Record: {formatMoney(s.wallet.bestRunGross)} · Insight {s.prestige.lifetimeInsightAwarded} · Relics {s.discoveries.relicIds.length}</p>
         <p>Saved {new Date(s.lastSettledUtc).toLocaleString()}</p>
         <button class="danger" disabled={busy} onclick={applyImport}>{busy ? 'Saving…' : 'Replace current progress'}</button>
@@ -210,15 +210,24 @@
 </Modal>
 
 <style>
+  /* Sections are headed like the scroll's: small capitals over a hairline. */
   fieldset {
-    border: 2px solid rgba(33, 27, 23, 0.3);
-    border-radius: 8px;
-    margin: 0.8rem 0;
+    border: 0;
+    padding: 0;
+    margin: 1.2rem 0 0;
     display: grid;
     gap: 0.5rem;
   }
   legend {
+    width: 100%;
+    padding: 0 0 0.3rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.72rem;
     font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(58, 38, 20, 0.8);
+    border-bottom: 1px solid var(--rule);
   }
   label {
     display: flex;
@@ -266,10 +275,10 @@
     min-width: 2.5rem;
     text-align: center;
     padding: 0.2rem 0.6rem;
-    border: 1px solid var(--ink);
+    border: 1px solid rgba(33, 27, 23, 0.6);
     border-bottom-width: 3px;
-    border-radius: 6px;
-    background: var(--ivory);
+    border-radius: 2px;
+    background: rgba(255, 252, 244, 0.6);
   }
   @media (hover: none) and (pointer: coarse) {
     .desktop-only { display: none; }

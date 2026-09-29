@@ -5,7 +5,13 @@ export interface SiteDef {
   id: string;
   index: number;
   displayNameKey: string;
+  /** The hill's own money: income lands here and is spent only here. */
+  currency: string;
+  /** Obols per unit, for Defiance and records only; nothing is ever exchanged. */
+  appraisal: number;
+  /** Paid in the previous hill's currency. */
   unlockCost: Money;
+  /** The previous hill's gross this run, in its currency, that issues the decree. */
   defianceGate: Money;
   baseYield: Money;
   baseLevelCost: Money;
@@ -48,7 +54,7 @@ export type InsightEffect =
   | 'openAtLevelFive'
   | 'olderSitesDouble'
   | 'freeWorkRestoration'
-  | 'offlineCap72'
+  | 'offlineCapExtended'
   | 'flywheelFactor150'
   | 'doubleIncome';
 
@@ -95,6 +101,17 @@ export interface Catalog {
     suggestAt: number;
   };
   insightUpgrades: InsightUpgradeDef[];
+  stewards: typeof raw.stewards;
+  counterweight: typeof raw.counterweight;
+  furnace: typeof raw.furnace;
+  jar: typeof raw.jar;
+  foundry: typeof raw.foundry;
+  sky: typeof raw.sky;
+  bureau: typeof raw.bureau;
+  memory: typeof raw.memory;
+  trials: typeof raw.trials;
+  appeals: typeof raw.appeals;
+  devices: typeof raw.devices;
   offline: typeof raw.offline;
   save: typeof raw.save;
 }
@@ -114,7 +131,7 @@ const INSIGHT_EFFECTS: InsightEffect[] = [
   'openAtLevelFive',
   'olderSitesDouble',
   'freeWorkRestoration',
-  'offlineCap72',
+  'offlineCapExtended',
   'flywheelFactor150',
   'doubleIncome',
 ];
@@ -139,13 +156,17 @@ export function buildCatalog(data: RawEconomy): Catalog {
   }));
   const siteIds = new Set(sites.map((s) => s.id));
   check(siteIds.size === sites.length, 'site ids must be unique');
+  check(new Set(sites.map((s) => s.currency)).size === sites.length, 'every hill needs its own currency');
+  check(data.stewards.insightCosts.length === sites.length, 'every hill needs a steward price in Insight');
   check(sites.length > 0 && sites[0].unlockCost.isZero(), 'first site must be free');
   sites.forEach((s, i) => {
     check(s.ascentSeconds > 0, `${s.id}: ascent must be positive`);
     check(s.baseYield.gt(0) && s.baseLevelCost.gt(0), `${s.id}: yield and cost must be positive`);
+    check(s.appraisal > 0, `${s.id}: appraisal must be positive`);
     if (i > 0) {
       check(s.unlockCost.gt(0), `${s.id}: paid sites need a positive price`);
-      check(s.defianceGate.gt(sites[i - 1].defianceGate), `${s.id}: gates must ascend`);
+      check(s.defianceGate.gt(0), `${s.id}: decrees need a positive gate`);
+      check(s.appraisal > sites[i - 1].appraisal, `${s.id}: later currencies must be worth more`);
     }
   });
 
@@ -197,6 +218,23 @@ export function buildCatalog(data: RawEconomy): Catalog {
   check(fullReach >= 1 - 1e-9, 'prelude upgrades must eventually reach the summit');
   check(prelude.fallYield > 0 && prelude.slipSecondsBase > 0, 'prelude falls must pay and take time');
 
+  check(
+    data.devices.tabletLevels.length === data.devices.dealt && data.devices.tabletCosts.length === data.devices.dealt,
+    'every dealt tablet needs a crew level and a price',
+  );
+  check(data.counterweight.maxTrim > 0 && data.counterweight.climbPerTrim > 0, 'the counterweight must do something');
+  check(data.sites.some((s) => s.id === data.furnace.siteId), 'the furnace must stand on a known hill');
+  check(data.furnace.slowdown < 1 && data.furnace.gain > 0 && data.furnace.climbs >= 1, 'the furnace must reach full heat and erupt');
+  check(data.sites.some((s) => s.id === data.jar.siteId), 'the jar must stand on a known hill');
+  check(data.sites.some((s) => s.id === data.foundry.siteId), 'the foundry must stand on a known hill');
+  check(data.foundry.defaultSplit >= 0 && data.foundry.defaultSplit <= 1, 'the foundry split is a share');
+  check(data.sites.some((s) => s.id === data.sky.siteId), 'the sky must turn over a known hill');
+  check(data.sites.some((s) => s.id === data.bureau.siteId), 'the bureau must sit on a known hill');
+  check(data.memory.remembranceCosts.every((c, i, a) => c > 0 && (i === 0 || c >= a[i - 1])), 'Remembrances must cost more each rank');
+  check(data.bureau.clerkRate > 0 && data.bureau.statute > 0 && data.bureau.startClerks >= 1, 'the bureau must approve forms');
+  check(data.sky.houses >= data.devices.dealt && data.sky.climbsPerHouse >= 1, 'the sky needs a house for every constellation');
+  check(data.jar.leakPerHole > 0 && data.jar.leakPerHole < 1 && data.jar.startHoles >= 1, 'the jar must leak');
+  check(data.jar.inflow * (1 + data.jar.inflowStep * Math.floor(data.levels.productionCap / data.jar.inflowEvery)) < 1, 'the jar must not overflow in one climb at the crew cap');
   check(data.cycle.descentSeconds > 0 && data.cycle.returnSeconds > 0, 'phase durations must be positive');
   check(Math.abs(data.cycle.summitShare + data.cycle.impactShare - 1) < 1e-9, 'summit + impact shares must be 1');
 
@@ -216,6 +254,17 @@ export function buildCatalog(data: RawEconomy): Catalog {
     relics: { ...data.relics, catalog: relicCatalog },
     prestige: { ...data.prestige, minimumRecord: Money.of(data.prestige.minimumRecord) },
     insightUpgrades: upgrades,
+    stewards: data.stewards,
+    counterweight: data.counterweight,
+    furnace: data.furnace,
+    jar: data.jar,
+    foundry: data.foundry,
+    sky: data.sky,
+    bureau: data.bureau,
+    memory: data.memory,
+    trials: data.trials,
+    appeals: data.appeals,
+    devices: data.devices,
     offline: data.offline,
     save: data.save,
   };

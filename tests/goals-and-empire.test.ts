@@ -22,13 +22,13 @@ describe('pinned goal', () => {
     s.discoveries.tutorialIds.push('first_summit', 'first_level');
     const key = goalKey({ kind: 'levels', track: 'production' }, 'first_hill')!;
     s.pinnedGoal = key;
-    const before = s.wallet.obols;
+    const before = s.empire.sites[0].purse;
     let v = buildView(s);
     expect(v.goal?.stale).toBe(false);
     expect(v.goal?.affordable).toBe(false);
     expect(v.objective).toMatch(/^Goal: Improve Operation 2/);
     expect(v.rows.find((r) => r.key === 'production')?.pinned).toBe(true);
-    expect(s.wallet.obols.eq(before)).toBe(true);
+    expect(s.empire.sites[0].purse.eq(before)).toBe(true);
 
     give(s, 1000);
     v = buildView(s);
@@ -58,7 +58,7 @@ describe('pinned goal', () => {
   it('requires the decree before a site goal counts as affordable', () => {
     const s = makeState();
     const next = catalog.sites[1];
-    s.wallet.obols = next.unlockCost.mul(2);
+    s.empire.sites[0].purse = next.unlockCost.mul(2);
     expect(resolveGoal(s, `site:${next.id}`).affordable).toBe(false);
     s.empire.offeredSiteIds.push(next.id);
     expect(resolveGoal(s, `site:${next.id}`).affordable).toBe(true);
@@ -164,7 +164,7 @@ describe('archive odds and stones', () => {
     s.counters.totalClimbs = 12;
     s.counters.totalImpacts = 9;
     const a = buildArchive(s);
-    expect(a.completion.map((x) => x.id)).toEqual(['guide', 'stamps', 'myths', 'relics', 'scenes', 'stones']);
+    expect(a.completion.map((x) => x.id)).toEqual(['guide', 'stamps', 'myths', 'relics', 'codex', 'scenes', 'stones']);
     expect(a.completion.every((x) => x.found >= 0 && x.found <= x.total)).toBe(true);
     expect(a.records).toContainEqual({ label: 'Completed climbs', value: '12' });
     expect(a.records).toContainEqual({ label: 'Resolved impacts', value: '9' });

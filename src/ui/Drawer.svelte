@@ -4,7 +4,7 @@
   import { iconUrl, imageUrl } from '../world/library';
   import { act, price, still } from './purchase';
 
-  let { game, view, onprestige }: { game: Game; view: GameView; onprestige: () => void } = $props();
+  let { game, view, onprestige }: { game: Game; view: GameView; onprestige: (kind?: 'appeal') => void } = $props();
 
   /** Buy, and if it went through, stamp the row: warm light in the fibres and a press of the seal. */
   function buy(e: MouseEvent, row: PurchaseRow, count = 1) {
@@ -36,6 +36,17 @@
       </div>
     {/if}
   </div>
+
+  {#if view.site.devices.length}
+    <details class="devices">
+      <summary>{view.site.devices.length} device{view.site.devices.length === 1 ? '' : 's'} at work here</summary>
+      <ul>
+        {#each view.site.devices as d (d.id)}
+          <li><strong>{d.name}</strong> {d.rule} <em>{d.quip}</em></li>
+        {/each}
+      </ul>
+    </details>
+  {/if}
 
   {#if view.goal?.stale}
     <div class="stale-goal">
@@ -78,15 +89,15 @@
           <div class="buttons">
             {#if row.options}
               {#each row.options as opt (opt.label)}
-                {@const p = price(opt.cost)}
-                <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label} for {opt.cost} Obols">
-                  <span>{opt.label}</span><small class="cost"><img src={iconUrl(p.icon)} alt="" />{p.amount}</small>
+                {@const p = price(opt.cost, row.currency)}
+                <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
+                  <span>{opt.label}</span>{#if opt.cost}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
                 </button>
               {/each}
             {:else}
-              <button disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost}` : ''}">
-                <span>{row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : 'Buy'}</span>
-                {#if row.cost}{@const p = price(row.cost)}<small class="cost"><img src={iconUrl(p.icon)} alt="" />{p.amount}</small>{/if}
+              <button disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
+                <span>{row.verb ?? (row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : row.action.kind === 'steward' ? 'Hire' : 'Buy')}</span>
+                {#if row.cost}{@const p = price(row.cost, row.currency)}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
               </button>
             {/if}
           </div>
@@ -175,6 +186,25 @@
   .row[data-accent='decree'] { --mark: #1c130c; }
   .row[data-accent='grip'] { --mark: #b27a4c; }
   .row[data-accent='insight'] { --mark: #6b4f8a; }
+  .row[data-accent='seal'] { --mark: #8e2a1c; }
+  .devices {
+    margin: 0 0 0.7rem;
+    font-size: 0.85rem;
+  }
+  .devices summary {
+    cursor: pointer;
+    color: #5b4a38;
+    letter-spacing: 0.04em;
+  }
+  .devices ul {
+    margin: 0.4rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .devices li { line-height: 1.35; }
+  .devices em { display: block; color: #6a5641; }
   /* Within reach: the ink is fresh and the fibres warm around it. */
   .row.affordable {
     background-color: rgba(255, 240, 200, 0.22);
@@ -357,6 +387,17 @@
   .cost img {
     width: 1.05em;
     height: 1.05em;
+  }
+  .cost .glyph {
+    display: inline-grid;
+    place-items: center;
+    width: 1.05em;
+    height: 1.05em;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e9c98a, #a8773a 70%);
+    color: #3c2a16;
+    font-size: 0.7em;
+    line-height: 1;
   }
   .buttons button:disabled .cost img {
     opacity: 0.6;

@@ -74,7 +74,7 @@
     style:--key-h="{KEY_H * 0.75}px"
   >
     <!-- A scroll held open between two rods. -->
-    <span class="rod top" aria-hidden="true"></span>
+    <span class="rod turned-rod" aria-hidden="true"></span>
     <div class="sheet">
       <header>
         <h2>{title}</h2>
@@ -82,7 +82,7 @@
       </header>
       {@render children()}
     </div>
-    <span class="rod bottom" aria-hidden="true"></span>
+    <span class="rod turned-rod" aria-hidden="true"></span>
   </div>
 </div>
 
@@ -139,34 +139,15 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(96, 60, 22, 0.45) transparent;
   }
-  /* Turned wood, dark with handling, with bronze finials. */
   .rod {
-    position: relative;
     z-index: 1;
     flex: none;
-    height: var(--rod);
     margin: 0 -16px;
-    border-radius: calc(var(--rod) / 2);
-    background:
-      repeating-linear-gradient(90deg, transparent 0 29px, rgba(20, 10, 3, 0.2) 29px 30px, transparent 30px 71px, rgba(255, 214, 160, 0.08) 71px 72px),
-      linear-gradient(180deg, #24140a 0%, #5e3a20 20%, #9b6a43 36%, #6a4326 56%, #3a2312 80%, #1a0e06 100%);
-    box-shadow: 0 2px 3px rgba(20, 10, 3, 0.45);
   }
-  .rod::before,
-  .rod::after {
-    content: '';
-    position: absolute;
-    top: -4px;
-    width: 18px;
-    height: calc(var(--rod) + 8px);
-    border-radius: 46% / 50%;
-    background:
-      linear-gradient(90deg, transparent 44%, rgba(40, 24, 6, 0.55) 46%, transparent 50%),
-      radial-gradient(ellipse at 36% 30%, #fbe6b0 0%, #d8ad64 20%, #a57b3b 46%, #6a4718 76%, #2e1d08 100%);
-    box-shadow: inset 0 -2px 3px rgba(20, 10, 2, 0.45), 0 1px 2px rgba(20, 10, 3, 0.4);
+  .close:focus-visible {
+    outline-width: 2px;
+    border-radius: 50%;
   }
-  .rod::before { left: -12px; }
-  .rod::after { right: -12px; }
   header {
     position: relative;
     display: flex;
@@ -200,6 +181,7 @@
   }
   .close {
     border: none;
+    border-radius: 50%;
     background: transparent;
     box-shadow: none;
     color: rgba(42, 29, 18, 0.8);
