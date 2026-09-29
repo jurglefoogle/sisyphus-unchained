@@ -179,8 +179,9 @@
     display: grid;
     gap: 0.45rem;
     text-align: left;
-    background: rgba(255, 252, 245, 0.55);
+    background: linear-gradient(145deg, rgba(255, 252, 245, 0.66), rgba(165, 123, 59, 0.08));
     border: 1px solid var(--rule);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.45), 0 2px 5px rgba(60, 35, 14, 0.08);
   }
   .completion button > span:first-child { display: flex; justify-content: space-between; gap: 0.5rem; }
   .completion-bar { height: 5px; overflow: hidden; border-radius: 3px; background: rgba(33, 27, 23, 0.15); }
@@ -212,14 +213,20 @@
   h3 { font-family: var(--display); font-size: 1.2rem; margin: 1rem 0 0.2rem; }
   .tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: 0.6rem 0 0.8rem;
+    flex-wrap: nowrap;
+    gap: 0.2rem;
+    margin: 0.3rem -0.35rem 0.9rem;
+    padding: 0.2rem 0.35rem 0.45rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    border-bottom: 1px solid rgba(92, 60, 26, 0.2);
   }
   /* Tabs are words on the sheet; the open one is underscored in clay. */
   .tabs button {
+    flex: 0 0 auto;
     min-height: 40px;
-    padding: 0 0.7rem;
+    padding: 0 0.65rem;
     border: 0;
     border-bottom: 2px solid transparent;
     border-radius: 0;
@@ -231,6 +238,7 @@
     color: #1f140c;
     font-weight: 700;
     border-bottom-color: var(--clay);
+    background: rgba(149, 68, 33, 0.07);
   }
   .muted {
     color: var(--muted);
@@ -343,5 +351,15 @@
   .sis {
     margin: 0.2rem 0 0;
     color: var(--muted);
+  }
+  @media (max-width: 600px) {
+    .completion { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
+    .completion button { min-width: 0; padding: 0.55rem; }
+    .records { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stamps, .stones { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
+    .scene-row { align-items: flex-start; }
+    .scene-row button { flex: none; }
+    .odds { font-size: 0.82rem; }
+    .odds th, .odds td { padding-inline: 0.3rem; }
   }
 </style>

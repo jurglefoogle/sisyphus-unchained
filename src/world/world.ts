@@ -158,6 +158,8 @@ const INSTALLS = [
  */
 export class World {
   private app = new Application();
+  private resizeObserver: ResizeObserver | null = null;
+  private resizeFrame = 0;
   private stage = new Container();
   private textures = new Map<string, Texture>();
   private pending = new Map<string, Promise<Texture | null>>();
@@ -292,6 +294,18 @@ export class World {
     });
     el.appendChild(this.app.canvas);
     this.app.canvas.setAttribute('aria-hidden', 'true');
+    // Mobile browser chrome changes the visual viewport without reliably
+    // producing the window resize Pixi's resize plugin listens for. Observe
+    // the actual host so the canvas never keeps a stale desktop-sized buffer.
+    this.resizeObserver = new ResizeObserver(() => {
+      cancelAnimationFrame(this.resizeFrame);
+      this.resizeFrame = requestAnimationFrame(() => {
+        const width = Math.max(1, Math.round(el.clientWidth));
+        const height = Math.max(1, Math.round(el.clientHeight));
+        if (this.app.screen.width !== width || this.app.screen.height !== height) this.app.renderer.resize(width, height);
+      });
+    });
+    this.resizeObserver.observe(el);
 
     this.shade.addChild(this.shadeRig);
     this.sis.addChild(this.sisRig);
@@ -1641,6 +1655,9 @@ export class World {
     // A torn-down world must stop hearing the game, or its next event reads a destroyed renderer.
     this.offEvents?.();
     this.offEvents = null;
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
+    cancelAnimationFrame(this.resizeFrame);
     this.app.destroy(true);
   }
 }

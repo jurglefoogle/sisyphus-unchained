@@ -223,7 +223,9 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.6rem 1rem 0.2rem;
+    padding: 0.65rem 1rem 0.55rem;
+    border-bottom: 1px solid rgba(246, 236, 220, 0.13);
+    box-shadow: 0 1px rgba(0, 0, 0, 0.36);
   }
   h2 {
     font-family: var(--display);
@@ -372,6 +374,9 @@
   @media (max-width: 760px) {
     .hint { display: none; }
     .card { width: 72vw; min-height: 200px; }
+    header { gap: 0.6rem; padding-inline: 0.7rem; }
+    h2 { flex: 1; font-size: 1.35rem; }
+    .strip { gap: 12px; padding-inline: 0.7rem; }
   }
   :global(.reduced-motion) .loop .wheel.spin { animation: none; }
   :global(.reduced-motion) .loop .stone.live { transition: none; }

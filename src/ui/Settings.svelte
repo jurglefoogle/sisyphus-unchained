@@ -214,22 +214,25 @@
   fieldset {
     /* A fieldset never shrinks below its content by default; on phones it must. */
     min-width: 0;
-    border: 0;
-    padding: 0;
-    margin: 1.2rem 0 0;
+    border: 1px solid rgba(92, 60, 26, 0.22);
+    border-radius: 3px;
+    padding: 0.8rem;
+    margin: 0.75rem 0 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem;
+    gap: 0.55rem;
+    background: linear-gradient(135deg, rgba(255, 252, 242, 0.34), rgba(130, 82, 30, 0.05));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.35);
   }
   legend {
     width: 100%;
-    padding: 0 0 0.3rem;
-    margin-bottom: 0.3rem;
+    padding: 0 0.15rem 0.38rem;
+    margin-bottom: 0.05rem;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(58, 38, 20, 0.8);
+    color: #69462a;
     border-bottom: 1px solid var(--rule);
   }
   label {
@@ -243,14 +246,36 @@
     height: 22px;
     flex-shrink: 0;
   }
+  label:has(input[type='checkbox']) {
+    margin: 0 -0.25rem;
+    padding: 0.34rem 0.45rem;
+    border-radius: 3px;
+    line-height: 1.25;
+  }
+  label:has(input[type='checkbox']):hover { background: rgba(149, 68, 33, 0.07); }
   input:not([type]) { min-width: 0; width: 100%; }
-  select { flex: 1; min-width: 0; max-width: 100%; text-overflow: ellipsis; }
+  select {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 40px;
+    padding: 0.35rem 2rem 0.35rem 0.55rem;
+    border: 1px solid rgba(74, 45, 20, 0.48);
+    border-radius: 3px;
+    background-color: rgba(255, 250, 237, 0.72);
+    text-overflow: ellipsis;
+  }
   label:has(input[type='range']) { display: grid; grid-template-columns: 5rem 1fr 2.5rem; }
   label:has(input:not([type])) { flex-wrap: wrap; }
   textarea {
     width: 100%;
     font-family: monospace;
     font-size: 0.75rem;
+  }
+  fieldset > button { justify-self: start; }
+  fieldset:last-of-type {
+    border-color: rgba(122, 31, 18, 0.34);
+    background: linear-gradient(135deg, rgba(255, 245, 231, 0.36), rgba(122, 31, 18, 0.06));
   }
   .hint {
     margin: 0;
@@ -290,5 +315,12 @@
   .danger {
     background: #7a1f12;
     color: var(--ivory);
+  }
+  @media (max-width: 600px) {
+    fieldset { padding: 0.7rem; margin-top: 0.6rem; }
+    fieldset > button { width: 100%; justify-self: stretch; }
+    label:has(select) { align-items: stretch; flex-direction: column; gap: 0.25rem; }
+    label:has(input[type='range']) { grid-template-columns: 4.4rem minmax(0, 1fr) 2.4rem; }
+    .keyrow button { flex: 1 1 auto; }
   }
 </style>

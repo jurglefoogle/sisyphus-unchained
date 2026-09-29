@@ -101,7 +101,9 @@
   /** Short landscape screens hang the open sheet to the floor: the dock and captions step left of it (its width, margin and rod). */
   const drawerWidth = $derived(drawerOpen && compact && !narrow ? scrollWidth + 48 : 0);
   const sheetHeight = $derived(
-    compact
+    narrow
+      ? Math.max(220, Math.round(Math.min(height * 0.56, height - hudHeight - controlsHeight - 24)))
+      : compact
       ? Math.max(200, Math.round(height - hudHeight - 28))
       : Math.max(260, Math.round(Math.min(height * 0.72, height - hudHeight - controlsHeight - 28))),
   );
@@ -1695,7 +1697,10 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    background: var(--ivory);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.24), rgba(165, 123, 59, 0.08)),
+      var(--grain),
+      var(--ivory);
     color: var(--ink);
     border: 1px solid #5c3e14;
     padding: 0.4rem 0.9rem 0.4rem 0.4rem;
@@ -1720,7 +1725,10 @@
   .reveal button {
     display: grid;
     gap: 0.25rem;
-    background: var(--ivory);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(149, 68, 33, 0.07)),
+      var(--grain),
+      var(--ivory);
     color: var(--ink);
     border: 1px solid #8e2a1c;
     border-top: 4px solid #8e2a1c;
@@ -1740,7 +1748,10 @@
     gap: 0.3rem;
     width: min(28rem, calc(100vw - 2rem));
     padding: 0.8rem 1.1rem 0.7rem;
-    background: var(--ivory);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(165, 123, 59, 0.08)),
+      var(--grain),
+      var(--ivory);
     color: var(--ink);
     border: 1px solid var(--bronze);
     border-top: 4px solid var(--bronze);

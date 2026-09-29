@@ -77,10 +77,15 @@
     <span class="rod turned-rod" aria-hidden="true"></span>
     <div class="sheet">
       <header>
-        <h2>{title}</h2>
+        <div class="heading">
+          <span class="eyebrow">Sisyphus · Unchained</span>
+          <h2>{title}</h2>
+        </div>
         <button class="close" onclick={onclose} aria-label="Close">✕</button>
       </header>
-      {@render children()}
+      <div class="content">
+        {@render children()}
+      </div>
     </div>
     <span class="rod turned-rod" aria-hidden="true"></span>
   </div>
@@ -124,7 +129,7 @@
     overflow: auto;
     overscroll-behavior: contain;
     margin: calc(var(--rod) / -2) 0;
-    padding: calc(var(--rod) / 2 + 1rem) 1.6rem calc(var(--rod) / 2 + 1.4rem);
+    padding: calc(var(--rod) / 2 + 0.7rem) 1.6rem calc(var(--rod) / 2 + 1.4rem);
     color: #2a1d12;
     background:
       linear-gradient(90deg, rgba(96, 60, 22, 0.28), rgba(96, 60, 22, 0) 7%, rgba(96, 60, 22, 0) 93%, rgba(96, 60, 22, 0.3)),
@@ -157,8 +162,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding-bottom: calc(var(--key-h) + 0.7rem);
-    margin-bottom: 0.4rem;
+    padding: 0.1rem 0 calc(var(--key-h) + 0.7rem);
+    margin-bottom: 0.65rem;
   }
   /* The running key in black glaze, as on the beam over the world. */
   header::after {
@@ -178,16 +183,36 @@
     margin: 0;
     font-family: var(--display);
     font-weight: 600;
-    font-size: 1.7rem;
+    font-size: clamp(1.55rem, 4vw, 1.9rem);
     letter-spacing: 0.04em;
     color: #231710;
   }
+  .heading { min-width: 0; }
+  .eyebrow {
+    display: block;
+    margin-bottom: 0.05rem;
+    color: #765d3e;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .content { min-width: 0; }
   .close {
-    border: none;
+    flex: none;
+    border: 1px solid rgba(74, 45, 20, 0.28);
     border-radius: 50%;
-    background: transparent;
-    box-shadow: none;
+    background: rgba(255, 250, 235, 0.38);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.42);
     color: rgba(42, 29, 18, 0.8);
+  }
+  @media (max-width: 600px) {
+    .backdrop { padding: max(6px, env(safe-area-inset-top)) 6px max(6px, env(safe-area-inset-bottom)); }
+    .modal { --rod: 14px; max-height: calc(100dvh - 12px); }
+    .rod { margin-inline: -5px; }
+    .sheet { padding-inline: 1rem; }
+    header { margin-bottom: 0.35rem; }
+    .eyebrow { font-size: 0.56rem; }
   }
   :global(.high-contrast) .sheet {
     background: #fffaf0;

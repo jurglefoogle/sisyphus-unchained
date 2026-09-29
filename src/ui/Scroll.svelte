@@ -73,6 +73,7 @@
         <span class="improve-plaque"><span aria-hidden="true">↳</span><strong>Improve</strong></span>
         <small>{ready ? `${ready} ready now` : next ? next.title : 'Plan the next attempt'}</small>
       </span>
+      <span class="roll-up" aria-hidden={!open}><span>⌃</span><strong>Roll up</strong></span>
       {#if ready && !open}<span class="seal" aria-hidden="true">{ready}</span>{/if}
       <span class="unroll-mark" aria-hidden="true">⌄</span>
     </button>
@@ -235,9 +236,13 @@
   .improve-plaque > span { font-size: 1.05rem; transform: rotate(180deg); }
   .improve-plaque strong { font-family: var(--display); font-size: 0.94rem; letter-spacing: 0.12em; text-transform: uppercase; }
   .roll-copy small { min-width: 0; overflow: hidden; color: rgba(58, 38, 20, 0.76); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; text-overflow: ellipsis; white-space: nowrap; }
+  .roll-up { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: #4a2b16; text-shadow: 0 1px rgba(255, 246, 220, 0.55); opacity: 0; transform: translateY(3px); transition: opacity 140ms ease 120ms, transform 180ms ease 100ms; }
+  .roll-up span { font-size: 0.88rem; }
+  .roll-up strong { font-family: var(--display); font-size: 0.76rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .open .roll-up { opacity: 1; transform: none; }
   .seal { position: absolute; right: 2.15rem; top: 50%; width: 25px; height: 25px; margin-top: -12.5px; display: grid; place-items: center; border-radius: 50%; color: #f8e4d5; background: radial-gradient(circle at 36% 30%, #d97455, #9b2f1b 65%, #5f190e); box-shadow: inset 0 -2px 3px rgba(40, 8, 2, 0.45), 0 1px 2px rgba(30, 10, 2, 0.35); font-size: 0.8rem; font-weight: 700; }
   .unroll-mark { position: absolute; right: 1rem; top: 50%; margin-top: -0.7em; color: rgba(58, 38, 20, 0.58); font-size: 1rem; transition: transform 260ms ease, opacity 120ms ease; }
-  .open .unroll-mark { transform: rotate(180deg); opacity: 0.62; }
+  .open .unroll-mark { transform: rotate(180deg); opacity: 0; }
 
   @keyframes sheet-open { from { opacity: 0; clip-path: inset(0 0 96% 0); } to { opacity: 1; clip-path: inset(0); } }
   @keyframes veil-in { from { opacity: 0; } to { opacity: 1; } }
