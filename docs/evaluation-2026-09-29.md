@@ -178,6 +178,28 @@ Charter on day 30.9, all within plan §9's targets. After that:
   summons), and never resets inside an Appeal, so real players will likely be
   faster than it.
 
+**Done (29 September):** the bot now buys the upgrades, then a file for each
+hill held, every Remembrance rank and summonses (never Unseal, which only
+informs), and plays on through the Appeals (`tests/appeals-campaign.test.ts`,
+run on request). Straight on from its Charter on day 30.3, Appeals 1 to 6 take
+15.5, 25.0, 53.5, 53.0, 79.5 and 117.5 days; Appeal 7 is unfinished after 120.
+
+What it shows:
+- **Insight runs dry.** All eight upgrades are owned by day 11, and every file
+  and Remembrance by day 30. After that Insight only raises the factor.
+- **Begin Again never pays inside an Appeal**, whatever the threshold (tried
+  down to a 5 percent factor rise). Each Appeal's Charter run peaks near the
+  same gross as the first campaign (about 1e21), and Insight pays only for a
+  new best, so an Appeal adds 19 to 55 Insight to about 1,950: half a percent
+  of factor.
+- **Appeals lengthen about ×1.5 each**, because gates double per Appeal while
+  a laurel adds 10 percent to crews. The twist changes a single Appeal (Drought
+  on the Heights made Appeal 4 no longer than Appeal 3) but not the trend.
+
+Open for a design decision: pay each Appeal's Insight against that Appeal's
+own record (gates are higher, so the gross should count for more), make
+laurels compound, or slow the gate growth.
+
 ## What works well
 
 - **The opening.** The title screen, the Sentence cutscene, the prelude and the

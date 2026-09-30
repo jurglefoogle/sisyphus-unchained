@@ -20,7 +20,12 @@ import {
   turnSky,
   hireClerk,
   setOnDuty,
+  fileAppeal,
+  keepOnFile,
+  remember,
+  summonVisitor,
 } from '../src/core/commands';
+import { remembranceFor, tabletPool, visitorFor } from '../src/content/devices';
 import { canTurn, isConstellation, overhead } from '../src/core/sky';
 import { clerkCost, clerksToMatch, filing, statute } from '../src/core/bureau';
 import { unlockCostOf, workCostOf } from '../src/core/formulas';
@@ -63,6 +68,10 @@ import { ctx } from './helpers';
  * They are deliberately plain: hold Push until the Foreman arrives, then leave
  * the game automated and glance at the drawer every few seconds. They never
  * assist by hand after automation, so real players who push land earlier.
+ * Insight goes to the permanent upgrades in order, then to the memory: a file
+ * for each hill held, Remembrances cheapest rank first, and a summons for a
+ * new hill's visitor. They never Unseal (reading a rule changes nothing for
+ * a player who takes every tablet).
  */
 
 export const GLANCE = 10; // seconds between purchase decisions while present
@@ -196,11 +205,7 @@ export function shop(run: Run): void {
       if (s.empire.sites[0].purse.lt(grip.cost) || !buyPreludeUpgrade(s, grip.id, []).ok) return;
       continue;
     }
-    for (const u of [...catalog.insightUpgrades].sort((a, b) => a.order - b.order)) {
-      if (s.prestige.permanentUpgradeIds.includes(u.id)) continue;
-      if (spendableInsight(s) >= u.cost && buyInsightUpgrade(s, u.id, []).ok) note(`insight ${u.id}`);
-      break;
-    }
+    spendInsight(run);
     if (!s.empire.foremanOwned && foremanUnlocked(s)) {
       // Save for the Foreman once he is on offer.
       if (!hireForeman(s, []).ok) return;
@@ -211,6 +216,50 @@ export function shop(run: Run): void {
     for (const site of [...s.empire.sites].reverse()) any = shopSite(run, site) || any;
     runStewards(s, []);
     if (!any) return;
+  }
+}
+
+// ------------------------------------------------------------ Insight
+
+/** Hills whose name is in the Archive: held in some run, so their memory can be bought. */
+const known = (s: GameState) => catalog.sites.filter((d, i) => i === 0 || s.discoveries.archiveIds.includes(`site.${d.id}`));
+
+/**
+ * The next permanent upgrade first, saving for it; once all are owned, the
+ * memory. A file (8) for each hill held, with its first revealed tablet;
+ * then one Remembrance rank at a time, cheapest first. A summons (3, this run
+ * only) calls a newly opened hill's visitor, once the file and ranks are paid for.
+ */
+function spendInsight(run: Run): void {
+  const s = run.state;
+  const note = (what: string) => run.log.push({ t: run.t, what });
+  const next = [...catalog.insightUpgrades].sort((a, b) => a.order - b.order).find((u) => !s.prestige.permanentUpgradeIds.includes(u.id));
+  if (next) {
+    if (spendableInsight(s) >= next.cost && buyInsightUpgrade(s, next.id, []).ok) note(`insight ${next.id}`);
+    return;
+  }
+  for (let guard = 0; guard < 100; guard++) {
+    const hills = known(s);
+    const unfiled = hills.find((d) => !s.prestige.fileSlots.includes(d.id) && tabletPool(d.id).some((t) => s.discoveries.codexIds.includes(t.id)));
+    if (unfiled) {
+      const pick = tabletPool(unfiled.id).find((t) => s.discoveries.codexIds.includes(t.id))!;
+      if (!keepOnFile(s, unfiled.id, pick.id).ok) return;
+      note(`insight file ${unfiled.id}`);
+      continue;
+    }
+    const costs = catalog.memory.remembranceCosts;
+    const rank = (id: string) => s.prestige.remembrances[id] ?? 0;
+    const cheapest = hills.filter((d) => remembranceFor(d.id) && rank(d.id) < costs.length).sort((a, b) => rank(a.id) - rank(b.id))[0];
+    if (cheapest) {
+      if (!remember(s, cheapest.id, []).ok) return;
+      note(`insight remember ${cheapest.id} ${rank(cheapest.id)}`);
+      continue;
+    }
+    for (const site of s.empire.sites) {
+      const v = visitorFor(site.id);
+      if (v && !site.summoned && site.productionLevel < v.arrivesAt && summonVisitor(s, site.id, []).ok) note(`insight summon ${site.id}`);
+    }
+    return;
   }
 }
 
@@ -228,6 +277,9 @@ export const RESET_GAIN = 1.5;
 
 export type ResetPolicy = 'none' | 'fixed' | 'gain';
 
+/** The factor rise that makes Begin Again worth it; `playAppeals` may lower it for the Appeals. */
+let resetGain = RESET_GAIN;
+
 function wantsReset(s: GameState, policy: ResetPolicy): boolean {
   const award = availableInsight(s);
   if (policy === 'none' || award <= 0) return false;
@@ -236,7 +288,7 @@ function wantsReset(s: GameState, policy: ResetPolicy): boolean {
     return !!next && s.wallet.runGross.gte(next);
   }
   const lifetime = s.prestige.lifetimeInsightAwarded;
-  return insightFactor(lifetime + award) >= RESET_GAIN * insightFactor(lifetime);
+  return insightFactor(lifetime + award) >= resetGain * insightFactor(lifetime);
 }
 
 function maybeReset(run: Run, policy: ResetPolicy): void {
@@ -330,12 +382,75 @@ export function playDaily(
   return run;
 }
 
+/**
+ * The daily player carried on through Thanatos's Appeals: each Charter is
+ * followed by filing the next Appeal at the next glance, and the campaign
+ * goes on under its twist (resetting when Begin Again is worth it, as before).
+ * `appealed` holds the day each Appeal was filed; `laurels` the day each
+ * Charter under an Appeal was signed.
+ */
+export function playAppeals(
+  state: GameState,
+  opts: { resets: ResetPolicy; appeals: number; daysEach: number; appealGain?: number },
+): Run & { appealed: number[]; laurels: number[] } {
+  const appealed: number[] = [];
+  const laurels: number[] = [];
+  const run = playDaily(state, { resets: opts.resets, days: opts.daysEach });
+  const result = Object.assign(run, { appealed, laurels });
+  if (!charter(state)) return result;
+  laurels.push(run.t);
+  resetGain = opts.appealGain ?? RESET_GAIN;
+  try {
+    appeals(run, state, opts, appealed, laurels);
+  } finally {
+    resetGain = RESET_GAIN;
+  }
+  return result;
+}
+
+function appeals(run: Run, state: GameState, opts: { resets: ResetPolicy; appeals: number; daysEach: number }, appealed: number[], laurels: number[]): void {
+  for (let n = 1; n <= opts.appeals; n++) {
+    if (!fileAppeal(state, []).ok) return;
+    appealed.push(run.t);
+    run.log.push({ t: run.t, what: `appeal ${n}` });
+    if (!continueDaily(run, { resets: opts.resets, until: run.t + opts.daysEach * 86400 })) return;
+    laurels.push(run.t);
+    const w = state.wallet;
+    run.log.push({ t: run.t, what: `laurel ${n}: run gross 1e${w.runGross.log10().toFixed(1)}, best 1e${w.bestRunGross.log10().toFixed(1)}, Insight ${state.prestige.lifetimeInsightAwarded} (+${availableInsight(state)} on offer)` });
+  }
+}
+
+/** Carry on the daily routine from `run.t` until the Charter is signed or `until`. */
+function continueDaily(run: Run, opts: { resets: ResetPolicy; until: number }): boolean {
+  const state = run.state;
+  const events: GameEvent[] = [];
+  const first = Math.floor(run.t / 86400);
+  for (let day = first; day * 86400 < opts.until; day++) {
+    for (const [hour, minutes] of DAY) {
+      const start = day * 86400 + hour * 3600;
+      if (start <= run.t) continue;
+      const summary = settleOffline(state, start - run.t, events);
+      events.length = 0;
+      run.absences.push({ t: start, decrees: summary.decreeSiteIds });
+      runStewards(state, []);
+      run.t = start;
+      maybeReset(run, opts.resets);
+      shop(run);
+      if (!isAutomated(state)) pushByHand(run, 60, events);
+      if (present(run, minutes * 60, opts.resets)) return true;
+    }
+  }
+  return false;
+}
+
 export function report(name: string, run: Run, unit: 'h' | 'd' = 'h'): void {
   if (!process.env.CAMPAIGN) return;
   const at = (t: number) => (unit === 'h' ? `${(t / 3600).toFixed(2)} h` : `day ${(t / 86400).toFixed(1)}`);
   console.log(
     `${name}: charter=${charter(run.state)} at ${at(run.t)} (played ${(run.played / 3600).toFixed(1)} h, ${run.state.counters.totalRuns} resets)`,
   );
+  const insight = run.log.filter((x) => x.what.startsWith('insight')).length;
+  console.log(`  insight spends: ${insight}, spendable left ${spendableInsight(run.state)}, lifetime ${run.state.prestige.lifetimeInsightAwarded}`);
   for (const e of run.log.filter((x) => !x.what.startsWith('insight') && !x.what.startsWith('steward'))) {
     console.log(`  ${at(e.t)}  ${e.what}`);
   }

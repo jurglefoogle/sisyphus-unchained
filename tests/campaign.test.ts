@@ -58,6 +58,10 @@ describe('release candidate: the campaign is completable', { timeout: 120_000 },
     expect(run.state.counters.totalRuns).toBeGreaterThanOrEqual(3);
     // Every relic is guaranteed by the end of the campaign; luck never gates it.
     expect(run.state.discoveries.relicIds).toHaveLength(catalog.relics.catalog.length);
+    // The bot spends Insight as a player would: every permanent upgrade, then the memory.
+    expect(run.state.prestige.permanentUpgradeIds).toHaveLength(catalog.insightUpgrades.length);
+    expect(Object.keys(run.state.prestige.remembrances).length).toBeGreaterThan(0);
+    expect(run.state.prestige.fileSlots.length).toBeGreaterThan(0);
   });
 
   it('never stalls without a reset, though Begin Again is part of the road', () => {
