@@ -140,6 +140,9 @@ eruptions, reveals, visitors, stewards, rumours, Edicts, Appeals and laurels.
 **Done (29 September):** the "Now" line leads with the trial and its count;
 Empire cards show the purse and the steward's standing order; player‑facing
 text says "hill" throughout (the Improve Operation track keeps its name).
+The header keeps one height on every hill (the name stays on one line, on
+its own row on phones and tablets), and the chisel plaque is now a clay
+tabula ansata set into the rock.
 
 ### 8. Shipping gaps
 
@@ -158,6 +161,10 @@ text says "hill" throughout (the Improve Operation track keeps its name).
 - A console error after importing a save and switching hills: a destroyed
   texture used by a plaque (PixiJS `alphaMode` of null). This is in the world
   layer, which another agent is editing.
+
+  **Done (29 September):** the painted-terrain path destroyed a hill's shared
+  mountain art when a hill without it was shown; it now destroys only the
+  terrain it painted itself.
 
 ### 9. Balance past the Charter is unproven
 
