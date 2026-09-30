@@ -206,6 +206,10 @@ grow ×40 each time. The bot's Appeals 1 to 10 take 20.0, 18.5, 39.7, 19.0,
 ten by day 231, and the run gross climbs from 1e21 to 1e37. Insight now grows
 too (a new best each Appeal): from about 1,950 to 8,300.
 
+**Retuned again (30 September):** Appeals now raise every price in a hill's
+own coin with the pay, ×1000 each, and gates and works ×2200; all ten Appeals
+end by day 81 for the level-buying player (see `release-checklist.md`).
+
 **Correction (30 September, `pacing-study-2026-09-30.md`):** these timings
 come from a bot that buys nothing on a hill while saving for its goal. A
 player who keeps buying levels that pay back signs the Charter on day 17 and

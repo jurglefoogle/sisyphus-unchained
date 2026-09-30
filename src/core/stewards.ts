@@ -50,20 +50,20 @@ function reinvest(state: GameState, site: SiteState, events: GameEvent[]): numbe
   const fits = (cost: Money | null): cost is Money => !!cost && cost.lte(spare());
   let bought = 0;
   for (let guard = 0; guard < MAX_PURCHASES; guard++) {
-    if (site.counterweight === null && counterweightUnlocked(site) && fits(counterweightCost(site))) {
+    if (site.counterweight === null && counterweightUnlocked(site) && fits(counterweightCost(state, site))) {
       if (installCounterweight(state, site.id, events).ok) {
         bought++;
         continue;
       }
     }
-    if (!site.wheelOwned && flywheelOffered(state, site) && fits(flywheelCost(site))) {
+    if (!site.wheelOwned && flywheelOffered(state, site) && fits(flywheelCost(state, site))) {
       if (buyFlywheel(state, site.id, events).ok) {
         bought++;
         continue;
       }
     }
     const toMilestone = levelsToMilestone(site);
-    if (toMilestone > 1 && toMilestone <= MILESTONE_LOOKAHEAD && fits(bulkCost(site, 'production', toMilestone))) {
+    if (toMilestone > 1 && toMilestone <= MILESTONE_LOOKAHEAD && fits(bulkCost(state, site, 'production', toMilestone))) {
       if (buyLevels(state, site.id, 'production', toMilestone, events).ok) {
         bought++;
         continue;
@@ -73,7 +73,7 @@ function reinvest(state: GameState, site: SiteState, events: GameEvent[]): numbe
     for (const track of TRACKS) {
       const level = track === 'production' ? site.productionLevel : track === 'strength' ? site.strengthLevel : site.impactLevel;
       if (track === 'strength' && !strengthLevelEffective(state, site, level)) continue;
-      const cost = bulkCost(site, track, 1);
+      const cost = bulkCost(state, site, track, 1);
       if (fits(cost) && (!best || cost.lt(best.cost))) best = { track, cost };
     }
     if (!best || !buyLevels(state, site.id, best.track, 1, events).ok) break;

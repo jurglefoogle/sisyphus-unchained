@@ -87,7 +87,7 @@ describe("the Danaids' jar", () => {
     const site = jarOf(s);
     expect(drill(s, site.id).ok).toBe(false); // empty purse
     const cost = drillCost(s, site);
-    expect(cost.eq(bulkCost(site, 'production', 1)!.mul(catalog.jar.drillShare).ceil())).toBe(true);
+    expect(cost.eq(bulkCost(s, site, 'production', 1)!.mul(catalog.jar.drillShare).ceil())).toBe(true);
     give(s, cost.toString(), site.id);
     expect(drill(s, site.id).ok).toBe(true);
     expect(site.jar!.holes).toBe(catalog.jar.startHoles + 1);

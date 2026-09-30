@@ -45,7 +45,7 @@ describe("Ixion's Wheel", () => {
     expect(flywheelOffered(s, tart)).toBe(false);
     expect(buyFlywheel(s, tart.id, []).ok).toBe(false);
     expect(trackOpen(tart, 'impact')).toBe(false);
-    expect(bulkCost(tart, 'impact', 1)).toBeNull();
+    expect(bulkCost(s, tart, 'impact', 1)).toBeNull();
     expect(trackOpen(first, 'impact')).toBe(true);
   });
 

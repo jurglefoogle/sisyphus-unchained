@@ -42,7 +42,7 @@ function buyWhatMakesSense(s: GameState, log: (label: string) => void): void {
       return; // saving for it
     }
     if (flywheelUnlocked(s) && !site.wheelOwned) {
-      if (s.empire.sites[0].purse.gte(flywheelCost(site)) && buyFlywheel(s, site.id, []).ok) {
+      if (s.empire.sites[0].purse.gte(flywheelCost(s, site)) && buyFlywheel(s, site.id, []).ok) {
         log('flywheel bought');
         continue;
       }
@@ -58,7 +58,7 @@ function buyWhatMakesSense(s: GameState, log: (label: string) => void): void {
     const tracks: LevelTrack[] = ['production', 'strength', 'impact'];
     const options = tracks
       .filter((t) => t !== 'strength' || strengthLevelEffective(s, site, site.strengthLevel))
-      .map((t) => ({ t, cost: bulkCost(site, t, 1) }))
+      .map((t) => ({ t, cost: bulkCost(s, site, t, 1) }))
       .filter((o) => o.cost && s.empire.sites[0].purse.gte(o.cost))
       .sort((a, b) => a.cost!.cmp(b.cost!));
     if (!options.length) return;

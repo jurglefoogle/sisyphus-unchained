@@ -132,7 +132,7 @@ describe('release candidate: invariants over a campaign', { timeout: 120_000 }, 
       resets: true,
       days: 45,
       stopAt: (x) => {
-        if (++n % 1500 === 0) snapshots.push(serializeSave(x));
+        if (++n % 1000 === 0) snapshots.push(serializeSave(x));
         return false;
       },
     });

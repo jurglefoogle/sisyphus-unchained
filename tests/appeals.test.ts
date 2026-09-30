@@ -3,7 +3,7 @@ import { catalog } from '../src/content/catalog';
 import { APPEALS, appealDef, DEVICES, tabletPool } from '../src/content/devices';
 import { fileAppeal, installWork } from '../src/core/commands';
 import { modifiers } from '../src/core/effects';
-import { gateOf, unlockCostOf, workCostOf } from '../src/core/formulas';
+import { bulkCost, gateOf, stewardCost, tabletCost, unlockCostOf, workCostOf } from '../src/core/formulas';
 import { checksum, deserializeSave, serializeSave } from '../src/core/save';
 import { dealHand } from '../src/core/seals';
 import { advanceSky, newSky, nextMounted } from '../src/core/sky';
@@ -43,6 +43,20 @@ describe('Appeals', () => {
     expect(gateOf(t, catalog.sites[1]).eq(catalog.sites[1].defianceGate.mul(g))).toBe(true);
     expect(unlockCostOf(t, catalog.sites[1]).eq(catalog.sites[1].unlockCost.mul(g))).toBe(true);
     expect(workCostOf(t, charter).eq(charter.cost.mul(catalog.appeals.workGrowth))).toBe(true);
+  });
+
+  it('raises every price paid in hill coin with the pay, so the hills do not cap out at once', () => {
+    const before = makeState();
+    const t = signed();
+    fileAppeal(t, []);
+    const p = catalog.appeals.payGrowth;
+    const [a, b] = [before.empire.sites[0], t.empire.sites[0]];
+    // Prices round up after scaling, so they agree to rounding.
+    const near = (x: { toNumber(): number }, y: { toNumber(): number }) => expect(x.toNumber() / (y.toNumber() * p)).toBeCloseTo(1, 1);
+    near(bulkCost(t, b, 'production', 10)!, bulkCost(before, a, 'production', 10)!);
+    near(tabletCost(t, b, 0), tabletCost(before, a, 0));
+    near(stewardCost(t, b), stewardCost(before, a));
+    expect(modifiers(t, b.id).crew / modifiers(before, a.id).crew).toBeCloseTo(p, 6);
   });
 
   it('the twist rules every hill; signing the Charter again wins a laurel', () => {

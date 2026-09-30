@@ -117,13 +117,13 @@ function target(s: GameState, site: SiteState): { cost: Money; buy: () => boolea
 
 /** Machines and devices: bought as soon as they are affordable, since each one changes the hill. */
 function tinker(s: GameState, site: SiteState): boolean {
-  if (flywheelOffered(s, site) && !site.wheelOwned && site.purse.gte(flywheelCost(site)) && buyFlywheel(s, site.id, []).ok) return true;
-  if (site.counterweight === null && counterweightUnlocked(site) && site.purse.gte(counterweightCost(site))) {
+  if (flywheelOffered(s, site) && !site.wheelOwned && site.purse.gte(flywheelCost(s, site)) && buyFlywheel(s, site.id, []).ok) return true;
+  if (site.counterweight === null && counterweightUnlocked(site) && site.purse.gte(counterweightCost(s, site))) {
     if (installCounterweight(s, site.id, []).ok) return true;
   }
   for (let i = 0; i < site.hand.length; i++) {
     if (site.devices.includes(site.hand[i]) || site.productionLevel < tabletLevel(i)) continue;
-    if (site.purse.gte(tabletCost(site, i)) && breakSeal(s, site.id, i, []).ok) return true;
+    if (site.purse.gte(tabletCost(s, site, i)) && breakSeal(s, site.id, i, []).ok) return true;
   }
   const v = visitorWaiting(site);
   if (v && takeBargain(s, site.id, v.bargains[0], []).ok) return true;
@@ -150,15 +150,15 @@ function tendMill(s: GameState, site: SiteState): void {
   if (want !== b.onDuty) setOnDuty(s, site.id, want);
 }
 
-/** Saving for a goal, buy levels that pay back before it (the pacing study's player); off by default. */
-let payback = false;
+/** Saving for a goal, buy levels that pay back before it: the reference player. Off, the bot hoards (the pacing study's patient saver). */
+let payback = true;
 export function setPayback(on: boolean): void {
   payback = on;
 }
 
 /** Buying the next level reaches `goal` sooner: its payback is shorter than the wait for the goal. */
 function levelBringsGoalNearer(s: GameState, site: SiteState, goal: Money): boolean {
-  const cost = bulkCost(site, 'production', 1);
+  const cost = bulkCost(s, site, 'production', 1);
   const income = steadyIncomePerSecond(s, site);
   if (!cost || site.purse.lt(cost) || income.lte(0)) return false;
   const L = site.productionLevel;
@@ -178,7 +178,7 @@ function shopSite(run: Run, site: SiteState): boolean {
       any = true;
       continue;
     }
-    if (!site.steward && stewardOffered(s, site) && site.purse.gte(stewardCost(site))) {
+    if (!site.steward && stewardOffered(s, site) && site.purse.gte(stewardCost(s, site))) {
       if (hireSteward(s, site.id, 'local', []).ok) {
         note(`steward ${site.id}`);
         any = true;
@@ -212,7 +212,7 @@ function shopSite(run: Run, site: SiteState): boolean {
     }
     // Short milestone lookahead, as in the spec §08 model: finish a doubling that is a few levels away.
     const n = levelsToMilestone(site);
-    const push = n > 0 && n <= MILESTONE_LOOKAHEAD ? bulkCost(site, 'production', n) : null;
+    const push = n > 0 && n <= MILESTONE_LOOKAHEAD ? bulkCost(s, site, 'production', n) : null;
     if (push && site.purse.gte(push) && buyLevels(s, site.id, 'production', n, []).ok) {
       any = true;
       continue;
@@ -220,7 +220,7 @@ function shopSite(run: Run, site: SiteState): boolean {
     let best: { track: LevelTrack; cost: Money } | null = null;
     for (const track of ['production', 'strength', 'impact'] as LevelTrack[]) {
       if (track === 'strength' && !strengthLevelEffective(s, site, site.strengthLevel)) continue;
-      const cost = bulkCost(site, track, 1);
+      const cost = bulkCost(s, site, track, 1);
       if (cost && site.purse.gte(cost) && (!best || cost.lt(best.cost))) best = { track, cost };
     }
     if (!best || !buyLevels(s, site.id, best.track, 1, []).ok) return any;

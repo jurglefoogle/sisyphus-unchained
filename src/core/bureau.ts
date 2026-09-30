@@ -1,7 +1,7 @@
 import { catalog, siteDef } from '../content/catalog';
 import { EDICTS, type EdictDef } from '../content/devices';
 import type { Modifiers } from './effects';
-import { milestoneCount } from './formulas';
+import { baseLevelCostOf, milestoneCount } from './formulas';
 import { Money } from './money';
 import type { BureauState, GameState } from './state';
 
@@ -65,7 +65,7 @@ export function clerksToMatch(m: Modifiers, productionLevel: number): number {
 
 export function clerkCost(state: GameState, siteId: string, hired: number, m: Modifiers): Money {
   const c = catalog.bureau;
-  return siteDef(siteId).baseLevelCost.mul(c.clerkCost * m.bureauClerkCost).mul(Money.of(c.clerkGrowth).pow(hired)).ceil();
+  return baseLevelCostOf(state, siteDef(siteId)).mul(c.clerkCost * m.bureauClerkCost).mul(Money.of(c.clerkGrowth).pow(hired)).ceil();
 }
 
 export interface FileStep {

@@ -42,7 +42,7 @@ describe('the Foundry', () => {
     expect(site.hand).toHaveLength(catalog.devices.dealt);
     for (const id of site.hand) expect(tabletPool('bronze_pass').map((d) => d.id)).toContain(id);
     expect(site.foundry).toEqual(newFoundry(site.hand));
-    site.purse = tabletCost(site, 0);
+    site.purse = tabletCost(s, site, 0);
     expect(breakSeal(s, site.id, 0, []).ok).toBe(false);
   });
 
@@ -63,7 +63,7 @@ describe('the Foundry', () => {
     setSplit(s, site.id, 1);
     const head = site.foundry!.queue[0];
     const size = blueprintSize(s, site);
-    expect(size.eq(tabletCost(site, 0))).toBe(true);
+    expect(size.eq(tabletCost(s, site, 0))).toBe(true);
     const events: GameEvent[] = [];
     grantIncome(s, site, size.add(50), events);
     expect(site.devices).toContain(head);
@@ -79,7 +79,7 @@ describe('the Foundry', () => {
     expect(pourNext(s, site.id, last).ok).toBe(true);
     expect(site.foundry!.queue[0]).toBe(last);
     expect(site.foundry!.paused).toBe(false);
-    expect(blueprintSize(s, site).eq(tabletCost(site, 1))).toBe(true);
+    expect(blueprintSize(s, site).eq(tabletCost(s, site, 1))).toBe(true);
   });
 
   it('keeps pouring with Talos on duty', () => {
@@ -87,7 +87,7 @@ describe('the Foundry', () => {
     const site = foundryOf(s);
     site.steward = { reinvest: false, paidWith: 'local' };
     setSplit(s, site.id, 1);
-    grantIncome(s, site, tabletCost(site, 0).add(tabletCost(site, 1)), []);
+    grantIncome(s, site, tabletCost(s, site, 0).add(tabletCost(s, site, 1)), []);
     expect(site.foundry!.finished).toBe(2);
     expect(site.foundry!.paused).toBe(false);
     expect(site.purse.isZero()).toBe(true);
@@ -146,7 +146,7 @@ describe('the blueprints', () => {
     site.devices.push('golden_gallery');
     site.foundry!.queue = [];
     site.foundry!.split = 1;
-    const price = levelCost(catalog.sites[3], 'production', 30).mul(2);
+    const price = levelCost(s, catalog.sites[3], 'production', 30).mul(2);
     // With nothing to cast the pour is idle, so the Gallery waits too.
     grantIncome(s, site, price, []);
     expect(site.productionLevel).toBe(30);

@@ -44,7 +44,7 @@ export function copyFoundry(f: FoundryState | null): FoundryState | null {
 export function blueprintSize(state: GameState, site: SiteState): Money {
   const f = site.foundry!;
   const index = Math.min(f.finished, catalog.devices.tabletCosts.length - 1);
-  return tabletCost(site, index).mul(modifiers(state, site.id).foundrySize).ceil();
+  return tabletCost(state, site, index).mul(modifiers(state, site.id).foundrySize).ceil();
 }
 
 /** Bronze is going into a blueprint right now. */
@@ -76,7 +76,7 @@ export function pourIncome(state: GameState, site: SiteState, amount: Money, eve
     const before = site.productionLevel;
     for (;;) {
       if (site.productionLevel >= catalog.levels.productionCap) break;
-      const cost = levelCost(def, 'production', site.productionLevel).mul(m.foundryCrew);
+      const cost = levelCost(state, def, 'production', site.productionLevel).mul(m.foundryCrew);
       if (f.gallery.lt(cost)) break;
       f.gallery = f.gallery.sub(cost);
       site.productionLevel += 1;

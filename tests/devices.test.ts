@@ -49,7 +49,7 @@ function own(s: GameState, id: string): void {
     return own(s, id);
   }
   site.productionLevel = Math.max(site.productionLevel, tabletLevel(index));
-  site.purse = site.purse.add(tabletCost(site, index));
+  site.purse = site.purse.add(tabletCost(s, site, index));
   expect(breakSeal(s, 'first_hill', index, []).ok).toBe(true);
 }
 
@@ -103,7 +103,7 @@ describe('sealed tablets', () => {
     const s = makeState();
     const site = s.empire.sites[0];
     site.productionLevel = tabletLevel(0) - 1;
-    give(s, tabletCost(site, 0).toNumber());
+    give(s, tabletCost(s, site, 0).toNumber());
     expect(breakSeal(s, 'first_hill', 0, []).ok).toBe(false);
     site.productionLevel = tabletLevel(0);
     const events: GameEvent[] = [];
@@ -116,8 +116,9 @@ describe('sealed tablets', () => {
   });
 
   it('prices rise steeply along the hand', () => {
-    const site = makeState().empire.sites[0];
-    for (let i = 1; i < catalog.devices.dealt; i++) expect(tabletCost(site, i).gt(tabletCost(site, i - 1))).toBe(true);
+    const s = makeState();
+    const site = s.empire.sites[0];
+    for (let i = 1; i < catalog.devices.dealt; i++) expect(tabletCost(s, site, i).gt(tabletCost(s, site, i - 1))).toBe(true);
   });
 
   it('change the rules they name', () => {

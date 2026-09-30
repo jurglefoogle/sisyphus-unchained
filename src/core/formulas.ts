@@ -51,6 +51,20 @@ export function unlockCostOf(state: GameState, def: SiteDef): Money {
   return def.unlockCost.mul(appealScale(state));
 }
 
+/**
+ * Every price paid in a hill's own coin (levels, tablets, machines, clerks,
+ * stewards) rises with the crews' pay, so an Appeal replays the campaign in
+ * bigger numbers instead of letting the hills cap out in one session.
+ */
+export function priceScale(state: GameState): number {
+  return catalog.appeals.payGrowth ** state.appeal.number;
+}
+
+/** A hill's base level price under the current Appeal. */
+export function baseLevelCostOf(state: GameState, def: SiteDef): Money {
+  return def.baseLevelCost.mul(priceScale(state));
+}
+
 /** Works (the Charter among them) rise more gently than gates: the last hill has no successor to feed it. */
 export function workCostOf(state: GameState, def: WorkDef): Money {
   return def.cost.mul(catalog.appeals.workGrowth ** state.appeal.number);
@@ -183,8 +197,8 @@ export function counterweightUnlocked(site: SiteState): boolean {
   return siteDef(site.id).index === 0 && site.productionLevel >= catalog.counterweight.unlockLevel;
 }
 
-export function counterweightCost(site: SiteState): Money {
-  return siteDef(site.id).baseLevelCost.mul(catalog.counterweight.costMultiplier).ceil();
+export function counterweightCost(state: GameState, site: SiteState): Money {
+  return baseLevelCostOf(state, siteDef(site.id)).mul(catalog.counterweight.costMultiplier).ceil();
 }
 
 /** The trim with the shortest cycle (the wheel counted as charged when owned). */
@@ -208,8 +222,8 @@ export function tabletLevel(index: number): number {
   return catalog.devices.tabletLevels[index];
 }
 
-export function tabletCost(site: SiteState, index: number): Money {
-  return siteDef(site.id).baseLevelCost.mul(catalog.devices.tabletCosts[index]).ceil();
+export function tabletCost(state: GameState, site: SiteState, index: number): Money {
+  return baseLevelCostOf(state, siteDef(site.id)).mul(catalog.devices.tabletCosts[index]).ceil();
 }
 
 export function isAutomated(state: GameState): boolean {
@@ -311,7 +325,7 @@ export function bureauIncome(state: GameState, site: SiteState, vents: boolean, 
 /** Drilling one more hole in the jar: half a crew level's price. */
 export function drillCost(state: GameState, site: SiteState): Money {
   const m = modifiers(state, site.id);
-  return levelCost(siteDef(site.id), 'production', Math.max(1, site.productionLevel))
+  return levelCost(state, siteDef(site.id), 'production', Math.max(1, site.productionLevel))
     .mul(catalog.jar.drillShare * m.jarDrillCost)
     .ceil();
 }
@@ -413,9 +427,9 @@ export function currentLevel(site: SiteState, track: LevelTrack): number {
 }
 
 /** Price of the next single level from `level` (the existing level). */
-export function levelCost(def: SiteDef, track: LevelTrack, level: number): Money {
+export function levelCost(state: GameState, def: SiteDef, track: LevelTrack, level: number): Money {
   const l = catalog.levels;
-  const blc = def.baseLevelCost;
+  const blc = baseLevelCostOf(state, def);
   switch (track) {
     case 'production':
       return blc.mul(Money.of(l.productionGrowth).pow(level - 1)).ceil();
@@ -427,17 +441,17 @@ export function levelCost(def: SiteDef, track: LevelTrack, level: number): Money
 }
 
 /** Sum of rounded individual prices, or null if the count exceeds the cap. */
-export function bulkCost(site: SiteState, track: LevelTrack, count: number): Money | null {
+export function bulkCost(state: GameState, site: SiteState, track: LevelTrack, count: number): Money | null {
   const def = siteDef(site.id);
   const from = currentLevel(site, track);
   if (count <= 0 || from + count > levelCap(track) || !trackOpen(site, track)) return null;
   let total = Money.ZERO;
-  for (let i = 0; i < count; i++) total = total.add(levelCost(def, track, from + i));
+  for (let i = 0; i < count; i++) total = total.add(levelCost(state, def, track, from + i));
   return total;
 }
 
-export function flywheelCost(site: SiteState): Money {
-  return siteDef(site.id).baseLevelCost.mul(catalog.levels.flywheelCostMultiplier).ceil();
+export function flywheelCost(state: GameState, site: SiteState): Money {
+  return baseLevelCostOf(state, siteDef(site.id)).mul(catalog.levels.flywheelCostMultiplier).ceil();
 }
 
 /** Whether buying strength level `level + 1` would shorten the unassisted ascent. */
@@ -460,7 +474,7 @@ export function maxAffordable(state: GameState, site: SiteState, track: LevelTra
   while (from + count < cap) {
     const lvl = from + count;
     if (track === 'strength' && !strengthLevelEffective(state, site, lvl)) break;
-    const next = total.add(levelCost(def, track, lvl));
+    const next = total.add(levelCost(state, def, track, lvl));
     if (next.gt(site.purse)) break;
     total = next;
     count++;
@@ -507,8 +521,8 @@ export function stewardOffered(state: GameState, site: SiteState): boolean {
   return state.empire.sites.some((s) => siteDef(s.id).index > index);
 }
 
-export function stewardCost(site: SiteState): Money {
-  return siteDef(site.id).baseLevelCost.mul(catalog.stewards.localCostMultiplier).ceil();
+export function stewardCost(state: GameState, site: SiteState): Money {
+  return baseLevelCostOf(state, siteDef(site.id)).mul(catalog.stewards.localCostMultiplier).ceil();
 }
 
 export function stewardInsightCost(site: SiteState): number {

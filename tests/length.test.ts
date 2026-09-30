@@ -4,8 +4,9 @@ import { charter, playBinge, playDaily, report, type Run } from './bot';
 import { freshState } from './helpers';
 
 /**
- * The length model (docs/hill-workshops-plan.md §9): a campaign measured in
- * weeks for a daily player, and no less than about 40 hours for a binge
+ * The length model (docs/pacing-study-2026-09-30.md, Pacing targets): the
+ * Charter in two to three weeks for a daily player who buys levels that pay
+ * back, and no less than about 40 hours for a binge
  * player. Set CAMPAIGN=1 to print the timelines.
  */
 
@@ -22,10 +23,10 @@ describe('length: the daily player', { timeout: 60_000 }, () => {
     expect(opened(run, 'tartarus_rim')).toBeLessThan(2 * DAY + 12 * 3600);
   });
 
-  it('reaches the Charter no sooner than day 25, and by day 40', () => {
+  it('reaches the Charter in two to three weeks', () => {
     expect(charter(run.state)).toBe(true);
-    expect(run.t).toBeGreaterThanOrEqual(25 * DAY);
-    expect(run.t).toBeLessThanOrEqual(40 * DAY);
+    expect(run.t).toBeGreaterThanOrEqual(14 * DAY);
+    expect(run.t).toBeLessThanOrEqual(21 * DAY);
     expect(run.state.empire.sites).toHaveLength(catalog.sites.length);
   });
 

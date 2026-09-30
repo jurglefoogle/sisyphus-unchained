@@ -26,8 +26,9 @@ import { freshState } from './helpers';
  * return buys, the time to the next purchase, growth per day, and how fast
  * each Begin Again catches up.
  * Run on request: STUDY=out.txt npx vitest run tests/pacing-study.test.ts
- * (STUDY_APPEALS=1 also plays ten Appeals, several minutes; STUDY_PAYBACK=1
- * plays a saver who buys levels that pay back before the goal).
+ * (STUDY_APPEALS=1 also plays ten Appeals, several minutes; STUDY_PATIENT=1
+ * plays the old saver who hoards for each goal instead of buying levels that
+ * pay back before it).
  */
 
 const out = process.env.STUDY;
@@ -59,10 +60,10 @@ function nextPurchase(s: GameState): { wait: number; what: string } {
     for (const track of ['production', 'strength', 'impact'] as LevelTrack[]) {
       // Strength past what the hill can use is on sale but buys nothing.
       if (track === 'strength' && !strengthLevelEffective(s, site, site.strengthLevel)) continue;
-      offers.push([bulkCost(site, track, 1), `${track} ${site.id}`]);
+      offers.push([bulkCost(s, site, track, 1), `${track} ${site.id}`]);
     }
     site.hand.forEach((id, i) => {
-      if (!site.devices.includes(id) && site.productionLevel >= tabletLevel(i)) offers.push([tabletCost(site, i), `tablet ${site.id}`]);
+      if (!site.devices.includes(id) && site.productionLevel >= tabletLevel(i)) offers.push([tabletCost(s, site, i), `tablet ${site.id}`]);
     });
     for (const w of catalog.works) {
       if (w.siteId === site.id && !s.empire.purchasedWorkIds.includes(w.id) && site.productionLevel >= w.requiredLevel) offers.push([workCostOf(s, w), `work ${w.id}`]);
@@ -303,14 +304,14 @@ function resetTable(lines: string[], resets: Reset[], label: string) {
 describe.skipIf(!out)('pacing study', { timeout: 1_800_000 }, () => {
   it('measures the daily, binge and Appeals players', () => {
     const lines: string[] = [];
-    setPayback(!!process.env.STUDY_PAYBACK);
+    setPayback(!process.env.STUDY_PATIENT);
     // What-if runs: STUDY_TUNE='{"levels":{"productionGrowth":1.15}}' overrides catalog sections.
     if (process.env.STUDY_TUNE) {
       const tune = JSON.parse(process.env.STUDY_TUNE) as Record<string, Record<string, unknown>>;
       for (const [k, v] of Object.entries(tune)) Object.assign((catalog as unknown as Record<string, object>)[k], v);
       lines.push(`tuned: ${process.env.STUDY_TUNE}`);
     }
-    lines.push(process.env.STUDY_PAYBACK ? 'players: payback savers' : 'players: patient savers');
+    lines.push(process.env.STUDY_PATIENT ? 'players: patient savers' : 'players: payback savers');
 
     // The daily player, to the Charter.
     let o = observe();
@@ -363,7 +364,7 @@ describe.skipIf(!out)('pacing study', { timeout: 1_800_000 }, () => {
       resetTable(lines, o.resets.filter((r) => r.t >= appeals.laurels[0]), 'appeals');
     }
 
-    setPayback(false);
+    setPayback(true);
     writeFileSync(out!, lines.join('\n') + '\n');
     expect(charter(daily.state)).toBe(true);
   });

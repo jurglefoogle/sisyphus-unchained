@@ -49,7 +49,7 @@ describe('each hill keeps its own money', () => {
     const s = twoHills();
     give(s, '1e40');
     expect(buyLevels(s, 'tartarus_rim', 'production', 1, []).ok).toBe(false);
-    give(s, bulkCost(s.empire.sites[1], 'production', 1)!.toString(), 'tartarus_rim');
+    give(s, bulkCost(s, s.empire.sites[1], 'production', 1)!.toString(), 'tartarus_rim');
     expect(buyLevels(s, 'tartarus_rim', 'production', 1, []).ok).toBe(true);
     expect(s.empire.sites[1].purse.isZero()).toBe(true);
 
@@ -75,7 +75,7 @@ describe('stewards', () => {
     const f = t.empire.sites[0];
     expect(stewardOffered(t, f)).toBe(true);
     expect(stewardOffered(t, t.empire.sites[1])).toBe(false);
-    f.purse = stewardCost(f);
+    f.purse = stewardCost(s, f);
     expect(hireSteward(t, f.id, 'local', []).ok).toBe(true);
     expect(f.purse.isZero()).toBe(true);
     expect(f.steward).toEqual({ reinvest: true, paidWith: 'local' });
@@ -101,7 +101,7 @@ describe('stewards', () => {
     const reserve = stewardReserve(s, rim);
     expect(reserve.gte(catalog.sites[2].unlockCost)).toBe(true);
     const level = rim.productionLevel;
-    rim.purse = reserve.add(bulkCost(rim, 'production', 1)!.mul(3));
+    rim.purse = reserve.add(bulkCost(s, rim, 'production', 1)!.mul(3));
     runStewards(s, []);
     expect(rim.productionLevel + rim.strengthLevel + rim.impactLevel).toBeGreaterThan(level);
     expect(rim.purse.gte(reserve)).toBe(true);

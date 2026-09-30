@@ -82,12 +82,12 @@ describe('prices', () => {
   const hill = siteDef('first_hill');
 
   it('matches the documented formulas', () => {
-    expect(levelCost(hill, 'production', 1).toNumber()).toBe(8);
-    expect(levelCost(hill, 'production', 2).toNumber()).toBe(Math.ceil(8 * 1.17));
-    expect(levelCost(hill, 'strength', 0).toNumber()).toBe(40);
-    expect(levelCost(hill, 'impact', 0).toNumber()).toBe(100);
     const s = makeState();
-    expect(flywheelCost(s.empire.sites[0]).toNumber()).toBe(80);
+    expect(levelCost(s, hill, 'production', 1).toNumber()).toBe(8);
+    expect(levelCost(s, hill, 'production', 2).toNumber()).toBe(Math.ceil(8 * 1.17));
+    expect(levelCost(s, hill, 'strength', 0).toNumber()).toBe(40);
+    expect(levelCost(s, hill, 'impact', 0).toNumber()).toBe(100);
+    expect(flywheelCost(s, s.empire.sites[0]).toNumber()).toBe(80);
     expect(catalog.levels.foremanCost.toNumber()).toBe(360);
   });
 
@@ -95,15 +95,15 @@ describe('prices', () => {
     const s = makeState();
     const site = s.empire.sites[0];
     let manual = Money.ZERO;
-    for (let i = 0; i < 10; i++) manual = manual.add(levelCost(hill, 'production', 1 + i));
-    expect(bulkCost(site, 'production', 10)!.eq(manual)).toBe(true);
+    for (let i = 0; i < 10; i++) manual = manual.add(levelCost(s, hill, 'production', 1 + i));
+    expect(bulkCost(s, site, 'production', 10)!.eq(manual)).toBe(true);
   });
 
   it('refuses counts beyond the cap', () => {
     const s = makeState();
-    expect(bulkCost(s.empire.sites[0], 'impact', 11)).toBeNull();
-    expect(bulkCost(s.empire.sites[0], 'production', 200)).toBeNull();
-    expect(bulkCost(s.empire.sites[0], 'production', 199)).not.toBeNull();
+    expect(bulkCost(s, s.empire.sites[0], 'impact', 11)).toBeNull();
+    expect(bulkCost(s, s.empire.sites[0], 'production', 200)).toBeNull();
+    expect(bulkCost(s, s.empire.sites[0], 'production', 199)).not.toBeNull();
   });
 
   it('Buy Max returns the largest exactly affordable count', () => {
@@ -111,8 +111,8 @@ describe('prices', () => {
     const site = s.empire.sites[0];
     give(s, 100);
     const n = maxAffordable(s, site, 'production');
-    expect(bulkCost(site, 'production', n)!.lte(100)).toBe(true);
-    expect(bulkCost(site, 'production', n + 1)!.gt(100)).toBe(true);
+    expect(bulkCost(s, site, 'production', n)!.lte(100)).toBe(true);
+    expect(bulkCost(s, site, 'production', n + 1)!.gt(100)).toBe(true);
   });
 
   it('marks strength ineffective once the ascent floor is reached', () => {

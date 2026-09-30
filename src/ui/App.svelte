@@ -905,7 +905,7 @@
       <ul>
         <li><strong>The twist:</strong> {a.rule}</li>
         <li>Gates and openings {a.gates}; works, the Charter among them, {a.works}.</li>
-        <li>The stakes rise too: every crew's pay {a.pay}.</li>
+        <li>The stakes rise too: every crew's pay {a.pay}, and every price in a hill's own coin with it.</li>
         <li>New tablets join the hills' pools.</li>
         <li>Sign the Charter again to win a laurel: every crew's pay {a.laurel}, for good. Laurels compound: with this one, {a.laurelsTotal}.</li>
         {#if a.award > 0}<li>This run's Insight is paid on filing: <strong>{a.award}</strong>.</li>{/if}

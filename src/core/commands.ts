@@ -189,7 +189,7 @@ export function buyLevels(
       if (!strengthLevelEffective(state, site, l)) return fail('ineffective');
     }
   }
-  const cost = bulkCost(site, track, count);
+  const cost = bulkCost(state, site, track, count);
   if (!cost) return fail('level-cap');
   if (cost.gt(site.purse)) return fail('insufficient-funds');
 
@@ -246,7 +246,7 @@ export function buyFlywheel(state: GameState, siteId: string, events: GameEvent[
   if (!site) return fail('site-not-owned');
   if (site.wheelOwned) return fail('already-owned');
   if (!flywheelOffered(state, site)) return fail('locked');
-  const cost = flywheelCost(site);
+  const cost = flywheelCost(state, site);
   if (cost.gt(site.purse)) return fail('insufficient-funds');
   debit(site, cost);
   site.wheelOwned = true;
@@ -357,7 +357,7 @@ export function installCounterweight(state: GameState, siteId: string, events: G
   if (!site) return fail('site-not-owned');
   if (site.counterweight !== null) return fail('already-owned');
   if (!counterweightUnlocked(site)) return fail('locked');
-  const cost = counterweightCost(site);
+  const cost = counterweightCost(state, site);
   if (cost.gt(site.purse)) return fail('insufficient-funds');
   debit(site, cost);
   site.counterweight = 0;
@@ -388,7 +388,7 @@ export function breakSeal(state: GameState, siteId: string, index: number, event
   if (site.foundry) return fail('cast-not-bought');
   if (site.devices.includes(deviceId)) return fail('already-owned');
   if (site.productionLevel < tabletLevel(index)) return fail('locked');
-  const cost = tabletCost(site, index);
+  const cost = tabletCost(state, site, index);
   if (cost.gt(site.purse)) return fail('insufficient-funds');
   debit(site, cost);
   events.push({ type: 'PurchaseCompleted', kind: 'seal', siteId, cost });
@@ -587,7 +587,7 @@ export function hireSteward(state: GameState, siteId: string, paidWith: 'local' 
   if (site.steward) return fail('already-owned');
   if (paidWith === 'local') {
     if (!stewardOffered(state, site)) return fail('locked');
-    const cost = stewardCost(site);
+    const cost = stewardCost(state, site);
     if (cost.gt(site.purse)) return fail('insufficient-funds');
     debit(site, cost);
     events.push({ type: 'PurchaseCompleted', kind: 'steward', siteId, cost });

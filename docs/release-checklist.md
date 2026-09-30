@@ -21,15 +21,13 @@ Reference timings from the daily bot (three sessions a day, away overnight),
 recorded 2026-09-29: Tartarus Rim day 1.3, Leaking Heights 3.9, Bronze Pass
 6.9, Skyward Escarpment 14.3, Olympian Approach 16.3, the Charter day 30.9. No
 coin bonuses: day 39.3. The binge bot has not signed it after 40 hours.
-Played straight on from the campaign, spending Insight (upgrades, files,
-Remembrances, summons), recorded 2026-09-30 with Appeal gates and works ×40,
-pay ×20 and laurels ×2 each: the Charter day 30.3, then Appeals 1 to 10 take
-20.0, 18.5, 39.7, 19.0, 18.8, 18.0, 9.2, 11.0, 28.3 and 18.5 days (all ten by
-day 231), and the run gross climbs from 1e21 to 1e37. These bots save
-patiently for each goal; a player who also buys levels that pay back signs
-the Charter on day 17.3 and wins the ten Appeals by day 43
-(`docs/pacing-study-2026-09-30.md`; `STUDY=out.txt STUDY_PAYBACK=1
-npx vitest run tests/pacing-study.test.ts`).
+Since 30 September the bots buy levels that pay back before their goal
+(`docs/pacing-study-2026-09-30.md`; `STUDY_PATIENT=1` in the pacing study
+restores the old patient saver). Recorded 2026-09-30 with each Appeal raising
+gates and works ×2200 and pay and every hill price ×1000, laurels ×2 each:
+the Charter day 17.3, then Appeals 1 to 10 take 8.0, 10.0, 8.2, 8.0, 6.8,
+5.5, 5.5, 4.0, 5.0 and 3.0 days (all ten by day 81), and the run gross climbs
+from 1e21 to 1e54.
 Print the current timings with
 `CAMPAIGN=1 npx vitest run tests/length.test.ts tests/campaign.test.ts --silent=false`,
 and the Appeals (several minutes) with

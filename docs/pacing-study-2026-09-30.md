@@ -44,7 +44,7 @@ bot that plays unlike a real player, and the shape of the growth has problems.
    the genre gives them names.
 
 The fixes are about **shape more than speed.** Every lever tried here also
-shortens the campaign, which is already shorter than intended. So each
+shortens the campaign, whose Charter is already on target. So each
 smoothing change needs gates retuned alongside it, measured with a realistic
 bot.
 
@@ -224,7 +224,7 @@ single evening is the exception, a story game rather than an idle one.
 Reproduce with:
 
 ```
-STUDY=out.txt STUDY_APPEALS=1 [STUDY_PAYBACK=1] npx vitest run tests/pacing-study.test.ts
+STUDY=out.txt STUDY_APPEALS=1 [STUDY_PATIENT=1] npx vitest run tests/pacing-study.test.ts
 ```
 
 ### The first session
@@ -430,3 +430,16 @@ In priority order.
   one survey of a single game, and forum posts. The design maths is the
   firmer ground.
 - Only a playtest shows how the pace feels.
+
+## Changes since the study
+
+- **30 September.** The payback saver is the balance bot's default, and
+  `length.test.ts` holds the Charter to days 14–21 (day 17.3).
+- **30 September.** Every price in a hill's own coin (levels, tablets,
+  machines, clerks, stewards) now rises with the pay in an Appeal. Each
+  Appeal multiplies pay and those prices ×1000 and gates and works ×2200,
+  with laurels ×2. The ten Appeals take 8.0, 10.0, 8.2, 8.0, 6.8, 5.5, 5.5,
+  4.0, 5.0 and 3.0 days, all by day 81, and the run gross reaches 1e54.
+  With prices and pay moving together, the ratio of gates to pay sets the
+  pace alone: ×2 finished the Appeals by day 65, ×2.4 by day 98, ×2.8 by
+  day 167.

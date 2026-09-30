@@ -436,27 +436,27 @@ export function resolveGoal(state: GameState, key: string): GoalView {
       const level = currentLevel(site, track);
       const capped = level >= levelCap(track) || (track === 'strength' && !strengthLevelEffective(state, site, level));
       const where = state.empire.sites.length > 1 ? ` · ${siteName(a)}` : '';
-      return money(`${TRACK_TITLES[track]} ${level + 1}${where}`, capped ? null : bulkCost(site, track, 1), capped, site);
+      return money(`${TRACK_TITLES[track]} ${level + 1}${where}`, capped ? null : bulkCost(state, site, track, 1), capped, site);
     }
     case 'flywheel': {
       const site = findSite(state, a);
-      return money(`Flywheel · ${siteName(a)}`, site ? flywheelCost(site) : null, !site || site.wheelOwned, site);
+      return money(`Flywheel · ${siteName(a)}`, site ? flywheelCost(state, site) : null, !site || site.wheelOwned, site);
     }
     case 'counterweight': {
       const site = findSite(state, a);
-      return money(`Counterweight · ${siteName(a)}`, site ? counterweightCost(site) : null, !site || site.counterweight !== null, site);
+      return money(`Counterweight · ${siteName(a)}`, site ? counterweightCost(state, site) : null, !site || site.counterweight !== null, site);
     }
     case 'seal': {
       const site = findSite(state, a);
       const index = Number(b);
       const id = site?.hand[index];
       const stale = !site || !id || site.devices.includes(id);
-      return money(`Sealed tablet · ${siteName(a)}`, site && id ? tabletCost(site, index) : null, stale, site, !!site && site.productionLevel >= tabletLevel(index));
+      return money(`Sealed tablet · ${siteName(a)}`, site && id ? tabletCost(state, site, index) : null, stale, site, !!site && site.productionLevel >= tabletLevel(index));
     }
     case 'steward': {
       const site = findSite(state, a);
       const name = HILLS[a] ? capitalize(HILLS[a].steward) : 'Steward';
-      return money(`Hire ${name}`, site ? stewardCost(site) : null, !site || !!site.steward, site, !!site && stewardOffered(state, site));
+      return money(`Hire ${name}`, site ? stewardCost(state, site) : null, !site || !!site.steward, site, !!site && stewardOffered(state, site));
     }
     case 'foreman':
       return money('Foreman Contract', catalog.levels.foremanCost, state.empire.foremanOwned, first);
@@ -849,7 +849,7 @@ function counterweightRows(state: GameState, site: SiteState): PurchaseRow[] {
   const cw = catalog.counterweight;
   if (site.counterweight === null) {
     if (!counterweightUnlocked(site)) return [];
-    const cost = counterweightCost(site);
+    const cost = counterweightCost(state, site);
     return [
       {
         key: 'counterweight',
@@ -918,7 +918,7 @@ function tabletRows(state: GameState, site: SiteState): PurchaseRow[] {
       });
       break;
     }
-    const cost = tabletCost(site, i);
+    const cost = tabletCost(state, site, i);
     const read = site.peeked.includes(id);
     // Unseal in Advance: once Insight is known, a seal can be read before it is broken.
     const peek = !read && state.prestige.lifetimeInsightAwarded > 0;
@@ -1062,6 +1062,7 @@ function summonRow(state: GameState, site: SiteState): PurchaseRow | null {
     effect: `${v.name} comes at crew ${v.arrivesAt}. Sent for, they come now, for this run.`,
     verb: 'Send for',
     cost: `${cost} Insight`,
+    currency: 'insight',
     affordable: spendableInsight(state) >= cost,
     action: { kind: 'summon' },
     accent: 'insight',
@@ -1105,22 +1106,22 @@ function levelRow(state: GameState, site: SiteState, track: LevelTrack): Purchas
     return { key: track, title, level: levelText, effect: 'At the ascent floor', affordable: false, disabled: true, action: { kind: 'levels', track } };
   }
 
-  const cost1 = bulkCost(site, track, 1)!;
+  const cost1 = bulkCost(state, site, track, 1)!;
   const purse = site.purse;
   const options: BuyOption[] = [{ label: 'Buy 1', count: 1, cost: formatMoney(cost1), affordable: purse.gte(cost1) }];
   if (track === 'production' && has(state, 'first_level')) {
     const ten = Math.min(10, cap - level);
-    const c10 = bulkCost(site, track, ten);
+    const c10 = bulkCost(state, site, track, ten);
     if (ten > 1 && c10) options.push({ label: `Buy ${ten}`, count: ten, cost: formatMoney(c10), affordable: purse.gte(c10) });
     const toM = levelsToMilestone(site);
-    const cm = toM > 0 ? bulkCost(site, track, toM) : null;
+    const cm = toM > 0 ? bulkCost(state, site, track, toM) : null;
     if (toM > 1 && toM !== ten && cm) {
       options.push({ label: `To ${level + toM}`, count: toM, cost: formatMoney(cm), affordable: purse.gte(cm) });
     }
   }
   if (has(state, 'foreman')) {
     const max = maxAffordable(state, site, track);
-    if (max > 1) options.push({ label: `Max ${max}`, count: max, cost: formatMoney(bulkCost(site, track, max)!), affordable: true });
+    if (max > 1) options.push({ label: `Max ${max}`, count: max, cost: formatMoney(bulkCost(state, site, track, max)!), affordable: true });
   }
 
   let effect: string;
@@ -1196,7 +1197,7 @@ function objective(state: GameState, site: SiteState): string {
       const tease = nm !== null && nm >= a.flywheelUnlockLevel ? ` ${t('hint.flywheel_tease')}` : '';
       return nm === null ? t('hint.flywheel_tease') : `Reach level ${nm} for ×2.${tease}`;
     }
-    return `${t('hint.flywheel')} Flywheel: ${priced(flywheelCost(site), site.id)}.`;
+    return `${t('hint.flywheel')} Flywheel: ${priced(flywheelCost(state, site), site.id)}.`;
   }
   if (!isAutomated(state)) {
     if (!state.empire.sites.some((s) => s.wheelCharged)) return t('hint.charge');
@@ -1291,7 +1292,7 @@ export function buildView(state: GameState): GameView {
     if (imp) rows.push(imp);
   }
   if (!site.wheelOwned && flywheelOffered(state, site)) {
-    const cost = flywheelCost(site);
+    const cost = flywheelCost(state, site);
     rows.push({
       key: 'flywheel',
       title: 'Flywheel',
@@ -1355,7 +1356,7 @@ export function buildView(state: GameState): GameView {
       accent: 'machine',
     });
   } else if (stewardOffered(state, site)) {
-    const cost = stewardCost(site);
+    const cost = stewardCost(state, site);
     rows.push({
       key: 'steward',
       title: `Hire ${capitalize(cast.steward)}`,
@@ -1430,7 +1431,7 @@ export function buildView(state: GameState): GameView {
     rows.push({
       key: 'appeal',
       title: `File Appeal ${n}: ${twist.name}`,
-      effect: `${twist.rule} Gates and openings ${formatTimes(catalog.appeals.gateGrowth ** n)}, works ${formatTimes(catalog.appeals.workGrowth ** n)}, every crew's pay ${formatTimes(catalog.appeals.payGrowth ** n)}; new tablets join the hills. Sign the Charter again to win a laurel.`,
+      effect: `${twist.rule} Gates and openings ${formatTimes(catalog.appeals.gateGrowth ** n)}, works ${formatTimes(catalog.appeals.workGrowth ** n)}, every crew's pay and every hill price ${formatTimes(catalog.appeals.payGrowth ** n)}; new tablets join the hills. Sign the Charter again to win a laurel.`,
       note: `Begins a new run (this run's Insight is paid). Each laurel multiplies every crew's pay ${formatTimes(catalog.appeals.laurelMultiplier)}, and laurels compound.`,
       verb: 'File',
       affordable: true,
