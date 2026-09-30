@@ -20,11 +20,12 @@ last column per candidate build; attach notes for anything not green.
 Reference timings from the daily bot (three sessions a day, away overnight),
 recorded 2026-09-29: Tartarus Rim day 1.3, Leaking Heights 3.9, Bronze Pass
 6.9, Skyward Escarpment 14.3, Olympian Approach 16.3, the Charter day 30.9. No
-coin bonuses: day 39.3. The binge bot has not signed it after 40 hours. Appeals
-1 to 3, each started fresh after the last Charter: 16.3, 25.3 and 53.3 days.
+coin bonuses: day 39.3. The binge bot has not signed it after 40 hours.
 Played straight on from the campaign, spending Insight (upgrades, files,
-Remembrances, summons): the Charter day 30.3, then Appeals 1 to 6 take 15.5,
-25.0, 53.5, 53.0, 79.5 and 117.5 days, and Appeal 7 is unfinished after 120.
+Remembrances, summons), recorded 2026-09-30 with Appeal gates and works ×40,
+pay ×20 and laurels ×2 each: the Charter day 30.3, then Appeals 1 to 10 take
+20.0, 18.5, 39.7, 19.0, 18.8, 18.0, 9.2, 11.0, 28.3 and 18.5 days (all ten by
+day 231), and the run gross climbs from 1e21 to 1e37.
 Print the current timings with
 `CAMPAIGN=1 npx vitest run tests/length.test.ts tests/campaign.test.ts --silent=false`,
 and the Appeals (several minutes) with

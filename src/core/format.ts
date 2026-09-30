@@ -68,6 +68,11 @@ export function formatDuration(seconds: number): string {
   return h ? `${d}d ${h}h` : `${d}d`;
 }
 
+/** A multiplier that may grow absurd: ×2.5, ×40, then ×1.00M and up. */
+export function formatTimes(x: number): string {
+  return x < 1e4 ? formatMultiplier(x) : `×${formatMoney(Money.of(x))}`;
+}
+
 export function formatMultiplier(x: number): string {
   return `×${localize(x.toFixed(x < 10 ? 2 : 1).replace(/\.?0+$/, ''))}`;
 }

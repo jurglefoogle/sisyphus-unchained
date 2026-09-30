@@ -196,9 +196,19 @@ What it shows:
   a laurel adds 10 percent to crews. The twist changes a single Appeal (Drought
   on the Heights made Appeal 4 no longer than Appeal 3) but not the trend.
 
-Open for a design decision: pay each Appeal's Insight against that Appeal's
-own record (gates are higher, so the gross should count for more), make
-laurels compound, or slow the gate growth.
+**Rebalanced (30 September), upward:** players enjoy absurd numbers, so the
+Appeals now scale everything up by multipliers rather than slowing down.
+Each Appeal multiplies gates and works ×40 and every crew's pay ×20, and each
+laurel multiplies pay ×2 for good, compounding. Prices outpace pay by exactly
+the laurels won, so every Appeal plays at a steady length while the numbers
+grow ×40 each time. The bot's Appeals 1 to 10 take 20.0, 18.5, 39.7, 19.0,
+18.8, 18.0, 9.2, 11.0, 28.3 and 18.5 days (the twists set the spread), all
+ten by day 231, and the run gross climbs from 1e21 to 1e37. Insight now grows
+too (a new best each Appeal): from about 1,950 to 8,300.
+
+Tuning notes: with pay rising as fast as prices, laurels alone shorten late
+Appeals to about a day; with prices ×10 and no pay growth, Appeal 1 takes 96
+days. A laurel of ×5 against prices five times ahead gives 40‑day Appeals.
 
 ## What works well
 

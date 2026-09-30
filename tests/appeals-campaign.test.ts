@@ -1,5 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { catalog } from '../src/content/catalog';
 import { playAppeals, report } from './bot';
 import { freshState } from './helpers';
 
@@ -13,6 +14,11 @@ import { freshState } from './helpers';
 describe.skipIf(!process.env.APPEALS)('length: the Appeals', { timeout: 1_200_000 }, () => {
   it('measures Appeals 1 to 10', () => {
     const t0 = Date.now();
+    // Tuning runs: APPEALS_TUNE=gateGrowth,workGrowth,payGrowth,laurelMultiplier overrides the economy.
+    if (process.env.APPEALS_TUNE) {
+      const [gateGrowth, workGrowth, payGrowth, laurelMultiplier] = process.env.APPEALS_TUNE.split(',').map(Number);
+      Object.assign(catalog.appeals, { gateGrowth, workGrowth, payGrowth, laurelMultiplier });
+    }
     const appealGain = process.env.APPEALS_GAIN ? Number(process.env.APPEALS_GAIN) : undefined;
     const run = playAppeals(freshState(), { resets: 'gain', appeals: Number(process.env.APPEALS_N ?? 10), daysEach: 120, appealGain });
     const DAY = 86400;

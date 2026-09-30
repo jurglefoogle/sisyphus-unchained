@@ -23,7 +23,7 @@ describe('The tablet gauge and the Appeal review', () => {
     installWork(s, charter.id, false, []);
     const offer = buildView(s).appealOffer!;
     expect(offer.number).toBe(1);
-    expect(offer.gates).toBe(catalog.appeals.gateGrowth);
+    expect(offer.gates).toBe(`×${catalog.appeals.gateGrowth}`);
     fileAppeal(s, []);
     expect(buildView(s).appealOffer).toBeNull();
   });

@@ -13,7 +13,7 @@ import { canTurn, climbsPerHouse, houseOf, isConstellation, nextMounted, overhea
 import { trialMet, trialNeeded, trialProgress, trialText } from '../core/trials';
 import { capitalize, HILLS } from '../content/hills';
 import { t } from '../content/strings';
-import { formatDuration, formatMoney, formatMultiplier, formatRate } from '../core/format';
+import { formatDuration, formatMoney, formatMultiplier, formatRate, formatTimes } from '../core/format';
 import {
   ascentSeconds,
   availableInsight,
@@ -235,10 +235,14 @@ export interface AppealOffer {
   number: number;
   name: string;
   rule: string;
-  gates: number;
+  gates: string;
   works: string;
+  /** The stakes: every crew's pay under this Appeal, before laurels. */
+  pay: string;
   award: number;
-  laurelPercent: number;
+  /** What one more laurel multiplies every crew by, and what all of them will. */
+  laurel: string;
+  laurelsTotal: string;
 }
 
 export interface PurseView {
@@ -1037,10 +1041,12 @@ function appealOffer(state: GameState): AppealOffer | null {
     number: n,
     name: twist.name,
     rule: twist.rule,
-    gates: catalog.appeals.gateGrowth ** n,
-    works: (catalog.appeals.workGrowth ** n).toFixed(2).replace(/\.?0+$/, ''),
+    gates: formatTimes(catalog.appeals.gateGrowth ** n),
+    works: formatTimes(catalog.appeals.workGrowth ** n),
+    pay: formatTimes(catalog.appeals.payGrowth ** n),
     award: availableInsight(state),
-    laurelPercent: Math.round(catalog.appeals.laurelCrew * 100),
+    laurel: formatTimes(catalog.appeals.laurelMultiplier),
+    laurelsTotal: formatTimes(catalog.appeals.laurelMultiplier ** n),
   };
 }
 
@@ -1424,8 +1430,8 @@ export function buildView(state: GameState): GameView {
     rows.push({
       key: 'appeal',
       title: `File Appeal ${n}: ${twist.name}`,
-      effect: `${twist.rule} Gates and openings ×${catalog.appeals.gateGrowth ** n}, works ×${(catalog.appeals.workGrowth ** n).toFixed(2).replace(/\.?0+$/, '')}; new tablets join the hills. Sign the Charter again to win a laurel.`,
-      note: `Begins a new run (this run's Insight is paid). Each laurel: every crew earns ${Math.round(catalog.appeals.laurelCrew * 100)}% more.`,
+      effect: `${twist.rule} Gates and openings ${formatTimes(catalog.appeals.gateGrowth ** n)}, works ${formatTimes(catalog.appeals.workGrowth ** n)}, every crew's pay ${formatTimes(catalog.appeals.payGrowth ** n)}; new tablets join the hills. Sign the Charter again to win a laurel.`,
+      note: `Begins a new run (this run's Insight is paid). Each laurel multiplies every crew's pay ${formatTimes(catalog.appeals.laurelMultiplier)}, and laurels compound.`,
       verb: 'File',
       affordable: true,
       action: { kind: 'appeal' },

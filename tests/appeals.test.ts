@@ -55,7 +55,7 @@ describe('Appeals', () => {
     installWork(t, charter.id, false, events);
     expect(t.appeal.laurels).toBe(1);
     expect(events.some((e) => e.type === 'LaurelWon')).toBe(true);
-    expect(modifiers(t, 'first_hill').crew).toBeCloseTo(twisted.crew * (1 + catalog.appeals.laurelCrew), 12);
+    expect(modifiers(t, 'first_hill').crew).toBeCloseTo(twisted.crew * catalog.appeals.laurelMultiplier, 12);
     // The next Appeal follows the laurels.
     fileAppeal(t, []);
     expect(t.appeal.number).toBe(2);

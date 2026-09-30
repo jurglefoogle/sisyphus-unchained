@@ -265,10 +265,11 @@ export function modifiers(state: GameState, siteId: string): Modifiers {
   // Remembrances: Insight ranks bought for this hill, one fold per rank.
   const memory = remembranceFor(siteId);
   if (memory) for (let r = state.prestige.remembrances[siteId] ?? 0; r > 0; r--) fold(m, memory.effect);
-  // The Appeal's twist rules every hill; each laurel won raises every crew.
+  // The Appeal's twist rules every hill. The stakes raise every crew's pay with the gates,
+  // and each laurel won multiplies it again, compounding.
   const twist = appealDef(state.appeal.number);
   if (twist) for (const e of twist.effects) fold(m, e);
-  m.crew *= 1 + catalog.appeals.laurelCrew * state.appeal.laurels;
+  m.crew *= catalog.appeals.payGrowth ** state.appeal.number * catalog.appeals.laurelMultiplier ** state.appeal.laurels;
   // Zeus's Edict, while one is in force, rules every hill.
   for (const site of state.empire.sites) {
     const edict = site.bureau?.edict ? EDICTS.find((x) => x.id === site.bureau!.edict) : undefined;
