@@ -98,6 +98,8 @@ export interface Catalog {
     entitlementScale: number;
     insightFactorScale: number;
     insightFactorDivisor: number;
+    /** The factor grows as (Insight / divisor) to this power: ½ is a square root, 1 a flat share per Insight. */
+    insightFactorExponent: number;
     suggestAt: number;
   };
   insightUpgrades: InsightUpgradeDef[];

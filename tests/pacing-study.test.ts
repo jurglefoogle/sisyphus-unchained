@@ -350,6 +350,8 @@ describe.skipIf(!out)('pacing study', { timeout: 1_800_000 }, () => {
     }
     resetTable(lines, o.resets, 'binge');
     const bn = nextPurchase(binge.state);
+    const bingeOpens = binge.log.filter((e) => e.what.startsWith('open') || e.what === 'begin again' || e.what.startsWith('begin again'));
+    lines.push(`binge opens: ${bingeOpens.map((e) => `${e.what.replace('open ', '')} ${(e.t / 3600).toFixed(1)} h`).join(', ') || 'none'}`);
     lines.push(`binge after 10 h: ${binge.state.empire.sites.length} hills, log gross ${binge.state.wallet.runGross.log10().toFixed(1)}, ${binge.state.counters.totalRuns} resets, next buy in ${hours(bn.wait)} h (${bn.what})`);
 
     if (process.env.STUDY_APPEALS) {

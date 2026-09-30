@@ -34,13 +34,21 @@ describe('length: the daily player', { timeout: 60_000 }, () => {
     for (const a of run.absences) expect(a.decrees.length).toBeLessThanOrEqual(1);
   });
 
-  it('spaces the hills out across the weeks', () => {
+  it('spaces the hills out across the weeks, with no long lull', () => {
     const days = catalog.sites.slice(1).map((s) => opened(run, s.id) / DAY);
     for (let i = 1; i < days.length; i++) expect(days[i]).toBeGreaterThan(days[i - 1] + 1);
+    // Something new at least every five days: each hill, then the Charter.
+    const beats = [0, ...days, run.t / DAY];
+    for (let i = 1; i < beats.length; i++) expect(beats[i] - beats[i - 1]).toBeLessThanOrEqual(5);
   });
 });
 
 describe('length: the binge player', { timeout: 60_000 }, () => {
+  it('opens the Tartarus Rim within the first evening', () => {
+    const run = playBinge(freshState(), { resets: 'gain', limitHours: 4 });
+    expect(opened(run, 'tartarus_rim')).toBeLessThanOrEqual(3 * 3600);
+  });
+
   it('is nowhere near the Charter after 40 hours of play', () => {
     const run = playBinge(freshState(), { resets: 'gain', limitHours: 40 });
     report('binge, gain resets', run);

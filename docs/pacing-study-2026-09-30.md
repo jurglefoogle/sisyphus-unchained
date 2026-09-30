@@ -443,3 +443,26 @@ In priority order.
   With prices and pay moving together, the ratio of gates to pay sets the
   pace alone: ×2 finished the Appeals by day 65, ×2.4 by day 98, ×2.8 by
   day 167.
+- **30 September.** Big numbers are named (Qa, Qi, Sx … up to 1e303), with
+  scientific notation as a setting.
+- **30 September.** Gates reshaped for the level-buying player:
+  - Tartarus Rim opening 6e6 and gate 8e6 (from 4.5e7 and 6e7). The binge
+    player opens it at 1.7 hours instead of after ten; the longest wait
+    between purchases in the first ten hours falls from 30 to 16 minutes.
+    The daily player still opens it on day 1.3.
+  - Skyward Escarpment 8e10 and 1.1e11 (from 1.6e11 and 2.125e11): it
+    opens on day 9.3, not 13.9, ending the seven-day lull.
+  - Olympian Approach 2.6e11 and 3.6e11 (from 1.6e11 and 2.24e11), and the
+    Charter 4e11 (from 2.5e11), to hold the Charter at day 16.9.
+  - New hills now arrive on days 1.3, 4.3, 6.9, 9.3 and 13.9, with the
+    Charter on day 16.9: no gap longer than 4.6 days. The ten Appeals end
+    by day 85. `length.test.ts` asserts the Rim within three hours for a
+    binge player and no gap over five days.
+- **Begin Again's catch-up is the player's choice, not the formula's.**
+  Stronger Insight curves were tried (a flat share per Insight, as in
+  AdVenture Capitalist, and a ¾ power). They changed how often the bot
+  reset and moved the Charter between day 12 and day 48, but the catch-up
+  share stayed at 30–85 percent. The bot resets as soon as its factor would
+  grow ×1.5, and a run that starts ×1.5 faster needs about two thirds of the
+  time to return. A player who waits for ×2–3 gets the fast second run. The
+  square root stays; `insightFactorExponent` is now a tuning parameter.

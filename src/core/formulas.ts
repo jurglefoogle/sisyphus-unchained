@@ -33,7 +33,7 @@ export function nextMilestone(level: number): number | null {
 
 export function insightFactor(lifetimeInsight: number): number {
   const p = catalog.prestige;
-  return 1 + p.insightFactorScale * Math.sqrt(lifetimeInsight / p.insightFactorDivisor);
+  return 1 + p.insightFactorScale * (lifetimeInsight / p.insightFactorDivisor) ** p.insightFactorExponent;
 }
 
 // ---------------------------------------------------------------- appeals
