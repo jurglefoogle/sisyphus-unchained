@@ -45,9 +45,11 @@ import {
   insightFactor,
   isAutomated,
   levelsToMilestone,
+  milestoneCount,
   nextPreludeUpgrade,
   nextUnownedSite,
   spendableInsight,
+  steadyIncomePerSecond,
   stewardCost,
   stewardOffered,
   strengthLevelEffective,
@@ -75,6 +77,13 @@ import { ctx } from './helpers';
  */
 
 export const GLANCE = 10; // seconds between purchase decisions while present
+
+/** Observers for measurement runs (tests/pacing-study.test.ts): called after each shop, and before each Begin Again. */
+export const watch: {
+  glance?: (run: Run, when: 'hand' | 'glance' | 'return') => void;
+  beforeReset?: (run: Run) => void;
+  afterReset?: (run: Run) => void;
+} = {};
 const MILESTONE_LOOKAHEAD = 5; // wait for a site or work that is this close, instead of buying levels
 
 export interface Run {
@@ -141,6 +150,23 @@ function tendMill(s: GameState, site: SiteState): void {
   if (want !== b.onDuty) setOnDuty(s, site.id, want);
 }
 
+/** Saving for a goal, buy levels that pay back before it (the pacing study's player); off by default. */
+let payback = false;
+export function setPayback(on: boolean): void {
+  payback = on;
+}
+
+/** Buying the next level reaches `goal` sooner: its payback is shorter than the wait for the goal. */
+function levelBringsGoalNearer(s: GameState, site: SiteState, goal: Money): boolean {
+  const cost = bulkCost(site, 'production', 1);
+  const income = steadyIncomePerSecond(s, site);
+  if (!cost || site.purse.lt(cost) || income.lte(0)) return false;
+  const L = site.productionLevel;
+  const worth = (l: number) => l * catalog.levels.milestoneFactor ** milestoneCount(l);
+  const gain = income.mul(worth(L + 1) / worth(L) - 1);
+  return cost.div(gain).lt(goal.sub(site.purse).div(income));
+}
+
 function shopSite(run: Run, site: SiteState): boolean {
   const s = run.state;
   const note = (what: string) => run.log.push({ t: run.t, what });
@@ -176,7 +202,14 @@ function shopSite(run: Run, site: SiteState): boolean {
     }
     if (site.bureau) tendMill(s, site);
     // Like the spec §08 heuristic, save for the selected target rather than dribbling money into levels.
-    if (goal) return any;
+    if (goal) {
+      // The patient saver waits; the payback saver buys a level whenever it
+      // pays for itself before the goal would be reached, since that brings the goal nearer.
+      if (!payback || !levelBringsGoalNearer(s, site, goal.cost)) return any;
+      if (!buyLevels(s, site.id, 'production', 1, []).ok) return any;
+      any = true;
+      continue;
+    }
     // Short milestone lookahead, as in the spec §08 model: finish a doubling that is a few levels away.
     const n = levelsToMilestone(site);
     const push = n > 0 && n <= MILESTONE_LOOKAHEAD ? bulkCost(site, 'production', n) : null;
@@ -293,7 +326,9 @@ function wantsReset(s: GameState, policy: ResetPolicy): boolean {
 
 function maybeReset(run: Run, policy: ResetPolicy): void {
   if (!wantsReset(run.state, policy)) return;
+  watch.beforeReset?.(run);
   confirmPrestige(run.state, []);
+  watch.afterReset?.(run);
   run.log.push({ t: run.t, what: `begin again #${run.state.counters.totalRuns}` });
 }
 
@@ -307,6 +342,7 @@ function pushByHand(run: Run, seconds: number, events: GameEvent[]): void {
     run.t += 2;
     run.played += 2;
     shop(run);
+    watch.glance?.(run, 'hand');
   }
 }
 
@@ -324,6 +360,7 @@ function present(run: Run, seconds: number, policy: ResetPolicy, stopAt?: (s: Ga
       run.played += GLANCE;
       maybeReset(run, policy);
       shop(run);
+      watch.glance?.(run, 'glance');
     }
     if (charter(run.state) || stopAt?.(run.state)) return true;
   }
@@ -376,6 +413,7 @@ export function playDaily(
       run.t = start;
       maybeReset(run, opts.resets);
       shop(run);
+      watch.glance?.(run, 'return');
       if (present(run, minutes * 60, opts.resets, opts.stopAt)) return run;
     }
   }
@@ -436,6 +474,7 @@ function continueDaily(run: Run, opts: { resets: ResetPolicy; until: number }): 
       run.t = start;
       maybeReset(run, opts.resets);
       shop(run);
+      watch.glance?.(run, 'return');
       if (!isAutomated(state)) pushByHand(run, 60, events);
       if (present(run, minutes * 60, opts.resets)) return true;
     }

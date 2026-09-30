@@ -25,7 +25,11 @@ Played straight on from the campaign, spending Insight (upgrades, files,
 Remembrances, summons), recorded 2026-09-30 with Appeal gates and works ×40,
 pay ×20 and laurels ×2 each: the Charter day 30.3, then Appeals 1 to 10 take
 20.0, 18.5, 39.7, 19.0, 18.8, 18.0, 9.2, 11.0, 28.3 and 18.5 days (all ten by
-day 231), and the run gross climbs from 1e21 to 1e37.
+day 231), and the run gross climbs from 1e21 to 1e37. These bots save
+patiently for each goal; a player who also buys levels that pay back signs
+the Charter on day 17.3 and wins the ten Appeals by day 43
+(`docs/pacing-study-2026-09-30.md`; `STUDY=out.txt STUDY_PAYBACK=1
+npx vitest run tests/pacing-study.test.ts`).
 Print the current timings with
 `CAMPAIGN=1 npx vitest run tests/length.test.ts tests/campaign.test.ts --silent=false`,
 and the Appeals (several minutes) with

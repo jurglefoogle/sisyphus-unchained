@@ -206,6 +206,12 @@ grow ×40 each time. The bot's Appeals 1 to 10 take 20.0, 18.5, 39.7, 19.0,
 ten by day 231, and the run gross climbs from 1e21 to 1e37. Insight now grows
 too (a new best each Appeal): from about 1,950 to 8,300.
 
+**Correction (30 September, `pacing-study-2026-09-30.md`):** these timings
+come from a bot that buys nothing on a hill while saving for its goal. A
+player who keeps buying levels that pay back signs the Charter on day 17 and
+wins all ten Appeals by day 43, two to five days each. The Appeals also leave
+the hills' own prices unscaled, so such a player caps every level at once.
+
 Tuning notes: with pay rising as fast as prices, laurels alone shorten late
 Appeals to about a day; with prices ×10 and no pay growth, Appeal 1 takes 96
 days. A laurel of ×5 against prices five times ahead gives 40‑day Appeals.
