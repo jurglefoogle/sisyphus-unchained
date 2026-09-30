@@ -12,7 +12,7 @@ import {
   steadyIncomePerSecond,
   strengthLevelEffective,
 } from '../src/core/formulas';
-import { formatMoney, formatMultiplier, setNumberLocale } from '../src/core/format';
+import { formatMoney, formatMultiplier, setNotation, setNumberLocale } from '../src/core/format';
 import { Money } from '../src/core/money';
 import { expectClose, give, makeState } from './helpers';
 
@@ -144,14 +144,24 @@ describe('prestige formulas', () => {
 });
 
 describe('formatting', () => {
-  it('uses K, M, B, T then scientific notation', () => {
+  it('uses K, M, B, T, then named -illions, or scientific notation by choice', () => {
     expect(formatMoney(Money.of(7))).toBe('7');
     expect(formatMoney(Money.of(1234))).toBe('1.23K');
     expect(formatMoney(Money.of('45000'))).toBe('45K');
     expect(formatMoney(Money.of('2.5e7'))).toBe('25M');
     expect(formatMoney(Money.of('1.2e10'))).toBe('12B');
     expect(formatMoney(Money.of('4.8e12'))).toBe('4.8T');
+    expect(formatMoney(Money.of('2e15'))).toBe('2Qa');
+    expect(formatMoney(Money.of('3.1e18'))).toBe('3.1Qi');
+    expect(formatMoney(Money.of('1e33'))).toBe('1Dc');
+    expect(formatMoney(Money.of('4.5e37'))).toBe('45UDc');
+    expect(formatMoney(Money.of('1e63'))).toBe('1Vg');
+    expect(formatMoney(Money.of('1e300'))).toBe('1NoNog');
+    expect(formatMoney(Money.of('2e303'))).toBe('2.00e303');
+    setNotation('scientific');
+    expect(formatMoney(Money.of('4.8e12'))).toBe('4.8T');
     expect(formatMoney(Money.of('2e15'))).toBe('2.00e15');
+    setNotation('named');
   });
 
   it('follows the locale decimal mark for display only', () => {

@@ -119,6 +119,13 @@
     </label>
     <label><input type="checkbox" checked={options.ambientCaptions} onchange={(e) => set('ambientCaptions', e.currentTarget.checked)} /> Ambient captions</label>
     <label><input type="checkbox" checked={options.highContrast} onchange={(e) => set('highContrast', e.currentTarget.checked)} /> High-contrast panels</label>
+    <label>
+      Big numbers
+      <select value={options.notation} onchange={(e) => set('notation', e.currentTarget.value === 'scientific' ? 'scientific' : 'named')}>
+        <option value="named">Named (1.5Qa, 20Sx, 3.1Dc)</option>
+        <option value="scientific">Scientific (1.50e15)</option>
+      </select>
+    </label>
     <button onclick={() => game.platform.toggleFullscreen()}>Toggle fullscreen{game.platform.kind === 'desktop' ? ' (F11)' : ''}</button>
     <label>
       Text size

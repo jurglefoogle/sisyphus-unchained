@@ -13,7 +13,7 @@ import { canTurn, climbsPerHouse, houseOf, isConstellation, nextMounted, overhea
 import { trialMet, trialNeeded, trialProgress, trialText } from '../core/trials';
 import { capitalize, HILLS } from '../content/hills';
 import { t } from '../content/strings';
-import { formatDuration, formatMoney, formatMultiplier, formatRate, formatTimes } from '../core/format';
+import { formatDuration, formatMoney, formatMultiplier, formatRate, formatTimes, setNotation } from '../core/format';
 import {
   ascentSeconds,
   availableInsight,
@@ -1258,6 +1258,7 @@ function goalHorizons(state: GameState, site: SiteState, now: string): GameView[
 }
 
 export function buildView(state: GameState): GameView {
+  setNotation(state.options.notation);
   const site = findSite(state, state.empire.selectedSiteId) ?? state.empire.sites[0];
   const def = siteDef(site.id);
   const owned = state.empire.sites;

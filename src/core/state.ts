@@ -162,6 +162,8 @@ export interface Options {
   ambientCaptions: boolean;
   textScale: number;
   highContrast: boolean;
+  /** Big numbers as named -illions (Qa, Qi, Sx…) or in scientific notation. */
+  notation: 'named' | 'scientific';
   /** Camera shake on impacts and falls (off keeps every other effect). */
   screenShake: boolean;
   /** Decree and discovery flourishes without bright flashes. */
@@ -300,6 +302,7 @@ export const DEFAULT_OPTIONS: Options = {
   ambientCaptions: true,
   textScale: 1,
   highContrast: false,
+  notation: 'named',
   screenShake: true,
   flashFree: false,
   richEffects: true,

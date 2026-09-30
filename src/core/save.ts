@@ -474,6 +474,7 @@ export function stateFromJson(data: unknown): GameState {
         typeof options.ambientCaptions === 'boolean' ? options.ambientCaptions : DEFAULT_OPTIONS.ambientCaptions,
       textScale: typeof options.textScale === 'number' ? Math.min(1.5, Math.max(0.85, options.textScale)) : 1,
       highContrast: typeof options.highContrast === 'boolean' ? options.highContrast : DEFAULT_OPTIONS.highContrast,
+      notation: options.notation === 'scientific' ? 'scientific' : 'named',
       screenShake: typeof options.screenShake === 'boolean' ? options.screenShake : DEFAULT_OPTIONS.screenShake,
       flashFree: typeof options.flashFree === 'boolean' ? options.flashFree : DEFAULT_OPTIONS.flashFree,
       richEffects: typeof options.richEffects === 'boolean' ? options.richEffects : DEFAULT_OPTIONS.richEffects,

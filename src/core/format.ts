@@ -1,6 +1,19 @@
 import { Money } from './money';
 
-const SUFFIXES = ['', 'K', 'M', 'B', 'T'];
+// Short-scale names: thousand to trillion, then the Latin -illions to 1e303
+// (quadrillion Qa, quintillion Qi, … decillion Dc, undecillion UDc, … vigintillion Vg).
+const UNITS = ['', 'U', 'D', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No'];
+const TENS = ['', 'Dc', 'Vg', 'Tg', 'Qag', 'Qig', 'Sxg', 'Spg', 'Ocg', 'Nog'];
+const SUFFIXES = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No'];
+for (let n = 10; n < 100; n++) SUFFIXES.push(UNITS[n % 10] + TENS[Math.floor(n / 10)]);
+
+/** Named suffixes (the default) or scientific notation past a trillion. */
+export type Notation = 'named' | 'scientific';
+let notation: Notation = 'named';
+
+export function setNotation(value: Notation): void {
+  notation = value;
+}
 
 /** Display decimal mark from the player's locale; saves always stay canonical. */
 let decimalMark = '.';
@@ -16,7 +29,7 @@ export function setNumberLocale(locale: string | undefined): void {
 
 const localize = (text: string): string => (decimalMark === '.' ? text : text.replace('.', decimalMark));
 
-/** Display-only formatting: K, M, B, T, then scientific notation. */
+/** Display-only formatting: K, M, B, T, then named -illions (or scientific notation), then scientific. */
 export function formatMoney(value: Money): string {
   return localize(formatCanonical(value));
 }
@@ -29,8 +42,9 @@ function formatCanonical(value: Money): string {
   }
   const exp = Math.floor(value.log10());
   const tier = Math.floor(exp / 3);
-  if (tier < SUFFIXES.length) {
-    const scaled = value.toNumber() / 10 ** (tier * 3);
+  if (tier < (notation === 'named' ? SUFFIXES.length : 5)) {
+    // Divide by the exact literal (10 ** n drifts for large n), and let truncation forgive float dust.
+    const scaled = value.toNumber() / Number(`1e${tier * 3}`);
     return trimFixed(scaled) + SUFFIXES[tier];
   }
   const mantissa = value.toNumber() / 10 ** exp;
@@ -42,7 +56,7 @@ function formatCanonical(value: Money): string {
 
 function trimFixed(n: number): string {
   const digits = n >= 100 ? 1 : 2;
-  const truncated = Math.floor(n * 10 ** digits) / 10 ** digits;
+  const truncated = Math.floor(n * 10 ** digits * (1 + 1e-12)) / 10 ** digits;
   return truncated.toFixed(digits).replace(/\.?0+$/, '');
 }
 
