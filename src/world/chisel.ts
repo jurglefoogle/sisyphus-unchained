@@ -730,26 +730,60 @@ const PLAQUE_EM = 30;
 const PLAQUE_PAD = { x: 16, y: 11 };
 const PLAQUE_MARGIN = 8;
 
-/** A small glazed panel for the hillside, with a scratched frame line. */
+/**
+ * The hillside cartouche: a tabula ansata, the Roman inscription tablet
+ * with dovetail handles, in the pinax's fired clay round a glazed field, set
+ * into the rock (a tight contact shadow, not a floating one) so it reads as
+ * part of the hill rather than an interface box.
+ */
 function cartoucheTexture(w: number, h: number): Texture {
-  return bake(`chisel-cartouche-${w}x${h}`, w + PLAQUE_MARGIN * 2, h + PLAQUE_MARGIN * 2, (ctx) => {
-    ctx.translate(PLAQUE_MARGIN, PLAQUE_MARGIN);
-    const panel = new Path2D();
-    panel.roundRect(0, 0, w, h, 3);
+  const ear = Math.round(h * 0.3);
+  const mx = PLAQUE_MARGIN + ear;
+  return bake(`chisel-tabula-${w}x${h}`, w + mx * 2, h + PLAQUE_MARGIN * 2, (ctx) => {
+    const r = rng(w * 11 + h * 5);
+    ctx.translate(mx, PLAQUE_MARGIN);
+    const tablet = shape(
+      [
+        [0, 0], [w, 0], [w, h * 0.4], [w + ear, h * 0.2], [w + ear, h * 0.8], [w, h * 0.6],
+        [w, h], [0, h], [0, h * 0.6], [-ear, h * 0.8], [-ear, h * 0.2], [0, h * 0.4],
+      ],
+      false,
+    );
+    // Seated in the rock: a dark socket line and a short contact shadow.
     ctx.save();
-    ctx.translate(2, 3);
-    ctx.filter = `blur(${2.5 * resOf(ctx)}px)`;
-    ctx.fillStyle = 'rgba(28, 16, 8, 0.55)';
-    ctx.fill(panel);
+    ctx.strokeStyle = 'rgba(28, 16, 8, 0.35)';
+    ctx.lineWidth = 4;
+    ctx.stroke(tablet);
+    ctx.translate(1, 2);
+    ctx.filter = `blur(${1.5 * resOf(ctx)}px)`;
+    ctx.fillStyle = 'rgba(28, 16, 8, 0.5)';
+    ctx.fill(tablet);
     ctx.restore();
-    glaze(ctx, panel, 0, 0, w, h);
-    const frame = new Path2D();
-    frame.rect(3.5, 3.5, w - 7, h - 7);
-    ctx.strokeStyle = '#d99c6c';
-    ctx.lineWidth = 1.2;
-    ctx.stroke(frame);
-    model(ctx, panel, h, 0.35, 0.5);
-    ink(ctx, panel, 1.2, 0.9);
+
+    ctx.fillStyle = across(ctx, -ear, 0, w * 0.5, h * 1.4, [[0, '#efbd90'], [0.5, '#dc9d6b'], [1, '#bb7546']]);
+    ctx.fill(tablet);
+    texture(ctx, tablet, 0.4, 0.09, w);
+    speckle(ctx, tablet, r, Math.round((w * h) / 260), [0.3, 0.9], 'rgba(110, 52, 24, 0.35)', [-ear, 0, w + ear * 2, h]);
+    model(ctx, tablet, h, 0.35, 0.45);
+    // A bronze pin through each handle.
+    for (const x of [-ear * 0.6, w + ear * 0.6]) {
+      ctx.fillStyle = css(INK);
+      ctx.beginPath();
+      ctx.arc(x, h * 0.5, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255, 226, 170, 0.55)';
+      ctx.beginPath();
+      ctx.arc(x - 0.6, h * 0.5 - 0.6, 0.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ink(ctx, tablet, 1.1, 0.85);
+
+    // The glazed field the numerals are cut through, sunk a little below the clay.
+    const inset = 4;
+    const field = new Path2D();
+    field.roundRect(inset, inset, w - inset * 2, h - inset * 2, 2);
+    glaze(ctx, field, inset, inset, w - inset * 2, h - inset * 2);
+    innerEdge(ctx, field, 'rgba(10, 6, 4, 0.6)', 1.2, 1.6, 2);
   }, 3);
 }
 
