@@ -10,6 +10,10 @@
   --rule: rgba(33, 27, 23, 0.28);
   --muted: #5e544b;
   --good: #3d6b3a;
+  /* Insight's colour: every button that spends it is glazed purple. */
+  --insight: #6b4f8a;
+  --insight-glaze: radial-gradient(ellipse at 30% 20%, rgba(232, 214, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #7e5ea3 0%, #624683 55%, #452f60 100%);
   --radius: 6px;
   --shadow: 0 3px 10px rgba(33, 27, 23, 0.14);
   --text-scale: 1;

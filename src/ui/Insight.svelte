@@ -223,10 +223,16 @@
     font-weight: 700;
     background: transparent;
   }
+  /* Everything here is paid in Insight, so every button wears its purple. */
+  .buy:disabled {
+    color: var(--insight);
+    border-color: var(--insight);
+  }
   .buy:not(:disabled) {
-    background: linear-gradient(180deg, #a9532b 0%, var(--clay) 55%, #813a1c 100%);
+    background: var(--insight-glaze);
     color: var(--ivory);
-    box-shadow: inset 0 1px rgba(255, 226, 190, 0.35), 0 2px 0 var(--ink);
+    border-color: #2a1a3d;
+    box-shadow: inset 0 1px rgba(235, 220, 255, 0.35), 0 2px 0 var(--ink);
   }
   .buy:not(:disabled):active {
     transform: translateY(1px);

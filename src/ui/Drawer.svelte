@@ -88,7 +88,7 @@
           <p class="effect" class:clipped={!explained[row.key]}>{#if row.level}<span class="level">{row.level}</span>{' · '}{/if}{row.effect}</p>
         </div>
         {#if !row.disabled && !row.options}
-          <button class="act" disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
+          <button class="act" class:insight={!!row.cost && price(row.cost, row.currency).name === 'Insight'} disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
             <span>{row.verb ?? (row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : row.action.kind === 'steward' ? 'Hire' : 'Buy')}</span>
             {#if row.cost}{@const p = price(row.cost, row.currency)}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
           </button>
@@ -113,7 +113,7 @@
           <div class="buttons wide">
             {#each row.options as opt (opt.label)}
               {@const p = price(opt.cost, row.currency)}
-              <button disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
+              <button class:insight={p.name === 'Insight'} disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
                 <span>{opt.label}</span>{#if opt.cost}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
               </button>
             {/each}
@@ -221,7 +221,7 @@
   .row[data-accent='work'] { --mark: var(--clay); }
   .row[data-accent='decree'] { --mark: #1c130c; }
   .row[data-accent='grip'] { --mark: #b27a4c; }
-  .row[data-accent='insight'] { --mark: #6b4f8a; }
+  .row[data-accent='insight'] { --mark: var(--insight); }
   .row[data-accent='seal'] { --mark: #8e2a1c; }
   .devices {
     margin: 0 0 0.7rem;
@@ -433,6 +433,17 @@
       linear-gradient(180deg, #a44d27 0%, #8c3b1b 55%, #6c2a11 100%);
     box-shadow: inset 0 1px rgba(255, 220, 180, 0.3), inset 0 -2px 3px rgba(40, 12, 2, 0.35), 0 2px 0 #2a150a, 0 3px 6px rgba(40, 20, 8, 0.25);
     transform: translateY(-1px);
+  }
+  .buttons button.insight:not(:disabled),
+  .act.insight:not(:disabled) {
+    border-color: #2a1a3d;
+    background: var(--insight-glaze);
+    box-shadow: inset 0 1px rgba(235, 220, 255, 0.3), inset 0 -2px 3px rgba(20, 8, 40, 0.35), 0 2px 0 #1f1330, 0 3px 6px rgba(30, 16, 48, 0.25);
+  }
+  .buttons button.insight:disabled,
+  .act.insight:disabled {
+    color: var(--insight);
+    border-color: var(--insight);
   }
   .buttons button:not(:disabled):active,
   .act:not(:disabled):active {
