@@ -596,7 +596,7 @@ function furnaceRows(state: GameState, site: SiteState): PurchaseRow[] {
     level: f.erupting > 0 ? 'Erupting' : `${pct(shownHeat(m, f))} heat`,
     effect:
       f.erupting > 0
-        ? `Erupting: impacts pay ×${f.power.toFixed(2)} for ${plural(f.erupting)} more.`
+        ? `Impacts pay ×${f.power.toFixed(2)} for ${plural(f.erupting)} more.`
         : `Every impact heats the wheel. At full heat it erupts: impacts ×${eruptionPower(m, 1).toFixed(2)} for ${plural(climbs)}.`,
     note: ventable
       ? `Vent now for ×${eruptionPower(m, f.heat).toFixed(2)}. Hotter pays more, but heats ever more slowly.`

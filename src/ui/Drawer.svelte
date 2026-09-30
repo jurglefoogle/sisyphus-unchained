@@ -88,7 +88,7 @@
           <p class="effect" class:clipped={!explained[row.key]}>{#if row.level}<span class="level">{row.level}</span>{' · '}{/if}{row.effect}</p>
         </div>
         {#if !row.disabled && !row.options}
-          <button class="act" class:insight={!!row.cost && price(row.cost, row.currency).name === 'Insight'} disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${row.cost} ${price(row.cost, row.currency).name}` : ''}">
+          <button class="act" class:insight={!!row.cost && price(row.cost, row.currency).name === 'Insight'} disabled={!row.affordable} onclick={(e) => buy(e, row)} aria-label="{row.title}{row.cost ? ` for ${price(row.cost, row.currency).amount} ${price(row.cost, row.currency).name}` : ''}">
             <span>{row.verb ?? (row.action.kind === 'prestige' ? 'Review' : row.action.kind === 'site' ? 'Open' : row.action.kind === 'steward' ? 'Hire' : 'Buy')}</span>
             {#if row.cost}{@const p = price(row.cost, row.currency)}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
           </button>
@@ -113,7 +113,7 @@
           <div class="buttons wide">
             {#each row.options as opt (opt.label)}
               {@const p = price(opt.cost, row.currency)}
-              <button class:insight={p.name === 'Insight'} disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${opt.cost} ${p.name}` : ''}">
+              <button class:insight={p.name === 'Insight'} disabled={!opt.affordable} onclick={(e) => buy(e, row, opt.count)} aria-label="{row.title}: {opt.label}{opt.cost ? ` for ${p.amount} ${p.name}` : ''}">
                 <span>{opt.label}</span>{#if opt.cost}<small class="cost">{#if p.icon}<img src={iconUrl(p.icon)} alt="" />{:else}<span class="glyph" aria-hidden="true">{p.glyph}</span>{/if}{p.amount}</small>{/if}
               </button>
             {/each}
@@ -408,10 +408,15 @@
     font-size: 0.88rem;
     border-radius: 3px;
     font-weight: 700;
-    color: rgba(42, 29, 18, 0.6);
-    background: rgba(92, 60, 26, 0.05);
-    border: 1px solid rgba(92, 60, 26, 0.3);
+    color: rgba(42, 29, 18, 0.72);
+    background: rgba(92, 60, 26, 0.06);
+    border: 1px dashed rgba(92, 60, 26, 0.45);
     box-shadow: none;
+  }
+  /* Out of reach is shown by the dashed rule, not by fading the price away. */
+  .buttons button:disabled,
+  .act:disabled {
+    opacity: 1;
   }
   /* Within reach they are pressed clay seals: a lit lip, a shaded foot and an ink edge. */
   .buttons button,

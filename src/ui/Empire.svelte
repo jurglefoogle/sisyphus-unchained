@@ -359,13 +359,17 @@
     background: linear-gradient(180deg, rgba(243, 232, 212, 0.9), var(--paper));
     border-top: 1px solid var(--rule);
   }
+  /* Every label keeps room for a full owned hill, so the names line up across the strip. */
+  @media (min-width: 761px) {
+    .label { min-height: 9.8rem; }
+  }
   .locked .label { background: rgba(33, 27, 23, 0.85); border-top-color: rgba(246, 236, 220, 0.15); }
   .chapter { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay); }
   .locked .chapter { color: var(--pale-clay); }
   strong { font-family: var(--display); font-size: 1.25rem; font-weight: 600; line-height: 1.1; }
   .stats { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .locked .stats { color: rgba(246, 236, 220, 0.7); }
-  .stats.purse { color: var(--ivory); }
+  .stats.purse { color: var(--ink); }
   .stats.steward { font-style: italic; }
   .stats.ready { color: var(--pale-clay); font-weight: 600; }
   .works { display: flex; gap: 4px; margin-top: 4px; }

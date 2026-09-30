@@ -1857,6 +1857,10 @@
   .gauge.hot .gauge-bar .fill { background: linear-gradient(180deg, #ffcf7a, #e0782c 55%, #9b3b12); }
   .gauge-bar .mark { position: absolute; top: -1px; bottom: -1px; width: 2px; margin-left: -1px; background: #f6ecd8; box-shadow: 0 0 2px rgba(0, 0, 0, 0.8); }
   .gauge-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  /* On a phone the bar gives up width so the reading stays whole. */
+  @media (max-width: 760px) {
+    .gauge { grid-template-columns: auto minmax(40px, 72px) 1fr; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .gauge-bar .fill { transition: none; }
   }

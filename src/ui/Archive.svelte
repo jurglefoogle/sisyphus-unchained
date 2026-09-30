@@ -222,6 +222,10 @@
     scrollbar-width: thin;
     border-bottom: 1px solid rgba(92, 60, 26, 0.2);
   }
+  /* Where the sheet is wide enough, the tabs wrap to a second line rather than scroll. */
+  @media (min-width: 761px) {
+    .tabs { flex-wrap: wrap; overflow-x: visible; }
+  }
   /* Tabs are words on the sheet; the open one is underscored in clay. */
   .tabs button {
     flex: 0 0 auto;

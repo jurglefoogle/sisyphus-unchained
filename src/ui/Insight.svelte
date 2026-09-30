@@ -194,7 +194,7 @@
     opacity: 0.7;
   }
   .upgrade.affordable {
-    background: #fff7e8;
+    background: linear-gradient(180deg, rgba(246, 236, 220, 0.95), rgba(236, 226, 240, 0.9));
     box-shadow: inset 0 0 0 1px #8d6fae;
   }
   .head {

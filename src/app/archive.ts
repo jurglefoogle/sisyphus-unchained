@@ -190,9 +190,9 @@ export function buildArchive(s: GameState): ArchiveView {
     ],
     records: [
       { label: 'Best Defiance run', value: formatMoney(s.wallet.bestRunGross) },
-      { label: 'Begin Again', value: String(s.counters.totalRuns) },
-      { label: 'Completed climbs', value: String(s.counters.totalClimbs) },
-      { label: 'Resolved impacts', value: String(s.counters.totalImpacts) },
+      { label: 'Begin Again', value: s.counters.totalRuns.toLocaleString('en-US') },
+      { label: 'Completed climbs', value: s.counters.totalClimbs.toLocaleString('en-US') },
+      { label: 'Resolved impacts', value: s.counters.totalImpacts.toLocaleString('en-US') },
       { label: 'Highest chapter', value: `${s.counters.highestSiteEver + 1} / ${catalog.sites.length}` },
       { label: 'Active labor', value: formatDuration(s.counters.totalActiveSeconds) },
       ...timedRecords(s),

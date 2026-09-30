@@ -178,6 +178,7 @@
     font: 600 .72rem/1.2 var(--body);
     letter-spacing: .12em;
     text-transform: uppercase;
+    text-wrap: balance;
   }
   h1 {
     margin: 0;
