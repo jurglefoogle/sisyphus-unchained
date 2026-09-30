@@ -634,9 +634,9 @@
     </div>
     <div class="chapter">
       <div class="title-row">
-        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.prevId)} disabled={!view.site.prevId} aria-label="Previous operation"><img class="icon small" src={iconUrl('ui_back')} alt="" /></button>{/if}
+        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.prevId)} disabled={!view.site.prevId} aria-label="Previous hill"><img class="icon small" src={iconUrl('ui_back')} alt="" /></button>{/if}
         {#key view.site.id}<h1>{view.site.name}{#if view.charterSigned}<img class="approved" src={iconUrl('decree_seal')} alt="Approved by Olympus" title="Approved by Olympus" />{/if}</h1>{/key}
-        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.nextId)} disabled={!view.site.nextId} aria-label="Next operation"><img class="icon small" src={iconUrl('ui_next')} alt="" /></button>{/if}
+        {#if view.site.ownedCount > 1}<button class="step" onclick={() => selectSite(view.site.nextId)} disabled={!view.site.nextId} aria-label="Next hill"><img class="icon small" src={iconUrl('ui_next')} alt="" /></button>{/if}
       </div>
       {#if view.prelude.active && view.prelude.attempts > 0}
         <div class="record">
@@ -995,7 +995,8 @@
     left: 0;
     right: 0;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    /* The purse and the menu keep their size; the hill's name gives way. */
+    grid-template-columns: 1fr minmax(0, auto) 1fr;
     align-items: center;
     gap: 1rem;
     min-height: 68px;
@@ -1022,7 +1023,7 @@
     box-shadow: 0 -1px 0 rgba(255, 250, 236, 0.75), inset 0 -2px 3px rgba(40, 14, 4, 0.3);
   }
   .hud-left > *, .menu > *, .chapter { pointer-events: auto; }
-  .hud-left { display: flex; gap: 0.6rem; align-items: stretch; min-width: 0; flex-wrap: wrap; }
+  .hud-left { display: flex; gap: 0.6rem; align-items: stretch; min-width: min-content; flex-wrap: wrap; }
   /* Cut letters: shadowed along the top of the cut, lit along its foot. */
   .obols,
   .chapter h1 {
@@ -1079,22 +1080,40 @@
     grid-column: 2;
     text-align: center;
     padding: 0 1rem;
+    min-width: 0;
   }
   .title-row {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
+    min-width: 0;
   }
+  /* One line on every hill, so the header keeps its height when the name changes. */
   .chapter h1 {
     font-family: var(--display);
     font-weight: 600;
-    font-size: clamp(1.3rem, 2.1vw, 1.9rem);
+    font-size: clamp(1.15rem, 1.55vw, 1.9rem);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin: 0;
     line-height: 1.05;
     color: #2e2218;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  @media (max-width: 1180px) {
+    .hud .chapter h1 { font-size: 1.15rem; letter-spacing: 0.06em; }
+    .hud .chapter h1::before,
+    .hud .chapter h1::after { display: none; }
+  }
+  /* Tablets: the name takes its own row under the purse and the menu, as on phones. */
+  @media (max-width: 999px) {
+    .hud { grid-template-columns: 1fr auto; row-gap: 0.2rem; }
+    .hud .chapter { grid-column: 1 / -1; grid-row: 2; padding: 0; }
+    .hud .menu { grid-column: 2; grid-row: 1; }
   }
   /* A new hill's name is inscribed: it gathers from wide spacing and settles. */
   .chapter h1 { animation: inscribe 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
@@ -1105,13 +1124,13 @@
   .chapter h1::after {
     content: '';
     display: inline-block;
-    width: 1.6em;
+    width: 1.2em;
     height: 1px;
     background: currentColor;
     opacity: 0.45;
     box-shadow: 0 1px 0 rgba(255, 250, 236, 0.9);
     vertical-align: middle;
-    margin: 0 0.6em;
+    margin: 0 0.5em;
   }
   .chapter-detail { display: block; font-size: 0.8rem; font-style: italic; color: #5b4a38; margin-top: 0.15rem; }
   .record { display: inline-flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #5b4a38; }
@@ -1549,9 +1568,7 @@
   /* ------------------------------------------------------------- narrow */
   .narrow .hud { grid-template-columns: 1fr auto; gap: 0.4rem; padding-left: 0.6rem; padding-right: 0.6rem; }
   .narrow .chapter { grid-column: 1 / -1; grid-row: 2; padding: 0; }
-  .narrow .chapter h1 { font-size: 1.1rem; }
-  .narrow .chapter h1::before,
-  .narrow .chapter h1::after { width: 0.8em; }
+  .narrow .chapter h1 { font-size: clamp(0.8rem, 3.9vw, 1.1rem); letter-spacing: 0.04em; }
   .narrow .chapter-detail { display: none; }
   .narrow .menu { grid-column: 2; gap: 0.3rem; }
   .narrow .round { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }

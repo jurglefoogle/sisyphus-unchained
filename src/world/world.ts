@@ -189,6 +189,8 @@ export class World {
   private machineReadSite = '';
   private terrain = new Sprite();
   private terrainKey = '';
+  /** The hill this renderer painted itself; the only terrain texture it may destroy (delivered art is shared). */
+  private paintedTerrain: Texture | null = null;
   private frieze = new TilingSprite();
   private marker = this.clip();
   private ropes = new Graphics();
@@ -671,10 +673,10 @@ export class World {
     }
     this.terrain.visible = true;
     const res = (window.devicePixelRatio || 1) > 1.25 ? 2 : 1.5;
-    const old = this.terrain.texture;
-    this.terrain.texture = Texture.from(paintTerrain(ground, scene.length * 97 + scene.charCodeAt(6), res, { footholds }));
+    this.paintedTerrain?.destroy(true);
+    this.paintedTerrain = Texture.from(paintTerrain(ground, scene.length * 97 + scene.charCodeAt(6), res, { footholds }));
+    this.terrain.texture = this.paintedTerrain;
     this.terrain.scale.set(1 / res);
-    if (old && old !== Texture.EMPTY) old.destroy(true);
   }
 
   /** The stone is the site's stone art; during the prelude craggy knobs stick out until it is ground round. */
