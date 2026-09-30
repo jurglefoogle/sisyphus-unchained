@@ -23,7 +23,8 @@ bot that plays unlike a real player, and the shape of the growth has problems.
    player who keeps buying levels that pay for themselves signs the Charter on
    **day 17**, not day 30, and finishes all ten Appeals by **day 43**, not day
    231. The length targets and the 30 September Appeal timings both assume
-   the hoarding player.
+   the hoarding player. Day 17 sits inside the new target of two to three
+   weeks (see [Pacing targets](#pacing-targets)); the Appeals are too short.
 2. **The Appeals do not scale the hills' own prices.** Pay rises ×20 each
    Appeal, but levels, tablets and machines keep their prices. An efficient
    player therefore caps every level in the first session of an Appeal (236
@@ -134,6 +135,59 @@ The common thread is that players leave when progress feels flat, which
 comes from long waits for one purchase, resets that feel like repetition,
 and time gates. They stay when something new or bigger arrives often and
 visibly.
+
+### How long the games last
+
+Added after a playtest, in which the designer reached the Tartarus Rim by day 2,
+found the time to automation right, and set the Charter at two to three
+weeks.
+
+| Game | First prestige | Main goal or ending | Everything |
+|---|---|---|---|
+| Universal Paperclips | none | 4–6 hours in one or two sittings; first runs 8–12 hours ([Cool Idle Games](https://coolidlegames.com/games/universal-paperclips)) | — |
+| Cookie Clicker | first ascension at 365–440 prestige levels ([wiki](https://cookieclicker.wiki.gg/wiki/Ascension_guide)): an evening to several days | no ending; "4–5 hours" for the basics ([TrueAchievements](https://www.trueachievements.com/game/Cookie-Clicker/completiontime)) | 200–300 hours; players speak of "1–3 years" ([Steam](https://steamcommunity.com/app/1454400/discussions/0/3092275748060223504/)) |
+| Trimps | first portal in "a few hours" ([Cool Idle Games](https://coolidlegames.com/games/trimps)) | — | — |
+| Antimatter Dimensions | Infinity in a few hours to a couple of days | Eternity in days to a week, Reality in a week to a month, the End in one to three months ([TV Tropes](https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/AntimatterDimensions)) | 200+ hours ([TrueSteamAchievements](https://truesteamachievements.com/game/Antimatter-Dimensions/completiontime)) |
+| Realm Grinder | "usually about 1 week" ([Steam](https://steamcommunity.com/app/610080/discussions/0/1489987634000397190/)); the second run takes half as long or less | R15 in under three days with a guide | hundreds of resets |
+| Kittens Game | first reset after days to weeks ([Steam](https://steamcommunity.com/app/1097410/discussions/0/766312101614464290/)) | — | — |
+| Melvor Idle | none | Volcanic Dungeon in 7–14 days ([wiki](https://wiki.melvoridle.com/w/What_to_level_first)) | 200+ hours |
+| NGU Idle | minutes | about 90 hours to beat ([GameFAQs](https://gamefaqs.gamespot.com/pc/272287-ngu-idle/answers/1-how-long-does-it-take-to-beat-this-game)) | 200+ hours |
+| AdVenture Capitalist | angels within the first hours | the Moon after 10³³ and a seven-day mission; then "weeks" to "5–6 months" on the Moon ([Steam](https://steamcommunity.com/app/346900/discussions/0/458606877315633869/)) | — |
+| **Sisyphus (payback saver)** | **Begin Again on day 1.5** | **the Charter on day 17** | **ten Appeals by day 43** |
+
+What the community rewards and punishes:
+- **Layers that lengthen gently.** Antimatter Dimensions is the most
+  praised structure. Each layer takes roughly three to five times as long as
+  the last (hours, then days, a week, a month), and each brings new rules.
+  Players accept a month for a layer when it is new.
+- **One long stage without new things is the classic failure.** AdVenture
+  Capitalist's Moon ("5–6 months", "gave up on Adv Cap for about 3–4
+  months") and Realm Grinder's first reincarnation ("30 hours" for "a LITTLE
+  BIT faster", [Steam](https://steamcommunity.com/app/610080/discussions/0/1749021365357509111/))
+  are the complaints most often repeated.
+- **The second run must be much faster.** Designers aim for a 2–4× speed‑up
+  on the second run, visible "within the first 30 seconds"
+  ([dev.to](https://dev.to/aguier/i-built-7-idle-games-in-30-days-what-i-learned-about-incremental-design-5d3f)),
+  and Realm Grinder's second run takes half as long or less.
+- **Reachable endings are welcome.** Players of short incrementals praise a
+  real ending over the mobile habit of endless play
+  ([itch.io](https://itch.io/post/6764560)), while games with no ending run
+  on as an idle background for years.
+- **Engagement decays, so the pace should too.** A first session is 15–60
+  minutes of active play. Players then check in hourly, a few times a day,
+  and finally about once a week, and the best designs set their long timers
+  to match: 20 minutes, 5 hours and 2 days in one example
+  ([Guan](https://ericguan.substack.com/p/idle-game-design-principles)).
+- **Few players reach week three.** A good mobile game keeps about 35% of
+  players on day 1, 15% on day 7 and 5% on day 30; idle games do better than
+  most genres at day 7 and day 30 ([Playio](https://blog.playio.co/d1-d7-d30-retention-benchmarks-2026)).
+  A Charter in weeks 2–3 is the goal for committed players, so the first
+  week has to carry the game on its own beats.
+
+A Charter at two to three weeks sits where the genre puts a major layer:
+Antimatter Dimensions' Reality (a week to a month), Melvor's Volcanic
+Dungeon (7–14 days) and Realm Grinder's first reincarnations. Paperclips'
+single evening is the exception, a story game rather than an idle one.
 
 ## How Sisyphus scales
 
@@ -293,16 +347,37 @@ Each lever speeds the whole campaign up, and none on its own fixes the
 first-day wall or the slow catch‑up. Smoothing has to be paired with higher
 gates, or it simply makes the game shorter.
 
+## Pacing targets
+
+These are set by the playtest and the genre research, and measured with the
+payback saver playing daily (half an hour on each return).
+
+| Beat | Target | Now | Source |
+|---|---|---|---|
+| First automation (Foreman) | 5 minutes | 5:10 | playtest: right |
+| First session | 15–60 minutes with a purchase at least every few minutes | purchases slow after 40 minutes | Guan |
+| Tartarus Rim, daily player | by day 2 | day 1.3 | playtest: right |
+| Tartarus Rim, binge player | first evening (3 hours or less) | about 10 hours | "an evening" for a first layer |
+| First Begin Again | day 1–2 | day 1.5 | genre: an evening to a week |
+| Second run | 2–4× faster, catch‑up a third to a half of the previous run | 51–79% | Pecorella, dev.to, Realm Grinder |
+| Something new (hill, work, steward, trial) | every 3 days or less | 7‑day lull | Guan's 2‑day timer; the Moon's failure |
+| **The Charter** | **days 14–21** | **day 17** | playtest; the genre's major layer |
+| Each Appeal | 4–7 days, never shorter than the one before by much | 5 falling to 2 days | Antimatter Dimensions' lengthening layers |
+| All ten Appeals | days 60–90 | day 43 | Antimatter Dimensions' End at 1–3 months |
+
+The Charter already lands on target for a realistic player. So the tuning
+work is about **shape rather than speed**: smooth the first evening, the
+lull and the resets, holding the Charter between days 14 and 21, and give
+the Appeals a steady length.
+
 ## Recommendations
 
 In priority order.
 
 1. **Measure with a realistic player.**
    - Make the payback saver the reference bot.
-   - Re‑baseline `length.test.ts`: the Charter lands on day 17, against the
-     25–40-day target.
-   - Decide whether the target stands (then raise the gates of hills 4–6 and
-     the Charter) or whether about three weeks is right.
+   - Re‑baseline `length.test.ts` to the Charter on days 14–21 (from the
+     25–40-day target), and the Appeals to the targets above.
    - Every later tuning decision depends on this one.
 2. **Scale the whole economy in an Appeal, and make the numbers absurd.**
    - Multiply every price in a hill's own currency by the same factor as
@@ -313,8 +388,9 @@ In priority order.
      new "‑illion" each time) costs nothing in pacing.
    - The pace then comes only from the gap between gates and pay, and from
      the laurels; tune that gap with the realistic bot.
-3. **Open the second hill within the first 60–90 minutes of play.**
-   - Lower the Tartarus Rim's gate and opening price about tenfold.
+3. **Open the second hill within the first evening of play.**
+   - Lower the Tartarus Rim's gate and opening price, perhaps tenfold,
+     aiming at three hours or less for a player who stays.
    - The daily player still opens it on their first return, so their
      schedule barely moves.
    - A player who stays on the first evening gets the second machine and
