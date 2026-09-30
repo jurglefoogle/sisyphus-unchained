@@ -466,3 +466,11 @@ In priority order.
   grow ×1.5, and a run that starts ×1.5 faster needs about two thirds of the
   time to return. A player who waits for ×2–3 gets the fast second run. The
   square root stays; `insightFactorExponent` is now a tuning parameter.
+- **30 September. Scorn, the Insight sink.** Once the Charter is signed,
+  Insight buys ranks of Scorn: each doubles every crew's pay in every run and
+  costs twice the last (400, 800, 1600 …). Before it, a player held about
+  19,000 Insight by the last Appeal with nothing to buy. Scorn is strong, so
+  the Appeals' gates and works now rise ×3600 each (from ×2200). The bot buys
+  a rank about every Appeal early on and five in all. Appeals take 4.0–7.5
+  days each, all ten by day 71. At ×100 base price Scorn collapsed the
+  Appeals to 1–3 days; ×4400 gates with a 250 base made them lengthen to 13.5.

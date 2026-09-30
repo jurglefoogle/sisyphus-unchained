@@ -24,12 +24,13 @@ coin bonuses: day 39.3. The binge bot has not signed it after 40 hours.
 Since 30 September the bots buy levels that pay back before their goal
 (`docs/pacing-study-2026-09-30.md`; `STUDY_PATIENT=1` in the pacing study
 restores the old patient saver). Recorded 2026-09-30 with each Appeal raising
-gates and works ×2200 and pay and every hill price ×1000, laurels ×2 each,
+gates and works ×3600 and pay and every hill price ×1000, laurels ×2 each,
+Scorn (400 Insight, doubling; each rank pays ×2) bought after the Charter,
 and the 30 September gates (Tartarus Rim 8e6, Skyward Escarpment 1.1e11,
 Olympian Approach 3.6e11, the Charter 4e11): hills open on days 1.3, 4.3,
-6.9, 9.3 and 13.9, the Charter day 16.9, then Appeals 1 to 10 take 8.7, 11.8,
-8.0, 10.0, 7.0, 5.5, 4.7, 4.3, 4.7 and 3.8 days (all ten by day 85), and the
-run gross climbs from 1e21 to 1e54. The binge bot opens the Tartarus Rim at
+6.9, 9.3 and 13.9, the Charter day 16.9, then Appeals 1 to 10 take 7.5, 7.2,
+4.0, 7.3, 4.5, 4.2, 4.3, 4.0, 5.4 and 5.5 days (all ten by day 71, with five
+ranks of Scorn), and the run gross climbs from 1e21 to 1e57. The binge bot opens the Tartarus Rim at
 1.7 hours.
 Print the current timings with
 `CAMPAIGN=1 npx vitest run tests/length.test.ts tests/campaign.test.ts --silent=false`,

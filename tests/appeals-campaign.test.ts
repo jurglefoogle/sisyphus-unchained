@@ -19,6 +19,11 @@ describe.skipIf(!process.env.APPEALS)('length: the Appeals', { timeout: 1_200_00
       const [gateGrowth, workGrowth, payGrowth, laurelMultiplier] = process.env.APPEALS_TUNE.split(',').map(Number);
       Object.assign(catalog.appeals, { gateGrowth, workGrowth, payGrowth, laurelMultiplier });
     }
+    // APPEALS_SCORN=baseCost,costGrowth,payMultiplier overrides Scorn.
+    if (process.env.APPEALS_SCORN) {
+      const [baseCost, costGrowth, payMultiplier] = process.env.APPEALS_SCORN.split(',').map(Number);
+      Object.assign(catalog.scorn, { baseCost, costGrowth, payMultiplier });
+    }
     const appealGain = process.env.APPEALS_GAIN ? Number(process.env.APPEALS_GAIN) : undefined;
     const run = playAppeals(freshState(), { resets: 'gain', appeals: Number(process.env.APPEALS_N ?? 10), daysEach: 120, appealGain });
     const DAY = 86400;

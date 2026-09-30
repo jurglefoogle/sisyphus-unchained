@@ -270,6 +270,8 @@ export function modifiers(state: GameState, siteId: string): Modifiers {
   const twist = appealDef(state.appeal.number);
   if (twist) for (const e of twist.effects) fold(m, e);
   m.crew *= catalog.appeals.payGrowth ** state.appeal.number * catalog.appeals.laurelMultiplier ** state.appeal.laurels;
+  // Scorn, bought with Insight after the Charter, multiplies every crew's pay in every run.
+  m.crew *= catalog.scorn.payMultiplier ** state.prestige.scorn;
   // Zeus's Edict, while one is in force, rules every hill.
   for (const site of state.empire.sites) {
     const edict = site.bureau?.edict ? EDICTS.find((x) => x.id === site.bureau!.edict) : undefined;

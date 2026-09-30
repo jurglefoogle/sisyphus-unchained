@@ -105,7 +105,8 @@
   "sky": { "siteId": "skyward_escarpment", "houses": 12, "climbsPerHouse": 4, "cooldown": 12 },
   "bureau": { "siteId": "olympian_approach", "startClerks": 2, "clerkRate": 0.25, "clerkCost": 10, "clerkGrowth": 1.5, "filingStep": 0.5, "filingEvery": 25, "lateFee": 0.02, "statute": 50, "power": 0.8, "dueStep": 0.01, "edictSeconds": 300, "settleClimbs": 400 },
   "trials": { "needed": { "first_hill": 100, "tartarus_rim": 25, "leaking_heights": 300, "bronze_pass": 3, "skyward_escarpment": 12 }, "jarHigh": 0.8, "skyMounted": 3 },
-  "appeals": { "gateGrowth": 2200, "workGrowth": 2200, "payGrowth": 1000, "laurelMultiplier": 2 },
+  "appeals": { "gateGrowth": 3600, "workGrowth": 3600, "payGrowth": 1000, "laurelMultiplier": 2 },
+  "scorn": { "baseCost": 400, "costGrowth": 2, "payMultiplier": 2 },
   "memory": { "remembranceCosts": [3, 6, 12, 24, 48], "keepOnFile": 8, "unseal": 2, "summon": 3 },
   "devices": { "dealt": 6, "tabletLevels": [5, 10, 25, 50, 100, 150], "tabletCosts": [40, 120, 1500, 60000, 150000000, 400000000000] },
   "stewards": {

@@ -36,7 +36,7 @@ import { Money } from './money';
 import { randomSeed } from './rng';
 import { checkVisitor, dealHand, noteAtlasTurn, notePatch, notePauseEnded, revealDevice, visitorWaiting } from './seals';
 import { trialMet } from './trials';
-import { gateOf, unlockCostOf, workCostOf } from './formulas';
+import { gateOf, scornCost, scornOpen, unlockCostOf, workCostOf } from './formulas';
 import { remembranceFor, tabletPool, visitorFor } from '../content/devices';
 import {
   findSite,
@@ -136,7 +136,7 @@ export function newGame(now: number, seeds?: { coin: number; relic: number; deal
     prelude: { complete: false, upgradeIds: [], bestHeight: 0, attempts: 0 },
     records: { runSeconds: 0, campaignSeconds: 0, firstCharterSeconds: null, charterSeconds: {} },
     appeal: { number: 0, laurels: 0 },
-    prestige: { lifetimeInsightAwarded: 0, giftedInsight: 0, insightSpent: 0, permanentUpgradeIds: [], remembrances: {}, fileSlots: [], filed: {} },
+    prestige: { lifetimeInsightAwarded: 0, giftedInsight: 0, insightSpent: 0, permanentUpgradeIds: [], remembrances: {}, fileSlots: [], filed: {}, scorn: 0 },
     empire: {
       foremanOwned: false,
       selectedSiteId: catalog.sites[0].id,
@@ -653,6 +653,16 @@ function spendInsight(state: GameState, cost: number): boolean {
 /** A hill held in some run (its name is in the Archive). */
 function hillKnown(state: GameState, siteId: string): boolean {
   return state.discoveries.archiveIds.includes(`site.${siteId}`) || siteId === catalog.sites[0].id;
+}
+
+/** Buy the next rank of Scorn: every crew's pay multiplied, in every run. */
+export function buyScorn(state: GameState, events: GameEvent[]): CommandResult {
+  if (!scornOpen(state)) return fail('locked');
+  const cost = scornCost(state);
+  if (!spendInsight(state, cost)) return fail('insufficient-insight');
+  state.prestige.scorn += 1;
+  events.push({ type: 'PurchaseCompleted', kind: 'insight', cost: Money.of(cost) });
+  return commit(state);
 }
 
 /** Buy the next Remembrance rank for a hill. */

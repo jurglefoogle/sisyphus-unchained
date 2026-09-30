@@ -70,6 +70,22 @@ export function workCostOf(state: GameState, def: WorkDef): Money {
   return def.cost.mul(catalog.appeals.workGrowth ** state.appeal.number);
 }
 
+/** Scorn is offered once the Charter has ever been signed. */
+export function scornOpen(state: GameState): boolean {
+  return (
+    state.records.firstCharterSeconds !== null ||
+    state.appeal.number > 0 ||
+    state.appeal.laurels > 0 ||
+    state.empire.purchasedWorkIds.includes('charter')
+  );
+}
+
+/** The Insight price of the next rank of Scorn. */
+export function scornCost(state: GameState): number {
+  const c = catalog.scorn;
+  return Math.round(c.baseCost * c.costGrowth ** state.prestige.scorn);
+}
+
 export function relicFactor(state: GameState): number {
   return catalog.relics.incomeMultiplier ** state.discoveries.relicIds.length;
 }

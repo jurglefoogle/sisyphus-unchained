@@ -52,6 +52,8 @@ import {
   steadyIncomePerSecond,
   stewardCost,
   stewardInsightCost,
+  scornCost,
+  scornOpen,
   stewardOffered,
   strengthLevelEffective,
   type LevelTrack,
@@ -271,6 +273,8 @@ export interface GameView {
   appeal: { number: number; name: string; rule: string; laurels: number } | null;
   /** Remembrances and files, one per hill held in any run. */
   memory: MemoryRow[];
+  /** Scorn, once the Charter has been signed: ranks owned, the pay they give, and the next rank's price. */
+  scorn: { rank: number; pay: string; next: string; cost: number; affordable: boolean } | null;
   /** The Insight menu appears once any Insight has been awarded. */
   insightMenu: boolean;
   /** The permanent income factor from lifetime Insight. */
@@ -1521,6 +1525,15 @@ export function buildView(state: GameState): GameView {
     insight: spendable,
     insightShop,
     memory,
+    scorn: scornOpen(state)
+      ? {
+          rank: state.prestige.scorn,
+          pay: formatTimes(catalog.scorn.payMultiplier ** state.prestige.scorn),
+          next: formatTimes(catalog.scorn.payMultiplier ** (state.prestige.scorn + 1)),
+          cost: scornCost(state),
+          affordable: spendable >= scornCost(state),
+        }
+      : null,
     gauge: machineGauge(state, site),
     appealOffer: appealOffer(state),
     appeal:

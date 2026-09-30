@@ -243,6 +243,8 @@ export interface GameState {
     fileSlots: string[];
     /** The device kept on file per hill. */
     filed: Record<string, string>;
+    /** Ranks of Scorn bought (after the first Charter): every crew's pay doubles with each. */
+    scorn: number;
   };
 
   empire: {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { catalog } from '../src/content/catalog';
 import { APPEALS, appealDef, DEVICES, tabletPool } from '../src/content/devices';
-import { fileAppeal, installWork } from '../src/core/commands';
+import { buyScorn, fileAppeal, installWork } from '../src/core/commands';
 import { modifiers } from '../src/core/effects';
 import { bulkCost, gateOf, stewardCost, tabletCost, unlockCostOf, workCostOf } from '../src/core/formulas';
 import { checksum, deserializeSave, serializeSave } from '../src/core/save';
@@ -74,6 +74,24 @@ describe('Appeals', () => {
     fileAppeal(t, []);
     expect(t.appeal.number).toBe(2);
     expect(modifiers(t, 'first_hill').noReturn).toBe(true);
+  });
+
+  it('Scorn opens with the Charter, doubles every crew’s pay per rank, costs double each time, and is kept', () => {
+    const s = makeState();
+    s.prestige.lifetimeInsightAwarded = 10_000;
+    expect(buyScorn(s, []).ok).toBe(false);
+    const t = signed();
+    t.prestige.lifetimeInsightAwarded = 10_000;
+    const crew = modifiers(t, 'first_hill').crew;
+    const spent = t.prestige.insightSpent;
+    expect(buyScorn(t, []).ok).toBe(true);
+    expect(buyScorn(t, []).ok).toBe(true);
+    expect(t.prestige.insightSpent - spent).toBe(catalog.scorn.baseCost * (1 + catalog.scorn.costGrowth));
+    expect(modifiers(t, 'first_hill').crew / crew).toBeCloseTo(catalog.scorn.payMultiplier ** 2, 6);
+    fileAppeal(t, []);
+    expect(t.prestige.scorn).toBe(2);
+    const r = deserializeSave(serializeSave(t));
+    expect(r.ok && r.state.prestige.scorn).toBe(2);
   });
 
   it('each Appeal adds a tablet to every hill, toward twelve', () => {

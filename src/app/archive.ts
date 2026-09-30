@@ -6,6 +6,7 @@ import { SCENE_FOR_STORY, SCENES, sceneSeenId } from '../content/scenes';
 import { en, t } from '../content/strings';
 import { ACHIEVEMENTS } from '../core/achievements';
 import { formatDuration, formatMoney } from '../core/format';
+import { scornOpen } from '../core/formulas';
 import type { GameState } from '../core/state';
 
 export interface ArchiveView {
@@ -77,6 +78,7 @@ const GUIDE: { id: string; title: string; after: string | null; when?: (s: GameS
   { id: 'olympian_approach', title: 'The Paperwork Mill', after: machineFlag('olympian_approach'), when: (s) => hasMachine(s, 'olympian_approach'), text: machineText('olympian_approach') },
   { id: 'memory', title: 'Spending Insight', after: null, when: (s) => s.counters.totalRuns > 0, text: 'Besides the eight permanent upgrades, Insight buys Remembrances (five ranks per hill, deepening its machine in every run), Keep on File (a revealed tablet always dealt there), Unseal in Advance and Send for a Visitor.' },
   { id: 'appeals', title: 'Appeals and laurels', after: null, when: (s) => s.appeal.number > 0 || s.records.firstCharterSeconds !== null || s.discoveries.seenStoryIds.includes('charter_purchase'), text: 'After the Charter, File an Appeal begins a harder campaign: gates, prices and the pay of every crew all rise, and every hill gets a rule twist with a compensation. Signing the Charter again wins a laurel: the pay of every crew is multiplied ×' + catalog.appeals.laurelMultiplier + ' for good, and laurels compound.' },
+  { id: 'scorn', title: 'Scorn', after: null, when: (s) => scornOpen(s), text: 'Once the Charter is signed, Insight buys Scorn: each rank multiplies the pay of every crew ×' + catalog.scorn.payMultiplier + ' in every run, for good, and costs twice the last. It is how Sisyphus keeps pace with the Appeals.' },
   { id: 'goals', title: 'Goals and the empire', after: 'first_level', text: 'Pin any purchase as your goal: the objective line tracks it and never reserves money. The Empire view shows every hill; choosing one only moves your attention.' },
 ];
 

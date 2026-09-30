@@ -111,6 +111,8 @@ export interface Catalog {
   sky: typeof raw.sky;
   bureau: typeof raw.bureau;
   memory: typeof raw.memory;
+  /** Scorn: after the first Charter, a repeatable Insight purchase that multiplies every crew's pay. */
+  scorn: typeof raw.scorn;
   trials: typeof raw.trials;
   appeals: typeof raw.appeals;
   devices: typeof raw.devices;
@@ -232,6 +234,7 @@ export function buildCatalog(data: RawEconomy): Catalog {
   check(data.foundry.defaultSplit >= 0 && data.foundry.defaultSplit <= 1, 'the foundry split is a share');
   check(data.sites.some((s) => s.id === data.sky.siteId), 'the sky must turn over a known hill');
   check(data.sites.some((s) => s.id === data.bureau.siteId), 'the bureau must sit on a known hill');
+  check(data.scorn.baseCost > 0 && data.scorn.costGrowth > 1 && data.scorn.payMultiplier > 1, 'Scorn must cost more each rank and pay more');
   check(data.memory.remembranceCosts.every((c, i, a) => c > 0 && (i === 0 || c >= a[i - 1])), 'Remembrances must cost more each rank');
   check(data.bureau.clerkRate > 0 && data.bureau.statute > 0 && data.bureau.startClerks >= 1, 'the bureau must approve forms');
   check(data.sky.houses >= data.devices.dealt && data.sky.climbsPerHouse >= 1, 'the sky needs a house for every constellation');
@@ -264,6 +267,7 @@ export function buildCatalog(data: RawEconomy): Catalog {
     sky: data.sky,
     bureau: data.bureau,
     memory: data.memory,
+    scorn: data.scorn,
     trials: data.trials,
     appeals: data.appeals,
     devices: data.devices,

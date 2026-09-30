@@ -33,6 +33,7 @@ import {
   hireClerk,
   setOnDuty,
   remember,
+  buyScorn,
   keepOnFile,
   fileAppeal,
   passTime,
@@ -120,6 +121,7 @@ export type Command =
   | { type: 'HireClerk' }
   | { type: 'SetOnDuty'; clerks: number }
   | { type: 'Remember'; siteId: string }
+  | { type: 'BuyScorn' }
   | { type: 'KeepOnFile'; siteId: string; deviceId: string | null }
   | { type: 'Unseal'; index: number }
   | { type: 'Summon' }
@@ -506,6 +508,8 @@ export class Game {
         return this.run((e) => fileAppeal(s(), e));
       case 'Remember':
         return this.run((e) => remember(s(), c.siteId, e));
+      case 'BuyScorn':
+        return this.run((e) => buyScorn(s(), e));
       case 'KeepOnFile':
         return this.run(() => keepOnFile(s(), c.siteId, c.deviceId));
       case 'Unseal':
@@ -549,6 +553,9 @@ export class Game {
   }
   fileAppeal(requestId?: string) {
     return this.send({ type: 'FileAppeal' }, requestId);
+  }
+  buyScorn(requestId?: string) {
+    return this.send({ type: 'BuyScorn' }, requestId);
   }
   remember(siteId: string, requestId?: string) {
     return this.send({ type: 'Remember', siteId }, requestId);

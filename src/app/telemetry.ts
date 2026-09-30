@@ -12,7 +12,7 @@ const MAX_ENTRIES = 5000;
 /** The choices each hill's machine and the later systems ask for; purchases are logged separately. */
 const DECISIONS = new Set([
   'SetStewardOrder', 'SetTrim', 'TakeBargain', 'Vent', 'SetVentAt', 'Drill', 'Patch', 'SetJarTarget', 'SetSplit',
-  'PourNext', 'TurnSky', 'Mount', 'HireClerk', 'SetOnDuty', 'FileAppeal', 'Remember', 'KeepOnFile', 'Unseal', 'Summon',
+  'PourNext', 'TurnSky', 'Mount', 'HireClerk', 'SetOnDuty', 'FileAppeal', 'Remember', 'BuyScorn', 'KeepOnFile', 'Unseal', 'Summon',
 ]);
 
 export interface TelemetryEntry {

@@ -68,6 +68,25 @@
     {/each}
   </ol>
 
+  {#if view.scorn}
+    {@const sc = view.scorn}
+    <h3>Scorn</h3>
+    <p class="muted">The Charter is signed and the stone still waits. Sisyphus looks down at it and smiles.</p>
+    <ol>
+      <li class="upgrade" class:affordable={sc.affordable}>
+        <div class="head">
+          <strong>Scorn{sc.rank > 0 ? `, rank ${sc.rank}` : ''}</strong>
+          {#if sc.rank > 0}<span class="tag">Every crew's pay {sc.pay}</span>{/if}
+        </div>
+        <p class="effect">Each rank doubles every crew's pay, in every run, for good. The next makes it {sc.next}; each rank costs twice the last.</p>
+        <button class="buy" disabled={!sc.affordable} onclick={() => game.buyScorn(`${view.revision}:scorn:${sc.rank}`)} aria-label="Scorn rank {sc.rank + 1} for {sc.cost} Insight">
+          <span>Scorn</span><small class="cost"><img src={iconUrl('ui_insight')} alt="" />{sc.cost}</small>
+        </button>
+        {#if !sc.affordable}<p class="note">Need {sc.cost - view.insight} more Insight.</p>{/if}
+      </li>
+    </ol>
+  {/if}
+
   {#if view.memory.length > 0}
     <h3>Remembrances and files</h3>
     <p class="muted">Each hill remembers its machine a little better, in every run. A device kept on file is always dealt there.</p>

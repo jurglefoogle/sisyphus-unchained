@@ -22,13 +22,14 @@ import {
   setOnDuty,
   fileAppeal,
   keepOnFile,
+  buyScorn,
   remember,
   summonVisitor,
 } from '../src/core/commands';
 import { remembranceFor, tabletPool, visitorFor } from '../src/content/devices';
 import { canTurn, isConstellation, overhead } from '../src/core/sky';
 import { clerkCost, clerksToMatch, filing, statute } from '../src/core/bureau';
-import { unlockCostOf, workCostOf } from '../src/core/formulas';
+import { scornCost, scornOpen, unlockCostOf, workCostOf } from '../src/core/formulas';
 import { modifiers } from '../src/core/effects';
 import { bestHoles } from '../src/core/jar';
 import {
@@ -292,6 +293,8 @@ function spendInsight(run: Run): void {
       const v = visitorFor(site.id);
       if (v && !site.summoned && site.productionLevel < v.arrivesAt && summonVisitor(s, site.id, []).ok) note(`insight summon ${site.id}`);
     }
+    // After the Charter, the rest goes to Scorn, keeping a little for summons.
+    while (scornOpen(s) && spendableInsight(s) >= scornCost(s) + 20 && buyScorn(s, []).ok) note(`insight scorn ${s.prestige.scorn}`);
     return;
   }
 }

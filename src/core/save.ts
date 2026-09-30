@@ -65,6 +65,7 @@ export function stateToJson(state: GameState): Json {
       lifetimeInsightAwarded: state.prestige.lifetimeInsightAwarded,
       giftedInsight: state.prestige.giftedInsight,
       insightSpent: state.prestige.insightSpent,
+      scorn: state.prestige.scorn,
       permanentUpgradeIds: [...state.prestige.permanentUpgradeIds],
       remembrances: { ...state.prestige.remembrances },
       fileSlots: [...state.prestige.fileSlots],
@@ -431,7 +432,7 @@ export function stateFromJson(data: unknown): GameState {
     },
     records: recordsFrom(d.records),
     appeal: appealFrom(d.appeal),
-    prestige: { lifetimeInsightAwarded: lifetime, giftedInsight: gifted, insightSpent: spent, permanentUpgradeIds: upgrades, ...memoryFrom(prestige) },
+    prestige: { lifetimeInsightAwarded: lifetime, giftedInsight: gifted, insightSpent: spent, permanentUpgradeIds: upgrades, ...memoryFrom(prestige), scorn: prestige.scorn === undefined ? 0 : int(prestige.scorn, 'prestige.scorn', 0, 10000) },
     empire: {
       foremanOwned: bool(empire.foremanOwned, 'empire.foremanOwned'),
       selectedSiteId,
