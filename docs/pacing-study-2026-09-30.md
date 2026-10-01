@@ -355,15 +355,15 @@ payback saver playing daily (half an hour on each return).
 | Beat | Target | Now | Source |
 |---|---|---|---|
 | First automation (Foreman) | 5 minutes | 5:10 | playtest: right |
-| First session | 15–60 minutes with a purchase at least every few minutes | purchases slow after 40 minutes | Guan |
+| First session | 15–60 minutes with a purchase at least every few minutes | a purchase every 1–9 minutes; one wait of about 20 minutes before the Rim | Guan |
 | Tartarus Rim, daily player | by day 2 | day 1.3 | playtest: right |
-| Tartarus Rim, binge player | first evening (3 hours or less) | about 10 hours | "an evening" for a first layer |
+| Tartarus Rim, binge player | first evening (3 hours or less) | 1.0 hours | "an evening" for a first layer |
 | First Begin Again | day 1–2 | day 1.5 | genre: an evening to a week |
 | Second run | 2–4× faster, catch‑up a third to a half of the previous run | 51–79% | Pecorella, dev.to, Realm Grinder |
-| Something new (hill, work, steward, trial) | every 3 days or less | 7‑day lull | Guan's 2‑day timer; the Moon's failure |
-| **The Charter** | **days 14–21** | **day 17** | playtest; the genre's major layer |
-| Each Appeal | 4–7 days, never shorter than the one before by much | 5 falling to 2 days | Antimatter Dimensions' lengthening layers |
-| All ten Appeals | days 60–90 | day 43 | Antimatter Dimensions' End at 1–3 months |
+| Something new (hill, work, steward, trial) | every 3 days or less | hills on days 1.3, 3.9, 5.9, 8.3, 12.5; longest gap 4.8 days | Guan's 2‑day timer; the Moon's failure |
+| **The Charter** | **days 14–21** | **day 17.3** | playtest; the genre's major layer |
+| Each Appeal | 4–7 days, never shorter than the one before by much | 3–11.5 days, most about 5 | Antimatter Dimensions' lengthening layers |
+| All ten Appeals | days 60–90 | day 77 | Antimatter Dimensions' End at 1–3 months |
 
 The Charter already lands on target for a realistic player. So the tuning
 work is about **shape rather than speed**: smooth the first evening, the
@@ -474,3 +474,20 @@ In priority order.
   a rank about every Appeal early on and five in all. Appeals take 4.0–7.5
   days each, all ten by day 71. At ×100 base price Scorn collapsed the
   Appeals to 1–3 days; ×4400 gates with a 250 base made them lengthen to 13.5.
+- **30 September. A doubling every 25 levels.** Milestones now fall at 10,
+  25, 50, 75 … 200 (nine doublings, from six), so a big moment is never more
+  than 25 levels away. Level prices rise ×1.18 a level (from ×1.17) to hold
+  the extra power. The gates move with it:
+  - Tartarus Rim 2.5e6 and 3.5e6 (from 6e6 and 8e6). A binge player opens
+    it at 1.0 hours. The longest wait without a purchase in the first two
+    hours falls from 43 to about 20 minutes, and `length.test.ts` holds it
+    under 25.
+  - Skyward Escarpment 1.6e11 and 2.2e11, Olympian Approach 3.6e11 and 5e11,
+    and the Charter 1.6e12 (from 8e10/1.1e11, 2.6e11/3.6e11 and 4e11).
+  - The daily player opens hills on days 1.3, 3.9, 5.9, 8.3 and 12.5 and
+    signs the Charter on day 17.3.
+  - Appeal gates and works rise ×4000 each (from ×3600). The ten Appeals take
+    5.5, 8.7, 4.8, 11.5, 4.5, 5.0, 5.0, 3.0, 5.0 and 6.6 days, all by day 77.
+    The Appeals are very sensitive to this factor: ×3600 ends them on day 63,
+    ×4400 on day 99, ×5000 on day 135, and ×7000 leaves two unwon after a
+    year.

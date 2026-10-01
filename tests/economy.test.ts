@@ -74,7 +74,7 @@ describe('worked opening example (spec §02)', () => {
       prev = next;
     }
     site.productionLevel = 200;
-    expectClose(cyclePayout(s, site).base, 10 * 200 * 64);
+    expectClose(cyclePayout(s, site).base, 10 * 200 * 2 ** catalog.levels.milestones.length);
   });
 });
 

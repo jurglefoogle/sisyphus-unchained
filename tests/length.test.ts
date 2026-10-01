@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { catalog } from '../src/content/catalog';
-import { charter, playBinge, playDaily, report, type Run } from './bot';
+import { charter, owned, playBinge, playDaily, report, watch, type Run } from './bot';
 import { freshState } from './helpers';
 
 /**
  * The length model (docs/pacing-study-2026-09-30.md, Pacing targets): the
  * Charter in two to three weeks for a daily player who buys levels that pay
  * back, and no less than about 40 hours for a binge
- * player. Set CAMPAIGN=1 to print the timelines.
+ * player, who opens the second hill in the first evening and never waits
+ * long for a purchase in the first two hours. Set CAMPAIGN=1 to print the timelines.
  */
 
 const DAY = 86400;
@@ -44,9 +45,29 @@ describe('length: the daily player', { timeout: 60_000 }, () => {
 });
 
 describe('length: the binge player', { timeout: 60_000 }, () => {
-  it('opens the Tartarus Rim within the first evening', () => {
-    const run = playBinge(freshState(), { resets: 'gain', limitHours: 4 });
-    expect(opened(run, 'tartarus_rim')).toBeLessThanOrEqual(3 * 3600);
+  it('opens the Tartarus Rim within the first evening, with something to buy all the way', () => {
+    // Every glance that changes what is owned is a purchase (or a Begin Again).
+    const buys: number[] = [];
+    let prev = 0;
+    watch.glance = (r) => {
+      const now = owned(r.state);
+      if (now !== prev) buys.push(r.t);
+      prev = now;
+    };
+    let run: Run;
+    try {
+      run = playBinge(freshState(), { resets: 'gain', limitHours: 4 });
+    } finally {
+      watch.glance = undefined;
+    }
+    expect(opened(run, 'tartarus_rim')).toBeLessThanOrEqual(2 * 3600);
+    let longest = 0;
+    let last = 0;
+    for (const t of [...buys.filter((t) => t < 2 * 3600), 2 * 3600]) {
+      longest = Math.max(longest, t - last);
+      last = t;
+    }
+    expect(longest).toBeLessThanOrEqual(25 * 60);
   });
 
   it('is nowhere near the Charter after 40 hours of play', () => {

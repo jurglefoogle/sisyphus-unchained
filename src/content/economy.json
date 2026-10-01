@@ -15,12 +15,12 @@
     "manualAssistFactor": 1.5
   },
   "levels": {
-    "milestones": [10, 25, 50, 100, 150, 200],
+    "milestones": [10, 25, 50, 75, 100, 125, 150, 175, 200],
     "milestoneFactor": 2,
     "productionCap": 200,
     "strengthCap": 25,
     "impactCap": 10,
-    "productionGrowth": 1.17,
+    "productionGrowth": 1.18,
     "strengthCostMultiplier": 5,
     "strengthGrowth": 1.45,
     "impactCostMultiplier": 12.5,
@@ -47,11 +47,11 @@
   },
   "sites": [
     { "id": "first_hill", "displayNameKey": "site.first_hill", "currency": "obols", "appraisal": 1, "unlockCost": "0", "defianceGate": "0", "baseYield": "10", "baseLevelCost": "8", "ascentSeconds": 12, "stoneAssetId": "stone_limestone", "sceneId": "scene_first_hill", "patronId": "hermes" },
-    { "id": "tartarus_rim", "displayNameKey": "site.tartarus_rim", "currency": "cinders", "appraisal": 25, "unlockCost": "6e6", "defianceGate": "8e6", "baseYield": "10", "baseLevelCost": "40", "ascentSeconds": 15, "stoneAssetId": "stone_basalt", "sceneId": "scene_tartarus_rim", "patronId": "daedalus" },
+    { "id": "tartarus_rim", "displayNameKey": "site.tartarus_rim", "currency": "cinders", "appraisal": 25, "unlockCost": "2.5e6", "defianceGate": "3.5e6", "baseYield": "10", "baseLevelCost": "40", "ascentSeconds": 15, "stoneAssetId": "stone_basalt", "sceneId": "scene_tartarus_rim", "patronId": "daedalus" },
     { "id": "leaking_heights", "displayNameKey": "site.leaking_heights", "currency": "drams", "appraisal": 1000, "unlockCost": "1.6e9", "defianceGate": "2e9", "baseYield": "10", "baseLevelCost": "160", "ascentSeconds": 18, "stoneAssetId": "stone_marble", "sceneId": "scene_leaking_heights", "patronId": "danaids" },
     { "id": "bronze_pass", "displayNameKey": "site.bronze_pass", "currency": "ingots", "appraisal": 75000, "unlockCost": "2.7e10", "defianceGate": "3.6e10", "baseYield": "10", "baseLevelCost": "640", "ascentSeconds": 21, "stoneAssetId": "stone_bronze", "sceneId": "scene_bronze_pass", "patronId": "talos" },
-    { "id": "skyward_escarpment", "displayNameKey": "site.skyward_escarpment", "currency": "starlight", "appraisal": 10000000, "unlockCost": "8e10", "defianceGate": "1.1e11", "baseYield": "10", "baseLevelCost": "2560", "ascentSeconds": 24, "stoneAssetId": "stone_star", "sceneId": "scene_skyward_escarpment", "patronId": "atlas" },
-    { "id": "olympian_approach", "displayNameKey": "site.olympian_approach", "currency": "ambrosia", "appraisal": 3000000000, "unlockCost": "2.6e11", "defianceGate": "3.6e11", "baseYield": "10", "baseLevelCost": "8500", "ascentSeconds": 27, "stoneAssetId": "stone_decree", "sceneId": "scene_olympian_approach", "patronId": "zeus" }
+    { "id": "skyward_escarpment", "displayNameKey": "site.skyward_escarpment", "currency": "starlight", "appraisal": 10000000, "unlockCost": "1.6e11", "defianceGate": "2.2e11", "baseYield": "10", "baseLevelCost": "2560", "ascentSeconds": 24, "stoneAssetId": "stone_star", "sceneId": "scene_skyward_escarpment", "patronId": "atlas" },
+    { "id": "olympian_approach", "displayNameKey": "site.olympian_approach", "currency": "ambrosia", "appraisal": 3000000000, "unlockCost": "3.6e11", "defianceGate": "5e11", "baseYield": "10", "baseLevelCost": "8500", "ascentSeconds": 27, "stoneAssetId": "stone_decree", "sceneId": "scene_olympian_approach", "patronId": "zeus" }
   ],
   "works": [
     { "id": "hermes", "displayNameKey": "work.hermes", "siteId": "first_hill", "requiredLevel": 10, "cost": "600", "effect": "incomeMultiplier", "value": 1.25, "storyId": null },
@@ -60,7 +60,7 @@
     { "id": "danaids", "displayNameKey": "work.danaids", "siteId": "leaking_heights", "requiredLevel": 10, "cost": "80000", "effect": "incomeMultiplier", "value": 2, "storyId": null },
     { "id": "talos", "displayNameKey": "work.talos", "siteId": "bronze_pass", "requiredLevel": 10, "cost": "480000", "effect": "incomeMultiplier", "value": 2, "storyId": "talos_purchase" },
     { "id": "atlas", "displayNameKey": "work.atlas", "siteId": "skyward_escarpment", "requiredLevel": 10, "cost": "1.92e6", "effect": "incomeMultiplier", "value": 2, "storyId": null },
-    { "id": "charter", "displayNameKey": "work.charter", "siteId": "olympian_approach", "requiredLevel": 25, "cost": "4e11", "effect": "incomeMultiplierAndEnding", "value": 2, "storyId": "charter_purchase" }
+    { "id": "charter", "displayNameKey": "work.charter", "siteId": "olympian_approach", "requiredLevel": 25, "cost": "1.6e12", "effect": "incomeMultiplierAndEnding", "value": 2, "storyId": "charter_purchase" }
   ],
   "bonusTargets": [
     { "id": "debris", "probability": 0.8, "baseMultiplier": 0 },
@@ -105,7 +105,7 @@
   "sky": { "siteId": "skyward_escarpment", "houses": 12, "climbsPerHouse": 4, "cooldown": 12 },
   "bureau": { "siteId": "olympian_approach", "startClerks": 2, "clerkRate": 0.25, "clerkCost": 10, "clerkGrowth": 1.5, "filingStep": 0.5, "filingEvery": 25, "lateFee": 0.02, "statute": 50, "power": 0.8, "dueStep": 0.01, "edictSeconds": 300, "settleClimbs": 400 },
   "trials": { "needed": { "first_hill": 100, "tartarus_rim": 25, "leaking_heights": 300, "bronze_pass": 3, "skyward_escarpment": 12 }, "jarHigh": 0.8, "skyMounted": 3 },
-  "appeals": { "gateGrowth": 3600, "workGrowth": 3600, "payGrowth": 1000, "laurelMultiplier": 2 },
+  "appeals": { "gateGrowth": 4000, "workGrowth": 4000, "payGrowth": 1000, "laurelMultiplier": 2 },
   "scorn": { "baseCost": 400, "costGrowth": 2, "payMultiplier": 2 },
   "memory": { "remembranceCosts": [3, 6, 12, 24, 48], "keepOnFile": 8, "unseal": 2, "summon": 3 },
   "devices": { "dealt": 6, "tabletLevels": [5, 10, 25, 50, 100, 150], "tabletCosts": [40, 120, 1500, 60000, 150000000, 400000000000] },

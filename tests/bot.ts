@@ -98,6 +98,17 @@ export interface Run {
   absences: { t: number; decrees: string[] }[];
 }
 
+/** Everything bought that stays bought within a run: levels, machines, tablets, works, hills. */
+export function owned(s: GameState): number {
+  let n = s.empire.purchasedWorkIds.length + s.empire.sites.length + (s.empire.foremanOwned ? 1 : 0);
+  for (const site of s.empire.sites) {
+    n += site.productionLevel + site.strengthLevel + site.impactLevel + site.devices.length;
+    n += (site.wheelOwned ? 1 : 0) + (site.counterweight !== null ? 1 : 0) + (site.steward ? 1 : 0);
+    if (site.bureau) n += site.bureau.hired;
+  }
+  return n;
+}
+
 export function newRun(state: GameState): Run {
   return { state, t: 0, played: 0, log: [], absences: [] };
 }
