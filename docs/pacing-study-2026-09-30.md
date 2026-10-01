@@ -491,3 +491,12 @@ In priority order.
     The Appeals are very sensitive to this factor: ×3600 ends them on day 63,
     ×4400 on day 99, ×5000 on day 135, and ×7000 leaves two unwon after a
     year.
+- **30 September. Venting is the reward.** Before, an eruption grew with
+  heat all the way to 100%, and the wheel erupts on its own at full heat, so
+  never touching the vent was the best play. Now an eruption is strongest
+  vented at 80% heat (×4.37); past that the wheel overheats, and one left to
+  blow at full heat keeps 60% of the bonus (×3.02, about what it paid
+  before). Steady venting at 70–80% earns about a fifth more than leaving it
+  alone. The base power rises from 2 to 4.5 so that an unattended wheel pays
+  as it did; at power 2 the bot, which never vents by hand, slipped the
+  Charter from day 17 to day 23.

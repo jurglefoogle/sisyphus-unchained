@@ -5,9 +5,10 @@ import type { FurnaceState, SiteState } from './state';
 /**
  * Ixion's Wheel, the Tartarus Rim's machine (docs/hill-workshops-plan.md §3.2).
  * Every impact heats the wheel, more slowly the hotter it is. At full heat it
- * erupts: impacts pay more for several climbs. Venting early gives a smaller
- * eruption sooner; eruption strength grows faster than heat, and heating slows
- * near the top, so there is a best vent point and devices move it.
+ * erupts: impacts pay more for several climbs. Eruptions are strongest when
+ * vented at the peak heat (80%); past it the wheel overheats, and one left to
+ * blow at full heat pays only part of that. Venting is the reward for watching
+ * (or for a steward); leaving the wheel alone still pays, just less.
  *
  * Everything here is pure and deterministic, so offline settlement can step
  * the wheel exactly as the live game does.
@@ -34,10 +35,12 @@ export function heatStep(m: Modifiers, f: FurnaceState): number {
   return c.gain * growth * (1 - c.slowdown * f.heat);
 }
 
-/** Impact multiplier of an eruption vented at `heat`. */
+/** Impact multiplier of an eruption vented at `heat`: rising to the peak heat, then falling to `overheatShare` of that bonus at full heat. */
 export function eruptionPower(m: Modifiers, heat: number, extra = 1): number {
   const c = catalog.furnace;
-  return 1 + c.power * heat ** c.exponent * m.furnacePower * extra;
+  let bonus = c.power * Math.min(heat, c.peakHeat) ** c.exponent;
+  if (heat > c.peakHeat) bonus *= 1 - ((1 - c.overheatShare) * (heat - c.peakHeat)) / (1 - c.peakHeat);
+  return 1 + bonus * m.furnacePower * extra;
 }
 
 export function eruptionClimbs(m: Modifiers): number {

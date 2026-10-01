@@ -24,8 +24,8 @@ export const MACHINE_CARDS: MachineCard[] = [
   {
     siteId: 'tartarus_rim',
     machine: 'Ixion’s Wheel',
-    decision: 'Choose when to vent. The best point is usually near 80% heat.',
-    text: 'Every impact heats the wheel. At full heat it erupts and impacts pay more for several climbs. Venting early gives a smaller eruption sooner, and heat builds ever more slowly near the top. The Erinyes vent at a heat you set.',
+    decision: 'Vent near 80% heat. Past that the wheel overheats.',
+    text: 'Every impact heats the wheel. Vent it and impacts pay more for several climbs, most of all at 80% heat. Past that it overheats, and a wheel left to blow at full heat pays a good deal less. Venting early gives a smaller eruption sooner. The Erinyes vent at a heat you set.',
     quip: 'It never stops turning, and neither does he.',
   },
   {

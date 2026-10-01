@@ -69,12 +69,22 @@ describe("Ixion's Wheel", () => {
     expect(f).toMatchObject({ heat: 0, erupting: 0, power: 1, eruptions: 1 });
   });
 
+  it('erupts strongest at the peak heat; a wheel left to blow at full heat pays less, but still pays', () => {
+    const m = modifiers(rim(), 'tartarus_rim');
+    const peak = catalog.furnace.peakHeat;
+    const atPeak = eruptionPower(m, peak);
+    for (let h = 0.2; h < peak - 1e-9; h += 0.05) expect(eruptionPower(m, h)).toBeLessThan(atPeak);
+    for (let h = peak + 0.05; h <= 1 + 1e-9; h += 0.05) expect(eruptionPower(m, h)).toBeLessThan(eruptionPower(m, h - 0.05));
+    expect(eruptionPower(m, 1)).toBeGreaterThan(1);
+    expect(eruptionPower(m, 1) - 1).toBeCloseTo((atPeak - 1) * catalog.furnace.overheatShare, 12);
+  });
+
   it('pays best when vented short of full, so waiting is never the only answer', () => {
     const s = rim();
     const site = wheelOf(s);
     const best = bestVent(s, site);
     expect(best).toBeGreaterThan(catalog.furnace.minVent);
-    expect(best).toBeLessThan(1);
+    expect(best).toBeLessThanOrEqual(catalog.furnace.peakHeat);
     const atBest = furnaceIncome(s, site, true, best);
     const atFull = furnaceIncome(s, site, false, 1);
     expect(atBest.gt(atFull)).toBe(true);

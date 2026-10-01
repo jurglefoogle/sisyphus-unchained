@@ -229,6 +229,8 @@ export function buildCatalog(data: RawEconomy): Catalog {
   check(data.counterweight.maxTrim > 0 && data.counterweight.climbPerTrim > 0, 'the counterweight must do something');
   check(data.sites.some((s) => s.id === data.furnace.siteId), 'the furnace must stand on a known hill');
   check(data.furnace.slowdown < 1 && data.furnace.gain > 0 && data.furnace.climbs >= 1, 'the furnace must reach full heat and erupt');
+  check(data.furnace.minVent < data.furnace.peakHeat && data.furnace.peakHeat < 1, 'the wheel must peak between its coldest vent and full heat');
+  check(data.furnace.overheatShare > 0 && data.furnace.overheatShare < 1, 'a full-heat eruption must pay, but less than one vented at the peak');
   check(data.sites.some((s) => s.id === data.jar.siteId), 'the jar must stand on a known hill');
   check(data.sites.some((s) => s.id === data.foundry.siteId), 'the foundry must stand on a known hill');
   check(data.foundry.defaultSplit >= 0 && data.foundry.defaultSplit <= 1, 'the foundry split is a share');

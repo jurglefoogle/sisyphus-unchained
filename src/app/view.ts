@@ -597,9 +597,9 @@ function furnaceRows(state: GameState, site: SiteState): PurchaseRow[] {
     effect:
       f.erupting > 0
         ? `Impacts pay ×${f.power.toFixed(2)} for ${plural(f.erupting)} more.`
-        : `Every impact heats the wheel. At full heat it erupts: impacts ×${eruptionPower(m, 1).toFixed(2)} for ${plural(climbs)}.`,
+        : `Vent at ${pct(catalog.furnace.peakHeat)} for ×${eruptionPower(m, catalog.furnace.peakHeat).toFixed(2)}. Left to blow at full heat, only ×${eruptionPower(m, 1).toFixed(2)}.`,
     note: ventable
-      ? `Vent now for ×${eruptionPower(m, f.heat).toFixed(2)}. Hotter pays more, but heats ever more slowly.`
+      ? `Vent now for ×${eruptionPower(m, f.heat).toFixed(2)}. Hotter pays more up to ${pct(catalog.furnace.peakHeat)}; past it the wheel overheats.`
       : f.erupting > 0
         ? undefined
         : `Too cold to vent below ${pct(catalog.furnace.minVent)}.`,

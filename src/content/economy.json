@@ -99,7 +99,7 @@
     { "id": "unbroken_memory", "order": 8, "cost": 160, "effect": "doubleIncome" }
   ],
   "counterweight": { "unlockLevel": 25, "costMultiplier": 150, "maxTrim": 10, "climbPerTrim": 0.15, "brakePerTrim": 0.1 },
-  "furnace": { "siteId": "tartarus_rim", "gain": 0.2, "slowdown": 0.93, "power": 2, "exponent": 1.3, "climbs": 6, "minVent": 0.2, "defaultVentAt": 0.8, "welcomePower": 1.5, "maxGrowth": 2 },
+  "furnace": { "siteId": "tartarus_rim", "gain": 0.2, "slowdown": 0.93, "power": 4.5, "exponent": 1.3, "climbs": 6, "minVent": 0.2, "peakHeat": 0.8, "overheatShare": 0.6, "defaultVentAt": 0.8, "welcomePower": 1.5, "maxGrowth": 2 },
   "jar": { "siteId": "leaking_heights", "inflow": 0.1, "inflowStep": 0.25, "inflowEvery": 25, "leakPerHole": 0.01, "startHoles": 6, "maxHoles": 80, "power": 2, "drillShare": 0.5, "defaultTarget": 0.9, "minTarget": 0.5, "almostFullAt": 0.9, "tidePeriod": 24, "settleClimbs": 300 },
   "foundry": { "siteId": "bronze_pass", "defaultSplit": 0.3 },
   "sky": { "siteId": "skyward_escarpment", "houses": 12, "climbsPerHouse": 4, "cooldown": 12 },
